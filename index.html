@@ -634,26 +634,6 @@
     padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);text-align:center}
   .sync-toast.err{background:#b91c1c}
   .sync-toast[hidden]{display:none}
-  /* Floating Search button: fixed to the bottom-right corner so it
-     stays on screen however far down the product list the user has
-     scrolled. Tapping it scrolls back up to the existing Search box
-     at the top and focuses it, ready to type — the list, the current
-     search text and every filter are left exactly as they were.
-     Purple to match the app theme; z-index sits above the sticky
-     finder bar and the list, but below the dialogs and the sync
-     toast, so it never covers an open panel. */
-  .fab-search{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
-    display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:12px 20px;
-    background:var(--badge-bg);color:var(--badge-ink);border:1.5px solid var(--badge-bg);
-    border-radius:999px;box-shadow:var(--shadow);font:inherit;font-size:16px;font-weight:700;
-    letter-spacing:.01em;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-  .fab-search svg{width:20px;height:20px;flex:none}
-  .fab-search:hover{background:var(--plum2);border-color:var(--plum2)}
-  .fab-search:focus-visible{outline:3px solid var(--plum2);outline-offset:2px;background:var(--plum2)}
-  .fab-search:active{filter:brightness(1.08)}
-  @media (max-width:760px){
-    .fab-search{right:12px;bottom:calc(14px + env(safe-area-inset-bottom));min-height:50px;padding:11px 18px}
-  }
   @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
 </style>
 </head>
@@ -4490,11 +4470,7 @@
     </div>
     <p class="editor-note" style="margin-top:0">This barcode isn&rsquo;t linked to a product yet. <span class="scanlink-code" id="scanLinkCode"></span></p>
     <p class="editor-note">Pick the product it belongs to to link it, so the next scan goes straight to that product.</p>
-    <div class="efield store-search-field">
-      <label for="scanLinkQ">Product</label>
-      <input id="scanLinkQ" type="search" placeholder="Filter the product list…" autocomplete="off" />
-    </div>
-    <div class="scanlink-list" id="scanLinkList" role="listbox" aria-label="Pick the product this barcode belongs to"></div>
+    <div class="scanlink-list" id="scanLinkList" role="listbox" aria-label="Pick the product this barcode belongs to" tabindex="-1"></div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="scanLinkAddNew">Add as a new product</button>
       <button type="button" class="btn-ghost" id="scanLinkCancel">Cancel</button>
@@ -4502,11 +4478,6 @@
     </div>
   </div>
 </div>
-
-<button type="button" class="fab-search" id="fabSearch" aria-label="Go to search">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-  <span>Search</span>
-</button>
 
 <div class="sync-toast" id="syncToast" hidden role="status"></div>
 
@@ -4762,35 +4733,6 @@
     filtersBtn.addEventListener('click', function(){
       controlsEl.classList.toggle('open');
       syncFiltersBtn();
-    });
-  }
-  /* Floating Search button (bottom-right, always on screen while
-     scrolling): bring the existing Search box at the top back into
-     view and focus it, ready to type. It deliberately touches
-     nothing else — the search text, filters, sort and the filtered
-     list itself all stay exactly as they were. The Search field is
-     always visible (on phones it is the one field the collapsed
-     sticky finder bar keeps showing), so no panel needs opening.
-     Focus is applied inside the tap first so phone keyboards open,
-     then again once the scroll up has settled. */
-  var fabSearch = document.getElementById('fabSearch');
-  if(fabSearch){
-    fabSearch.addEventListener('click', function(){
-      var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-      function focusSearch(){
-        try{ q.focus({ preventScroll:true }); }catch(e){ q.focus(); }
-        try{
-          var end = q.value.length;
-          if(q.setSelectionRange) q.setSelectionRange(end, end);
-        }catch(e){}
-      }
-      focusSearch();
-      if(controlsEl && controlsEl.scrollIntoView){
-        controlsEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block:'start' });
-      } else {
-        window.scrollTo(0, 0);
-      }
-      window.setTimeout(focusSearch, reduceMotion ? 60 : 450);
     });
   }
   /* ---------- In-page data editor ----------
@@ -6437,7 +6379,6 @@
   var scannerManual = document.getElementById('scannerManual');
   var scanLinkOverlay = document.getElementById('scanLinkOverlay');
   var scanLinkList = document.getElementById('scanLinkList');
-  var scanLinkQ = document.getElementById('scanLinkQ');
   var scanLinkSaveBtn = document.getElementById('scanLinkSave');
   var scanStream = null, scanDetector = null, scanTimer = null;
   var scanActive = false, scanHandled = false, scanZxing = null;
@@ -6589,12 +6530,10 @@
 
   /* ----- "Barcode not on file" — pick a product and link it ----- */
   function buildScanLinkList(){
-    var f = scanLinkQ.value.trim().toLowerCase();
     scanLinkList.innerHTML = '';
     var shown = 0;
     rows.forEach(function(row){
       var label = detailLabel(row);
-      if(f && (row.getAttribute('data-search') || '').indexOf(f) === -1 && label.toLowerCase().indexOf(f) === -1) return;
       shown++;
       var b = document.createElement('button');
       b.type = 'button';
@@ -6623,7 +6562,7 @@
       var p = document.createElement('p');
       p.className = 'editor-note';
       p.style.padding = '8px 10px';
-      p.textContent = 'No products match that filter. Clear it to see the full list, or use “Add as a new product”.';
+      p.textContent = 'No products in the list yet. Use “Add as a new product”.';
       scanLinkList.appendChild(p);
     }
   }
@@ -6632,11 +6571,10 @@
     scanLinkRow = null;
     scanLinkSaveBtn.disabled = true;
     document.getElementById('scanLinkCode').textContent = pendingBarcode;
-    scanLinkQ.value = '';
     buildScanLinkList();
     scanLinkOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    scanLinkQ.focus();
+    scanLinkList.focus();
   }
   function closeScanLink(){
     if(scanLinkOverlay.hidden) return;
@@ -6645,7 +6583,6 @@
     scanLinkRow = null;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && scannerOverlay.hidden) document.body.style.overflow = '';
   }
-  scanLinkQ.addEventListener('input', buildScanLinkList);
   document.getElementById('scanLinkClose').addEventListener('click', closeScanLink);
   document.getElementById('scanLinkCancel').addEventListener('click', closeScanLink);
   scanLinkOverlay.addEventListener('click', function(ev){ if(ev.target === scanLinkOverlay) closeScanLink(); });
