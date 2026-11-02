@@ -85,6 +85,11 @@
   .wk-table th,.wk-table td{border:1px solid var(--line);padding:6px 3px;text-align:center;overflow-wrap:break-word}
   .wk-table th{background:var(--violet-soft);color:var(--plum);font-weight:700}
   @media (prefers-color-scheme: dark){ .wk-table th{color:var(--lilac)} }
+  /* Sweetness chart: label sits directly beside its g/L range, one
+     sweetness per row, so the pairing stays readable on a phone */
+  .wk-sweet-table{font-size:14px}
+  .wk-sweet-table th[scope="row"]{text-align:left;padding:7px 10px}
+  .wk-sweet-table td{text-align:left;padding:7px 10px}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -3834,12 +3839,16 @@
     <details class="wk-section">
       <summary>Sweetness chart</summary>
       <div class="wk-body">
-        <table class="wk-table">
+        <table class="wk-table wk-sweet-table">
           <thead>
-            <tr><th scope="col">Dry</th><th scope="col">Off Dry</th><th scope="col">Med-Dry</th><th scope="col">Med-Sweet</th><th scope="col">Sweet</th></tr>
+            <tr><th scope="col">Sweetness</th><th scope="col">Residual sugar</th></tr>
           </thead>
           <tbody>
-            <tr><td>0–9 g/L</td><td>9–18 g/L</td><td>18–50 g/L</td><td>50–120 g/L</td><td>+120 g/L</td></tr>
+            <tr><th scope="row">Dry</th><td>0–9 g/L</td></tr>
+            <tr><th scope="row">Off Dry</th><td>9–18 g/L</td></tr>
+            <tr><th scope="row">Med-Dry</th><td>18–50 g/L</td></tr>
+            <tr><th scope="row">Med-Sweet</th><td>50–120 g/L</td></tr>
+            <tr><th scope="row">Sweet</th><td>+120 g/L</td></tr>
           </tbody>
         </table>
         <ul>
@@ -5925,6 +5934,137 @@
       }
     }).then(function(){ sbSaved('Store ' + num + ' saved — everyone can see it now.'); }, sbFail('that store'));
   }
+  /* ---------- Scheduled sales (LTO periods) — date-aware ----------
+     The LTO / flash-sale items switch on and off BY DATE, with no
+     manual swap and nothing to remember: which products are on sale
+     is derived from the calendar every time this runs — on first
+     paint, after every shared-list load/refresh, and on the 30-second
+     refresh tick. Periods (all dates inclusive, local calendar):
+       · P8 LTOs — Oct 12 to Nov 8, 2026: the 15 products that were
+         marked on sale for P8, at the sale prices shown then.
+       · P9 LTOs — Nov 9 to Nov 29, 2026 (P9 Legacy Loblaws Impact):
+         the 10 products below, at the impact's LTO prices. Jackson-
+         Triggs Reserve Sauvignon Blanc 750mL is in both P8 and P9 at
+         the same $12.99, so it simply stays on sale across the change.
+       · Black Friday Flash Sale — Nov 16 to Nov 30, 2026: $3 off
+         each product's regular price (the price on its row when this
+         runs, so a price corrected in the shared list is honoured).
+     Outside its period a scheduled product is NOT on sale: on Nov 9
+     the P8 items come off (except the one carried into P9), on
+     Nov 30 the P9 items come off while the flash sale runs its last
+     day, and from Dec 1 nothing here is on sale until a later period
+     is added to this table. Products that appear in no period are
+     left exactly as they are, so a one-off manual sale set in the
+     editor is untouched.
+     Items are matched by product id where the row carries one, and
+     otherwise — the Not In Plano rows for Inniskillin Discovery
+     Series P3 and Susse Reserve Riesling carry no Product ID line —
+     by consolidated brand + product + size, the same key the shared
+     list matches on. Names below are the app's consolidated names.
+     This is display logic only: applying the schedule never calls
+     any sbSync* helper, so scheduled sale state is never written to
+     the shared list (whose products table has no on_sale /
+     sale_price columns yet). A manual On sale toggle on a scheduled
+     product still works until the next load or refresh re-derives
+     the sale state from the date. */
+  var SALE_PERIODS = [
+    { name: 'P8 LTOs', start: new Date(2026, 9, 12), end: new Date(2026, 10, 8), items: [
+      { pid: '80085897', brand: 'BASK', product: 'Pinot Noir', size: '750mL', price: '11.99' },
+      { pid: '80098877', brand: 'BASK', product: 'Reserve Simply White', size: '750mL', price: '13.49' },
+      { pid: '317016', brand: 'Inniskillin', product: 'Cabernet Franc', size: '750mL', price: '12.99' },
+      { pid: '219543', brand: 'Inniskillin', product: 'Late Autumn Riesling', size: '750mL', price: '12.99' },
+      { pid: '80010517', brand: 'Jackson-Triggs', product: "Proprietors' Selection Cabernet Sauvignon", size: '4L', price: '41.99' },
+      { pid: '377820', brand: 'Jackson-Triggs', product: "Proprietors' Selection Merlot", size: '1.5L', price: '18.49' },
+      { pid: '80010511', brand: 'Jackson-Triggs', product: "Proprietors' Selection Pinot Grigio", size: '4L', price: '41.99' },
+      { pid: '526228', brand: 'Jackson-Triggs', product: 'Reserve Meritage', size: '750mL', price: '12.99' },
+      { pid: '535682', brand: 'Jackson-Triggs', product: 'Reserve Pinot Grigio', size: '750mL', price: '12.99' },
+      { pid: '618413', brand: 'Jackson-Triggs', product: 'Reserve Sauvignon Blanc', size: '750mL', price: '12.99' },
+      { pid: '80099662', brand: 'Saintly', product: 'The Good Rosé', size: '750mL', price: '15.99' },
+      { pid: '80087083', brand: 'Sandbanks', product: 'Reserve French Kiss', size: '750mL', price: '15.99' },
+      { pid: '80098997', brand: 'Sidney', product: 'Rosé', size: '750mL', price: '11.99' },
+      { pid: '80060253', brand: 'Vintage Ink', product: 'Rebel Red', size: '750mL', price: '14.99' },
+      { pid: '', brand: 'Vintage Ink', product: 'Wicked White', size: '750mL', price: '14.99' }
+    ] },
+    { name: 'P9 LTOs', start: new Date(2026, 10, 9), end: new Date(2026, 10, 29), items: [
+      { pid: '80090370', brand: 'BASK', product: 'Sauvignon Blanc', size: '3L', price: '34.99' },
+      { pid: '80100035', brand: 'Bù', product: 'Cabernet Sauvignon', size: '750mL', price: '13.99' },
+      { pid: '80100036', brand: 'Bù', product: 'Chardonnay', size: '750mL', price: '13.99' },
+      { pid: '80003853', brand: 'Inniskillin', product: 'Discovery Series P3', size: '750mL', price: '19.99' },
+      { pid: '988102', brand: 'Inniskillin', product: 'Riesling Pinot Grigio', size: '750mL', price: '13.99' },
+      { pid: '80003392', brand: 'Jackson-Triggs', product: 'Reserve Sparkling', size: '750mL', price: '15.99' },
+      { pid: '618421', brand: 'Jackson-Triggs', product: 'Reserve Merlot', size: '750mL', price: '12.99' },
+      { pid: '618413', brand: 'Jackson-Triggs', product: 'Reserve Sauvignon Blanc', size: '750mL', price: '12.99' },
+      { pid: '80010507', brand: 'Jackson-Triggs', product: "Proprietors' Selection Merlot", size: '4L', price: '41.99' },
+      { pid: '80010385', brand: 'Jackson-Triggs', product: "Proprietors' Selection Sauvignon Blanc", size: '4L', price: '41.99' }
+    ] },
+    { name: 'Black Friday Flash Sale', start: new Date(2026, 10, 16), end: new Date(2026, 10, 30), items: [
+      { pid: '80020465', brand: 'Inniskillin', product: 'Discovery Series Susse Reserve Riesling', size: '750mL', off: 3 },
+      { pid: '80011979', brand: 'Jackson-Triggs', product: 'Grand Reserve Shiraz', size: '750mL', off: 3 }
+    ] }
+  ];
+  SALE_PERIODS.forEach(function(period){
+    period.items.forEach(function(item){
+      item.key = normKey(item.brand, item.product, item.size);
+    });
+  });
+  function saleEntryMatches(item, pid, key){
+    if(item.pid && pid && item.pid === pid) return true;
+    return item.key === key;
+  }
+  /* The sale state the schedule wants for one row today: null when
+     the product is in no period (leave it alone), { on:false } when
+     it is scheduled but no period covering it is running today, and
+     { on:true, price } while its period runs — the fixed LTO price,
+     or for the flash sale the row's regular price minus the amount
+     off ('' when the row has no regular price to take it off, so the
+     SALE badge still shows and the price cell keeps its "—"). */
+  function scheduledSaleFor(row){
+    var pid = rowPid[row.getAttribute('data-idx')] || row.getAttribute('data-pid') || detailSrcPid(row);
+    var d = readRow(row);
+    var key = normKey(d.brand, d.name, d.size);
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var matched = false, active = null;
+    SALE_PERIODS.forEach(function(period){
+      var running = today >= period.start && today <= period.end;
+      period.items.forEach(function(item){
+        if(!saleEntryMatches(item, pid, key)) return;
+        matched = true;
+        if(running && !active) active = item;
+      });
+    });
+    if(!matched) return null;
+    if(!active) return { on: false, price: null };
+    if(active.off){
+      var reg = parseFloat(row.getAttribute('data-price'));
+      var p = (!isNaN(reg) && reg > active.off) ? (reg - active.off).toFixed(2) : '';
+      return { on: true, price: p };
+    }
+    return { on: true, price: active.price };
+  }
+  function applyScheduledSales(){
+    rows.slice().forEach(function(row){
+      var want = scheduledSaleFor(row);
+      if(!want) return;
+      var curOn = isSale(row);
+      var samePrice = true;
+      if(want.on && want.price !== null){
+        var a = parseFloat(row.getAttribute('data-sale-price'));
+        var b = parseFloat(want.price);
+        samePrice = (isNaN(a) && isNaN(b)) || (!isNaN(a) && !isNaN(b) && Math.abs(a - b) < 0.005);
+      }
+      if(curOn === want.on && (!want.on || samePrice)) return;
+      var data = readRow(row);
+      data.sale = want.on;
+      /* Turning off keeps the stored sale price for later, exactly
+         like the ⋮ menu toggle; turning on sets the scheduled one */
+      if(want.on) data.salePrice = want.price;
+      writeRow(row, data);
+      syncPlanoSearch(row);
+      syncCoolerSearch(row);
+      syncSaleSearch(row);
+    });
+  }
   /* ----- inbound: apply the shared list over the local rows ----- */
   function sbApplyRemote(data){
     /* The one fully-placeholder product is never shown: a shared
@@ -6059,6 +6199,9 @@
         .then(function(){}, sbFail('the built-in list upload'));
     }
     refreshAllUnavailable();
+    /* The date decides the LTO / flash-sale state, not the shared
+       list: re-derive it over whatever the sync just applied */
+    applyScheduledSales();
     applySort();
     apply();
   }
@@ -6077,12 +6220,19 @@
     });
   }
   setSyncStatus('Connecting to the shared list…');
+  /* First paint already follows the calendar, before (and even
+     without) the shared list answering */
+  applyScheduledSales();
   sbLoad();
   /* Pick up other users' changes while the app stays open; skipped
      while any dialog is open so an edit in progress is never
      overwritten mid-type */
   setInterval(function(){
     if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden) return;
+    /* Re-derive the scheduled sales too, so an app left open across
+       a period boundary (e.g. midnight into Nov 9) switches on its
+       own; sbLoad's apply then re-renders over the same state */
+    applyScheduledSales();
     sbLoad();
   }, 30000);
 
