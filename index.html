@@ -135,6 +135,7 @@
   .scanlink-overlay{z-index:96}
   .scanlink-code{font-weight:800;color:var(--plum)}
   :root[data-theme="dark"] .scanlink-code{color:var(--lilac)}
+  .scanlink-search{width:100%;margin-top:10px}
   .scanlink-list{margin-top:10px;border:1px solid var(--line);border-radius:12px;
     padding:6px;max-height:44vh;overflow-y:auto;background:var(--panel)}
   .scanlink-item{display:block;width:100%;text-align:left;background:transparent;border:none;
@@ -312,6 +313,29 @@
   .wk-sweet-list .wk-sweet-range{color:var(--ink);font-weight:600}
   .knowledge-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
   :root[data-theme="dark"] .knowledge-panel .editor-head h2{color:#e9d5ff}
+  /* Collapse button at the bottom of every Wine Knowledge topic:
+     some topics are very long, so after reading to the bottom the
+     reader can close that topic right there instead of scrolling
+     back up to its heading. A full-width row under a divider at the
+     very end of the topic body, holding one clearly visible solid
+     plum button labelled "Collapse" with an up chevron. Tapping it
+     closes only that topic (wired up in the Wine Knowledge script
+     below). Scoped to the Wine Knowledge panel only — the Support
+     Center sections that share .wk-section are untouched. */
+  .wk-collapse-row{display:flex;justify-content:center;margin-top:16px;padding-top:14px;
+    border-top:1.5px solid var(--line)}
+  .wk-collapse-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:48px;min-width:180px;padding:11px 26px;border-radius:999px;cursor:pointer;
+    background:var(--plum);border:1.5px solid var(--plum);color:#fff;
+    font:inherit;font-size:16px;font-weight:800;line-height:1.2;letter-spacing:.01em}
+  .wk-collapse-btn .wk-collapse-chev{font-size:18px;font-weight:900;line-height:1}
+  .wk-collapse-btn:hover,.wk-collapse-btn:focus-visible{background:var(--plum2);border-color:var(--plum2);
+    outline:2px solid var(--plum2);outline-offset:2px}
+  :root[data-theme="dark"] .wk-collapse-btn{background:var(--badge-bg);border-color:var(--badge-bg)}
+  :root[data-theme="dark"] .wk-collapse-btn:hover, :root[data-theme="dark"] .wk-collapse-btn:focus-visible{background:var(--plum);border-color:var(--plum)}
+  @media (max-width:520px){
+    .wk-collapse-btn{width:100%;min-width:0}
+  }
   /* What's on sample today + Current Impact Cheat Sheet — two more
      static reference panels opened from Settings, following the Wine
      Knowledge pattern. Both show schedule content baked into this
@@ -756,16 +780,18 @@
     .store-item{padding:10px}
     .store-tools .selcount{margin-left:0;flex:1 1 100%}
   }
-  /* First-visit store prompt: shown when the app opens, before
-     anything else, until the visitor picks a store. It mirrors the
-     header store selector: the heading asks "Which store are you
-     at?" and directly below it is the same kind of dropdown —
-     the stores already set up, with "＋ Add store…" as its last
-     option. Picking an existing store switches to it straight
-     away; picking Add store reveals a number field, and Continue
-     creates that store (empty product set, saved to the shared
-     list like any other new store). It sits above every other
-     dialog. */
+  /* First-visit store prompt: shown only on first use, when the
+     app opens before anything else and this device has no saved
+     store preference yet. Once a store is picked it is saved in
+     localStorage and remembered, so the prompt never reappears
+     on later opens. It mirrors the header store selector: the
+     heading asks "Which store are you at?" and directly below it
+     is the same kind of dropdown — the stores already set up,
+     with "＋ Add store…" as its last option. Picking an existing
+     store switches to it straight away; picking Add store
+     reveals a number field, and Continue creates that store
+     (empty product set, saved to the shared list like any other
+     new store). It sits above every other dialog. */
   .welcome-overlay{z-index:90}
   .welcome-panel{max-width:440px}
   .welcome-intro{margin-top:0}
@@ -980,10 +1006,10 @@
         <tr class="drow" data-detail-for="2" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of peach, honey, tangerine and grapefruit. Pairs well with grilled chicken salad or smoked salmon.</p><p class="src">Product ID 80098880</p></div></td>
         </tr>
-        <tr class="prow" data-idx="3" data-brand="BASK" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="14.31" data-rs="0.0" data-search="bask cabernet sauvignon cabernet sauvignon 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="3" data-brand="BASK" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask cabernet sauvignon cabernet sauvignon 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Cabernet Sauvignon</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$14.31</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip red">Medium Red</span></td>
@@ -994,10 +1020,10 @@
         <tr class="drow" data-detail-for="3" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant and black cherry, a hint of spice, and a smooth finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80091176</p></div></td>
         </tr>
-        <tr class="prow" data-idx="4" data-brand="BASK" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask cabernet sauvignon cabernet sauvignon 3l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="4" data-brand="BASK" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="37.99" data-rs="0.0" data-search="bask cabernet sauvignon cabernet sauvignon 3l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Cabernet Sauvignon</span></td>
           <td data-label="Size">3L</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$37.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip red">Medium Red</span></td>
@@ -1008,10 +1034,10 @@
         <tr class="drow" data-detail-for="4" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant and black cherry, a hint of spice, and a smooth finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving. [from 750mL tag, romance-tags-5.csv]</p><p class="src">Product ID 80096815</p></div></td>
         </tr>
-        <tr class="prow" data-idx="5" data-brand="BASK" data-rich="Medium White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask chardonnay chardonnay 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="5" data-brand="BASK" data-rich="Medium White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask chardonnay chardonnay 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Chardonnay</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip white">Medium White</span></td>
@@ -1022,10 +1048,10 @@
         <tr class="drow" data-detail-for="5" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of tropical fruit, citrus, and a subtle toasted oak finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80095812</p></div></td>
         </tr>
-        <tr class="prow" data-idx="6" data-brand="BASK" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="14.31" data-rs="0.0" data-search="bask crisp rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="6" data-brand="BASK" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask crisp rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Crisp Rosé</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$14.31</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip rose">Rosé</span></td>
@@ -1036,10 +1062,10 @@
         <tr class="drow" data-detail-for="6" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries [as printed] with a hint of citrus on the finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80085899</p></div></td>
         </tr>
-        <tr class="prow" data-idx="7" data-brand="BASK" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="43.13" data-rs="0.0" data-search="bask crisp rosé rosé (generic style) 3l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="7" data-brand="BASK" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="37.99" data-rs="0.0" data-search="bask crisp rosé rosé (generic style) 3l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Crisp Rosé</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">3L</td>
-          <td data-label="Price" class="price">$43.13</td>
+          <td data-label="Price" class="price">$37.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip rose">Rosé</span></td>
@@ -1050,10 +1076,10 @@
         <tr class="drow" data-detail-for="7" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries [as printed] with a hint of citrus on the finish. Stays fresh for up to 6 weeks! Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090375</p></div></td>
         </tr>
-        <tr class="prow" data-idx="8" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask hard sparkling water black tea goji &amp; blackberry n/a 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="8" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask hard sparkling water black tea goji &amp; blackberry n/a 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Hard Sparkling Water Black Tea Goji &amp; Blackberry</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1064,10 +1090,10 @@
         <tr class="drow" data-detail-for="8" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of black tea with sweet and sour berry and superfruit flavours. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80087831</p></div></td>
         </tr>
-        <tr class="prow" data-idx="9" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask hard sparkling water green tea peach n/a 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="9" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask hard sparkling water green tea peach n/a 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Hard Sparkling Water Green Tea Peach</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1078,10 +1104,10 @@
         <tr class="drow" data-detail-for="9" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of green tea with a subtly sweet peach finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80091006</p></div></td>
         </tr>
-        <tr class="prow" data-idx="10" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask lightly sparkling rosé sparkling wine 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="10" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask lightly sparkling rosé sparkling wine 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Lightly Sparkling Rosé</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1092,10 +1118,10 @@
         <tr class="drow" data-detail-for="10" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Dry and fruity, with aromas of tart berries, watermelon, honey and a hint of spice; gentle effervescence with plenty of fruit and a refreshing dry finish.</p><p class="src">Product ID 80093814</p></div></td>
         </tr>
-        <tr class="prow" data-idx="11" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask pinot grigio pinot grigio / pinot gris 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="11" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask pinot grigio pinot grigio / pinot gris 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Pinot Grigio</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip white">Light White</span></td>
@@ -1106,10 +1132,10 @@
         <tr class="drow" data-detail-for="11" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of pear and lime and a clean and refreshing finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80091174</p></div></td>
         </tr>
-        <tr class="prow" data-idx="12" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="43.13" data-rs="0.0" data-search="bask pinot grigio pinot grigio / pinot gris 3l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="12" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="37.99" data-rs="0.0" data-search="bask pinot grigio pinot grigio / pinot gris 3l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Pinot Grigio</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">3L</td>
-          <td data-label="Price" class="price">$43.13</td>
+          <td data-label="Price" class="price">$37.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip white">Light White</span></td>
@@ -1134,10 +1160,10 @@
         <tr class="drow" data-detail-for="13" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of dark cherry and subtle notes of spice. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80085897</p></div></td>
         </tr>
-        <tr class="prow" data-idx="14" data-brand="BASK" data-rich="Light Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="43.13" data-rs="0.0" data-search="bask pinot noir pinot noir 3l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="14" data-brand="BASK" data-rich="Light Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="37.99" data-rs="0.0" data-search="bask pinot noir pinot noir 3l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Pinot Noir</span></td>
           <td data-label="Size">3L</td>
-          <td data-label="Price" class="price">$43.13</td>
+          <td data-label="Price" class="price">$37.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip red">Light Red</span></td>
@@ -1148,10 +1174,10 @@
         <tr class="drow" data-detail-for="14" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of dark cherry and subtle notes of spice. Stays fresh for up to 6 weeks! Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090372</p></div></td>
         </tr>
-        <tr class="prow" data-idx="15" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask rosé wine spritz rosé (generic style) 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="15" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask rosé wine spritz rosé (generic style) 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Rosé Wine Spritz</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1162,10 +1188,10 @@
         <tr class="drow" data-detail-for="15" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Crisp and dry rosé wine spritz with a touch of juicy strawberry. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090894</p></div></td>
         </tr>
-        <tr class="prow" data-idx="16" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask sangria wine spritz wine spritz 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="16" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask sangria wine spritz wine spritz 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Sangria Wine Spritz</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1176,10 +1202,10 @@
         <tr class="drow" data-detail-for="16" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Crisp and dry red wine spritz with a touch of blood orange. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80091007</p></div></td>
         </tr>
-        <tr class="prow" data-idx="17" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="14.31" data-rs="0.0" data-search="bask sauvignon blanc sauvignon blanc 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="17" data-brand="BASK" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask sauvignon blanc sauvignon blanc 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Sauvignon Blanc</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$14.31</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip white">Light White</span></td>
@@ -1204,10 +1230,10 @@
         <tr class="drow" data-detail-for="18" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of lemongrass, citrus and gooseberry and a delightful acidic finish. *Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving. [from 750mL tag, romance-tags-1.csv]</p><p class="src">Product ID 80090370</p></div></td>
         </tr>
-        <tr class="prow" data-idx="19" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask white wine spritz wine spritz 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="19" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask white wine spritz wine spritz 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">White Wine Spritz</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1218,10 +1244,10 @@
         <tr class="drow" data-detail-for="19" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Crisp and dry white wine spritz with a touch of lemon. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80091005</p></div></td>
         </tr>
-        <tr class="prow" data-idx="20" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask reserve simply red vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="20" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask reserve simply red vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Reserve Simply Red</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1232,10 +1258,10 @@
         <tr class="drow" data-detail-for="20" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Aromas of cherries, plums and dark chocolate. Full body, long finish, grippy tannins. *Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80098876</p></div></td>
         </tr>
-        <tr class="prow" data-idx="21" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="0.0" data-search="bask reserve simply rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="21" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask reserve simply rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Reserve Simply Rosé</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$12.99</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -2520,7 +2546,7 @@
         <tr class="drow" data-detail-for="112" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Fresh and vibrant, this wine offers aromas of green apple, stone fruit, and delicate florals, with zesty citrus flavours leading to a crisp, refreshing finish.</p><p class="src">Product ID 80097273</p></div></td>
         </tr>
-        <tr class="prow" data-idx="113" data-brand="Konzelmann" data-rich="Medium White" data-sweet="Off-Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="10.0" data-barcode="624654000072" data-search="konzelmann chardonnay vqa chardonnay 750ml 624654000072" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="113" data-brand="Konzelmann" data-rich="Medium White" data-sweet="Off-Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="10.0" data-barcode="624644001072" data-search="konzelmann chardonnay vqa chardonnay 750ml 624644001072" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Konzelmann</span><span class="pname">Chardonnay</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
@@ -2532,7 +2558,7 @@
           <td data-label="Acidity">Medium (unoaked: High; oaked: Moderate)</td>
         </tr>
         <tr class="drow" data-detail-for="113" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of citrus, tropical fruit and vanilla with a zesty, citrus finish. Pairs well with miso soup or grilled fish.</p><p class="src">Product ID 80058787 · Barcode 624654000072</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of citrus, tropical fruit and vanilla with a zesty, citrus finish. Pairs well with miso soup or grilled fish.</p><p class="src">Product ID 80058787 · Barcode 624644001072</p></div></td>
         </tr>
         <tr class="prow" data-idx="114" data-brand="Konzelmann" data-rich="Medium Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="17.99" data-rs="5.0" data-search="konzelmann shiraz vqa syrah / shiraz 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Konzelmann</span><span class="pname">Shiraz</span><span class="badge vqa">VQA</span></td>
@@ -3304,10 +3330,10 @@
         <tr class="drow" data-detail-for="168" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Rich dark fruits, smoky vanilla notes and subtle whisky undertones on the nose, carrying onto a palate of red and dark fruits with intense vanilla cream and hints of whisky; supple, luscious tannins with balanced acidity and a long finish.</p><p class="src">Product ID 80059250</p></div></td>
         </tr>
-        <tr class="prow" data-idx="169" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="" data-status="Not In Plano" data-price="" data-rs="0.0" data-search="bask hard sparkling water white tea passion fruit n/a 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="169" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="0.0" data-search="bask hard sparkling water white tea passion fruit n/a 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Hard Sparkling Water White Tea Passion Fruit</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">355mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -4232,6 +4258,8 @@
           <li><strong>Finish length is a quality clue:</strong> a long, pleasant finish — flavours still evolving well after the sip — is one of the most reliable signs of a well-made wine. A finish that vanishes in a few seconds usually means a simpler wine, whatever the price tag says.</li>
           <li>Finish on an overall impression: was it balanced, interesting, and would you pour it again? That judgement step is covered in the Judging a wine section below.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4284,6 +4312,8 @@
           <li><strong>Watch the acidity.</strong> Two wines at the same g/L can taste quite different: high acidity hides sugar, low acidity shows it. When a customer found a wine &ldquo;sweeter than expected&rdquo;, reach for a higher-acid wine at the same level next time.</li>
           <li><strong>When in doubt, step one level drier</strong> for food and one level sweeter for sipping on its own — sweetness tastes stronger in a wine drunk by itself than the same wine next to a meal.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4328,6 +4358,8 @@
           <li><strong>With air:</strong> time in a decanter or an open bottle lets oxygen start the same softening process in hours instead of years, which is why young, firm reds often taste better on the second glass.</li>
           <li><strong>With food:</strong> fat and protein bind to tannin, so a bite of steak, cheese or anything rich makes the same wine taste noticeably softer and fruitier — see Food pairing 101.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4354,6 +4386,8 @@
           <li><strong>For aging:</strong> acidity is a natural preservative. High-acid wines age the most gracefully — top Rieslings improve for decades — while soft, low-acid wines fade quickly and are best drunk young.</li>
           <li><strong>For balance:</strong> acidity is what stops a sweet or fruity wine from tasting syrupy. A wine can carry a lot of sugar and still taste fresh if the acidity is high enough to match it.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4375,6 +4409,8 @@
           <li><strong>Cool climates the opposite:</strong> in a cool region like Ontario, grapes are picked with moderate sugar to preserve acidity, so wines typically land at 11–13% and taste lighter and fresher for it.</li>
           <li><strong>The trade-off:</strong> higher alcohol brings body and richness but can overwhelm delicate food and amplify chilli heat; lower alcohol keeps a wine nimble and food-friendly. Neither is better — it is about the style the grower was aiming for.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4396,6 +4432,8 @@
           <li><strong>Climate and ripeness</strong> — warm-climate grapes picked ripe give fuller wines; cool-climate wines are naturally lighter-bodied.</li>
           <li><strong>Why it matters:</strong> body is the first thing to match with food — light wine with light food, full wine with rich food, so neither overwhelms the other (see Food pairing 101). It is also a personal preference: customers who say they like a wine that is &ldquo;smooth and easy&rdquo; usually want light-to-medium body; &ldquo;big and bold&rdquo; means full-bodied.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4422,6 +4460,8 @@
           <li><strong>Judge what lingers, not just how long:</strong> a long finish should taste pleasant. If what lingers is bitterness, harsh alcohol heat or a sour edge, that is a fault in the wine, not a virtue — length only counts when the flavours are good ones.</li>
           <li><strong>Practical use:</strong> when a customer asks what makes a pricier bottle &ldquo;better&rdquo;, the finish is the easiest difference to demonstrate — one sip of each, count the seconds, and the gap is obvious.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4450,6 +4490,8 @@
           <li><strong>Secondary &amp; tertiary — Maturation:</strong> leather, earth, mushrooms, tobacco, toffee, chocolate, coffee, dried red and black fruit</li>
         </ul>
         <p>Some flavours and aromas may fall into two categories. A useful habit: when you smell something, ask which of the three families it belongs to — grape, winemaking or aging — because that tells you how the wine was made and how old it is, not just what it smells like.</p>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4485,6 +4527,8 @@
           <li><strong>Refermentation in the bottle</strong> — a still wine that is unexpectedly fizzy or cloudy has started fermenting again; it is not supposed to sparkle.</li>
           <li><strong>Not faults:</strong> sediment in an older red is natural and harmless (decant it off), and white crystals in a white wine are just tartrates — cold-stored wine dropping harmless &ldquo;wine diamonds&rdquo;. Neither affects the taste.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4525,6 +4569,8 @@
           <li><strong>Medium term (5–10 years):</strong> good Cabernet Sauvignon and Meritage, structured Shiraz, quality Riesling.</li>
           <li><strong>Long term (10+ years):</strong> only the most structured, concentrated wines — top Cabernet-based blends, fine Riesling and icewine. These are the exception, not the rule, and they need proper storage (see Storing wine) to get there.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4555,6 +4601,8 @@
           <li><strong>The shape helps:</strong> a bowl that narrows toward the rim gathers aromas to your nose. Big bowls suit reds (more air contact), narrower glasses suit whites and sparkling (keeping them cold and the bubbles lively); a tulip-shaped glass beats a flute for sparkling because it lets the aromas show.</li>
           <li><strong>Clean glassware matters:</strong> detergent residue and cabinet smells kill aroma and flatten bubbles. Rinse glasses with hot water and polish them dry before a tasting.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4575,6 +4623,8 @@
           <li><strong>Once opened:</strong> recork and refrigerate everything, reds included. Most wines hold 2–3 days; high-acid whites and sweet wines last longest (up to a week), delicate reds fade fastest. Let a red lose its fridge chill for 20 minutes before the next glass. Sparkling keeps a day or two with a proper stopper — cold and sealed is what holds the bubbles.</li>
           <li><strong>The fridge is fine for weeks, not seasons:</strong> it is too cold and too dry (corks shrink) for long-term storage, and food odours build up — temporary holding only.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4661,6 +4711,8 @@
           <li><strong>Dry red + dark chocolate.</strong> Bitter chocolate plus tannin is harsh. If wine must go with chocolate, it needs sweetness — otherwise suggest the chocolate on its own, or after the wine.</li>
           <li><strong>Ignoring the sauce and cooking method.</strong> Grilled, smoked, creamed, tomato-based or glazed versions of the same protein need different wines. Always pair to the finished dish, not the raw ingredient.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4716,6 +4768,8 @@
           <li><strong>Signature aromas:</strong> blackberry, blackcurrant, raspberry, violets, black pepper, spice and savoury meat.</li>
           <li><strong>Serve &amp; pair:</strong> serve at 15–18°C; peppery rubs, grilled lamb and smoked meats echo its spice — but keep it away from very hot chilli dishes, where its alcohol fans the heat.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -4771,6 +4825,8 @@
           <li><strong>Signature aromas:</strong> table — peach, apricot, citrus and flowers; icewine — honey, apricot and tropical fruit.</li>
           <li><strong>Serve &amp; pair:</strong> table Vidal chilled (8–10°C) with roast pork and fruit-glazed ham; icewine well chilled (6–9°C) in small pours with fruit desserts, crème brûlée or blue cheese.</li>
         </ul>
+
+        <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
       </div>
     </details>
 
@@ -5077,7 +5133,7 @@
         </div>
         <div class="efield">
           <label for="f-barcode">Barcode (UPC)</label>
-          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 624654000072 — scanning it opens this product" />
+          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 624644001072 — scanning it opens this product" />
         </div>
         <div class="efield">
           <label for="f-sale">On sale</label>
@@ -5298,6 +5354,7 @@
     </div>
     <p class="editor-note" style="margin-top:0">This barcode isn&rsquo;t linked to a product yet. <span class="scanlink-code" id="scanLinkCode"></span></p>
     <p class="editor-note">Pick the product it belongs to to link it, so the next scan goes straight to that product.</p>
+    <input id="scanLinkSearch" class="scanlink-search" type="search" autocomplete="off" placeholder="Search by brand, product or size&hellip;" aria-label="Search products to link" />
     <div class="scanlink-list" id="scanLinkList" role="listbox" aria-label="Pick the product this barcode belongs to" tabindex="-1"></div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="scanLinkAddNew">Add as a new product</button>
@@ -5339,8 +5396,33 @@
      (switched by the Store dropdown in the Stores section below);
      it is declared here so the availability helpers, defined before
      that section, can read it. */
-  var activeStore = '358';
+  /* The store chosen on this device is remembered as a preference
+     in localStorage (STORE_PREF_KEY) — the same device-only pattern
+     as the theme preference. On the very first use there is no
+     saved preference, so the "Which store are you at?" prompt
+     shows; the moment a store is picked there (or later changed
+     via the header selector or Settings) the choice is saved, and
+     every later open starts on that saved store with no prompt.
+     The preference is only which store this device shows first —
+     the stores themselves and what they carry stay on the shared
+     list, exactly as before. */
+  var STORE_PREF_KEY = 'wr-current-store';
+  function loadSavedStorePref(){
+    try{
+      var v = localStorage.getItem(STORE_PREF_KEY);
+      return (v && /^\d+$/.test(v)) ? v : '';
+    }catch(e){ return ''; }
+  }
+  function saveStorePref(num){
+    var clean = String(num == null ? '' : num).trim();
+    if(!/^\d+$/.test(clean)) return;
+    savedStorePref = clean;
+    try{ localStorage.setItem(STORE_PREF_KEY, clean); }catch(e){}
+  }
+  var savedStorePref = loadSavedStorePref();
+  var activeStore = savedStorePref || '358';
   var storeUnavailable = { '358': new Set() };
+  if(savedStorePref && !storeUnavailable[savedStorePref]) storeUnavailable[savedStorePref] = new Set();
   function unavailSet(store){
     if(!storeUnavailable[store]) storeUnavailable[store] = new Set();
     return storeUnavailable[store];
@@ -6544,6 +6626,24 @@
   });
   document.getElementById('knowledgeClose').addEventListener('click', closeKnowledge);
   document.getElementById('knowledgeCancel').addEventListener('click', closeKnowledge);
+  /* Bottom "Collapse" button in every Wine Knowledge topic: closes
+     only that topic from the bottom of its (often long) body, so the
+     reader does not have to scroll back to the topic heading. After
+     closing, the topic's heading is brought into view and focused,
+     so the reader lands back on that heading in the topic list. */
+  knowledgeOverlay.addEventListener('click', function(ev){
+    var btn = ev.target.closest ? ev.target.closest('.wk-collapse-btn') : null;
+    if(!btn || !knowledgeOverlay.contains(btn)) return;
+    var section = btn.closest('details.wk-section');
+    if(!section) return;
+    section.open = false;
+    var summary = section.querySelector('summary');
+    if(summary){
+      var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      summary.scrollIntoView({ block:'start', behavior: reduceMotion ? 'auto' : 'smooth' });
+      if(summary.focus) summary.focus({ preventScroll:true });
+    }
+  });
   knowledgeOverlay.addEventListener('click', function(ev){ if(ev.target === knowledgeOverlay) closeKnowledge(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !knowledgeOverlay.hidden) closeKnowledge();
@@ -6932,6 +7032,18 @@
   var storeSel = document.getElementById('storeSel');
   var storeOrder = ['358'];
   var storeSets = { '358': new Set(rows.map(function(r){ return r.getAttribute('data-idx'); })) };
+  /* A remembered store that isn't in the baked-in list yet (it
+     lives on the shared list, which loads just after first paint)
+     gets a placeholder set now, so the header selector can show
+     it and the list logic never looks up a missing store. The
+     shared-list load fills its real products in — and if that
+     store was only ever created on this device, the load keeps
+     this local entry and uploads it, like any local-only store. */
+  if(savedStorePref && !storeSets[savedStorePref]){
+    storeOrder.push(savedStorePref);
+    storeSets[savedStorePref] = new Set();
+    if(!storeUnavailable[savedStorePref]) storeUnavailable[savedStorePref] = new Set();
+  }
 
   /* ---------- Store types (extensible) ----------
      Every store has a type, picked when the store is created
@@ -7248,17 +7360,23 @@
      the heading asks "Which store are you at?" and directly below
      it is a dropdown in the same style as the header's — a
      "Choose a store…" placeholder, every store already set up,
-     and "＋ Add store…" as the last option. It opens as soon as
-     the app does, before the visitor browses anything. Picking an
-     existing store from the dropdown switches to it straight
-     away, exactly like the header dropdown; picking Add store
-     reveals a number field, and Continue creates that store on
-     the spot — an empty product set, saved to the shared list
-     through the same sbSyncStoreSave path as any other new store,
-     so every other user sees it too. Once a store has been
-     chosen the prompt does not come back during this visit. The
-     dropdown options are rebuilt whenever the store list changes
-     (including when the shared list loads). */
+     and "＋ Add store…" as the last option. It is a FIRST-USE
+     prompt only: it opens as soon as the app does only when this
+     device has no saved store preference (see STORE_PREF_KEY at
+     the top). Picking an existing store from the dropdown switches
+     to it straight away, exactly like the header dropdown; picking
+     Add store reveals a number field, and Continue creates that
+     store on the spot — an empty product set, saved to the shared
+     list through the same sbSyncStoreSave path as any other new
+     store, so every other user sees it too. Either way the chosen
+     store is saved as this device's preference (welcomeChoose
+     calls saveStorePref), so the prompt does not come back on
+     later opens — the app simply starts on the remembered store.
+     The store can still be changed at any time via the header
+     store selector or Settings, and changing it there updates
+     the saved preference too. The dropdown options are rebuilt
+     whenever the store list changes (including when the shared
+     list loads). */
   var welcomeOverlay = document.getElementById('welcomeOverlay');
   var welcomeSel = document.getElementById('welcomeStoreSel');
   var welcomeNum = document.getElementById('welcomeStoreNum');
@@ -7266,7 +7384,10 @@
   var welcomeNewWrap = document.getElementById('welcomeNewWrap');
   var welcomeTypeWrap = document.getElementById('welcomeTypeWrap');
   var welcomeType = document.getElementById('welcomeStoreType');
-  var welcomeDone = false;
+  /* Already answered on a previous visit when a store preference
+     is saved — the prompt stays closed and the app opens on the
+     remembered store (activeStore was initialised from it) */
+  var welcomeDone = !!savedStorePref;
 
   function syncWelcomeNewField(){
     if(!welcomeSel || !welcomeNewWrap) return;
@@ -7377,6 +7498,9 @@
     }
     activeStore = num;
     welcomeDone = true;
+    /* Remember this choice on this device so the prompt only
+       ever appears on first use */
+    saveStorePref(num);
     rebuildStoreOptions();
     syncStoreUI();
     refreshAllUnavailable();
@@ -7426,6 +7550,10 @@
       return;
     }
     activeStore = storeSel.value;
+    /* Changing the store here updates the remembered preference,
+       so the next open starts on this store too */
+    saveStorePref(activeStore);
+    welcomeDone = true;
     syncStoreUI();
     /* Re-render every row's unavailable banner/red tint from the
        newly selected store's own unavailable set before filtering */
@@ -7616,6 +7744,11 @@
       storeSets[num] = dlgSet;
     }
     activeStore = num;
+    /* Saving here switches to this store (including a brand-new
+       one created in Settings) — remember it as this device's
+       preference so later opens start here without the prompt */
+    saveStorePref(num);
+    welcomeDone = true;
     rebuildStoreOptions();
     syncStoreUI();
     refreshAllUnavailable();
@@ -7627,7 +7760,10 @@
   });
   rebuildStoreOptions();
   syncStoreUI();
-  /* First visit: ask for the store number before browsing */
+  /* First use only: ask for the store before browsing. When a
+     store preference is already saved on this device, welcomeDone
+     is already true (and activeStore already the remembered
+     store), so openWelcome() is a no-op and no prompt appears. */
   openWelcome();
 
   /* ---------- Barcode scanner ----------
@@ -7645,30 +7781,44 @@
      Barcodes live on the row as data-barcode and are matched after
      normalising: digits only, and a 13-digit EAN with a leading 0
      is the same code as its 12-digit UPC form, so a scanner that
-     reports either form still finds the product. The first known
-     link is baked into this page: Konzelmann Chardonnay 750mL,
-     barcode 624654000072 (from the bottle photo), so it is
-     recognised even before the shared list carries it.
+     reports either form still finds the product. The lookup also
+     checks the shared list's own barcode links (sharedBarcodes,
+     indexed from the Supabase products fetch), so a barcode saved
+     to the shared list is recognised on the next scan on any
+     device, including one saved from the app itself. The first
+     known link is baked into this page: Konzelmann Chardonnay
+     750mL, barcode 624644001072 — the value the scanner actually
+     decoded from the bottle, and the one saved in the shared
+     list — so it is recognised even before the shared list
+     carries it.
      Detection uses the browser's built-in BarcodeDetector where
      it exists (Chrome on Android, newer Safari); where it does
      not, a ZXing reader is loaded from a CDN as a fallback; where
      neither works, the camera view still opens and the typed
      barcode box at the bottom does the same lookup and linking.
-     Saving a link needs the products.barcode column in the shared
-     list: until that column exists the PATCH is refused, the link
-     is kept on this screen, and a clear message says saving will
-     work once the barcode column is added — the button, the
-     scanner and this prompt all keep working regardless. */
+     Links save to the products.barcode column in the shared list.
+     If a save is ever refused, the link is still kept and indexed
+     on this screen for the next scan here, and a message says so —
+     the button, the scanner and this prompt all keep working
+     regardless. */
   var scannerOverlay = document.getElementById('scannerOverlay');
   var scannerVideo = document.getElementById('scannerVideo');
   var scannerStatus = document.getElementById('scannerStatus');
   var scannerManual = document.getElementById('scannerManual');
   var scanLinkOverlay = document.getElementById('scanLinkOverlay');
   var scanLinkList = document.getElementById('scanLinkList');
+  var scanLinkSearch = document.getElementById('scanLinkSearch');
   var scanLinkSaveBtn = document.getElementById('scanLinkSave');
   var scanStream = null, scanDetector = null, scanTimer = null;
   var scanActive = false, scanHandled = false, scanZxing = null;
   var pendingBarcode = '', scanLinkRow = null;
+  /* The shared list's barcode links, indexed by normalised code:
+     normalised barcode -> Supabase product_id. Rebuilt from every
+     shared-list fetch (sbApplyRemote) and updated the moment a
+     link is saved here (sbSyncBarcode), so findRowByBarcode can
+     recognise a shared-list barcode even where the row on this
+     screen does not carry it in data-barcode yet. */
+  var sharedBarcodes = {};
 
   function normalizeBarcode(v){
     var d = String(v || '').replace(/\D/g, '');
@@ -7678,9 +7828,16 @@
   function findRowByBarcode(code){
     var want = normalizeBarcode(code);
     if(!want) return null;
+    /* First the barcode each row itself carries — the baked-in
+       links and any link set on this screen */
     for(var i = 0; i < rows.length; i++){
       if(normalizeBarcode(rows[i].getAttribute('data-barcode') || '') === want) return rows[i];
     }
+    /* Then the shared list's barcode field: a link saved to
+       Supabase (products.barcode) is recognised on the next scan
+       even if this screen's row has not picked the value up yet */
+    var pid = sharedBarcodes[want];
+    if(pid && pidRow[pid]) return pidRow[pid];
     return null;
   }
   function setScanStatus(msg){ if(scannerStatus) scannerStatus.textContent = msg || ''; }
@@ -7842,11 +7999,24 @@
   });
 
   /* ----- "Barcode not on file" — pick a product and link it ----- */
+  /* The search box above the list filters it as the user types:
+     every word typed must appear in the product's brand, name or
+     size (its detailLabel), so "konzelmann chardonnay" or just
+     "750ml" narrows the list without scrolling the whole thing */
   function buildScanLinkList(){
+    var query = scanLinkSearch ? scanLinkSearch.value.trim().toLowerCase() : '';
+    var tokens = query ? query.split(/\s+/) : [];
     scanLinkList.innerHTML = '';
-    var shown = 0;
+    var shown = 0, total = 0;
     rows.forEach(function(row){
+      total++;
       var label = detailLabel(row);
+      if(tokens.length){
+        var hay = label.toLowerCase();
+        for(var t = 0; t < tokens.length; t++){
+          if(hay.indexOf(tokens[t]) === -1) return;
+        }
+      }
       shown++;
       var b = document.createElement('button');
       b.type = 'button';
@@ -7875,25 +8045,32 @@
       var p = document.createElement('p');
       p.className = 'editor-note';
       p.style.padding = '8px 10px';
-      p.textContent = 'No products in the list yet. Use “Add as a new product”.';
+      p.textContent = (total && query)
+        ? 'No products match \u201C' + scanLinkSearch.value.trim() + '\u201D. Clear the search to see the whole list.'
+        : 'No products in the list yet. Use \u201CAdd as a new product\u201D.';
       scanLinkList.appendChild(p);
     }
   }
+  if(scanLinkSearch) scanLinkSearch.addEventListener('input', buildScanLinkList);
   function openScanLink(code){
     pendingBarcode = normalizeBarcode(code) || String(code || '').replace(/\D/g, '');
     scanLinkRow = null;
     scanLinkSaveBtn.disabled = true;
     document.getElementById('scanLinkCode').textContent = pendingBarcode;
+    /* Every open starts with an empty search and the full list */
+    if(scanLinkSearch) scanLinkSearch.value = '';
     buildScanLinkList();
     scanLinkOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    scanLinkList.focus();
+    if(scanLinkSearch) scanLinkSearch.focus();
+    else scanLinkList.focus();
   }
   function closeScanLink(){
     if(scanLinkOverlay.hidden) return;
     scanLinkOverlay.hidden = true;
     pendingBarcode = '';
     scanLinkRow = null;
+    if(scanLinkSearch) scanLinkSearch.value = '';
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && scannerOverlay.hidden) document.body.style.overflow = '';
   }
   document.getElementById('scanLinkClose').addEventListener('click', closeScanLink);
@@ -8085,32 +8262,34 @@
     });
   }
   /* Barcode syncs separately from the main product payload, for
-     the same reason as sale above, only more so: the shared
-     products table does not have a barcode column yet (it is added
-     by running, in the Supabase SQL Editor:
-       alter table public.products add column if not exists barcode text;
-     ), and sending an unknown column in the main PATCH would make
-     Supabase reject the whole product save. This PATCH carries
-     only the barcode. While the column is missing it is refused:
-     the link stays on this screen (and baked-in links like the
-     Konzelmann Chardonnay's keep being recognised in the app), and
-     a non-quiet save shows a clear message that saving to the
-     shared list will work once the barcode column is added. Once
-     the column exists, this same call starts succeeding and every
-     link syncs to every user with no further change here. */
+     the same reason as sale above: this PATCH carries only the
+     barcode, so a barcode save can never take the whole product
+     save down with it. The link is written to the shared
+     products.barcode column, indexed on this screen immediately
+     (sharedBarcodes), and picked up by every other device on its
+     next shared-list fetch. If the PATCH is ever refused, the
+     link stays on this screen (and baked-in links like the
+     Konzelmann Chardonnay's keep being recognised in the app),
+     and a non-quiet save says so. */
   function sbSyncBarcode(row, quiet){
     if(!row) return Promise.resolve();
     var pid = rowPid[row.getAttribute('data-idx')];
     if(!pid) return Promise.resolve();
     var code = normalizeBarcode(row.getAttribute('data-barcode') || '');
+    /* Index the link on this screen the moment it is saved, so a
+       just-saved link works on the very next scan without waiting
+       for a reload or the next shared-list refresh; a cleared
+       barcode drops this product's old index entries with it */
+    if(code) sharedBarcodes[code] = pid;
+    else for(var bk in sharedBarcodes){ if(sharedBarcodes[bk] === pid) delete sharedBarcodes[bk]; }
     return sb('products?product_id=eq.' + encodeURIComponent(pid), {
       method: 'PATCH', prefer: 'return=minimal',
       body: { barcode: code || null }
     }).then(function(){
       if(!quiet) sbSaved('Barcode saved to the shared list — every phone can scan it now.');
     }, function(err){
-      if(window.console) console.warn('Barcode not synced (shared list has no barcode column yet):', err);
-      if(!quiet) syncToast('Linked on this screen for now — saving barcodes to the shared list will work once the barcode column is added in Supabase.', true);
+      if(window.console) console.warn('Barcode not synced to the shared list:', err);
+      if(!quiet) syncToast('Linked on this screen for now — the barcode couldn\u2019t be saved to the shared list, check your connection and link it again.', true);
     });
   }
   function sbSyncProduct(row){
@@ -8350,6 +8529,16 @@
     data.products = data.products.filter(function(p){
       return !isPlaceholderValue(p.brand) && !isPlaceholderValue(p.product);
     });
+    /* Index the shared list's barcode links by normalised code.
+       The scan lookup checks this index alongside each row's own
+       data-barcode, so a barcode saved to the shared list — from
+       this app or any other — is recognised on the next scan on
+       any device, even before the row below carries it. */
+    sharedBarcodes = {};
+    data.products.forEach(function(p){
+      var bc = normalizeBarcode(p.barcode || '');
+      if(bc) sharedBarcodes[bc] = p.product_id;
+    });
     var byPid = {}, byKey = {};
     data.products.forEach(function(p){
       byPid[p.product_id] = p;
@@ -8412,17 +8601,20 @@
          state is kept — a sync must never wipe a sale marked on
          this screen just because the shared list can't store it */
       if(!('on_sale' in p)){ want.sale = cur.sale; want.salePrice = cur.salePrice; }
-      /* Barcode: while the shared list has no barcode column (or
-         the column is there but still empty for this product), the
-         local link is kept — a sync must never wipe a link just
-         because the shared list can't store it yet, and the
-         baked-in Konzelmann Chardonnay link in particular must
-         survive every refresh. When the column exists but is
+      /* Barcode: a barcode saved on the shared record wins — it
+         replaces whatever this row carries, including the baked-in
+         value, so the row itself holds the shared link and the
+         next scan finds this product. Only while the shared record
+         carries no barcode is the local link kept (a sync must
+         never wipe a link just because the shared list has none
+         for this product yet); when the column exists but is
          empty and this screen holds a link, the link is pushed up
          (quietly) so the shared list catches up on its own. */
-      if(!('barcode' in p) || !p.barcode){
+      if(p.barcode){
+        want.barcode = String(p.barcode).replace(/\D/g, '');
+      } else {
         want.barcode = cur.barcode;
-        if('barcode' in p && !p.barcode && cur.barcode) sbSyncBarcode(row, true);
+        if('barcode' in p && cur.barcode) sbSyncBarcode(row, true);
       }
       if(cur.brand !== want.brand || cur.name !== want.name || cur.size !== want.size ||
          String(cur.price) !== String(want.price) || String(cur.rs) !== String(want.rs) ||
@@ -8466,7 +8658,14 @@
       storeOrder = newOrder;
       storeSets = newSets;
       storeUnavailable = newUn;
-      if(!storeSets[activeStore]) activeStore = storeOrder[0];
+      if(!storeSets[activeStore]){
+        /* The remembered store is no longer on the shared list —
+           fall back to the first store and remember that instead,
+           rather than bringing the first-visit prompt back */
+        activeStore = storeOrder[0];
+        if(activeStore) saveStorePref(activeStore);
+      }
+      if(savedStorePref) welcomeDone = true;
       /* Store types: a type saved on the shared store record wins;
          any type name arriving this way is learned into this
          device's type list (that is how a custom type added on
