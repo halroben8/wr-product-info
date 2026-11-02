@@ -1,14 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light" data-theme-pref="light">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="color-scheme" content="light dark" />
+<meta name="color-scheme" content="light" />
 <link rel="icon" href="data:," />
 <title>Wine Rack Sortable Product List</title>
+<script>
+/* Theme — Light is the default look. Before first paint, apply the
+   choice saved on this device (Dark / Light / Auto); with no saved
+   choice, stay on Light and do not fall back to the phone's dark
+   mode. Auto is the only mode that follows the phone. Display
+   setting only: kept in localStorage on this device, never synced. */
+(function(){
+  var pref = 'light';
+  try{
+    var saved = localStorage.getItem('wr-theme-pref');
+    if(saved === 'light' || saved === 'dark' || saved === 'auto') pref = saved;
+  }catch(e){}
+  var eff = pref;
+  if(pref === 'auto'){
+    eff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+  }
+  document.documentElement.setAttribute('data-theme', eff);
+  document.documentElement.setAttribute('data-theme-pref', pref);
+  document.documentElement.style.colorScheme = eff;
+})();
+</script>
 <style>
   :root{
-    color-scheme: light dark;
+    color-scheme: light;
     --bg:#f3eefc; --panel:#ffffff; --panel2:#ece4fb; --ink:#241536; --muted:#5c4a78;
     --line:#d9cbf5; --plum:#5b21b6; --plum2:#7c3aed; --grape:#9333ea; --lilac:#c4b5fd;
     --violet-soft:#ede9fe; --chip-red:#7e1d4f; --chip-red-bg:#fbe3ef; --chip-white:#1e40af; --chip-white-bg:#dbeafe;
@@ -16,15 +37,11 @@
     --badge-bg:#5b21b6; --badge-ink:#fff; --shadow:0 10px 30px rgba(76,29,149,.16);
     --header-grad:linear-gradient(120deg,#3b0764 0%,#6d28d9 55%,#9333ea 100%);
   }
-  @media (prefers-color-scheme: dark){
-    :root{
-      --bg:#170b2e; --panel:#241243; --panel2:#2d1854; --ink:#f1eafd; --muted:#c3b2e8;
+  :root[data-theme="dark"]{color-scheme:dark; --bg:#170b2e; --panel:#241243; --panel2:#2d1854; --ink:#f1eafd; --muted:#c3b2e8;
       --line:#452a75; --plum:#a78bfa; --plum2:#c4b5fd; --grape:#d8b4fe; --lilac:#7c5cd6;
       --violet-soft:#311a63; --chip-red:#f9a8d4; --chip-red-bg:#4a1030; --chip-white:#93c5fd; --chip-white-bg:#1e3a5f;
       --chip-rose:#f9a8d4; --chip-rose-bg:#831843; --chip-cider:#86efac; --chip-cider-bg:#0f3520;
-      --badge-bg:#7c3aed; --shadow:0 10px 30px rgba(0,0,0,.45);
-    }
-  }
+      --badge-bg:#7c3aed; --shadow:0 10px 30px rgba(0,0,0,.45);}
   *{box-sizing:border-box}
   tr[hidden]{display:none !important}
   body{margin:0;background:var(--bg);color:var(--ink);
@@ -54,42 +71,66 @@
   .settings-action:hover,.settings-action:focus-visible{background:var(--panel2);border-color:var(--plum2);outline:none}
   .settings-action .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
   .settings-note{color:var(--muted);font-size:13.5px;margin:14px 0 0;line-height:1.5}
+  /* Appearance — Dark / Light / Auto, in Settings. Light is the
+     default look. The choice is a display setting saved on this
+     device only; it is never synced to the shared list. */
+  .theme-setting{margin:2px 0 14px;padding:12px;border:1.5px solid var(--line);border-radius:12px;background:var(--panel)}
+  .theme-setting-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px}
+  .theme-label{font-size:12px;font-weight:800;color:var(--plum);text-transform:uppercase;letter-spacing:.06em}
+  .theme-current{font-size:13px;font-weight:700;color:var(--muted)}
+  .theme-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .theme-opt{appearance:none;-webkit-appearance:none;min-height:52px;padding:8px 6px;border-radius:10px;
+    border:1.5px solid var(--line);background:var(--violet-soft);color:var(--ink);
+    font:inherit;font-size:15px;font-weight:700;cursor:pointer;text-align:center;line-height:1.2}
+  .theme-opt .theme-opt-sub{display:block;font-size:11.5px;font-weight:600;margin-top:2px;opacity:.85}
+  .theme-opt:hover,.theme-opt:focus-visible{border-color:var(--plum2);outline:none}
+  .theme-opt[aria-checked="true"]{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
+  .theme-note{color:var(--muted);font-size:12.5px;line-height:1.45;margin:9px 0 0}
   /* Wine Knowledge — a static reference panel opened from Settings.
      The content is training material baked into this page only; it
      never reads from, writes to, or syncs with the product list. Each
      topic is a collapsible <details> section so the panel stays
      compact on a phone. */
   .knowledge-panel{max-width:680px}
-  .wk-intro{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.5}
+  .wk-intro{color:var(--ink);font-size:15px;font-weight:500;margin:0 0 12px;line-height:1.6}
   .wk-section{border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--panel);overflow:hidden}
   .wk-section summary{display:flex;align-items:center;justify-content:space-between;gap:10px;
-    min-height:48px;padding:11px 14px;cursor:pointer;list-style:none;
-    font-weight:700;font-size:15.5px;color:var(--plum);background:var(--violet-soft)}
+    min-height:50px;padding:12px 14px;cursor:pointer;list-style:none;
+    font-weight:800;font-size:17px;color:#4c1d95;background:var(--violet-soft)}
   .wk-section summary::-webkit-details-marker{display:none}
-  .wk-section summary::after{content:"›";font-size:22px;line-height:1;font-weight:700;color:var(--plum2);
+  .wk-section summary::after{content:"›";font-size:24px;line-height:1;font-weight:800;color:#6d28d9;
     transform:rotate(90deg);transition:transform .15s ease;flex:none}
   .wk-section[open ] summary::after{transform:rotate(-90deg)}
   .wk-section summary:hover,.wk-section summary:focus-visible{background:var(--panel2);outline:none}
-  @media (prefers-color-scheme: dark){ .wk-section summary{color:var(--lilac)} }
-  .wk-body{padding:12px 14px 14px;font-size:14.5px;line-height:1.55}
-  .wk-body p{margin:0 0 10px}
+  :root[data-theme="dark"] .wk-section summary{color:#e9d5ff}
+:root[data-theme="dark"] .wk-section summary::after{color:#d8b4fe}
+  .wk-body{padding:12px 14px 14px;font-size:15.5px;line-height:1.65;color:var(--ink);font-weight:500}
+  .wk-body p{margin:0 0 10px;color:var(--ink)}
   .wk-body p:last-child,.wk-body ul:last-child{margin-bottom:0}
-  .wk-body ul{margin:0 0 10px;padding-left:20px}
-  .wk-body li{margin-bottom:5px}
+  .wk-body ul{margin:0 0 10px;padding-left:20px;color:var(--ink)}
+  .wk-body li{margin-bottom:6px;color:var(--ink)}
   .wk-body li:last-child{margin-bottom:0}
-  .wk-body h4{margin:14px 0 5px;font-size:12.5px;font-weight:700;color:var(--plum);
+  .wk-body strong{font-weight:800;color:var(--ink)}
+  .wk-body h4{margin:15px 0 6px;font-size:14px;font-weight:800;color:#4c1d95;
     text-transform:uppercase;letter-spacing:.05em}
   .wk-body h4:first-child{margin-top:0}
-  @media (prefers-color-scheme: dark){ .wk-body h4{color:var(--lilac)} }
-  .wk-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12.5px;margin:2px 0 10px}
+  :root[data-theme="dark"] .wk-body h4{color:#e9d5ff}
+  .wk-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:14px;margin:2px 0 10px;color:var(--ink)}
   .wk-table th,.wk-table td{border:1px solid var(--line);padding:6px 3px;text-align:center;overflow-wrap:break-word}
-  .wk-table th{background:var(--violet-soft);color:var(--plum);font-weight:700}
-  @media (prefers-color-scheme: dark){ .wk-table th{color:var(--lilac)} }
-  /* Sweetness chart: label sits directly beside its g/L range, one
-     sweetness per row, so the pairing stays readable on a phone */
-  .wk-sweet-table{font-size:14px}
-  .wk-sweet-table th[scope="row"]{text-align:left;padding:7px 10px}
-  .wk-sweet-table td{text-align:left;padding:7px 10px}
+  .wk-table td{font-weight:500;color:var(--ink)}
+  .wk-table th{background:var(--violet-soft);color:#4c1d95;font-weight:800}
+  :root[data-theme="dark"] .wk-table th{color:#e9d5ff}
+  /* Sweetness chart: each level is one compact line — the label and
+     its g/L range together on the same line, so the chart stays short
+     on a phone instead of stacking into a tall table */
+  .wk-sweet-list{list-style:none;margin:2px 0 10px;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .wk-sweet-list li{display:flex;align-items:baseline;gap:8px;margin:0;padding:7px 10px;font-size:15.5px;border-top:1px solid var(--line);color:var(--ink);font-weight:500}
+  .wk-sweet-list li:first-child{border-top:none}
+  .wk-sweet-list .wk-sweet-label{font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .wk-sweet-list .wk-sweet-label{color:#e9d5ff}
+  .wk-sweet-list .wk-sweet-range{color:var(--ink);font-weight:600}
+  .knowledge-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .knowledge-panel .editor-head h2{color:#e9d5ff}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -103,13 +144,11 @@
   tr.prow.is-unavailable:hover{background:#fee2e2}
   tr.prow.is-unavailable td[data-label="Price"]{text-decoration:line-through;text-decoration-thickness:2px;color:#b91c1c}
   tr.prow.is-unavailable .pname,tr.prow.is-unavailable .brand{color:#7f1d1d}
-  @media (prefers-color-scheme: dark){
-    tr.prow.is-unavailable{background:#3d0f1a}
-    tr.prow.is-unavailable:hover{background:#4c1220}
-    tr.prow.is-unavailable td[data-label="Price"]{color:#fca5a5}
-    tr.prow.is-unavailable .pname,tr.prow.is-unavailable .brand{color:#fecaca}
-    .badge.unavail{background:#dc2626}
-  }
+  :root[data-theme="dark"] tr.prow.is-unavailable{background:#3d0f1a}
+:root[data-theme="dark"] tr.prow.is-unavailable:hover{background:#4c1220}
+:root[data-theme="dark"] tr.prow.is-unavailable td[data-label="Price"]{color:#fca5a5}
+:root[data-theme="dark"] tr.prow.is-unavailable .pname, :root[data-theme="dark"] tr.prow.is-unavailable .brand{color:#fecaca}
+:root[data-theme="dark"] .badge.unavail{background:#dc2626}
   /* Store switcher: a compact pill in the header's top-right corner,
      directly to the left of the settings gear — pin icon, the number
      alone ("358", no "Store" word), chevron. It is vertically centred
@@ -138,21 +177,21 @@
   .field{display:flex;flex-direction:column;gap:4px;flex:1 1 150px;min-width:0}
   .field.grow{flex:2 1 220px}
   label{font-size:12px;font-weight:700;color:var(--plum);text-transform:uppercase;letter-spacing:.06em}
-  @media (prefers-color-scheme: dark){ label{color:var(--lilac)} }
+  :root[data-theme="dark"] label{color:var(--lilac)}
   input,select{font:inherit;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;
     background:var(--panel);color:var(--ink);width:100%}
   input:focus,select:focus{outline:2px solid var(--plum2);outline-offset:1px;border-color:var(--plum2)}
   .toggles{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .toggle{border:1.5px solid var(--plum2);color:var(--plum);background:var(--violet-soft);
     border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
-  @media (prefers-color-scheme: dark){ .toggle{color:var(--plum2)} }
+  :root[data-theme="dark"] .toggle{color:var(--plum2)}
   .toggle[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
   .toggle:hover{filter:brightness(1.06)}
   button.reset{border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);
     border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
   .count{font-weight:700;color:var(--plum)}
   .filtersbtn{display:none}
-  @media (prefers-color-scheme: dark){ .count{color:var(--lilac)} }
+  :root[data-theme="dark"] .count{color:var(--lilac)}
   .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
   table{border-collapse:collapse;width:100%;font-size:14.5px}
   thead th{background:var(--plum);color:#fff;text-align:left;padding:11px 10px;font-size:12.5px;
@@ -167,7 +206,7 @@
   .brand{display:block;font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--grape)}
   .pname{display:block;font-weight:650}
   .price{font-weight:800;color:var(--plum);white-space:nowrap}
-  @media (prefers-color-scheme: dark){ .price{color:var(--lilac)} }
+  :root[data-theme="dark"] .price{color:var(--lilac)}
   .badge{display:inline-block;margin-top:5px;margin-right:5px;font-size:11px;font-weight:700;
     padding:2px 8px;border-radius:999px;background:var(--badge-bg);color:var(--badge-ink)}
   .badge.nip{background:transparent;color:var(--grape);border:1.5px solid var(--grape)}
@@ -187,23 +226,19 @@
   .price .sale-now{color:#be185d;font-weight:800}
   .price .was{color:var(--muted);font-weight:600;font-size:.82em;
     text-decoration:line-through;margin-left:6px;white-space:nowrap}
-  @media (prefers-color-scheme: dark){
-    tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
-    tr.prow.is-sale:not(.is-unavailable):hover{background:#5f143d}
-    .price .sale-now{color:#f9a8d4}
-    .badge.sale{border-color:#f9a8d4}
-  }
+  :root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
+:root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable):hover{background:#5f143d}
+:root[data-theme="dark"] .price .sale-now{color:#f9a8d4}
+:root[data-theme="dark"] .badge.sale{border-color:#f9a8d4}
   /* VQA designation: a gold seal-style badge beside the other badges
      under the product name, instead of "VQA" written into the name.
      Gold on near-black-brown reads as an official stamp and stays
      distinct from the plum Cooler badge and the amber Check badge */
   .badge.vqa{background:#eab308;color:#221a02;border:1px solid #a16207;
     font-weight:800;letter-spacing:.09em}
-  @media (prefers-color-scheme: dark){
-    .badge.vqa{background:#facc15;color:#221a02;border-color:#facc15}
-  }
+  :root[data-theme="dark"] .badge.vqa{background:#facc15;color:#221a02;border-color:#facc15}
   .chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--violet-soft);color:var(--plum)}
-  @media (prefers-color-scheme: dark){ .chip{color:var(--plum2)} }
+  :root[data-theme="dark"] .chip{color:var(--plum2)}
   .chip.red{background:var(--chip-red-bg);color:var(--chip-red)}
   .chip.white{background:var(--chip-white-bg);color:var(--chip-white)}
   .chip.rose{background:var(--chip-rose-bg);color:var(--chip-rose)}
@@ -224,7 +259,7 @@
   .detail-head .dh-label{flex:none;font-size:11px;font-weight:800;letter-spacing:.06em;
     text-transform:uppercase;color:#fff;background:var(--badge-bg);border-radius:999px;padding:2px 9px}
   .detail-head .dh-name{font-weight:750;color:var(--plum)}
-  @media (prefers-color-scheme: dark){ .detail-head .dh-name{color:var(--lilac)} }
+  :root[data-theme="dark"] .detail-head .dh-name{color:var(--lilac)}
   .detail-head .dh-arrow{flex:none;color:var(--plum2);font-weight:800}
   .detail .notes{margin:0 0 6px;max-width:75ch}
   .detail .notes.none{color:var(--muted);font-style:italic}
@@ -246,15 +281,11 @@
     /* Unavailable on a phone card: red border all round plus the red
        banner, so it reads as unavailable before any text is read */
     tbody tr.prow.is-sale:not(.is-unavailable){border:1.5px solid #db2777;background:#fce7f3}
-    @media (prefers-color-scheme: dark){
-      tbody tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
-    }
+    :root[data-theme="dark"] tbody tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
     tbody tr.prow.is-unavailable{border:2px solid #dc2626;background:#fef2f2}
     tbody tr.prow.is-unavailable .badge.unavail{display:flex;justify-content:center;width:100%;
       font-size:13.5px;padding:6px 10px;border-radius:6px}
-    @media (prefers-color-scheme: dark){
-      tbody tr.prow.is-unavailable{background:#3d0f1a;border-color:#ef4444}
-    }
+    :root[data-theme="dark"] tbody tr.prow.is-unavailable{background:#3d0f1a;border-color:#ef4444}
     /* Store pill sits directly left of the gear on phones too,
        vertically centred on the 34px gear (top 15px): a slim fixed
        width (pin + number + chevron; the number alone is shown, no
@@ -355,8 +386,7 @@
     display:flex;align-items:center;justify-content:center}
   .kebab-btn:hover,.kebab-btn:focus-visible,.kebab-btn[aria-expanded="true"]{
     background:var(--violet-soft);color:var(--plum);outline:none}
-  @media (prefers-color-scheme: dark){ .kebab-btn:hover,.kebab-btn:focus-visible,
-    .kebab-btn[aria-expanded="true"]{color:var(--plum2)} }
+  :root[data-theme="dark"] .kebab-btn:hover, :root[data-theme="dark"] .kebab-btn:focus-visible, :root[data-theme="dark"] .kebab-btn[aria-expanded="true"]{color:var(--plum2)}
   .kebab-menu{position:fixed;z-index:65;min-width:172px;background:var(--panel);
     border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:4px}
   .kebab-menu[hidden]{display:none}
@@ -373,7 +403,7 @@
     box-shadow:var(--shadow);width:100%;max-width:640px;padding:18px}
   .editor-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
   .editor-head h2{margin:0;font-size:20px;color:var(--plum)}
-  @media (prefers-color-scheme: dark){ .editor-head h2{color:var(--lilac)} }
+  :root[data-theme="dark"] .editor-head h2{color:var(--lilac)}
   .editor-x{border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);border-radius:999px;
     width:40px;height:40px;font-size:20px;line-height:1;cursor:pointer;flex:none}
   .editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -426,9 +456,9 @@
   .store-tools button{background:var(--panel2);color:var(--ink);border:1.5px solid var(--line);
     border-radius:999px;padding:6px 14px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;min-height:36px}
   .store-tools .selcount{margin-left:auto;font-size:13px;font-weight:700;color:var(--plum)}
-  @media (prefers-color-scheme: dark){ .store-tools .selcount{color:var(--lilac)} }
+  :root[data-theme="dark"] .store-tools .selcount{color:var(--lilac)}
   .store-err{color:#b91c1c;font-size:13.5px;font-weight:600;margin:8px 0 0}
-  @media (prefers-color-scheme: dark){ .store-err{color:#fca5a5} }
+  :root[data-theme="dark"] .store-err{color:#fca5a5}
   .store-search-field{margin-top:12px}
   /* Set store products: the store number is picked from a dropdown
      of the stores already set up. Choosing "＋ Add store…" in it
@@ -1855,12 +1885,12 @@
         <tr class="drow" data-detail-for="87" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks! [from 4L tag, romance-tags-4.csv]</p><p class="src">Product ID 383711</p></div></td>
         </tr>
-        <tr class="prow is-sale" data-idx="88" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="" data-cooler="No" data-status="Planogram" data-price="18.49" data-sale="Yes" data-sale-price="18.49" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 1.5l" tabindex="0" aria-expanded="false">
+        <tr class="prow is-sale" data-idx="88" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="18.49" data-sale="Yes" data-sale-price="18.49" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 1.5l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span><span class="badge sale">Sale</span></td>
           <td data-label="Size">1.5L</td>
           <td data-label="Price" class="price"><span class="sale-now">$18.49</span></td>
           <td data-label="Sugar (RS)">10 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip red">Light Red</span></td>
           <td data-label="Varietal">Merlot</td>
           <td data-label="Tannins">Medium</td>
@@ -3795,6 +3825,18 @@
       <h2 id="settingsTitle">Settings</h2>
       <button type="button" class="editor-x" id="settingsClose" aria-label="Close settings">×</button>
     </div>
+    <div class="theme-setting">
+      <div class="theme-setting-head">
+        <span class="theme-label" id="themeLabel">Appearance</span>
+        <span class="theme-current" id="themeCurrent">Light</span>
+      </div>
+      <div class="theme-options" role="radiogroup" aria-labelledby="themeLabel">
+        <button type="button" class="theme-opt" data-theme-opt="dark" role="radio" aria-checked="false">Dark</button>
+        <button type="button" class="theme-opt" data-theme-opt="light" role="radio" aria-checked="true">Light<span class="theme-opt-sub">Default</span></button>
+        <button type="button" class="theme-opt" data-theme-opt="auto" role="radio" aria-checked="false">Auto<span class="theme-opt-sub">Follow phone</span></button>
+      </div>
+      <p class="theme-note">Light is the default look. Auto follows your phone&rsquo;s light / dark setting. Saved on this device only.</p>
+    </div>
     <div class="settings-actions">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
@@ -3839,21 +3881,34 @@
     <details class="wk-section">
       <summary>Sweetness chart</summary>
       <div class="wk-body">
-        <table class="wk-table wk-sweet-table">
-          <thead>
-            <tr><th scope="col">Sweetness</th><th scope="col">Residual sugar</th></tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">Dry</th><td>0–9 g/L</td></tr>
-            <tr><th scope="row">Off Dry</th><td>9–18 g/L</td></tr>
-            <tr><th scope="row">Med-Dry</th><td>18–50 g/L</td></tr>
-            <tr><th scope="row">Med-Sweet</th><td>50–120 g/L</td></tr>
-            <tr><th scope="row">Sweet</th><td>+120 g/L</td></tr>
-          </tbody>
-        </table>
+        <ul class="wk-sweet-list">
+          <li><span class="wk-sweet-label">Extra Dry</span><span class="wk-sweet-range">0–4 g/L</span></li>
+          <li><span class="wk-sweet-label">Dry</span><span class="wk-sweet-range">0–9 g/L</span></li>
+          <li><span class="wk-sweet-label">Off Dry</span><span class="wk-sweet-range">9–18 g/L</span></li>
+          <li><span class="wk-sweet-label">Med-Dry</span><span class="wk-sweet-range">18–50 g/L</span></li>
+          <li><span class="wk-sweet-label">Med-Sweet</span><span class="wk-sweet-range">50–120 g/L</span></li>
+          <li><span class="wk-sweet-label">Sweet</span><span class="wk-sweet-range">+120 g/L</span></li>
+        </ul>
         <ul>
+          <li>Extra Dry is the driest end of the Dry range — the very driest wines (0–4 g/L) fall in Extra Dry, and Dry covers everything up to 9 g/L.</li>
           <li>Sweetness is often felt as a coating or richness on the tongue; noticeable sweetness can feel like a coating left by honey or syrup. A dry wine leaves the mouth feeling clean and refreshed.</li>
           <li>A wine's Residual Sugar (RS) is shown on its price tag or romance tag in grams per litre (g/L).</li>
+        </ul>
+        <h4>How residual sugar (RS) works</h4>
+        <p>Residual sugar is the natural grape sugar left in the wine once fermentation is done. During fermentation, yeast eats the sugar in the grape juice and converts it into alcohol — so the more sugar the yeast converts, the less is left behind. When nearly all of the sugar is converted, the wine has very little RS and tastes dry; when a lot of sugar is left unconverted, the wine has a lot of RS and tastes sweet.</p>
+        <h4>Why some wines keep more RS</h4>
+        <ul>
+          <li><strong>Fermentation stopped early</strong> — if the winemaker stops fermentation before the yeast finishes (for example by chilling or filtering the wine), more of the grape's natural sugar stays in the wine.</li>
+          <li><strong>Sugar added</strong> — in some styles, sugar is added back or unfermented sweet grape juice is blended in after fermentation, raising the RS.</li>
+          <li><strong>Very ripe or concentrated grapes</strong> — late-harvest, dried or frozen grapes (like icewine grapes) start with so much sugar that the yeast can't convert it all, leaving plenty behind.</li>
+        </ul>
+        <h4>How RS is measured</h4>
+        <p>RS is measured in grams of sugar per litre of wine (g/L) — that's the number on the chart above, and the number shown on a product's price tag or romance tag. A wine at 3 g/L has almost no sugar left; a wine at 120 g/L or more has a great deal left.</p>
+        <h4>How RS affects the taste</h4>
+        <ul>
+          <li><strong>Sweetness</strong> — the more RS, the sweeter the wine tastes: dry wines have little RS left, sweet wines have a lot.</li>
+          <li><strong>Body and coating</strong> — sugar adds weight and richness, so higher-RS wines can feel fuller and leave a coating on the tongue.</li>
+          <li><strong>Balance with acidity</strong> — acidity offsets sugar, so a wine with both high RS and high acidity (like many Rieslings) can taste less sweet than its g/L number suggests, while a low-acid wine can taste sweeter than its number.</li>
         </ul>
       </div>
     </details>
@@ -5173,7 +5228,7 @@
        label all say which parts are global and which are not */
     document.getElementById('editorNote').textContent = row
       ? 'Price, tasting notes and product info are shared: saving here updates this product for every store that carries it and every user of this app. Availability is per store — the Availability setting above only changes Store ' + activeStore + ', and every other store keeps its own availability for this product.'
-      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. The product is ticked for the store you\'re viewing now; other stores can include it any time via Settings → “Set store products”. Availability is per store: marking it unavailable here only makes it unavailable at Store ' + activeStore + '.';
+      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. A new product is not added to any store automatically — it appears unticked in Settings → “Set store products”, and you must tick it there for each store that should carry it. Availability is per store: marking it unavailable here only makes it unavailable at Store ' + activeStore + '.';
     document.getElementById('editorSave').textContent = row ? 'Save for all stores' : 'Add to global list';
     document.getElementById('f-availability-label').textContent = 'Availability — Store ' + activeStore + ' only';
     var cur = row ? readRow(row) : {
@@ -5263,11 +5318,11 @@
       /* A product added from any store joins the one global
          catalogue (createRow pushes it onto `rows`, so it appears in
          every store's product checklist and its data is edited
-         globally like any other product). It is ticked only for the
-         store being viewed — assortment stays per store. */
+         globally like any other product). It is NOT ticked for any
+         store — not even the store being viewed: assortment stays
+         per store, and a store only carries it once someone ticks
+         it in Settings → “Set store products”. */
       target = createRow(data);
-      storeSets[activeStore].add(target.getAttribute('data-idx'));
-      syncStoreUI();
     }
     /* writeRow rebuilt data-search, so re-add the plano / cooler
        tokens to match the status and In cooler values just saved */
@@ -5323,6 +5378,71 @@
   });
   document.getElementById('addProduct').addEventListener('click', closeSettings);
   document.getElementById('setStoreProducts').addEventListener('click', closeSettings);
+
+  /* ---------- Appearance: Dark / Light / Auto (Settings) ----------
+     Display setting only. Light is the default look and the default
+     when nothing is saved on this device — it does NOT fall back to
+     the phone's dark mode. Dark forces dark, Auto follows the
+     phone. The preference is saved in localStorage on this device
+     only (key wr-theme-pref); it is never synced to Supabase and
+     never touches the products table. The <head> script applies the
+     saved choice before first paint; this code keeps it in sync
+     while the app is open, including when the phone setting changes
+     while on Auto. */
+  var THEME_KEY = 'wr-theme-pref';
+  var themeMedia = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+  function themePref(){
+    var pref = document.documentElement.getAttribute('data-theme-pref');
+    if(pref === 'light' || pref === 'dark' || pref === 'auto') return pref;
+    try{
+      var saved = localStorage.getItem(THEME_KEY);
+      if(saved === 'light' || saved === 'dark' || saved === 'auto') return saved;
+    }catch(e){}
+    return 'light';
+  }
+  function effectiveTheme(pref){
+    if(pref === 'auto') return (themeMedia && themeMedia.matches) ? 'light' : 'dark';
+    return pref;
+  }
+  function syncThemeUI(pref, eff){
+    var labels = {dark:'Dark', light:'Light', auto:'Auto — follow phone'};
+    var current = document.getElementById('themeCurrent');
+    if(current) current.textContent = labels[pref] || 'Light';
+    var opts = document.querySelectorAll('[data-theme-opt]');
+    for(var i = 0; i < opts.length; i++){
+      opts[i].setAttribute('aria-checked', opts[i].getAttribute('data-theme-opt') === pref ? 'true' : 'false');
+    }
+    var meta = document.querySelector('meta[name="color-scheme"]');
+    if(meta) meta.setAttribute('content', eff);
+  }
+  function applyTheme(pref, save){
+    if(pref !== 'light' && pref !== 'dark' && pref !== 'auto') pref = 'light';
+    var eff = effectiveTheme(pref);
+    document.documentElement.setAttribute('data-theme-pref', pref);
+    document.documentElement.setAttribute('data-theme', eff);
+    document.documentElement.style.colorScheme = eff;
+    if(save){
+      try{ localStorage.setItem(THEME_KEY, pref); }catch(e){}
+    }
+    syncThemeUI(pref, eff);
+    return eff;
+  }
+  /* Apply on load (the head script already painted the right scheme;
+     this syncs the Settings buttons to it) */
+  applyTheme(themePref(), false);
+  var themeOpts = document.querySelectorAll('[data-theme-opt]');
+  for(var ti = 0; ti < themeOpts.length; ti++){
+    themeOpts[ti].addEventListener('click', function(){
+      applyTheme(this.getAttribute('data-theme-opt'), true);
+    });
+  }
+  if(themeMedia){
+    var onThemeMediaChange = function(){
+      if(themePref() === 'auto') applyTheme('auto', false);
+    };
+    if(themeMedia.addEventListener) themeMedia.addEventListener('change', onThemeMediaChange);
+    else if(themeMedia.addListener) themeMedia.addListener(onThemeMediaChange);
+  }
 
   /* ---------- Wine Knowledge (Settings) ----------
      A static reference panel: the tasting and pairing content from
@@ -5887,17 +6007,20 @@
   function sbRegisterNewProduct(row){
     var pid = genPid();
     setRowPid(row, pid);
+    /* Only the product itself is registered in the shared list.
+       No store_products row is written here: a new product must not
+       be added to the current store (or any store) automatically.
+       It joins the global list and shows up unticked in Settings →
+       “Set store products”, where it can be ticked manually for
+       whichever stores should carry it. */
     sb('products', { method: 'POST', body: rowToProduct(row), prefer: 'resolution=merge-duplicates,return=minimal' })
-      .then(function(){
-        return sb('store_products', { method: 'POST', body: { store_number: activeStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
-      })
       .then(function(){
         if(isUnavail(row)){
           return sb('store_unavailable', { method: 'POST', body: { store_number: activeStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
         }
       })
       .then(function(){ return sbSyncSale(row); })
-      .then(function(){ sbSaved('Product added — everyone can see it now.'); }, sbFail('the new product'));
+      .then(function(){ sbSaved('Product added to the global list — tick it in “Set store products” to add it to a store.'); }, sbFail('the new product'));
   }
   function sbSyncStoreSave(num, prevNum, idxSet){
     var pids = [];
