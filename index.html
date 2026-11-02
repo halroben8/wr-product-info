@@ -54,6 +54,37 @@
   .settings-action:hover,.settings-action:focus-visible{background:var(--panel2);border-color:var(--plum2);outline:none}
   .settings-action .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
   .settings-note{color:var(--muted);font-size:13.5px;margin:14px 0 0;line-height:1.5}
+  /* Wine Knowledge — a static reference panel opened from Settings.
+     The content is training material baked into this page only; it
+     never reads from, writes to, or syncs with the product list. Each
+     topic is a collapsible <details> section so the panel stays
+     compact on a phone. */
+  .knowledge-panel{max-width:680px}
+  .wk-intro{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.5}
+  .wk-section{border:1.5px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--panel);overflow:hidden}
+  .wk-section summary{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    min-height:48px;padding:11px 14px;cursor:pointer;list-style:none;
+    font-weight:700;font-size:15.5px;color:var(--plum);background:var(--violet-soft)}
+  .wk-section summary::-webkit-details-marker{display:none}
+  .wk-section summary::after{content:"›";font-size:22px;line-height:1;font-weight:700;color:var(--plum2);
+    transform:rotate(90deg);transition:transform .15s ease;flex:none}
+  .wk-section[open ] summary::after{transform:rotate(-90deg)}
+  .wk-section summary:hover,.wk-section summary:focus-visible{background:var(--panel2);outline:none}
+  @media (prefers-color-scheme: dark){ .wk-section summary{color:var(--lilac)} }
+  .wk-body{padding:12px 14px 14px;font-size:14.5px;line-height:1.55}
+  .wk-body p{margin:0 0 10px}
+  .wk-body p:last-child,.wk-body ul:last-child{margin-bottom:0}
+  .wk-body ul{margin:0 0 10px;padding-left:20px}
+  .wk-body li{margin-bottom:5px}
+  .wk-body li:last-child{margin-bottom:0}
+  .wk-body h4{margin:14px 0 5px;font-size:12.5px;font-weight:700;color:var(--plum);
+    text-transform:uppercase;letter-spacing:.05em}
+  .wk-body h4:first-child{margin-top:0}
+  @media (prefers-color-scheme: dark){ .wk-body h4{color:var(--lilac)} }
+  .wk-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12.5px;margin:2px 0 10px}
+  .wk-table th,.wk-table td{border:1px solid var(--line);padding:6px 3px;text-align:center;overflow-wrap:break-word}
+  .wk-table th{background:var(--violet-soft);color:var(--plum);font-weight:700}
+  @media (prefers-color-scheme: dark){ .wk-table th{color:var(--lilac)} }
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -136,6 +167,27 @@
     padding:2px 8px;border-radius:999px;background:var(--badge-bg);color:var(--badge-ink)}
   .badge.nip{background:transparent;color:var(--grape);border:1.5px solid var(--grape)}
   .badge.chk{background:#b45309;color:#fff}
+  /* On sale: vivid pink — a saturated pink given a dark outline,
+     so a SALE badge sitting next to a VQA badge or a pale rosé
+     chip never reads as the same thing. The same pink marks the
+     On sale filter when it is selected and tints the whole
+     row/card of a product on sale. Pink (not the plum used
+     elsewhere, not the red reserved for Unavailable) is the
+     sale colour throughout. */
+  .badge.sale{background:#f472b6;color:#241536;border:1.5px solid #241536;
+    font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  tr.prow.is-sale:not(.is-unavailable){background:#fce7f3}
+  tr.prow.is-sale:not(.is-unavailable):hover{background:#fbcfe8}
+  .toggle.sale-toggle[aria-pressed="true"]{background:#f472b6;color:#241536;border-color:#be185d}
+  .price .sale-now{color:#be185d;font-weight:800}
+  .price .was{color:var(--muted);font-weight:600;font-size:.82em;
+    text-decoration:line-through;margin-left:6px;white-space:nowrap}
+  @media (prefers-color-scheme: dark){
+    tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
+    tr.prow.is-sale:not(.is-unavailable):hover{background:#5f143d}
+    .price .sale-now{color:#f9a8d4}
+    .badge.sale{border-color:#f9a8d4}
+  }
   /* VQA designation: a gold seal-style badge beside the other badges
      under the product name, instead of "VQA" written into the name.
      Gold on near-black-brown reads as an official stamp and stays
@@ -188,6 +240,10 @@
     .settings-btn svg{width:19px;height:19px}
     /* Unavailable on a phone card: red border all round plus the red
        banner, so it reads as unavailable before any text is read */
+    tbody tr.prow.is-sale:not(.is-unavailable){border:1.5px solid #db2777;background:#fce7f3}
+    @media (prefers-color-scheme: dark){
+      tbody tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
+    }
     tbody tr.prow.is-unavailable{border:2px solid #dc2626;background:#fef2f2}
     tbody tr.prow.is-unavailable .badge.unavail{display:flex;justify-content:center;width:100%;
       font-size:13.5px;padding:6px 10px;border-radius:6px}
@@ -201,8 +257,8 @@
     .hero-store{top:17px;right:54px}
     .hero-store select{height:30px;min-height:30px;font-size:12.5px;width:92px}
     /* Sticky finder bar: search and the result count stay on screen
-       while scrolling; brand / style / sweetness / price / sort and the
-       reset live inside the Filters panel, behind the Filters button
+       while scrolling; brand / style / sweetness / tannins / price /
+       sort and the reset live inside the Filters panel, behind the Filters button
        until tapped. (Add product and Set store products moved to the
        Settings panel, opened by the gear in the header.) Brand keeps
        its .wide span so it runs full-width when the panel is open, but
@@ -317,6 +373,9 @@
     width:40px;height:40px;font-size:20px;line-height:1;cursor:pointer;flex:none}
   .editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .efield{display:flex;flex-direction:column;gap:4px;min-width:0}
+  .efield[hidden]{display:none !important}
+  .price .was{display:inline-block}
+  @media (max-width:760px){ .price .was{display:block;margin-left:0} }
   .efield.wide{grid-column:1 / -1}
   .efield textarea{font:inherit;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;
     background:var(--panel);color:var(--ink);width:100%;resize:vertical}
@@ -366,6 +425,13 @@
   .store-err{color:#b91c1c;font-size:13.5px;font-weight:600;margin:8px 0 0}
   @media (prefers-color-scheme: dark){ .store-err{color:#fca5a5} }
   .store-search-field{margin-top:12px}
+  /* Set store products: the store number is picked from a dropdown
+     of the stores already set up. Choosing "＋ Add store…" in it
+     reveals a number field for a brand-new store, the same pattern
+     as the first-visit prompt. */
+  .store-num-field select{cursor:pointer}
+  .store-new{margin-top:12px}
+  .store-new[hidden]{display:none !important}
   @media (max-width:760px){
     .store-list{max-height:36vh}
     .store-tools button{min-height:44px}
@@ -501,6 +567,17 @@
         </select>
       </div>
       <div class="field">
+        <label for="tannins">Tannins</label>
+        <select id="tannins">
+          <option value="">Any tannins</option>
+          <option value="none">None</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="field">
         <label for="maxprice">Max price</label>
         <input id="maxprice" type="number" min="0" step="1" placeholder="No limit" />
       </div>
@@ -519,6 +596,7 @@
     </div>
     <div class="toggles">
       <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
+      <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
       <span class="count" id="count" role="status"></span>
     </div>
@@ -722,10 +800,10 @@
         <tr class="drow" data-detail-for="12" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of pear and lime and a clean and refreshing finish. Stays fresh for up to 6 weeks! Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80094019</p></div></td>
         </tr>
-        <tr class="prow" data-idx="13" data-brand="BASK" data-rich="Light Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="11.99" data-rs="0.0" data-search="bask pinot noir pinot noir 750ml" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">BASK</span><span class="pname">Pinot Noir</span></td>
+        <tr class="prow is-sale" data-idx="13" data-brand="BASK" data-rich="Light Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="11.99" data-sale="Yes" data-sale-price="11.99" data-rs="0.0" data-search="bask pinot noir pinot noir 750ml" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">BASK</span><span class="pname">Pinot Noir</span><span class="badge sale">Sale</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$11.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$11.99</span></td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip red">Light Red</span></td>
@@ -848,10 +926,10 @@
         <tr class="drow" data-detail-for="21" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of strawberry, raspberry, cherry, citrus and floral; refreshing, with strawberry and cherry notes.</p><p class="src">Product ID 80098878</p></div></td>
         </tr>
-        <tr class="prow" data-idx="22" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="13.49" data-rs="0.0" data-search="bask reserve simply white vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">BASK</span><span class="pname">Reserve Simply White</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="22" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="13.49" data-sale="Yes" data-sale-price="13.49" data-rs="0.0" data-search="bask reserve simply white vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">BASK</span><span class="pname">Reserve Simply White</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$13.49</td>
+          <td data-label="Price" class="price"><span class="sale-now">$13.49</span></td>
           <td data-label="Sugar (RS)">0 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
@@ -1002,12 +1080,12 @@
         <tr class="drow" data-detail-for="32" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of tropical fruit, citrus, and peach. Stays fresh for up to 6 weeks!</p><p class="src">Product ID 80099114</p></div></td>
         </tr>
-        <tr class="prow" data-idx="33" data-brand="Burnt Ship Bay" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="3.0" data-search="burnt ship bay cabernet merlot vqa merlot 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="33" data-brand="Burnt Ship Bay" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="3.0" data-search="burnt ship bay cabernet merlot vqa merlot 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Burnt Ship Bay</span><span class="pname">Cabernet Merlot</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">3 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Merlot</td>
           <td data-label="Tannins">Medium</td>
@@ -1170,12 +1248,12 @@
         <tr class="drow" data-detail-for="44" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of lime and pastry with flavours white peach and asian pear. Pairs well with seared fish or risotto with peas.</p><p class="src">Product ID 80090817</p></div></td>
         </tr>
-        <tr class="prow" data-idx="45" data-brand="Cave Spring" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="17.99" data-rs="9.0" data-search="cave spring riesling dry vqa riesling 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="45" data-brand="Cave Spring" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="17.99" data-rs="9.0" data-search="cave spring riesling dry vqa riesling 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Cave Spring</span><span class="pname">Riesling Dry</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">$17.99</td>
           <td data-label="Sugar (RS)">9 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Riesling</td>
           <td data-label="Tannins">None</td>
@@ -1240,12 +1318,12 @@
         <tr class="drow" data-detail-for="49" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of strawberries and violets with a hint of mushrooms. Pairs well with lamb or beef burger with caramelized onions.</p><p class="src">Product ID 80059009</p></div></td>
         </tr>
-        <tr class="prow" data-idx="50" data-brand="Chateau Des Charmes" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="6.0" data-search="chateau des charmes gamay noir vqa gamay noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="50" data-brand="Chateau Des Charmes" data-rich="" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="6.0" data-search="chateau des charmes gamay noir vqa gamay noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Chateau Des Charmes</span><span class="pname">Gamay Noir</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">6 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Gamay Noir</td>
           <td data-label="Tannins">Low</td>
@@ -1282,12 +1360,12 @@
         <tr class="drow" data-detail-for="52" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of black raspberry, white pepper and oak with flavours of red cherry, damson plum and spice. Pairs well with ribs or brisket.</p><p class="src">Product ID 80059011</p></div></td>
         </tr>
-        <tr class="prow" data-idx="53" data-brand="D&#x27;Ont Poke The Bear" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="13.5" data-search="d&#x27;ont poke the bear cabernet baco noir vqa baco noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="53" data-brand="D&#x27;Ont Poke The Bear" data-rich="" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="13.5" data-search="d&#x27;ont poke the bear cabernet baco noir vqa baco noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">D&#x27;Ont Poke The Bear</span><span class="pname">Cabernet Baco Noir</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">13.5 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Off-Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Baco Noir</td>
           <td data-label="Tannins">Low</td>
@@ -1296,12 +1374,12 @@
         <tr class="drow" data-detail-for="53" hidden>
           <td colspan="9"><div class="detail"><p class="notes">A blend of Cabernet Sauvignon, Cabernet Franc, and Baco Noir; deep, dark purple, with notes of black currant, black cherry, blueberry, and a touch of spice — medium-bodied, easy-drinking, with a smooth and silky mouthfeel.</p><p class="src">Product ID 80086431</p></div></td>
         </tr>
-        <tr class="prow" data-idx="54" data-brand="D&#x27;Ont Poke The Bear" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="16.99" data-rs="15.0" data-search="d&#x27;ont poke the bear chardonnay sauvignon blanc riesling chardonnay-sauvignon blanc-riesling blend 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="54" data-brand="D&#x27;Ont Poke The Bear" data-rich="" data-sweet="Off-Dry" data-cooler="Yes" data-status="Planogram" data-price="16.99" data-rs="15.0" data-search="d&#x27;ont poke the bear chardonnay sauvignon blanc riesling chardonnay-sauvignon blanc-riesling blend 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">D&#x27;Ont Poke The Bear</span><span class="pname">Chardonnay Sauvignon Blanc Riesling</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">$16.99</td>
           <td data-label="Sugar (RS)">15 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Off-Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Chardonnay-Sauvignon Blanc-Riesling blend</td>
           <td data-label="Tannins">None-Low</td>
@@ -1338,12 +1416,12 @@
         <tr class="drow" data-detail-for="56" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of tropical fruit, green apple, citrus and candied ginger. Pairs well with chicken skewers or summer salads.</p><p class="src">Product ID 80059144</p></div></td>
         </tr>
-        <tr class="prow" data-idx="57" data-brand="Fielding" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="fielding pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="57" data-brand="Fielding" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="fielding pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Fielding</span><span class="pname">Pinot Grigio</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">2 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Pinot Grigio / Pinot Gris</td>
           <td data-label="Tannins">None</td>
@@ -1366,12 +1444,12 @@
         <tr class="drow" data-detail-for="58" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Calling to the heritage of Growers Cider, 1927 Extra Dry is a crisp and refreshing apple cider made from only the best fruits from Canada!</p><p class="src">Product ID 80003052</p></div></td>
         </tr>
-        <tr class="prow" data-idx="59" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="16.57" data-rs="60.0" data-search="growers cranberry pomegranate cider 2l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="59" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="Yes" data-status="Planogram" data-price="16.57" data-rs="60.0" data-search="growers cranberry pomegranate cider 2l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Cranberry Pomegranate</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">2L</td>
           <td data-label="Price" class="price">$16.57</td>
           <td data-label="Sugar (RS)">60 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Cider</td>
           <td data-label="Tannins">Variable</td>
@@ -1408,12 +1486,12 @@
         <tr class="drow" data-detail-for="61" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of ripe and juicy apricots, plums and nectarines, complimented with intense sweetness.</p><p class="src">Product ID 80065964</p></div></td>
         </tr>
-        <tr class="prow" data-idx="62" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="3.82" data-rs="75.0" data-search="growers raspberry ginger zinger cider 473ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="62" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="Yes" data-status="Planogram" data-price="3.82" data-rs="75.0" data-search="growers raspberry ginger zinger cider 473ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Raspberry Ginger Zinger</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">473mL</td>
           <td data-label="Price" class="price">$3.82</td>
           <td data-label="Sugar (RS)">75 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Cider</td>
           <td data-label="Tannins">Variable</td>
@@ -1436,12 +1514,12 @@
         <tr class="drow" data-detail-for="63" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of blackberries, blueberries and raspberries with a delightful natural sweetness.</p><p class="src">Product ID 80057695</p></div></td>
         </tr>
-        <tr class="prow" data-idx="64" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="3.82" data-rs="75.0" data-search="growers tropical clementine pineapple cider 473ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="64" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="Yes" data-status="Planogram" data-price="3.82" data-rs="75.0" data-search="growers tropical clementine pineapple cider 473ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Tropical Clementine Pineapple</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">473mL</td>
           <td data-label="Price" class="price">$3.82</td>
           <td data-label="Sugar (RS)">75 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Cider</td>
           <td data-label="Tannins">Variable</td>
@@ -1450,12 +1528,12 @@
         <tr class="drow" data-detail-for="64" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of tropical fruit balanced well with the clementine flavours.</p><p class="src">Product ID 80064690</p></div></td>
         </tr>
-        <tr class="prow" data-idx="65" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="16.57" data-rs="75.0" data-search="growers tropical clementine pineapple cider 2l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="65" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="Yes" data-status="Planogram" data-price="16.57" data-rs="75.0" data-search="growers tropical clementine pineapple cider 2l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Tropical Clementine Pineapple</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">2L</td>
           <td data-label="Price" class="price">$16.57</td>
           <td data-label="Sugar (RS)">75 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Cider</td>
           <td data-label="Tannins">Variable</td>
@@ -1464,12 +1542,12 @@
         <tr class="drow" data-detail-for="65" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of tropical fruit balanced well with the clementine flavours. [BUY 6 &amp; SAVE panel ignored]</p><p class="src">Product ID 80082375</p></div></td>
         </tr>
-        <tr class="prow" data-idx="66" data-brand="Henry of Pelham" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="19.99" data-rs="12.0" data-search="henry of pelham old vines baco noir vqa baco noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="66" data-brand="Henry of Pelham" data-rich="" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="19.99" data-rs="12.0" data-search="henry of pelham old vines baco noir vqa baco noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Henry of Pelham</span><span class="pname">Old Vines Baco Noir</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">$19.99</td>
           <td data-label="Sugar (RS)">12 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Off-Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Baco Noir</td>
           <td data-label="Tannins">Low</td>
@@ -1492,10 +1570,10 @@
         <tr class="drow" data-detail-for="67" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Pale lemon in colour, this pleasantly aromatic wine offers notes of juicy gooseberry, chamomile, lemon, herbs and wet stone that replay on the bone-dry palate.</p><p class="src">Product ID 80099449</p></div></td>
         </tr>
-        <tr class="prow" data-idx="68" data-brand="Inniskillin" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-rs="1.0" data-search="inniskillin cabernet franc vqa cabernet franc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Cabernet Franc</span><span class="badge vqa">VQA</span></td>
+        <tr class="prow is-sale" data-idx="68" data-brand="Inniskillin" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-sale="Yes" data-sale-price="12.99" data-rs="1.0" data-search="inniskillin cabernet franc vqa cabernet franc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Cabernet Franc</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$12.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
           <td data-label="Sugar (RS)">1 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip red">Medium Red</span></td>
@@ -1548,10 +1626,10 @@
         <tr class="drow" data-detail-for="71" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of raspberry, strawberry, cranberry, and candied rhubarb. Pairs well with strawberry goat cheese salad, turkey dinner, or rhubarb pie.</p><p class="src">Product ID 80097274</p></div></td>
         </tr>
-        <tr class="prow" data-idx="72" data-brand="Inniskillin" data-rich="Medium White" data-sweet="Medium" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="21.0" data-search="inniskillin late autumn riesling vqa riesling 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Late Autumn Riesling</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="72" data-brand="Inniskillin" data-rich="Medium White" data-sweet="Medium" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-sale="Yes" data-sale-price="12.99" data-rs="21.0" data-search="inniskillin late autumn riesling vqa riesling 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Late Autumn Riesling</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$12.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
           <td data-label="Sugar (RS)">21 g/L</td>
           <td data-label="Sweetness">Medium</td>
           <td data-label="Richness"><span class="chip white">Medium White</span></td>
@@ -1562,12 +1640,12 @@
         <tr class="drow" data-detail-for="72" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of citrus, pear, honey and delicate spice. Pairs well with roast turkey or pan-fried fish.</p><p class="src">Product ID 219543</p></div></td>
         </tr>
-        <tr class="prow" data-idx="73" data-brand="Inniskillin" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="4.0" data-search="inniskillin pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="73" data-brand="Inniskillin" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="4.0" data-search="inniskillin pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Pinot Grigio</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">4 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Pinot Grigio / Pinot Gris</td>
           <td data-label="Tannins">None</td>
@@ -1576,12 +1654,12 @@
         <tr class="drow" data-detail-for="73" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Light, fresh Pinot Grigio showing aromas and flavours of citrus, melon and grassy herbs; pale straw, dry and light-medium bodied with citrus fruit and nut flavours and a crisp, clean finish.</p><p class="src">Product ID 348979</p></div></td>
         </tr>
-        <tr class="prow" data-idx="74" data-brand="Inniskillin" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="5.0" data-search="inniskillin pinot noir vqa pinot noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="74" data-brand="Inniskillin" data-rich="" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="5.0" data-search="inniskillin pinot noir vqa pinot noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Pinot Noir</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">5 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Pinot Noir</td>
           <td data-label="Tannins">Low to Medium</td>
@@ -1688,10 +1766,10 @@
         <tr class="drow" data-detail-for="81" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant with hints of vanilla and spice.</p><p class="src">Product ID 331025</p></div></td>
         </tr>
-        <tr class="prow" data-idx="82" data-brand="Jackson-Triggs" data-rich="Rich Red" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="41.99" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection cabernet sauvignon cabernet sauvignon 4l" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Cabernet Sauvignon</span></td>
+        <tr class="prow is-sale" data-idx="82" data-brand="Jackson-Triggs" data-rich="Rich Red" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="41.99" data-sale="Yes" data-sale-price="41.99" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection cabernet sauvignon cabernet sauvignon 4l" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Cabernet Sauvignon</span><span class="badge sale">Sale</span></td>
           <td data-label="Size">4L</td>
-          <td data-label="Price" class="price">$41.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$41.99</span></td>
           <td data-label="Sugar (RS)">10 g/L</td>
           <td data-label="Sweetness">Off-Dry</td>
           <td data-label="Richness"><span class="chip red">Rich Red</span></td>
@@ -1758,12 +1836,12 @@
         <tr class="drow" data-detail-for="86" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of delicate pear, nectarine, and lemon with a touch of honey. [from 1.5L tag, romance-tags-4.csv]</p><p class="src">Product ID 80010509</p></div></td>
         </tr>
-        <tr class="prow" data-idx="87" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="87" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">10 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip red">Light Red</span></td>
           <td data-label="Varietal">Merlot</td>
           <td data-label="Tannins">Medium</td>
@@ -1772,10 +1850,10 @@
         <tr class="drow" data-detail-for="87" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks! [from 4L tag, romance-tags-4.csv]</p><p class="src">Product ID 383711</p></div></td>
         </tr>
-        <tr class="prow" data-idx="88" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="" data-cooler="No" data-status="Planogram" data-price="18.49" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 1.5l" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span></td>
+        <tr class="prow is-sale" data-idx="88" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="" data-cooler="No" data-status="Planogram" data-price="18.49" data-sale="Yes" data-sale-price="18.49" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 1.5l" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span><span class="badge sale">Sale</span></td>
           <td data-label="Size">1.5L</td>
-          <td data-label="Price" class="price">$18.49</td>
+          <td data-label="Price" class="price"><span class="sale-now">$18.49</span></td>
           <td data-label="Sugar (RS)">10 g/L</td>
           <td data-label="Sweetness">—</td>
           <td data-label="Richness"><span class="chip red">Light Red</span></td>
@@ -1828,12 +1906,12 @@
         <tr class="drow" data-detail-for="91" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of peach, complimented by citrus with a floral finish.</p><p class="src">Product ID 987503</p></div></td>
         </tr>
-        <tr class="prow" data-idx="92" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="41.99" data-rs="4.0" data-search="jackson-triggs proprietors&#x27; selection pinot grigio pinot grigio / pinot gris 4l" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Pinot Grigio</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="92" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="41.99" data-sale="Yes" data-sale-price="41.99" data-rs="6.0" data-search="jackson-triggs proprietors&#x27; selection pinot grigio pinot grigio / pinot gris 4l" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Pinot Grigio</span><span class="badge sale">Sale</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">4L</td>
-          <td data-label="Price" class="price">$41.99</td>
-          <td data-label="Sugar (RS)">4 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Price" class="price"><span class="sale-now">$41.99</span></td>
+          <td data-label="Sugar (RS)">6 g/L</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip white">Light White</span></td>
           <td data-label="Varietal">Pinot Grigio / Pinot Gris</td>
           <td data-label="Tannins">None</td>
@@ -1898,12 +1976,12 @@
         <tr class="drow" data-detail-for="96" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of crisp citrus with a grassy and herbacious finish. Stays fresh for up to 6 weeks!</p><p class="src">Product ID 80010385</p></div></td>
         </tr>
-        <tr class="prow" data-idx="97" data-brand="Jackson-Triggs" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="jackson-triggs proprietors&#x27; selection sauvignon blanc sauvignon blanc 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="97" data-brand="Jackson-Triggs" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="jackson-triggs proprietors&#x27; selection sauvignon blanc sauvignon blanc 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Sauvignon Blanc</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">7 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Sauvignon Blanc</td>
           <td data-label="Tannins">None</td>
@@ -1912,12 +1990,12 @@
         <tr class="drow" data-detail-for="97" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Pale straw; floral &amp; grassy aromas; dry, light-body, with gooseberry and citrus flavours &amp; finish.</p><p class="src">Product ID 399410</p></div></td>
         </tr>
-        <tr class="prow" data-idx="98" data-brand="Jackson-Triggs" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="jackson-triggs proprietors&#x27; selection sauvignon blanc sauvignon blanc 1.5l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="98" data-brand="Jackson-Triggs" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="jackson-triggs proprietors&#x27; selection sauvignon blanc sauvignon blanc 1.5l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Sauvignon Blanc</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">1.5L</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">7 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Sauvignon Blanc</td>
           <td data-label="Tannins">None</td>
@@ -1982,10 +2060,10 @@
         <tr class="drow" data-detail-for="102" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of baked apple, pear and rich buttery pastry. Pairs well with truffle butter risotto or stuffed chicken with ricotta &amp; spinach.</p><p class="src">Product ID 526251</p></div></td>
         </tr>
-        <tr class="prow" data-idx="103" data-brand="Jackson-Triggs" data-rich="Medium Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-rs="6.0" data-search="jackson-triggs reserve meritage vqa red blend / meritage (bordeaux-style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Meritage</span><span class="badge vqa">VQA</span></td>
+        <tr class="prow is-sale" data-idx="103" data-brand="Jackson-Triggs" data-rich="Medium Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="12.99" data-sale="Yes" data-sale-price="12.99" data-rs="6.0" data-search="jackson-triggs reserve meritage vqa red blend / meritage (bordeaux-style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Meritage</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$12.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
           <td data-label="Sugar (RS)">6 g/L</td>
           <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip red">Medium Red</span></td>
@@ -2024,10 +2102,10 @@
         <tr class="drow" data-detail-for="105" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of dark plum, black cherry, mocha and vanilla. Pairs well with grilled steak. [from 750mL tag, romance-tags-5.csv]</p><p class="src">Product ID 988319</p></div></td>
         </tr>
-        <tr class="prow" data-idx="106" data-brand="Jackson-Triggs" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="5.0" data-search="jackson-triggs reserve pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Pinot Grigio</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="106" data-brand="Jackson-Triggs" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-sale="Yes" data-sale-price="12.99" data-rs="5.0" data-search="jackson-triggs reserve pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Pinot Grigio</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
           <td data-label="Sugar (RS)">5 g/L</td>
           <td data-label="Sweetness">—</td>
           <td data-label="Richness">—</td>
@@ -2038,10 +2116,10 @@
         <tr class="drow" data-detail-for="106" hidden>
           <td colspan="9"><div class="detail"><p class="notes">A refreshing, crisp white, expressing vibrant fruit flavours. The nose and palate show green apple, grapefruit and candied pear notes.</p><p class="src">Product ID 535682</p></div></td>
         </tr>
-        <tr class="prow" data-idx="107" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="" data-search="jackson-triggs reserve sauvignon blanc vqa sauvignon blanc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Sauvignon Blanc</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="107" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-sale="Yes" data-sale-price="12.99" data-rs="" data-search="jackson-triggs reserve sauvignon blanc vqa sauvignon blanc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Sauvignon Blanc</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$12.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
           <td data-label="Sugar (RS)">—</td>
           <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip white">Light White</span></td>
@@ -2290,12 +2368,12 @@
         <tr class="drow" data-detail-for="124" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of leather and tobacco, flavours of raspberry and sour cherries. Pairs well with slow roasted pork or traditional turkey dinner.</p><p class="src">Product ID 80086436</p></div></td>
         </tr>
-        <tr class="prow" data-idx="125" data-brand="Peninsula Ridge" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="peninsula ridge inox unoaked chardonnay vqa chardonnay 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="125" data-brand="Peninsula Ridge" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="peninsula ridge inox unoaked chardonnay vqa chardonnay 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Peninsula Ridge</span><span class="pname">Inox Unoaked Chardonnay</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">2 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Chardonnay</td>
           <td data-label="Tannins">None</td>
@@ -2402,10 +2480,10 @@
         <tr class="drow" data-detail-for="132" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of green apple, candied lemon, and dried apricot. Pairs well with pad thai, grilled asparagus, or pork tenderloin.</p><p class="src">Product ID 80097275</p></div></td>
         </tr>
-        <tr class="prow" data-idx="133" data-brand="Saintly" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="15.99" data-rs="4.0" data-search="saintly the good rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Saintly</span><span class="pname">The Good Rosé</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="133" data-brand="Saintly" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="15.99" data-sale="Yes" data-sale-price="15.99" data-rs="4.0" data-search="saintly the good rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Saintly</span><span class="pname">The Good Rosé</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$15.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$15.99</span></td>
           <td data-label="Sugar (RS)">4 g/L</td>
           <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness"><span class="chip rose">Rosé</span></td>
@@ -2542,12 +2620,12 @@
         <tr class="drow" data-detail-for="142" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of red apple, pear and fig with flavours of apricot and peach on the finish. Pairs well with butternut squash risotto or arugula salad.</p><p class="src">Product ID 80087069</p></div></td>
         </tr>
-        <tr class="prow" data-idx="143" data-brand="Sandbanks" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="10.0" data-search="sandbanks rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="143" data-brand="Sandbanks" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="10.0" data-search="sandbanks rosé vqa rosé (generic style) 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Sandbanks</span><span class="pname">Rosé</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">10 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Rosé (generic style)</td>
           <td data-label="Tannins">Low</td>
@@ -2598,10 +2676,10 @@
         <tr class="drow" data-detail-for="146" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of intense, rich &amp; ripe red fruits, cedar, wildflowers, toasty and spicy oak. Pairs well with hearty braised beef with root vegetables or grilled burgers.</p><p class="src">Product ID 80087079</p></div></td>
         </tr>
-        <tr class="prow" data-idx="147" data-brand="Sandbanks" data-rich="Medium Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="15.99" data-rs="7.0" data-search="sandbanks reserve french kiss vqa merlot-cabernet blend 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Sandbanks</span><span class="pname">Reserve French Kiss</span><span class="badge vqa">VQA</span></td>
+        <tr class="prow is-sale" data-idx="147" data-brand="Sandbanks" data-rich="Medium Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="15.99" data-sale="Yes" data-sale-price="15.99" data-rs="7.0" data-search="sandbanks reserve french kiss vqa merlot-cabernet blend 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Sandbanks</span><span class="pname">Reserve French Kiss</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$15.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$15.99</span></td>
           <td data-label="Sugar (RS)">7 g/L</td>
           <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip red">Medium Red</span></td>
@@ -2738,10 +2816,10 @@
         <tr class="drow" data-detail-for="156" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of white peach, pink grapefruit and meyer lemon. Pairs well with shrimp tempura or fish and chips. Less Alcohol: Sidney, a wine beverage, is 7% ABV compared to traditional wine that typically contains 12% to 14% ABV%.</p><p class="src">Product ID 80098996</p></div></td>
         </tr>
-        <tr class="prow" data-idx="157" data-brand="Sidney" data-rich="" data-sweet="published: 1 g sugar per 188 mL serving, not converted" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="" data-search="sidney rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Sidney</span><span class="pname">Rosé</span><span class="badge cooler">Cooler</span></td>
+        <tr class="prow is-sale" data-idx="157" data-brand="Sidney" data-rich="" data-sweet="published: 1 g sugar per 188 mL serving, not converted" data-cooler="Yes" data-status="Planogram" data-price="" data-sale="Yes" data-sale-price="11.99" data-rs="" data-search="sidney rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Sidney</span><span class="pname">Rosé</span><span class="badge sale">Sale</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">—</td>
+          <td data-label="Price" class="price"><span class="sale-now">$11.99</span></td>
           <td data-label="Sugar (RS)">—</td>
           <td data-label="Sweetness">published: 1 g sugar per 188 mL serving, not converted</td>
           <td data-label="Richness">—</td>
@@ -2780,12 +2858,12 @@
         <tr class="drow" data-detail-for="159" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of ripe raspberry and cherry with floral and spice. Pairs well with flank steak with garlic potatoes.</p><p class="src">Product ID 80059213</p></div></td>
         </tr>
-        <tr class="prow" data-idx="160" data-brand="Svelte" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="svelte rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="160" data-brand="Svelte" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="svelte rosé rosé (generic style) 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Svelte</span><span class="pname">Rosé</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">7 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Rosé (generic style)</td>
           <td data-label="Tannins">Low</td>
@@ -2794,12 +2872,12 @@
         <tr class="drow" data-detail-for="160" hidden>
           <td colspan="9"><div class="detail"><p class="notes">This fresh and fruity rosé, with only 80 calories per 188 mL serving, does not compromise on taste. Fruity aromas of strawberry and cherry greet you on the nose, accompanied by gentle floral notes that lead to a refreshingly light palate.</p><p class="src">Product ID 80097278</p></div></td>
         </tr>
-        <tr class="prow" data-idx="161" data-brand="Svelte" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="6.0" data-search="svelte white 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="161" data-brand="Svelte" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="6.0" data-search="svelte white 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Svelte</span><span class="pname">White</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">6 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">—</td>
           <td data-label="Tannins">—</td>
@@ -2808,12 +2886,12 @@
         <tr class="drow" data-detail-for="161" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Fresh and fruity, this light, white blend pours with aromas of apricot and gentle floral notes. It is crisp and easy on the palate with balanced flavours and a pleasant mouthfeel.</p><p class="src">Product ID 80097277</p></div></td>
         </tr>
-        <tr class="prow" data-idx="162" data-brand="The Noble Experiment" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="5.0" data-search="the noble experiment cabernet sauvignon cabernet sauvignon 750ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="162" data-brand="The Noble Experiment" data-rich="" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="5.0" data-search="the noble experiment cabernet sauvignon cabernet sauvignon 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">The Noble Experiment</span><span class="pname">Cabernet Sauvignon</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">5 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Cabernet Sauvignon</td>
           <td data-label="Tannins">High</td>
@@ -2822,12 +2900,12 @@
         <tr class="drow" data-detail-for="162" hidden>
           <td colspan="9"><div class="detail"><p class="notes">A bold Cabernet Sauvignon delivering flavours of blackberry, figs, jam and cocoa, balanced with a smooth oak finish.</p><p class="src">Product ID 80060870</p></div></td>
         </tr>
-        <tr class="prow" data-idx="163" data-brand="Vineland Estates" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="" data-rs="7.0" data-search="vineland estates cabernet franc vqa cabernet franc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="163" data-brand="Vineland Estates" data-rich="" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="7.0" data-search="vineland estates cabernet franc vqa cabernet franc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Vineland Estates</span><span class="pname">Cabernet Franc</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">7 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Cabernet Franc</td>
           <td data-label="Tannins">Medium</td>
@@ -2836,12 +2914,12 @@
         <tr class="drow" data-detail-for="163" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Bursting with dark cherry, chocolate and dried herb aromas and a rich palate of black berry, spice and cocoa powder, with weight and structure to pair with beef dishes.</p><p class="src">Product ID 80059124</p></div></td>
         </tr>
-        <tr class="prow" data-idx="164" data-brand="Vineland Estates" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="vineland estates unoaked chardonnay vqa chardonnay 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="164" data-brand="Vineland Estates" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="2.0" data-search="vineland estates unoaked chardonnay vqa chardonnay 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Vineland Estates</span><span class="pname">Unoaked Chardonnay</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">2 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Chardonnay</td>
           <td data-label="Tannins">None</td>
@@ -2850,12 +2928,12 @@
         <tr class="drow" data-detail-for="164" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Mac apple, Bosc pear and hints of lime on the nose; Bosc turns Bartlett on the palate with green apple, limeade and a touch of minerality, with a pleasing peach linger on the finish.</p><p class="src">Product ID 80059125</p></div></td>
         </tr>
-        <tr class="prow" data-idx="165" data-brand="Vintage Ink" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="19.4" data-rs="12.0" data-search="vintage ink pink ink vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="165" data-brand="Vintage Ink" data-rich="" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="19.4" data-rs="12.0" data-search="vintage ink pink ink vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Vintage Ink</span><span class="pname">Pink Ink</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price">$19.40</td>
           <td data-label="Sugar (RS)">12 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Off-Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">—</td>
           <td data-label="Tannins">—</td>
@@ -2864,10 +2942,10 @@
         <tr class="drow" data-detail-for="165" hidden>
           <td colspan="9"><div class="detail"><p class="notes">A rosé exploding with layers of strawberry and raspberry and a hint of refreshing grapefruit; well-balanced with fresh, crisp acidity.</p><p class="src">Product ID 80082765</p></div></td>
         </tr>
-        <tr class="prow" data-idx="166" data-brand="Vintage Ink" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="14.99" data-rs="21.0" data-search="vintage ink rebel red vqa shiraz-merlot-cabernet sauvignon blend 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Vintage Ink</span><span class="pname">Rebel Red</span><span class="badge vqa">VQA</span></td>
+        <tr class="prow is-sale" data-idx="166" data-brand="Vintage Ink" data-rich="" data-sweet="" data-cooler="No" data-status="Planogram" data-price="14.99" data-sale="Yes" data-sale-price="14.99" data-rs="21.0" data-search="vintage ink rebel red vqa shiraz-merlot-cabernet sauvignon blend 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Vintage Ink</span><span class="pname">Rebel Red</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$14.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$14.99</span></td>
           <td data-label="Sugar (RS)">21 g/L</td>
           <td data-label="Sweetness">—</td>
           <td data-label="Richness">—</td>
@@ -3004,12 +3082,12 @@
         <tr class="drow" data-detail-for="175" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of cedar, dark berries and sweet herb. Pairs well with flank steak or lamb burger.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="176" data-brand="Good Fortune" data-rich="" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="4.0" data-search="good fortune hard seltzer blackberry elderflower n/a 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="176" data-brand="Good Fortune" data-rich="" data-sweet="Extra Dry" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="4.0" data-search="good fortune hard seltzer blackberry elderflower n/a 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Hard Seltzer Blackberry Elderflower</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">355mL</td>
           <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">4 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Extra Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">N/A</td>
           <td data-label="Tannins">None</td>
@@ -3018,12 +3096,12 @@
         <tr class="drow" data-detail-for="176" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Sparkling water spiked with a splash of wine infused with fruit and botanical flavours. Notes of juicy blackberries balanced by fresh, floral elderflower. [romance-tags-13.csv] | Sparkling water spiked with a splash of wine infused with fruit and botanical flavours. Notes of juicy blackberries balanced by fresh, floral elderflower. [romance-tags-14.csv]</p></div></td>
         </tr>
-        <tr class="prow" data-idx="177" data-brand="Good Fortune" data-rich="" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="42.0" data-search="good fortune sparkling wine spritz citrus orange flower sparkling wine 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="177" data-brand="Good Fortune" data-rich="" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="42.0" data-search="good fortune sparkling wine spritz citrus orange flower sparkling wine 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Sparkling Wine Spritz Citrus Orange Flower</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">355mL</td>
           <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">42 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Sparkling wine</td>
           <td data-label="Tannins">Low</td>
@@ -3032,12 +3110,12 @@
         <tr class="drow" data-detail-for="177" hidden>
           <td colspan="9"><div class="detail"><p class="notes">A refreshing poolside paring! [as printed] Deep flavours of clementine and lemon turn into a light finish of white flowers and sweetness.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="178" data-brand="Good Fortune" data-rich="" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="47.0" data-search="good fortune sparkling wine spritz mango margarita sparkling wine 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="178" data-brand="Good Fortune" data-rich="" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="47.0" data-search="good fortune sparkling wine spritz mango margarita sparkling wine 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Sparkling Wine Spritz Mango Margarita</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">355mL</td>
           <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">47 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Sparkling wine</td>
           <td data-label="Tannins">Low</td>
@@ -3046,12 +3124,12 @@
         <tr class="drow" data-detail-for="178" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Sparkling wine cocktail blended with bold fruit and botanical flavours. Notes of juicy mango balanced by fresh mint.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="179" data-brand="Good Fortune" data-rich="" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="49.0" data-search="good fortune sparkling wine spritz raspberry hibiscus sparkling wine 355ml" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="179" data-brand="Good Fortune" data-rich="" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="49.0" data-search="good fortune sparkling wine spritz raspberry hibiscus sparkling wine 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Sparkling Wine Spritz Raspberry Hibiscus</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">355mL</td>
           <td data-label="Price" class="price">$3.49</td>
           <td data-label="Sugar (RS)">49 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Sparkling wine</td>
           <td data-label="Tannins">Low</td>
@@ -3060,12 +3138,12 @@
         <tr class="drow" data-detail-for="179" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Sparkling wine cocktail blended with bold fruit and botanical flavours. Notes of candied raspberries, sweet hibiscus with crisp acidity on the finish.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="180" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="10.36" data-rs="37.0" data-search="growers rosé cider rosé (generic style) 1l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="180" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="10.36" data-rs="37.0" data-search="growers rosé cider rosé (generic style) 1l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Rosé Cider</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">1L</td>
           <td data-label="Price" class="price">$10.36</td>
           <td data-label="Sugar (RS)">37 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Rosé (generic style)</td>
           <td data-label="Tannins">Low</td>
@@ -3074,12 +3152,12 @@
         <tr class="drow" data-detail-for="180" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of apple blossom on the nose, finished with a splash of rosé wine.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="181" data-brand="Growers" data-rich="Cider" data-sweet="" data-cooler="" data-status="Not In Plano" data-price="" data-rs="60.0" data-search="growers winter cranberry cider 1l" tabindex="0" aria-expanded="false">
+        <tr class="prow" data-idx="181" data-brand="Growers" data-rich="Cider" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="" data-rs="60.0" data-search="growers winter cranberry cider 1l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Growers</span><span class="pname">Winter Cranberry</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">1L</td>
           <td data-label="Price" class="price">—</td>
           <td data-label="Sugar (RS)">60 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sweetness">Sweet</td>
           <td data-label="Richness"><span class="chip cider">Cider</span></td>
           <td data-label="Varietal">Cider</td>
           <td data-label="Tannins">Variable</td>
@@ -3410,10 +3488,10 @@
         <tr class="drow" data-detail-for="204" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of subtle vanilla and creamy oak notes combined with pear and green apple fruit. Pairs well with sauteed mushrooms or grilled chicken skewers.</p></div></td>
         </tr>
-        <tr class="prow" data-idx="205" data-brand="Vintage Ink" data-rich="Medium White" data-sweet="Dry" data-cooler="" data-status="Not In Plano" data-price="14.99" data-rs="8.0" data-search="vintage ink wicked white vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
-          <td data-label="Product"><span class="brand">Vintage Ink</span><span class="pname">Wicked White</span><span class="badge vqa">VQA</span><span class="badge nip">Not in plano</span></td>
+        <tr class="prow is-sale" data-idx="205" data-brand="Vintage Ink" data-rich="Medium White" data-sweet="Dry" data-cooler="" data-status="Not In Plano" data-price="14.99" data-sale="Yes" data-sale-price="14.99" data-rs="8.0" data-search="vintage ink wicked white vqa 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+          <td data-label="Product"><span class="brand">Vintage Ink</span><span class="pname">Wicked White</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge nip">Not in plano</span></td>
           <td data-label="Size">750mL</td>
-          <td data-label="Price" class="price">$14.99</td>
+          <td data-label="Price" class="price"><span class="sale-now">$14.99</span></td>
           <td data-label="Sugar (RS)">8 g/L</td>
           <td data-label="Sweetness">Dry</td>
           <td data-label="Richness"><span class="chip white">Medium White</span></td>
@@ -3703,6 +3781,7 @@
   <button type="button" id="kebabAvail" role="menuitem">⊘ Mark unavailable at this store</button>
   <button type="button" id="kebabPlano" role="menuitem" aria-pressed="false">☐ Not in plano — Off</button>
   <button type="button" id="kebabCooler" role="menuitem" aria-pressed="false">☐ Cooler — Off</button>
+  <button type="button" id="kebabSale" role="menuitem" aria-pressed="false">☐ On sale — Off</button>
 </div>
 
 <div class="editor-overlay" id="settingsOverlay" hidden>
@@ -3714,11 +3793,237 @@
     <div class="settings-actions">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
+      <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, food pairing and red &amp; white wine varietals</span></span></button>
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="knowledgeOverlay" hidden>
+  <div class="editor-panel knowledge-panel" role="dialog" aria-modal="true" aria-labelledby="knowledgeTitle">
+    <div class="editor-head">
+      <h2 id="knowledgeTitle">Wine Knowledge</h2>
+      <button type="button" class="editor-x" id="knowledgeClose" aria-label="Close wine knowledge">×</button>
+    </div>
+    <p class="wk-intro">Reference from the Liquid Learning “Intro to Red Wine” training, with the white wine varietals added from general wine knowledge. Tap a topic to open it.</p>
+
+    <details class="wk-section" open>
+      <summary>How to taste (3 steps)</summary>
+      <div class="wk-body">
+        <h4>Step 1: The Appearance</h4>
+        <ul>
+          <li><strong>Clarity:</strong> bright, clear, dull, cloudy? Most wines should look clear; very vivid colour can be described as bright. Dull, hazy or cloudy may indicate a fault, or that the wine is unfiltered.</li>
+          <li><strong>Colour (reds):</strong> purple, ruby, garnet, tawny. Young reds tend to show vibrant purple or ruby tones; older reds develop deeper garnet or tawny hues. Colour also hints at grape variety, winemaking style and age.</li>
+          <li><strong>Colour intensity:</strong> judged by how easily you can see through the wine (tilt the glass over white text). <strong>Pale</strong> — letters easily read through it. <strong>Medium</strong> — letters visible but less clear. <strong>Deep</strong> — rich and dark, letters hard to see. <strong>Opaque</strong> — very dark, letters not visible at all.</li>
+        </ul>
+        <h4>Step 2: The Nose</h4>
+        <ul>
+          <li><strong>Condition:</strong> clean or unclean (faulty)? Clean = pleasant aromas typical of wine, no obvious faults. Unclean = unusual smells such as vinegar, wet newspaper or damp cardboard.</li>
+          <li><strong>Swirl</strong> the wine gently to release more aromas, then smell again.</li>
+          <li><strong>Aroma intensity:</strong> <strong>Light</strong> — subtle, nose close to or inside the rim to detect. <strong>Medium</strong> — easily noticeable with your nose just above the glass. <strong>Pronounced</strong> — very strong, detectable even with the glass held a short distance away.</li>
+        </ul>
+        <h4>Step 3: The Taste</h4>
+        <p>Move a small sip around your mouth so it touches all areas of the tongue and palate. Assess, in order: sweetness, acidity, tannin, alcohol, body, flavour, intensity, finish.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Sweetness chart</summary>
+      <div class="wk-body">
+        <table class="wk-table">
+          <thead>
+            <tr><th scope="col">Dry</th><th scope="col">Off Dry</th><th scope="col">Med-Dry</th><th scope="col">Med-Sweet</th><th scope="col">Sweet</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>0–9 g/L</td><td>9–18 g/L</td><td>18–50 g/L</td><td>50–120 g/L</td><td>+120 g/L</td></tr>
+          </tbody>
+        </table>
+        <ul>
+          <li>Sweetness is often felt as a coating or richness on the tongue; noticeable sweetness can feel like a coating left by honey or syrup. A dry wine leaves the mouth feeling clean and refreshed.</li>
+          <li>A wine's Residual Sugar (RS) is shown on its price tag or romance tag in grams per litre (g/L).</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Tannins</summary>
+      <div class="wk-body">
+        <h4>What they are</h4>
+        <p>Tannins are natural compounds found in grape skins, seeds and stems. They are an important part of the structure of red wine, giving it firmness and backbone alongside acidity and alcohol, and they act as a natural preservative that helps a wine age well. Tannins themselves have little flavour of their own — you feel them more than you taste them.</p>
+        <h4>Where they come from</h4>
+        <ul>
+          <li><strong>Grape skins</strong> — the main source. Red wines are fermented with the skins, so they pick up the most tannin; white wines have little or no skin contact, so they have little to none.</li>
+          <li><strong>Seeds and stems</strong> — add tannin too, though winemakers usually limit their harsh, bitter side.</li>
+          <li><strong>Oak</strong> — barrels add a small amount of tannin as wine ages in them, but oak aging mostly helps soften the tannins already there, for a smoother, rounder mouthfeel.</li>
+          <li><strong>The grape itself</strong> — thick-skinned grapes like Cabernet Sauvignon are naturally high in tannin; thin-skinned grapes like Pinot Noir and Gamay are naturally low.</li>
+        </ul>
+        <h4>What they feel like</h4>
+        <p>Tannins create a drying, slightly puckering or grippy sensation in your mouth — most noticeable on your gums, tongue and the inside of your cheeks. It is the same feeling as drinking strong black tea or biting into an unripe banana: your mouth feels dried out rather than refreshed. The firmer the tannins, the more the wine seems to grip and coat your mouth.</p>
+        <ul>
+          <li><strong>Low</strong> — a light drying touch; the wine feels smooth and easy-drinking (Pinot Noir, Gamay).</li>
+          <li><strong>Medium</strong> — a noticeable grip that frames the fruit without dominating (Merlot, Cabernet Franc).</li>
+          <li><strong>High</strong> — a firm, chewy grip that coats the mouth and lingers (Cabernet Sauvignon). Fatty foods like steak soften the feel of high tannins, which is why they pair so well together.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Acidity</summary>
+      <div class="wk-body">
+        <p>Acidity creates a fresh, mouth-watering sensation. High-acid red wines make your mouth water more and can feel crisp, lively or tart — similar to biting into a sour cherry, cranberry or underripe berry. Low-acid wines feel softer, smoother and less mouth-watering.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Alcohol</summary>
+      <div class="wk-body">
+        <p>Alcohol is often felt as a warming sensation toward the back of your mouth or throat.</p>
+        <ul>
+          <li><strong>Low (6–9%)</strong> — little to no warming.</li>
+          <li><strong>Medium (10–13%)</strong> — noticeable warmth, but not overpowering.</li>
+          <li><strong>High (14–17%)</strong> — a strong warming sensation that stands out.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Body</summary>
+      <div class="wk-body">
+        <p>Body describes how heavy or rich the wine feels in your mouth: light, medium or full/rich.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Flavour intensity</summary>
+      <div class="wk-body">
+        <ul>
+          <li><strong>Light</strong> — flavours are subtle and may take concentration to identify.</li>
+          <li><strong>Medium</strong> — flavours are noticeable and easy to recognize.</li>
+          <li><strong>Pronounced</strong> — flavours are bold, powerful and immediately stand out.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Finish</summary>
+      <div class="wk-body">
+        <p>How long flavours remain after swallowing or spitting.</p>
+        <ul>
+          <li><strong>Short</strong> — fade quickly, under 15 seconds.</li>
+          <li><strong>Medium</strong> — remain noticeable for about 15–30 seconds.</li>
+          <li><strong>Long</strong> — linger more than 30 seconds and may evolve, revealing additional layers.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Common red wine aromas and flavours</summary>
+      <div class="wk-body">
+        <p>Every aroma and flavour in a wine comes from one of three sources — <strong>primary</strong>, <strong>secondary</strong> or <strong>tertiary</strong>. The label tells you <em>where</em> that flavour came from, not just what it smells or tastes like.</p>
+        <ul>
+          <li><strong>Primary — from the grape itself:</strong> the fruit, floral and spice character built into the grape variety. These are the fresh flavours in a young wine — for example the red and black fruit and peppery spice in the list below.</li>
+          <li><strong>Secondary — from winemaking:</strong> flavours created during and just after fermentation, by the winemaker&rsquo;s choices. This includes fermentation itself, malolactic fermentation (which can add buttery, creamy notes) and oak — aging in oak barrels adds vanilla, toast, caramel and smoke.</li>
+          <li><strong>Tertiary — from aging / maturation:</strong> flavours that only develop over time as the wine ages and matures, in barrel and then in bottle. Fresh fruit softens and savoury, developed notes appear — leather, earth, tobacco, mushrooms and dried fruit.</li>
+        </ul>
+        <p>In short: <strong>primary = the grape, secondary = the winemaking, tertiary = the aging</strong>. The same flavour can show up in more than one place — oak flavours, for example, start as secondary from the barrel and deepen into tertiary as the wine matures.</p>
+        <ul>
+          <li><strong>Primary — Red fruit:</strong> strawberry, raspberry, cherry</li>
+          <li><strong>Primary — Black fruit:</strong> blackcurrant, blackberry</li>
+          <li><strong>Primary — Dried fruit:</strong> fig, prune, raisin, jam, baked fruit</li>
+          <li><strong>Primary — Spice:</strong> pepper, liquorice</li>
+          <li><strong>Secondary &amp; tertiary — Oak:</strong> vanilla, toast, caramel, mocha, smoke, charred wood, chocolate, coffee</li>
+          <li><strong>Secondary &amp; tertiary — Maturation:</strong> leather, earth, mushrooms, tobacco, toffee, chocolate, coffee, dried red and black fruit</li>
+        </ul>
+        <p>Some flavours and aromas may fall into two categories.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Judging a wine</summary>
+      <div class="wk-body">
+        <p>Bring together what you observed through sight, smell and taste for an overall impression.</p>
+        <ul>
+          <li><strong>Faulty or Poor quality</strong> — something may be wrong, or the wine tastes unbalanced or uninteresting; you would likely not choose it again.</li>
+          <li><strong>Acceptable</strong> — drinkable but not especially memorable; you might drink it but would probably choose something else if available.</li>
+          <li><strong>Good to Excellent</strong> — balanced, enjoyable and interesting; you would likely choose it again or serve it for a special occasion.</li>
+        </ul>
+        <ul>
+          <li>Liking a wine is different from judging its quality: a wine can be simple yet enjoyable, or high-quality even if it is not your personal preference.</li>
+          <li><strong>Balance:</strong> a balanced wine has all its elements working well together. If one element stands out in a negative way, the wine may feel unbalanced. A well-structured wine shows harmony and skill in winemaking.</li>
+          <li><strong>Value:</strong> is the wine fairly priced for its quality? A good-value wine matches its price to its overall quality; a poor-value wine feels overpriced; an excellent-value wine exceeds expectations for its price.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Aging (stainless steel vs oak)</summary>
+      <div class="wk-body">
+        <h4>Stainless steel</h4>
+        <p>Preserves fresh, fruity flavours and a lively style. Steel adds no flavours of its own, so the grape's natural flavours shine through. Result: often bright, fresh and fruit-forward.</p>
+        <h4>Oak</h4>
+        <p>Adds complexity, texture and depth of flavour, and can soften tannins for a smoother, rounder mouthfeel. Result: often richer, fuller and more complex, with added layers complementing the grape's fruit.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Food pairing 101</summary>
+      <div class="wk-body">
+        <p>Five tastes to work with: sweet, sour, bitter, umami, salty.</p>
+        <h4>Compare — match weight and intensity</h4>
+        <p>Light-bodied wines pair best with lighter foods; fuller-bodied wines with richer dishes, so neither overpowers the other. Gamay Noir + charcuterie; Merlot + meat lasagna; Cabernet Sauvignon + grilled ribeye.</p>
+        <h4>Contrast — balance opposites</h4>
+        <p>A wine can refresh the palate, soften certain flavours or highlight different elements in a dish. Pinot Noir + grilled salmon; Cabernet Franc + pepperoni pizza; Baco Noir + spicy sausage.</p>
+        <h4>Regional — what grows together, goes together</h4>
+        <p>Many classic pairings come from the same region, where local wines naturally complement local ingredients and cooking styles. Niagara Pinot Noir + wild mushroom risotto; Prince Edward County Baco Noir + BBQ ribs; Ontario Cabernet Franc + herb-crusted lamb.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Red wine varietals</summary>
+      <div class="wk-body">
+        <h4>Baco Noir</h4>
+        <p>Niagara Peninsula, Prince Edward County, USA. Typically medium-bodied and off-dry, deep ruby-purple, with strawberry, cherry, pepper and smoky notes.</p>
+        <h4>Cabernet Franc</h4>
+        <p>Niagara Peninsula, France, Argentina, Italy. Medium-bodied with medium to high acidity; raspberry, sometimes strawberry, and earthy notes.</p>
+        <h4>Cabernet Sauvignon</h4>
+        <p>Niagara Peninsula, California, Australia. Deeply coloured and full-bodied, with heavy tannins and medium-to-high acidity; bold blackcurrant, chocolate, mint, bell pepper and earthy notes.</p>
+        <h4>Meritage</h4>
+        <p>Niagara Peninsula, France, Argentina. A Bordeaux-style blend of Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot and Malbec. Typically dry and medium- to full-bodied; winemakers adjust the blend from vintage to vintage for consistent quality. Pronunciation: rhymes with “heritage”.</p>
+        <h4>Merlot</h4>
+        <p>Niagara Peninsula, France, Italy. Cedar, plum, licorice, black cherry and fruitcake; typically lower in acidity and tannin, with juicy fruit and higher alcohol.</p>
+        <h4>Pinot Noir</h4>
+        <p>Niagara Peninsula, Prince Edward County, France. Red and black cherry flavours are typical, along with raspberry and hints of currant; light to medium tannins.</p>
+        <h4>Shiraz / Syrah</h4>
+        <p>Niagara Peninsula, France, Australia, Spain. Deeply coloured with firm tannins and jammy fruit; blackberry, currant, raspberry, violets, hawthorn, spice, savoury meat, black pepper and eucalyptus.</p>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>White wine varietals</summary>
+      <div class="wk-body">
+        <h4>Chardonnay</h4>
+        <p>Niagara Peninsula, France, California, Australia. The most versatile white grape: unoaked Chardonnay is light- to medium-bodied and crisp, with high acidity and green apple, lemon and pear notes; oaked Chardonnay is medium- to full-bodied with more moderate acidity, and tropical fruit, peach, vanilla, toast and buttery notes. No tannin in either style.</p>
+        <h4>Gewürztraminer</h4>
+        <p>Niagara Peninsula, France (Alsace), Germany. Medium- to full-bodied and highly aromatic, with low to medium-low acidity — the softest acidity of the whites here — and often a touch of sweetness; lychee, rose petal, ginger, tropical fruit and spice notes. In this list it appears in white blends such as Sandbanks Reserve Sleeping Giant White, alongside Chardonnay, Muscat and Marsanne.</p>
+        <h4>Moscato / Muscat</h4>
+        <p>Niagara Peninsula, Italy, France. Light- to medium-bodied, with low to medium acidity and little to no tannin; usually sweet or off-dry and often lightly sparkling, with pronounced peach, apricot, orange blossom, grape and honey notes. The same grape family is labelled Moscato in the Italian style and Muscat in the French style.</p>
+        <h4>Pinot Grigio / Pinot Gris</h4>
+        <p>Niagara Peninsula, Italy, France (Alsace). One grape, two names and two styles: Italian-style Pinot Grigio is light-bodied, dry and crisp; Pinot Gris in the Alsace style is riper, fuller and softer. Both show medium-high acidity and no tannin, with pear, green apple, citrus, peach and melon notes.</p>
+        <h4>Riesling</h4>
+        <p>Niagara Peninsula, Germany, France (Alsace). Light- to medium-bodied, with high to very high acidity and no tannin — that acidity keeps even sweet styles tasting fresh. Made from dry to sweet, and a classic Ontario icewine grape; lime, green apple, peach, apricot and floral notes, with honey in icewine.</p>
+        <h4>Sauvignon Blanc</h4>
+        <p>Niagara Peninsula, France, New Zealand. Light- to medium-bodied and almost always dry, with high acidity and no tannin; grapefruit, lime, gooseberry, green apple and passion fruit notes, often with a fresh grassy or herbal edge. Oak- or barrel-aged versions add vanilla and toast notes.</p>
+        <h4>Vidal Blanc</h4>
+        <p>Niagara Peninsula and across Ontario. A cold-hardy hybrid grape suited to Canadian winters. Light- to medium-bodied as a dry or off-dry table wine, with medium-high to high acidity, none to low tannin, and peach, apricot, citrus and floral notes; left to freeze on the vine it makes rich, sweet icewine with honey, apricot and tropical fruit notes.</p>
+      </div>
+    </details>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="knowledgeCancel">Close</button>
     </div>
   </div>
 </div>
@@ -3748,6 +4053,17 @@
         <div class="efield">
           <label for="f-price">Price ($)</label>
           <input id="f-price" type="number" min="0" step="0.01" placeholder="Leave blank if not known" />
+        </div>
+        <div class="efield">
+          <label for="f-sale">On sale</label>
+          <select id="f-sale">
+            <option value="No">No</option>
+            <option value="Yes">Yes — show pink SALE badge</option>
+          </select>
+        </div>
+        <div class="efield" id="f-saleprice-field" hidden>
+          <label for="f-saleprice">Sale price ($)</label>
+          <input id="f-saleprice" type="number" min="0" step="0.01" placeholder="Leave blank to keep the price above as the sale price" />
         </div>
         <div class="efield">
           <label for="f-rs">Sugar — RS (g/L)</label>
@@ -3828,9 +4144,16 @@
       <h2 id="storeTitle">Add store</h2>
       <button type="button" class="editor-x" id="storeClose" aria-label="Close store setup">×</button>
     </div>
-    <div class="efield">
+    <div class="efield store-num-field">
       <label for="storeNum">Store number</label>
-      <input id="storeNum" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 412" />
+      <select id="storeNum" aria-label="Store number">
+        <option value="358">358</option>
+        <option value="__add__">＋ Add store…</option>
+      </select>
+    </div>
+    <div class="efield store-new" id="storeNewWrap" hidden>
+      <label for="storeNewNum">New store number</label>
+      <input id="storeNewNum" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 412" />
     </div>
     <p class="store-err" id="storeErr" role="alert" hidden></p>
     <p class="editor-note">Ticking only sets which products this store carries, chosen from the one shared product list. Price, notes and product info are global — shared by all stores — and are never changed or copied per store here. Saving a store here updates the shared list, so every user sees the same stores and the same products in each.</p>
@@ -3891,10 +4214,13 @@
   });
   var q = document.getElementById('q'), brand = document.getElementById('brand'),
       rich = document.getElementById('rich'), sweet = document.getElementById('sweet'),
+      tannins = document.getElementById('tannins'),
       maxprice = document.getElementById('maxprice'), sortsel = document.getElementById('sortsel'),
       count = document.getElementById('count'), empty = document.getElementById('empty');
   var controlsEl = document.querySelector('.controls');
   var filtersBtn = document.getElementById('filtersBtn');
+  var saleToggle = document.getElementById('saleToggle');
+  function saleOnlyOn(){ return !!saleToggle && saleToggle.getAttribute('aria-pressed') === 'true'; }
   var state = { sort:'product', dir:1 };
 
   /* ---------- Per-store availability ----------
@@ -3921,7 +4247,9 @@
     if(brand.value) n++;
     if(rich.value) n++;
     if(sweet.value) n++;
+    if(tannins.value) n++;
     if(maxprice.value) n++;
+    if(saleOnlyOn()) n++;
     var open = controlsEl.classList.contains('open');
     filtersBtn.textContent = 'Filters' + (n ? ' · ' + n + ' on' : '') + (open ? ' ▴' : ' ▾');
     filtersBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -3948,8 +4276,38 @@
     words.forEach(function(w){ sum += levels[w]; });
     return sum / words.length;
   }
+  /* Tannins filter: a product matches the chosen level when the
+     range in its tannin text includes that level — "Low to Medium"
+     matches Low and Medium, "None-Low" matches None and Low, and
+     "Medium-High to High" matches Medium and High. "Unknown"
+     matches the values with no level in them at all ("—",
+     "Variable", "N/A", blank) — the same ones tanninRank() sorts
+     last. Purely a list-view filter: it reads the row's Tannins
+     cell and is never saved or synced anywhere. */
+  function tanninMatches(text, level){
+    var levels = { 'negligible':0, 'none':0, 'low':1, 'medium':2, 'moderate':2, 'high':3, 'very high':4 };
+    var words = String(text || '').toLowerCase().match(/very high|negligible|none|low|medium|moderate|high/g);
+    if(level === 'unknown') return !words;
+    if(!words) return false;
+    var target = { 'none':0, 'low':1, 'medium':2, 'high':3 }[level];
+    var ranks = words.map(function(w){ return levels[w]; });
+    var lo = Math.min.apply(null, ranks), hi = Math.max.apply(null, ranks);
+    if(level === 'high') return hi >= 3;
+    return target >= lo && target <= hi;
+  }
+  /* What a customer actually pays: the sale price when the product
+     is on sale and a sale price is set, otherwise the regular price.
+     Price sorting and the Max price filter both use this. */
+  function effectivePrice(row){
+    if(row.getAttribute('data-sale') === 'Yes'){
+      var sp = parseFloat(row.getAttribute('data-sale-price'));
+      if(!isNaN(sp)) return sp;
+    }
+    var p = parseFloat(row.getAttribute('data-price'));
+    return isNaN(p) ? null : p;
+  }
   function sortKey(row, key){
-    if(key === 'price'){ var p = parseFloat(row.getAttribute('data-price')); return isNaN(p) ? null : p; }
+    if(key === 'price'){ return effectivePrice(row); }
     if(key === 'rs'){ var r = parseFloat(row.getAttribute('data-rs')); return isNaN(r) ? null : r; }
     if(key === 'brand'){ return cellText(row,'Product'); }
     if(key === 'product'){ return cellText(row,'Product'); }
@@ -3984,7 +4342,7 @@
   }
   function apply(){
     var query = q.value.trim().toLowerCase();
-    var b = brand.value, r = rich.value, s = sweet.value;
+    var b = brand.value, r = rich.value, s = sweet.value, t = tannins.value;
     var mp = parseFloat(maxprice.value);
     var shown = 0;
     rows.forEach(function(row){
@@ -3993,9 +4351,11 @@
       if(b && row.getAttribute('data-brand') !== b) ok = false;
       if(r && row.getAttribute('data-rich') !== r) ok = false;
       if(s && row.getAttribute('data-sweet').indexOf(s) !== 0) ok = false;
+      if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
+      if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
       if(!isNaN(mp)){
-        var p = parseFloat(row.getAttribute('data-price'));
-        if(isNaN(p) || p > mp) ok = false;
+        var p = effectivePrice(row);
+        if(p === null || p > mp) ok = false;
       }
       if(!storeSets[activeStore].has(row.getAttribute('data-idx'))) ok = false;
       row.style.display = ok ? '' : 'none';
@@ -4012,7 +4372,7 @@
     }
     empty.style.display = shown === 0 ? 'block' : 'none';
   }
-  [q, brand, rich, sweet, maxprice].forEach(function(el){
+  [q, brand, rich, sweet, tannins, maxprice].forEach(function(el){
     el.addEventListener('input', apply);
     el.addEventListener('change', apply);
   });
@@ -4080,8 +4440,15 @@
     });
   }
   rows.forEach(wireRow);
+  if(saleToggle){
+    saleToggle.addEventListener('click', function(){
+      saleToggle.setAttribute('aria-pressed', saleOnlyOn() ? 'false' : 'true');
+      apply();
+    });
+  }
   document.getElementById('reset').addEventListener('click', function(){
-    q.value=''; brand.value=''; rich.value=''; sweet.value=''; maxprice.value='';
+    q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
+    if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     state.sort='product'; state.dir=1; sortsel.value='product';
     applySort(); apply();
   });
@@ -4213,8 +4580,43 @@
     if(isPlaceholderValue(raw)) return '';
     return String(raw || '').trim();
   }
+  /* ---------- Sweetness from residual sugar (RS) ----------
+     Sweetness chart, applied ONLY where a product has no
+     sweetness selection yet: Extra Dry 0–4 g/L, Dry over 4 to
+     10 g/L, Off-Dry over 10 to 20 g/L, Medium over 20 to
+     35 g/L, Sweet over 35 to 100 g/L, Extra Sweet over
+     100 g/L. An existing sweetness — a romance/shelf-tag value
+     above all — is never overwritten, even when it disagrees
+     with the chart ("trust the tag"). A product with no RS
+     value either keeps its blank sweetness: nothing is guessed.
+     This runs inside normalizeProductData(), the one helper
+     every read, write, editor save and shared-list sync passes
+     through, so the app list and the shared Supabase list (via
+     rowToProduct) get the same fill-in and it cannot be undone
+     by a sync that still carries the blank. */
+  function sweetnessFromRs(rs){
+    var n = parseFloat(rs);
+    if(isNaN(n) || n < 0) return '';
+    if(n <= 4) return 'Extra Dry';
+    if(n <= 10) return 'Dry';
+    if(n <= 20) return 'Off-Dry';
+    if(n <= 35) return 'Medium';
+    if(n <= 100) return 'Sweet';
+    return 'Extra Sweet';
+  }
+  function fillSweetnessFromRs(data){
+    if(!data) return data;
+    var cur = String(data.sweet || '').trim();
+    /* A placeholder ("Unknown") is not a selection either */
+    if(cur && !isPlaceholderValue(cur)) return data;
+    var derived = sweetnessFromRs(data.rs);
+    if(derived) data.sweet = derived;
+    else if(cur) data.sweet = '';
+    return data;
+  }
   function normalizeProductData(data){
     if(!data) return data;
+    fillSweetnessFromRs(data);
     var variant = brandVariant(data.brand);
     if(variant){
       data.brand = variant.brand;
@@ -4333,6 +4735,8 @@
       tannins: cellVal(row, 'Tannins'),
       acidity: cellVal(row, 'Acidity'),
       cooler: row.getAttribute('data-cooler') || '',
+      sale: row.getAttribute('data-sale') === 'Yes',
+      salePrice: row.getAttribute('data-sale-price') || '',
       vqa: isVqa(row),
       status: row.getAttribute('data-status') || 'Planogram',
       unavailable: isUnavail(row),
@@ -4474,6 +4878,35 @@
     syncPlanoSearch(row);
     syncCoolerSearch(row);
   }
+  /* ---------- On sale — on/off from the ⋮ menu and the editor ----------
+     A product on sale (data-sale="Yes") carries the pink SALE
+     badge under its name, a pale-pink row/card tint, and — when a
+     sale price is set — the sale price in place of the regular
+     price, with the regular price struck through beside it. The
+     ⋮ menu's On sale item toggles the flag, keeping the sale price
+     for when it is turned back on; the editor's On sale / Sale
+     price fields edit both. On sale is global product info, like
+     price — the same for every store and every user — so toggling
+     here is the same change the editor makes. The "On sale only"
+     filter toggle shows just these products. Search also matches
+     "sale" and "on sale" for products on sale. */
+  function isSale(row){
+    return row.getAttribute('data-sale') === 'Yes';
+  }
+  function syncSaleSearch(row){
+    var s = (row.getAttribute('data-search') || '').replace(/\bon sale\b/g, '').replace(/\bsale\b/g, '').replace(/\s+/g, ' ').trim();
+    if(isSale(row)) s += ' on sale sale';
+    row.setAttribute('data-search', s);
+  }
+  function setSale(row, on){
+    if(isSale(row) === !!on){ syncSaleSearch(row); return; }
+    var data = readRow(row);
+    data.sale = !!on;
+    writeRow(row, data);
+    syncPlanoSearch(row);
+    syncCoolerSearch(row);
+    syncSaleSearch(row);
+  }
   /* One shared ⋮ menu, positioned fixed next to whichever product's
      dots were tapped, so it is never clipped by the table or the card */
   var kebabMenu = document.getElementById('kebabMenu');
@@ -4481,6 +4914,7 @@
   var kebabAvailBtn = document.getElementById('kebabAvail');
   var kebabPlanoBtn = document.getElementById('kebabPlano');
   var kebabCoolerBtn = document.getElementById('kebabCooler');
+  var kebabSaleBtn = document.getElementById('kebabSale');
   var menuRow = null, menuBtn = null;
   function closeKebabMenu(refocus){
     if(kebabMenu.hidden) return;
@@ -4504,6 +4938,9 @@
     var cool = isCooler(row);
     kebabCoolerBtn.textContent = cool ? '☑ Cooler — On' : '☐ Cooler — Off';
     kebabCoolerBtn.setAttribute('aria-pressed', cool ? 'true' : 'false');
+    var sale = isSale(row);
+    kebabSaleBtn.textContent = sale ? '☑ On sale — On' : '☐ On sale — Off';
+    kebabSaleBtn.setAttribute('aria-pressed', sale ? 'true' : 'false');
     btn.setAttribute('aria-expanded', 'true');
     kebabMenu.hidden = false;
     var r = btn.getBoundingClientRect();
@@ -4534,6 +4971,11 @@
     var row = menuRow;
     closeKebabMenu(false);
     if(row){ setCooler(row, !isCooler(row)); apply(); sbSyncProduct(row); }
+  });
+  kebabSaleBtn.addEventListener('click', function(){
+    var row = menuRow;
+    closeKebabMenu(false);
+    if(row){ setSale(row, !isSale(row)); apply(); sbSyncProduct(row); }
   });
   document.addEventListener('click', function(ev){
     if(!kebabMenu.hidden && !kebabMenu.contains(ev.target)) closeKebabMenu(false);
@@ -4577,8 +5019,11 @@
     row.setAttribute('data-vqa', data.vqa ? 'Yes' : 'No');
     row.setAttribute('data-status', data.status);
     row.setAttribute('data-price', data.price);
+    row.setAttribute('data-sale', data.sale ? 'Yes' : 'No');
+    row.setAttribute('data-sale-price', data.salePrice || '');
+    row.classList.toggle('is-sale', !!data.sale);
     row.setAttribute('data-rs', data.rs);
-    row.setAttribute('data-search', (data.brand + ' ' + data.name + (data.vqa ? ' vqa' : '') + ' ' + data.varietal + ' ' + data.size).toLowerCase());
+    row.setAttribute('data-search', (data.brand + ' ' + data.name + (data.vqa ? ' vqa' : '') + ' ' + data.varietal + ' ' + data.size + (data.status === 'Not In Plano' ? ' not in plano' : '') + (data.cooler === 'Yes' ? ' cooler' : '') + (data.sale ? ' on sale sale' : '')).toLowerCase());
     var pcell = cellEl(row, 'Product');
     pcell.innerHTML = '';
     var b = document.createElement('span');
@@ -4587,6 +5032,11 @@
     var p = document.createElement('span');
     p.className = 'pname'; p.textContent = data.name;
     pcell.appendChild(p);
+    if(data.sale){
+      var sb2 = document.createElement('span');
+      sb2.className = 'badge sale'; sb2.textContent = 'Sale';
+      pcell.appendChild(sb2);
+    }
     if(data.vqa){
       var vb = document.createElement('span');
       vb.className = 'badge vqa'; vb.textContent = 'VQA';
@@ -4610,8 +5060,30 @@
     /* Availability banner goes on after the name/badges are rebuilt */
     setUnavailable(row, !!data.unavailable);
     setCell(row, 'Size', data.size || '—');
+    /* Price cell: on sale with a sale price, the sale price leads in
+       bold and the regular price follows struck through; on sale
+       with no separate sale price, the regular price stands (the
+       pink SALE badge and row tint carry the sale signal) */
     var priceN = parseFloat(data.price);
-    setCell(row, 'Price', isNaN(priceN) ? '—' : '$' + priceN.toFixed(2));
+    var priceTd = cellEl(row, 'Price');
+    if(priceTd){
+      priceTd.innerHTML = '';
+      var saleN = data.sale ? parseFloat(data.salePrice) : NaN;
+      if(!isNaN(saleN)){
+        var now = document.createElement('span');
+        now.className = 'sale-now';
+        now.textContent = '$' + saleN.toFixed(2);
+        priceTd.appendChild(now);
+        if(!isNaN(priceN) && priceN !== saleN){
+          var was = document.createElement('span');
+          was.className = 'was';
+          was.textContent = '$' + priceN.toFixed(2);
+          priceTd.appendChild(was);
+        }
+      } else {
+        priceTd.textContent = isNaN(priceN) ? '—' : '$' + priceN.toFixed(2);
+      }
+    }
     var rsN = parseFloat(data.rs);
     setCell(row, 'Sugar (RS)', isNaN(rsN) ? '—' : rsN + ' g/L');
     setCell(row, 'Sweetness', data.sweet || '—');
@@ -4697,7 +5169,7 @@
     document.getElementById('f-availability-label').textContent = 'Availability — Store ' + activeStore + ' only';
     var cur = row ? readRow(row) : {
       brand:'', name:'', size:'750mL', price:'', rs:'', sweet:'', rich:'',
-      varietal:'', tannins:'', acidity:'', cooler:'', vqa:false, status:'Not In Plano', unavailable:false, notes:''
+      varietal:'', tannins:'', acidity:'', cooler:'', sale:false, salePrice:'', vqa:false, status:'Not In Plano', unavailable:false, notes:''
     };
     comboFields.forEach(function(cf){
       var sel = document.getElementById(cf.sel), nw = document.getElementById(cf.nw);
@@ -4712,6 +5184,9 @@
        product, whose name can carry more than the varietal. */
     document.getElementById('f-name-field').hidden = !row;
     document.getElementById('f-price').value = cur.price;
+    document.getElementById('f-sale').value = cur.sale ? 'Yes' : 'No';
+    document.getElementById('f-saleprice').value = cur.salePrice;
+    document.getElementById('f-saleprice-field').hidden = !cur.sale;
     document.getElementById('f-rs').value = cur.rs;
     document.getElementById('f-cooler').value = cur.cooler;
     document.getElementById('f-vqa').value = cur.vqa ? 'Yes' : 'No';
@@ -4728,6 +5203,12 @@
     document.body.style.overflow = '';
     editingRow = null;
   }
+  /* Sale price field only shows while On sale is Yes */
+  document.getElementById('f-sale').addEventListener('change', function(){
+    var on = this.value === 'Yes';
+    document.getElementById('f-saleprice-field').hidden = !on;
+    if(on) document.getElementById('f-saleprice').focus();
+  });
   document.getElementById('editorClose').addEventListener('click', closeEditor);
   document.getElementById('editorCancel').addEventListener('click', closeEditor);
   editorOverlay.addEventListener('click', function(ev){ if(ev.target === editorOverlay) closeEditor(); });
@@ -4743,6 +5224,8 @@
        it). Editing: the name comes from the name field as before. */
     data.name = editingRow ? document.getElementById('f-name').value.trim() : data.varietal;
     data.price = document.getElementById('f-price').value.trim();
+    data.sale = document.getElementById('f-sale').value === 'Yes';
+    data.salePrice = document.getElementById('f-saleprice').value.trim();
     data.rs = document.getElementById('f-rs').value.trim();
     data.cooler = document.getElementById('f-cooler').value;
     data.vqa = document.getElementById('f-vqa').value === 'Yes';
@@ -4779,7 +5262,7 @@
     }
     /* writeRow rebuilt data-search, so re-add the plano / cooler
        tokens to match the status and In cooler values just saved */
-    if(target){ syncPlanoSearch(target); syncCoolerSearch(target); }
+    if(target){ syncPlanoSearch(target); syncCoolerSearch(target); syncSaleSearch(target); }
     /* Shared list: push this save to Supabase so every other user
        sees it. A new product is registered first (its availability
        mark, if any, is sent by sbRegisterNewProduct once the product
@@ -4802,6 +5285,8 @@
   /* Products that arrived already in the cooler get the "cooler"
      search token too, matching ones toggled later */
   rows.forEach(syncCoolerSearch);
+  /* Same for products that arrived already on sale */
+  rows.forEach(syncSaleSearch);
 
   /* ---------- Settings (gear, top right) ----------
      The gear in the header opens the Settings panel, which is where
@@ -4818,7 +5303,7 @@
   function closeSettings(){
     if(settingsOverlay.hidden) return;
     settingsOverlay.hidden = true;
-    if(editorOverlay.hidden && storeOverlay.hidden) document.body.style.overflow = '';
+    if(editorOverlay.hidden && storeOverlay.hidden && knowledgeOverlay.hidden) document.body.style.overflow = '';
   }
   document.getElementById('settingsBtn').addEventListener('click', openSettings);
   document.getElementById('settingsClose').addEventListener('click', closeSettings);
@@ -4830,14 +5315,44 @@
   document.getElementById('addProduct').addEventListener('click', closeSettings);
   document.getElementById('setStoreProducts').addEventListener('click', closeSettings);
 
+  /* ---------- Wine Knowledge (Settings) ----------
+     A static reference panel: the tasting and pairing content from
+     the Liquid Learning "Intro to Red Wine" training slides, baked
+     into this page as plain markup. It is reference material only —
+     nothing here reads or writes product data, and it never syncs
+     to the shared list. */
+  var knowledgeOverlay = document.getElementById('knowledgeOverlay');
+  function openKnowledge(){
+    knowledgeOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('knowledgeClose').focus();
+  }
+  function closeKnowledge(){
+    if(knowledgeOverlay.hidden) return;
+    knowledgeOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('wineKnowledge').addEventListener('click', function(){
+    closeSettings();
+    openKnowledge();
+  });
+  document.getElementById('knowledgeClose').addEventListener('click', closeKnowledge);
+  document.getElementById('knowledgeCancel').addEventListener('click', closeKnowledge);
+  knowledgeOverlay.addEventListener('click', function(ev){ if(ev.target === knowledgeOverlay) closeKnowledge(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !knowledgeOverlay.hidden) closeKnowledge();
+  });
+
   /* ---------- Stores ----------
      Store 358 is the store this list was built from, so it starts with
      every product ticked. The Store dropdown sits under the main
      heading and switches the whole list to another store's products.
-     Its last option, "＋ Add store…", opens the store dialog with a
-     blank store number and every product unticked; "Set store
-     products" reopens it for the current store, where the store
-     number can also be changed. Tick the products a store carries
+     Its last option, "＋ Add store…", opens the store dialog with
+     every product unticked; "Set store products" reopens it for the
+     current store. In the dialog the store number is itself a
+     dropdown of the stores already set up: picking another store
+     there loads that store's products instead, and its "＋ Add
+     store…" option reveals a field for a new store's number. Tick the products a store carries
      and Save — the main list then shows only that store's products.
      Store setups are saved to the shared Supabase list too, so all
      users see the same stores.
@@ -5020,6 +5535,8 @@
   var storeOverlay = document.getElementById('storeOverlay');
   var storeTitle = document.getElementById('storeTitle');
   var storeNum = document.getElementById('storeNum');
+  var storeNewWrap = document.getElementById('storeNewWrap');
+  var storeNewNum = document.getElementById('storeNewNum');
   var storeErr = document.getElementById('storeErr');
   var storeQ = document.getElementById('storeQ');
   var storeList = document.getElementById('storeList');
@@ -5084,23 +5601,59 @@
     });
     dlgCount();
   });
-  function openStoreDialog(mode){
-    dlgMode = mode;
-    if(mode === 'add'){
+  /* The store number in this dialog is a dropdown of the stores
+     already set up, rebuilt each time the dialog opens so stores
+     added since (here, at first visit, or by another user through
+     the shared list) are all in it. Its last option, "＋ Add
+     store…", reveals the new-number field below it — picking an
+     existing store instead loads that store's ticked products, so
+     switching the dropdown switches which store is being set up. */
+  function buildStoreNumOptions(selected){
+    storeNum.innerHTML = '';
+    storeOrder.forEach(function(n){
+      var o = document.createElement('option');
+      o.value = n;
+      o.textContent = n;
+      storeNum.appendChild(o);
+    });
+    var addOpt = document.createElement('option');
+    addOpt.value = '__add__';
+    addOpt.textContent = '＋ Add store…';
+    storeNum.appendChild(addOpt);
+    storeNum.value = selected;
+  }
+  function dlgShowStore(num){
+    if(num === '__add__'){
+      dlgMode = 'add';
       storeTitle.textContent = 'Add store';
-      storeNum.value = '';
+      storeNewWrap.hidden = false;
       dlgSet = new Set();
     } else {
-      storeTitle.textContent = 'Store ' + activeStore + ' — set products';
-      storeNum.value = activeStore;
-      dlgSet = new Set(storeSets[activeStore]);
+      dlgMode = 'edit';
+      storeTitle.textContent = 'Store ' + num + ' — set products';
+      storeNewWrap.hidden = true;
+      dlgSet = new Set(storeSets[num] || []);
     }
     storeErr.hidden = true;
-    storeQ.value = '';
     buildStoreList();
+  }
+  storeNum.addEventListener('change', function(){
+    dlgShowStore(storeNum.value);
+    if(storeNum.value === '__add__') storeNewNum.focus();
+  });
+  function openStoreDialog(mode){
+    storeNewNum.value = '';
+    storeQ.value = '';
+    if(mode === 'add'){
+      buildStoreNumOptions('__add__');
+      dlgShowStore('__add__');
+    } else {
+      buildStoreNumOptions(activeStore);
+      dlgShowStore(activeStore);
+    }
     storeOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    storeNum.focus();
+    if(mode === 'add') storeNewNum.focus(); else storeNum.focus();
   }
   function closeStoreDialog(){
     storeOverlay.hidden = true;
@@ -5116,37 +5669,33 @@
     if(ev.key === 'Escape' && !storeOverlay.hidden) closeStoreDialog();
   });
   document.getElementById('storeSave').addEventListener('click', function(){
-    var num = storeNum.value.trim();
-    var prevStore = activeStore, wasAdd = (dlgMode === 'add');
-    function fail(msg){ storeErr.textContent = msg; storeErr.hidden = false; storeNum.focus(); }
-    if(!/^\d+$/.test(num)){ fail('Enter the store number using digits only.'); return; }
-    if(storeSets[num] && num !== activeStore){ fail('Store ' + num + ' already exists — pick it in the Store dropdown instead.'); return; }
-    if(dlgMode === 'add' && num === activeStore && storeSets[num]){ fail('Store ' + num + ' already exists — pick it in the Store dropdown instead.'); return; }
-    if(dlgMode === 'add'){
+    /* The number comes from the dropdown: an existing store picked
+       in it, or — when "＋ Add store…" is picked — the new number
+       typed in the field that choice reveals. The store number is
+       never renamed here any more; picking a different existing
+       store in the dropdown simply saves that store's products. */
+    var wasAdd = (storeNum.value === '__add__');
+    var num = wasAdd ? storeNewNum.value.trim() : storeNum.value;
+    function fail(msg){ storeErr.textContent = msg; storeErr.hidden = false; (wasAdd ? storeNewNum : storeNum).focus(); }
+    if(!/^\d+$/.test(num)){ fail(wasAdd ? 'Enter the new store number using digits only.' : 'Pick a store from the dropdown.'); return; }
+    if(wasAdd && storeSets[num]){ fail('Store ' + num + ' already exists — pick it in the dropdown instead.'); return; }
+    if(wasAdd){
       storeOrder.push(num);
       storeSets[num] = dlgSet;
       /* A brand-new store starts with nothing marked unavailable,
          whatever is unavailable at any other store */
       storeUnavailable[num] = new Set();
-      activeStore = num;
     } else {
-      if(num !== activeStore){
-        storeOrder[storeOrder.indexOf(activeStore)] = num;
-        delete storeSets[activeStore];
-        /* Renaming a store carries that store's unavailable marks
-           with it to the new number */
-        storeUnavailable[num] = storeUnavailable[activeStore] || new Set();
-        delete storeUnavailable[activeStore];
-        activeStore = num;
-      }
+      if(!storeUnavailable[num]) storeUnavailable[num] = new Set();
       storeSets[num] = dlgSet;
     }
+    activeStore = num;
     rebuildStoreOptions();
     syncStoreUI();
     refreshAllUnavailable();
     /* Shared list: push the store (and its product ticks) to
        Supabase so every other user sees it */
-    sbSyncStoreSave(num, wasAdd ? null : prevStore, dlgSet);
+    sbSyncStoreSave(num, null, dlgSet);
     closeStoreDialog();
     apply();
   });
@@ -5238,7 +5787,9 @@
       rs: (p.rs === null || p.rs === undefined) ? '' : String(p.rs),
       sweet: isBask ? 'Extra Dry' : (p.sweetness || ''), rich: p.richness || '',
       varietal: p.varietal || '', tannins: p.tannins || '', acidity: p.acidity || '',
-      cooler: p.in_cooler ? 'Yes' : 'No', vqa: !!p.vqa,
+      cooler: p.in_cooler ? 'Yes' : 'No',
+      sale: !!p.on_sale, salePrice: (p.sale_price === null || p.sale_price === undefined) ? '' : String(p.sale_price),
+      vqa: !!p.vqa,
       status: p.status || 'Planogram', unavailable: false, notes: p.tasting_notes || ''
     });
   }
@@ -5284,6 +5835,28 @@
     setSyncStatus('Shared list connected — adds and edits save for everyone.');
     if(msg) syncToast(msg, false);
   }
+  /* Sale syncs separately from the main product payload, on
+     purpose: the shared products table does not have on_sale /
+     sale_price columns yet, and sending an unknown column in the
+     main PATCH would make Supabase reject the whole product save.
+     This PATCH carries only the two sale fields and its failure is
+     swallowed silently — the product itself still saves, and the
+     sale flag keeps working on this screen. Once on_sale (boolean)
+     and sale_price (numeric) columns are added to the products
+     table, this same call starts succeeding and sale state syncs
+     to every user with no further change here. */
+  function sbSyncSale(row){
+    if(!row) return Promise.resolve();
+    var pid = rowPid[row.getAttribute('data-idx')];
+    if(!pid) return Promise.resolve();
+    var d = readRow(row);
+    return sb('products?product_id=eq.' + encodeURIComponent(pid), {
+      method: 'PATCH', prefer: 'return=minimal',
+      body: { on_sale: !!d.sale, sale_price: sbNum(d.salePrice) }
+    }).then(function(){}, function(err){
+      if(window.console) console.warn('Sale state not synced (shared list has no sale columns yet):', err);
+    });
+  }
   function sbSyncProduct(row){
     if(!row) return;
     var pid = rowPid[row.getAttribute('data-idx')];
@@ -5291,7 +5864,7 @@
     var payload = rowToProduct(row);
     delete payload.product_id;
     sb('products?product_id=eq.' + encodeURIComponent(pid), { method: 'PATCH', body: payload, prefer: 'return=minimal' })
-      .then(function(){ sbSaved(); }, sbFail('that product'));
+      .then(function(){ sbSaved(); sbSyncSale(row); }, sbFail('that product'));
   }
   function sbSyncUnavailable(row){
     if(!row) return;
@@ -5314,6 +5887,7 @@
           return sb('store_unavailable', { method: 'POST', body: { store_number: activeStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
         }
       })
+      .then(function(){ return sbSyncSale(row); })
       .then(function(){ sbSaved('Product added — everyone can see it now.'); }, sbFail('the new product'));
   }
   function sbSyncStoreSave(num, prevNum, idxSet){
@@ -5417,16 +5991,23 @@
       if(!row) return;
       var want = productToRowData(p);
       var cur = readRow(row);
+      /* If the shared record carries no sale fields at all (the
+         products table has no sale columns yet), the local sale
+         state is kept — a sync must never wipe a sale marked on
+         this screen just because the shared list can't store it */
+      if(!('on_sale' in p)){ want.sale = cur.sale; want.salePrice = cur.salePrice; }
       if(cur.brand !== want.brand || cur.name !== want.name || cur.size !== want.size ||
          String(cur.price) !== String(want.price) || String(cur.rs) !== String(want.rs) ||
          cur.sweet !== want.sweet || cur.rich !== want.rich || cur.varietal !== want.varietal ||
          cur.tannins !== want.tannins || cur.acidity !== want.acidity ||
          (cur.cooler === 'Yes') !== (want.cooler === 'Yes') || cur.vqa !== want.vqa ||
+         cur.sale !== want.sale || String(cur.salePrice) !== String(want.salePrice) ||
          cur.status !== want.status || cur.notes !== want.notes){
         want.unavailable = isUnavail(row);
         writeRow(row, want);
         syncPlanoSearch(row);
         syncCoolerSearch(row);
+        syncSaleSearch(row);
       }
     });
     /* Stores, memberships and per-store unavailable marks */
@@ -5501,7 +6082,7 @@
      while any dialog is open so an edit in progress is never
      overwritten mid-type */
   setInterval(function(){
-    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden) return;
+    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden) return;
     sbLoad();
   }, 30000);
 
