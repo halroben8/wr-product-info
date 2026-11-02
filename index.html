@@ -67,17 +67,21 @@
   /* Scan button — directly under the settings gear in the header's
      top-right corner (same right edge and width, one gap below it).
      It wears the scan icon from Michael's uploaded image: a square
-     viewfinder with four dark corner brackets, vertical barcode bars
+     viewfinder with four corner brackets, vertical barcode bars
      in the upper and lower halves, and a horizontal scan line across
-     the middle. The icon is dark plum on a white button so the dark
-     brackets read clearly against the purple banner. Tapping it
-     opens the full-screen barcode scanner below. */
+     the middle. The button has a fully transparent background — no
+     solid fill, plate, border, or shadow behind the icon — so the
+     purple header shows through and only the brackets, bars, and
+     scan line are visible. The icon is drawn in white so it reads
+     clearly directly on the purple banner. Tapping it opens the
+     full-screen barcode scanner below. */
   .scan-btn{position:absolute;top:68px;right:20px;width:36px;height:36px;border-radius:999px;
-    border:1.5px solid rgba(255,255,255,.85);background:#fff;color:#241536;z-index:3;
+    border:none;background:transparent;background-color:transparent;color:#fff;z-index:3;
     display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
-    box-shadow:0 2px 8px rgba(23,8,46,.35)}
-  .scan-btn:hover,.scan-btn:focus-visible{background:var(--violet-soft);outline:2px solid #fff;outline-offset:2px}
-  .scan-btn svg{width:23px;height:23px;flex:none}
+    box-shadow:none}
+  .scan-btn:hover,.scan-btn:focus-visible{background:transparent;background-color:transparent;outline:2px solid #fff;outline-offset:2px}
+  .scan-btn:active{background:transparent;background-color:transparent}
+  .scan-btn svg{width:23px;height:23px;flex:none;background:transparent}
   /* Barcode scanner — a full-screen camera view over everything.
      The live camera fills the screen, darkened at the edges, with a
      clear viewfinder box in the centre: four corner brackets and a
