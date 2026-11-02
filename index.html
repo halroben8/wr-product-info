@@ -150,10 +150,71 @@
      full impact PDFs and the date-aware cheat sheet sit under it. */
   .settings-group-head{margin:12px 2px 0;font-size:12px;font-weight:800;color:var(--plum);
     text-transform:uppercase;letter-spacing:.06em}
+  /* Obvious collapsible toggles — used for BOTH the Documents group
+     and the Store settings section in Settings. Collapsibility must
+     be unmistakable, not a plain label: the heading is a full-width
+     tappable bar with a distinct filled background and a thick plum
+     border, a large white-on-plum chevron disc that rotates 180deg
+     on expand/collapse, and explicit "Tap to expand" /
+     "Tap to collapse" pill text that swaps with the state (driven
+     purely by aria-expanded, so the markup/JS only flip that one
+     attribute). Both sections start collapsed. */
+  .settings-group-toggle,.collapsible-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    width:100%;min-height:62px;background:var(--violet-soft);border:2px solid var(--plum2);border-radius:14px;
+    padding:10px 12px 10px 16px;cursor:pointer;font:inherit;color:var(--ink);
+    box-shadow:0 2px 8px rgba(76,29,149,.14);text-align:left;margin:0}
+  :root[data-theme="dark"] .settings-group-toggle, :root[data-theme="dark"] .collapsible-toggle{background:var(--panel2)}
+  .settings-group-toggle:hover,.settings-group-toggle:focus-visible,
+  .collapsible-toggle:hover,.collapsible-toggle:focus-visible{background:var(--panel2);border-color:var(--plum);outline:2px solid var(--plum2);outline-offset:1px}
+  :root[data-theme="dark"] .settings-group-toggle:hover, :root[data-theme="dark"] .collapsible-toggle:hover{background:var(--violet-soft)}
+  .collapsible-toggle-main{display:flex;flex-direction:column;gap:1px;min-width:0}
+  .collapsible-title{font-size:17px;font-weight:800;line-height:1.25;color:var(--ink);letter-spacing:0;text-transform:none}
+  .collapsible-subtitle{font-size:13px;font-weight:650;line-height:1.3;color:var(--muted)}
+  .collapsible-toggle-side{display:flex;align-items:center;gap:9px;flex:none}
+  .tap-hint{display:inline-flex;align-items:center;min-height:32px;padding:5px 11px;border-radius:999px;
+    background:var(--panel);border:1.5px solid var(--plum2);color:var(--plum);
+    font-size:13px;font-weight:800;line-height:1.15;white-space:nowrap}
+  :root[data-theme="dark"] .tap-hint{color:var(--lilac)}
+  .tap-hint .tap-collapse-text{display:none}
+  .collapsible-toggle[aria-expanded="true"] .tap-hint .tap-collapse-text,
+  .settings-group-toggle[aria-expanded="true"] .tap-hint .tap-collapse-text{display:inline}
+  .collapsible-toggle[aria-expanded="true"] .tap-hint .tap-expand-text,
+  .settings-group-toggle[aria-expanded="true"] .tap-hint .tap-expand-text{display:none}
+  .collapsible-chevron{display:flex;align-items:center;justify-content:center;flex:none;
+    width:40px;height:40px;border-radius:999px;background:var(--plum);color:#fff;
+    font-size:26px;font-weight:900;line-height:1;transition:transform .2s ease}
+  :root[data-theme="dark"] .collapsible-chevron{background:var(--badge-bg)}
+  .collapsible-toggle[aria-expanded="true"] .collapsible-chevron,
+  .settings-group-toggle[aria-expanded="true"] .collapsible-chevron{transform:rotate(180deg)}
+  .docs-body{display:grid;gap:10px}
+  .docs-body[hidden]{display:none !important}
+  /* Store settings as a collapsible card: the toggle bar is the
+     card header (no separate card padding around it) and the body
+     below it holds the type controls; the body hides completely
+     while collapsed. */
+  #storeSettingsSection{padding:0;overflow:hidden}
+  #storeSettingsSection .collapsible-toggle{border:none;border-radius:0;box-shadow:none;min-height:62px}
+  .store-settings-body{padding:12px 14px 14px;border-top:1.5px solid var(--line)}
+  .store-settings-body[hidden]{display:none !important}
+  @media (max-width:520px){
+    .settings-group-toggle,.collapsible-toggle{padding:10px 10px 10px 12px;gap:8px}
+    .collapsible-title{font-size:16px}
+    .collapsible-subtitle{font-size:12px}
+    .tap-hint{font-size:12px;padding:5px 8px;min-height:30px}
+    .collapsible-chevron{width:36px;height:36px;font-size:23px}
+    .collapsible-toggle-side{gap:7px}
+  }
   .settings-action{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;
     background:var(--violet-soft);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;
     padding:12px 16px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left}
   .settings-action:hover,.settings-action:focus-visible{background:var(--panel2);border-color:var(--plum2);outline:none}
+  .settings-action[hidden]{display:none !important}
+  /* Shown in Documents in place of the Legacy Loblaws impact
+     entries when the current store is not a Loblaws store: its own
+     impact is not loaded yet */
+  .docs-note{margin:0;padding:12px 14px;border:1.5px dashed var(--line);border-radius:12px;
+    font-size:14px;font-weight:600;line-height:1.55;color:var(--ink);background:var(--panel)}
+  .docs-note[hidden]{display:none !important}
   .settings-action .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
   /* Full-document links in Settings (Full P8 / P9 Impact PDFs and the
      Product Info Manual) are <a> elements wearing .settings-action.
@@ -179,6 +240,33 @@
   .theme-opt:hover,.theme-opt:focus-visible{border-color:var(--plum2);outline:none}
   .theme-opt[aria-checked="true"]{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
   .theme-note{color:var(--muted);font-size:12.5px;line-height:1.45;margin:9px 0 0}
+  /* Store settings — Settings block reusing the .theme-setting shell:
+     the current store's type, the list of available store types and
+     the Add new store type control, in one place. The type list
+     starts with Loblaws / Sobeys / Foodland / Non-boutique and grows
+     with custom types added in the app; the type decides which
+     impact the store sees */
+  .store-type-select{width:100%;cursor:pointer}
+  .store-settings-sub{font-size:12px;font-weight:800;color:var(--plum);text-transform:uppercase;letter-spacing:.06em;margin:0 0 6px}
+  :root[data-theme="dark"] .store-settings-sub{color:var(--lilac)}
+  .store-type-list{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .store-type-list li{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
+    padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--violet-soft);color:var(--ink)}
+  .store-type-list li.is-current{border-color:var(--plum2);background:var(--badge-bg);color:var(--badge-ink)}
+  .store-type-list li .st-tag{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;opacity:.75}
+  .btn-add-type{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:6px;
+    min-height:40px;padding:8px 14px;border-radius:999px;border:1.5px dashed var(--plum2);
+    background:transparent;color:var(--plum);font:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px}
+  :root[data-theme="dark"] .btn-add-type{color:var(--lilac)}
+  .btn-add-type:hover,.btn-add-type:focus-visible{background:var(--violet-soft);outline:none}
+  .add-type-form{margin-top:10px;padding:10px;border:1.5px solid var(--line);border-radius:10px;background:var(--panel)}
+  .add-type-form[hidden]{display:none !important}
+  .add-type-form label{display:block;margin-bottom:4px}
+  .add-type-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .btn-save-small{background:var(--plum);color:#fff;border:1.5px solid var(--plum);border-radius:999px;
+    padding:8px 16px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;min-height:40px}
+  .btn-ghost-small{background:var(--panel2);color:var(--ink);border:1.5px solid var(--line);border-radius:999px;
+    padding:8px 14px;font:inherit;font-size:14px;font-weight:600;cursor:pointer;min-height:40px}
   /* Wine Knowledge — a static reference panel opened from Settings.
      The content is training material baked into this page only; it
      never reads from, writes to, or syncs with the product list. Each
@@ -263,6 +351,34 @@
   .cs-list li:last-child{margin-bottom:0}
   .cs-note{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:var(--muted)}
   .cs-src{margin:16px 0 0;padding-top:10px;border-top:1px dashed var(--lilac);font-size:12.5px;line-height:1.55;color:var(--muted)}
+  /* Support Center — a static reference panel opened from the
+     Support Center section in Settings, following the Wine Knowledge
+     pattern. It holds the Wine Rack Store Support Centre contact
+     sheet (last updated April 21, 2026) baked into this page only;
+     it never reads from, writes to, or syncs with the product list.
+     Each contact group is a collapsible .wk-section; each contact
+     shows its function/title, then labelled name / phone / email /
+     additional-information lines. */
+  .support-panel{max-width:680px}
+  .support-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .support-panel .editor-head h2{color:#e9d5ff}
+  .sc-updated{margin:0 0 12px;font-size:13px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .sc-updated{color:var(--lilac)}
+  .sc-contact{padding:10px 0 11px;border-top:1px solid var(--line)}
+  .sc-contact:first-child{border-top:none;padding-top:2px}
+  .sc-contact:last-child{padding-bottom:2px}
+  .sc-func{margin:0 0 5px;font-size:15.5px;font-weight:800;line-height:1.35;color:var(--ink)}
+  .sc-detail{margin:0 0 3px;font-size:14.5px;line-height:1.55;color:var(--ink);overflow-wrap:break-word}
+  .sc-detail:last-child{margin-bottom:0}
+  .sc-k{display:inline-block;min-width:58px;font-size:11px;font-weight:800;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--grape);vertical-align:1px}
+  .sc-detail a{color:var(--plum2);font-weight:650}
+  .sc-afterhours{margin:14px 0 2px;font-size:12px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;color:#b91c1c}
+  :root[data-theme="dark"] .sc-afterhours{color:#fca5a5}
+  .sc-trunc{margin:10px 0 0;padding:10px 12px;border:1.5px dashed var(--lilac);border-radius:10px;
+    font-size:13.5px;font-weight:600;line-height:1.5;color:var(--ink);background:var(--violet-soft)}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -2276,12 +2392,12 @@
         <tr class="drow" data-detail-for="105" hidden>
           <td colspan="9"><div class="detail"><p class="notes">Notes of dark plum, black cherry, mocha and vanilla. Pairs well with grilled steak. [from 750mL tag, romance-tags-5.csv]</p><p class="src">Product ID 988319</p></div></td>
         </tr>
-        <tr class="prow is-sale" data-idx="106" data-brand="Jackson-Triggs" data-rich="" data-sweet="" data-cooler="Yes" data-status="Planogram" data-price="" data-sale="Yes" data-sale-price="12.99" data-rs="5.0" data-search="jackson-triggs reserve pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
+        <tr class="prow is-sale" data-idx="106" data-brand="Jackson-Triggs" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-sale="Yes" data-sale-price="12.99" data-rs="6.0" data-search="jackson-triggs reserve pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Pinot Grigio</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
           <td data-label="Size">750mL</td>
           <td data-label="Price" class="price"><span class="sale-now">$12.99</span></td>
-          <td data-label="Sugar (RS)">5 g/L</td>
-          <td data-label="Sweetness">—</td>
+          <td data-label="Sugar (RS)">6 g/L</td>
+          <td data-label="Sweetness">Dry</td>
           <td data-label="Richness">—</td>
           <td data-label="Varietal">Pinot Grigio / Pinot Gris</td>
           <td data-label="Tannins">None</td>
@@ -3976,16 +4092,58 @@
       </div>
       <p class="theme-note">Light is the default look. Auto follows your phone&rsquo;s light / dark setting. Saved on this device only.</p>
     </div>
+    <div class="theme-setting store-type-setting" id="storeSettingsSection">
+      <button type="button" class="collapsible-toggle" id="storeSettingsHead" aria-expanded="false" aria-controls="storeSettingsBody">
+        <span class="collapsible-toggle-main">
+          <span class="collapsible-title" id="storeTypeLabel">Store settings</span>
+          <span class="collapsible-subtitle" id="storeTypeCurrent">Store 358</span>
+        </span>
+        <span class="collapsible-toggle-side">
+          <span class="tap-hint"><span class="tap-expand-text">Tap to expand</span><span class="tap-collapse-text">Tap to collapse</span></span>
+          <span class="collapsible-chevron" aria-hidden="true">▾</span>
+        </span>
+      </button>
+      <div class="store-settings-body" id="storeSettingsBody" hidden>
+      <p class="store-settings-sub" id="storeTypeSubLabel">Store type for this store</p>
+      <label class="sr-only" for="settingsStoreType">Store type for the current store</label>
+      <select id="settingsStoreType" class="store-type-select">
+        <option value="">Not set — choose a type</option>
+        <option value="Loblaws">Loblaws</option>
+        <option value="Sobeys">Sobeys</option>
+        <option value="Foodland">Foodland</option>
+        <option value="Non-boutique">Non-boutique</option>
+        <option value="__add_type__">＋ Add new store type…</option>
+      </select>
+      <p class="store-settings-sub" style="margin-top:12px">Available store types</p>
+      <ul class="store-type-list" id="storeTypeList" aria-label="Available store types"></ul>
+      <button type="button" class="btn-add-type" id="settingsAddTypeBtn">＋ Add new store type</button>
+      <div class="add-type-form" id="settingsAddTypeForm" hidden>
+        <label for="settingsNewTypeName">New store type name</label>
+        <input id="settingsNewTypeName" type="text" autocomplete="off" placeholder="e.g. Fortinos" maxlength="60" />
+        <p class="store-err" id="settingsAddTypeErr" role="alert" hidden></p>
+        <div class="add-type-actions">
+          <button type="button" class="btn-save-small" id="settingsAddTypeSave">Add store type</button>
+          <button type="button" class="btn-ghost-small" id="settingsAddTypeCancel">Cancel</button>
+        </div>
+      </div>
+      <p class="theme-note">The store type decides which impact this store sees. Loblaws stores see the Legacy Loblaws impact; every other type — including types added here — sees a note that its impact is not loaded yet, until that type&rsquo;s impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
+      </div>
+    </div>
     <div class="settings-actions">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
       <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, food pairing and red &amp; white wine varietals</span></span></button>
       <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
-      <h3 class="settings-group-head" id="documentsHead">Documents</h3>
-      <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-      <a class="settings-action" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-      <a class="settings-action" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-      <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
+      <h3 class="settings-group-head" id="supportHead">Support Center</h3>
+      <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
+      <button type="button" class="settings-group-toggle collapsible-toggle" id="documentsHead" aria-expanded="false" aria-controls="documentsBody"><span class="collapsible-toggle-main"><span class="collapsible-title">Documents</span><span class="collapsible-subtitle">Manual, impact PDFs &amp; cheat sheet</span></span><span class="collapsible-toggle-side"><span class="tap-hint"><span class="tap-expand-text">Tap to expand</span><span class="tap-collapse-text">Tap to collapse</span></span><span class="collapsible-chevron" aria-hidden="true">▾</span></span></button>
+      <div class="docs-body" id="documentsBody" hidden>
+        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
+        <p class="docs-note" id="impactNote" hidden></p>
+      </div>
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
@@ -4263,6 +4421,249 @@
   </div>
 </div>
 
+<div class="editor-overlay" id="supportOverlay" hidden>
+  <div class="editor-panel support-panel" role="dialog" aria-modal="true" aria-labelledby="supportTitle">
+    <div class="editor-head">
+      <h2 id="supportTitle">Support Center</h2>
+      <button type="button" class="editor-x" id="supportClose" aria-label="Close support center">×</button>
+    </div>
+    <p class="sc-updated">Wine Rack Store Support Centre &middot; Last Updated: April 21, 2026</p>
+    <p class="wk-intro">Who to contact for what &mdash; tap a section to open it. Phone numbers and emails are tap-to-call / tap-to-email.</p>
+
+    <details class="wk-section" open>
+      <summary>Support Services</summary>
+      <div class="wk-body">
+        <div class="sc-contact">
+          <h4 class="sc-func">AWC IT Support Service Desk</h4>
+          <p class="sc-detail">General &ldquo;How to&rdquo; Issues (Password, VDI, email access, Kronos)</p>
+          <p class="sc-detail"><span class="sc-k">Name</span> Service Bar</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18335415749">1 833 541 5749</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Monday&ndash;Friday 9AM&ndash;5PM EST</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">RSG HELP DESK</h4>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18555630115">1 855 563 0115</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">POS Software/Hardware Issues</h4>
+          <p class="sc-detail"><span class="sc-k">Info</span> No separate name or phone shown on the contact sheet.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Marketing Contacts</summary>
+      <div class="wk-body">
+        <div class="sc-contact">
+          <h4 class="sc-func">Shopper Marketing Specialist, Wine Rack</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Mia Trdina</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:mia.trdina@arterracanada.com">mia.trdina@arterracanada.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Always cc <a href="mailto:admin@winerack.com">admin@winerack.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Brand Manager, Digital, Consumer Experience &amp; New Channels</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Kate Henry</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:kate.henry@arterracanada.com">kate.henry@arterracanada.com</a></p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Operations Contacts</summary>
+      <div class="wk-body">
+        <div class="sc-contact">
+          <h4 class="sc-func">Manager, Operations &amp; Training</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Marlena Drachenberg</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:marlena.drachenberg@arterracanada.com">marlena.drachenberg@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">POS Specialist</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Tina Grant</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+19053718042">(905) 371-8042</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:tina.grant@arterracanada.com">tina.grant@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Office Services Coordinator (POS backup battery replacement)</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Terry Fleming</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18886024444">(888) 602-4444</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:terry.fleming@arterracanada.com">terry.fleming@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Cash &amp; Banking Supply Requests</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> AWC Treasury</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18886024444">(888) 602-4444</a> Ext (4133)</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:treasury@arterracanada.com">treasury@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Quality Assurance Issues</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Quality Assurance</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Fill out Quality Assurance Form (Available on Speakeasy)</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Media Questions/Inquiries</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Media Relations</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:media@arterracanada.com">media@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Pinpad issues</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Service Bar</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18335415749">(833)-541-5749</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Security system / Camera related issues</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Ness Security</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18003876233">(800) 387-6233</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:service@nesssecurity.ca">service@nesssecurity.ca</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Locks / Safes / Keys</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Ness Security</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:locks@nesssecurity.ca">locks@nesssecurity.ca</a></p>
+        </div>
+        <p class="sc-afterhours">For After Hour Emergencies</p>
+        <div class="sc-contact">
+          <h4 class="sc-func">Maintenance &amp; Facility (Flood)</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Prime Facility</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+16479209662">(647) 920-9662</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Window Break (GTA, Hamilton, Niagara, Mississauga, Barrie, Scarborough)</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Superior</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+19054571959">(905) 457-1959</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Window Break (Windsor, London, Ottawa, Kingston)</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Dogwood</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18882373945">1-888-237-3945</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Store phone issues (no dial tone, static, etc)</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> BELL</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18887882355">1-888-788-2355</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Enter the main telephone number for the site you are calling about; for example 905 368 7141 for Niagara Falls. Press option 2 (trouble repair ticket), or option 1 for voice.</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">STORE HOURS</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Admin</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:admin@winerack.com">admin@winerack.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Changes to Google: DMs to fill out Regular Store Hours Change Form (Available on Speakeasy); Changes to Delivery Apps: Store Managers complete via the appropriate portal; Store hour issues: <a href="mailto:admin@winerack.com">admin@winerack.com</a>.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Marketplace</summary>
+      <div class="wk-body">
+        <p class="sc-detail" style="margin-bottom:6px"><strong>Issues with delivery app/orders</strong></p>
+        <div class="sc-contact">
+          <h4 class="sc-func">SKIP THE DISHES</h4>
+          <p class="sc-detail"><span class="sc-k">Info</span> Holiday Hour Requests/Order Issues: <a href="mailto:restaurants@skipthedishes.ca">restaurants@skipthedishes.ca</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Online Portal: <a href="https://restaurants.skipthedishes.com" target="_blank" rel="noopener">restaurants.skipthedishes.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Hardware issue: AWC Service Desk</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">UberEats</h4>
+          <p class="sc-detail"><span class="sc-k">Info</span> Live Orders in Progress only: <a href="tel:+18332753287">(833) 275-3287</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> All other inquiries/Hardware issue: <a href="mailto:restaurants@uber.com">restaurants@uber.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">DoorDash</h4>
+          <p class="sc-detail"><span class="sc-k">Info</span> Live Orders in Progress only: <a href="tel:+18554310459">(855)-431-0459</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> All other inquiries/Hardware issue: <a href="mailto:mxpsupport@doordash.com">mxpsupport@doordash.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Instacart</h4>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:admin@winerack.com">admin@winerack.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Pricing Issues on storefront</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Admin</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:admin@winerack.com">admin@winerack.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Fill in Marketplace Pricing Discrepancy Form (Available on Speakeasy)</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Distribution / Shipment / Store Ordering Contacts</summary>
+      <div class="wk-body">
+        <div class="sc-contact">
+          <h4 class="sc-func">Customer Service Representative</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Tatiana Larossa-Pacheco</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:tatiana.larrosapacheco@arterracanada.com">tatiana.larrosapacheco@arterracanada.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Contact for order inquiries</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Human Resources / Payroll / Safety Contacts</summary>
+      <div class="wk-body">
+        <div class="sc-contact">
+          <h4 class="sc-func">Human Resources/People &amp; Culture Business Partner</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Rachel Heimbecker</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:Rachel.heimbecker@arterracanada.com">Rachel.heimbecker@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Payroll/Paycheque inquiries</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:payroll@arterracanada.com">payroll@arterracanada.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Please have your manager contact Payroll for any pay cheque errors.</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Workday</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18886024444">(888) 602-4444</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:PRC@arterracanada.com">PRC@arterracanada.com</a></p>
+          <p class="sc-detail"><span class="sc-k">Info</span> Please contact PRC if you have any Workday questions.</p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Pension &amp; Benefits, Including STD</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18886024444">(888) 602-4444</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:PRC@arterracanada.com">PRC@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Health and Safety</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Mike Forgione</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:Michael.forgione@arterracanada.com">Michael.forgione@arterracanada.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">Non-Work Related Disability Claims</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> Acclaim Ability Management</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+14164869254">(416) 486-9254</a> / <a href="tel:+18664868663">(866) 486-8663</a></p>
+          <p class="sc-detail"><span class="sc-k">Email</span> <a href="mailto:allclients@acclaimability.com">allclients@acclaimability.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">AWC ETHICS HOTLINE</h4>
+          <p class="sc-detail"><span class="sc-k">Name</span> NA</p>
+          <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18006619675">1-800-661-9675</a></p>
+          <p class="sc-detail"><span class="sc-k">Web</span> <a href="https://arterracanada.confidenceline.com" target="_blank" rel="noopener">arterracanada.confidenceline.com</a></p>
+        </div>
+        <div class="sc-contact">
+          <h4 class="sc-func">EMPLOYEE ASSISTANCE PROGRAM</h4>
+          <p class="sc-detail"><span class="sc-k">Info</span> Available to All Wine Rack employees 24/7</p>
+          <p class="sc-trunc">The rest of this entry was cut off (truncated) in the photo &mdash; no further details are shown, so none are listed here.</p>
+        </div>
+      </div>
+    </details>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="supportCancel">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="editor-overlay" id="editorOverlay" hidden>
   <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
     <div class="editor-head">
@@ -4394,6 +4795,27 @@
       <label for="storeNewNum">New store number</label>
       <input id="storeNewNum" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 412" />
     </div>
+    <div class="efield store-new" id="storeTypeWrap" hidden>
+      <label for="storeNewType">Store type</label>
+      <select id="storeNewType" aria-label="Store type">
+        <option value="">Choose a store type…</option>
+        <option value="Loblaws">Loblaws</option>
+        <option value="Sobeys">Sobeys</option>
+        <option value="Foodland">Foodland</option>
+        <option value="Non-boutique">Non-boutique</option>
+        <option value="__add_type__">＋ Add new store type…</option>
+      </select>
+      <button type="button" class="btn-add-type" id="storeAddTypeBtn">＋ Add new store type</button>
+      <div class="add-type-form" id="storeAddTypeForm" hidden>
+        <label for="storeNewTypeName">New store type name</label>
+        <input id="storeNewTypeName" type="text" autocomplete="off" placeholder="e.g. Fortinos" maxlength="60" />
+        <p class="store-err" id="storeAddTypeErr" role="alert" hidden></p>
+        <div class="add-type-actions">
+          <button type="button" class="btn-save-small" id="storeAddTypeSave">Add store type</button>
+          <button type="button" class="btn-ghost-small" id="storeAddTypeCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
     <p class="store-err" id="storeErr" role="alert" hidden></p>
     <p class="editor-note">Ticking only sets which products this store carries, chosen from the one shared product list. Price, notes and product info are global — shared by all stores — and are never changed or copied per store here. Saving a store here updates the shared list, so every user sees the same stores and the same products in each.</p>
     <div class="efield store-search-field">
@@ -4431,6 +4853,27 @@
       <div class="efield welcome-new" id="welcomeNewWrap" hidden>
         <label for="welcomeStoreNum">New store number</label>
         <input id="welcomeStoreNum" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 412" />
+      </div>
+      <div class="efield welcome-new" id="welcomeTypeWrap" hidden>
+        <label for="welcomeStoreType">Store type</label>
+        <select id="welcomeStoreType" aria-label="Store type">
+          <option value="">Choose a store type…</option>
+          <option value="Loblaws">Loblaws</option>
+          <option value="Sobeys">Sobeys</option>
+          <option value="Foodland">Foodland</option>
+          <option value="Non-boutique">Non-boutique</option>
+          <option value="__add_type__">＋ Add new store type…</option>
+        </select>
+        <button type="button" class="btn-add-type" id="welcomeAddTypeBtn">＋ Add new store type</button>
+        <div class="add-type-form" id="welcomeAddTypeForm" hidden>
+          <label for="welcomeNewTypeName">New store type name</label>
+          <input id="welcomeNewTypeName" type="text" autocomplete="off" placeholder="e.g. Fortinos" maxlength="60" />
+          <p class="store-err" id="welcomeAddTypeErr" role="alert" hidden></p>
+          <div class="add-type-actions">
+            <button type="button" class="btn-save-small" id="welcomeAddTypeSave">Add store type</button>
+            <button type="button" class="btn-ghost-small" id="welcomeAddTypeCancel">Cancel</button>
+          </div>
+        </div>
       </div>
       <p class="store-err" id="welcomeErr" role="alert" hidden></p>
       <div class="editor-actions">
@@ -5983,6 +6426,73 @@
   document.addEventListener('visibilitychange', function(){ if(!document.hidden) cheatDayCheck(); });
   window.addEventListener('focus', cheatDayCheck);
 
+  /* ---------- Documents (Settings) ----------
+     The Documents group in Settings is collapsible, like the
+     Wine Knowledge / Support Center sections: tapping the
+     Documents heading expands it to show the manual, the two
+     full impact PDFs and the Current Impact Cheat Sheet, and
+     tapping it again collapses it and hides them. It starts
+     collapsed. Display state only — the document links and the
+     date-aware cheat sheet button inside work exactly as before. */
+  var documentsToggle = document.getElementById('documentsHead');
+  var documentsBody = document.getElementById('documentsBody');
+  documentsToggle.addEventListener('click', function(){
+    var open = documentsToggle.getAttribute('aria-expanded') === 'true';
+    documentsToggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+    documentsBody.hidden = open;
+  });
+
+  /* ---------- Store settings (Settings) ----------
+     Store settings is a collapsible section with the same
+     unmistakably obvious toggle as Documents: a distinct tappable
+     heading bar, a large chevron disc that rotates via
+     aria-expanded, and "Tap to expand" / "Tap to collapse" pill
+     text that swaps via aria-expanded in CSS. Tapping the heading
+     shows or hides the store-type controls in #storeSettingsBody;
+     it starts collapsed. Display state only — the store-type
+     select, type list and Add-type controls inside work exactly
+     as before, and the impact rules are unchanged. */
+  var storeSettingsToggle = document.getElementById('storeSettingsHead');
+  var storeSettingsBody = document.getElementById('storeSettingsBody');
+  if(storeSettingsToggle && storeSettingsBody){
+    storeSettingsToggle.addEventListener('click', function(){
+      var open = storeSettingsToggle.getAttribute('aria-expanded') === 'true';
+      storeSettingsToggle.setAttribute('aria-expanded', open ? 'false' : 'true');
+      storeSettingsBody.hidden = open;
+    });
+  }
+
+  /* ---------- Support Center (Settings) ----------
+     A static reference panel, same pattern as Wine Knowledge: the
+     Wine Rack Store Support Centre contact sheet (last updated
+     April 21, 2026), baked into this page as plain markup in the
+     supportOverlay. Reference content only — nothing here reads
+     or writes product data, and it never syncs to the shared list.
+     The Employee Assistance Program entry is shown only as far as
+     the source photo shows it; the rest was truncated in the
+     photo and is marked as such in the panel, not guessed. */
+  var supportOverlay = document.getElementById('supportOverlay');
+  function openSupport(){
+    supportOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('supportClose').focus();
+  }
+  function closeSupport(){
+    if(supportOverlay.hidden) return;
+    supportOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('supportCenter').addEventListener('click', function(){
+    closeSettings();
+    openSupport();
+  });
+  document.getElementById('supportClose').addEventListener('click', closeSupport);
+  document.getElementById('supportCancel').addEventListener('click', closeSupport);
+  supportOverlay.addEventListener('click', function(ev){ if(ev.target === supportOverlay) closeSupport(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !supportOverlay.hidden) closeSupport();
+  });
+
   /* ---------- Stores ----------
      Store 358 is the store this list was built from, so it starts with
      every product ticked. The Store dropdown sits under the main
@@ -6007,6 +6517,316 @@
   var storeOrder = ['358'];
   var storeSets = { '358': new Set(rows.map(function(r){ return r.getAttribute('data-idx'); })) };
 
+  /* ---------- Store types (extensible) ----------
+     Every store has a type, picked when the store is created
+     (required in both Add store flows) and changeable later in
+     Settings → Store settings for the current store. The list of
+     types is NOT fixed: it starts with Loblaws, Sobeys, Foodland
+     and Non-boutique, and anyone can add a new type with the
+     “＋ Add new store type” button/option shown wherever a type
+     is chosen (Settings Store settings, the Store dialog and the
+     first-visit prompt). A type added that way is saved to the
+     type list on this device (localStorage, CUSTOM_STORE_TYPES_KEY),
+     is immediately available in every type dropdown, and — once a
+     store uses it — is pushed to the shared list on that store's
+     record (store_type, via sbSyncStoreType), so other devices
+     learn the new type from that store on their next load and add
+     it to their own lists. There is no separate shared table for
+     the bare type list, so a type nobody has assigned to a store
+     yet stays on the device that created it until it is first used.
+     The type decides which impact the store sees: only Loblaws
+     stores get the Legacy Loblaws impact (the date-aware Current
+     Impact Cheat Sheet and the full P8/P9 PDFs in Documents, plus
+     "What's on sample today?"); every other type — the built-in
+     Sobeys / Foodland / Non-boutique and any custom type added
+     later — does NOT get that impact: Documents shows a note that
+     their impact is not loaded yet and can be added by uploading
+     its document. Per-store types are also kept on this device
+     (STORE_TYPES_KEY), so they survive even where the shared list
+     has no store_type column yet. Store 358 is a Loblaws boutique,
+     so it defaults to Loblaws. */
+  var BUILTIN_STORE_TYPES = ['Loblaws', 'Sobeys', 'Foodland', 'Non-boutique'];
+  var STORE_TYPE_OPTIONS = BUILTIN_STORE_TYPES.slice();
+  var STORE_TYPES_KEY = 'wr-store-types';
+  var CUSTOM_STORE_TYPES_KEY = 'wr-custom-store-types';
+  var ADD_TYPE_VALUE = '__add_type__';
+  function normalizeStoreTypeName(name){
+    return String(name == null ? '' : name).trim().replace(/\s+/g, ' ').slice(0, 60);
+  }
+  function findStoreType(name){
+    var want = normalizeStoreTypeName(name).toLowerCase();
+    if(!want) return '';
+    for(var i = 0; i < STORE_TYPE_OPTIONS.length; i++){
+      if(STORE_TYPE_OPTIONS[i].toLowerCase() === want) return STORE_TYPE_OPTIONS[i];
+    }
+    return '';
+  }
+  function isBuiltinStoreType(name){ return BUILTIN_STORE_TYPES.indexOf(findStoreType(name)) !== -1 && !!findStoreType(name); }
+  function persistCustomStoreTypes(){
+    var custom = STORE_TYPE_OPTIONS.filter(function(t){ return BUILTIN_STORE_TYPES.indexOf(t) === -1; });
+    try{ localStorage.setItem(CUSTOM_STORE_TYPES_KEY, JSON.stringify(custom)); }catch(e){}
+  }
+  /* Add a name to the type list (no-op, returning the existing
+     canonical spelling, when it is already there). Returns the
+     canonical name, or '' for a blank name. Rebuilds every type
+     dropdown and the Store settings type list so the new type is
+     choosable straight away. */
+  function registerStoreType(name){
+    var clean = normalizeStoreTypeName(name);
+    if(!clean || clean === ADD_TYPE_VALUE) return '';
+    var existing = findStoreType(clean);
+    if(existing) return existing;
+    STORE_TYPE_OPTIONS.push(clean);
+    persistCustomStoreTypes();
+    rebuildStoreTypeSelects();
+    return clean;
+  }
+  /* Custom types saved on this device on earlier visits */
+  try{
+    var savedCustom = JSON.parse(localStorage.getItem(CUSTOM_STORE_TYPES_KEY) || '[]');
+    if(Array.isArray(savedCustom)){
+      savedCustom.forEach(function(t){
+        var clean = normalizeStoreTypeName(t);
+        if(clean && !findStoreType(clean)) STORE_TYPE_OPTIONS.push(clean);
+      });
+    }
+  }catch(e){}
+  var storeTypes = {};
+  try{
+    var savedTypes = JSON.parse(localStorage.getItem(STORE_TYPES_KEY) || '{}');
+    if(savedTypes && typeof savedTypes === 'object'){
+      Object.keys(savedTypes).forEach(function(n){
+        var clean = normalizeStoreTypeName(savedTypes[n]);
+        if(clean){
+          /* A type saved for a store is a real type even if this
+             device has never seen it in the list — learn it */
+          storeTypes[n] = registerStoreType(clean);
+        }
+      });
+    }
+  }catch(e){}
+  if(!storeTypes['358']) storeTypes['358'] = 'Loblaws';
+  function storeTypeOf(num){ return storeTypes[num] || ''; }
+  function persistStoreTypes(){
+    try{ localStorage.setItem(STORE_TYPES_KEY, JSON.stringify(storeTypes)); }catch(e){}
+  }
+  function setStoreType(num, type, sync){
+    var clean = normalizeStoreTypeName(type);
+    if(!clean || clean === ADD_TYPE_VALUE) return;
+    /* Unknown types are registered rather than rejected, so a
+       type arriving from the shared list or typed in once keeps
+       working everywhere */
+    clean = registerStoreType(clean);
+    storeTypes[num] = clean;
+    persistStoreTypes();
+    if(sync) sbSyncStoreType(num);
+    if(num === activeStore) applyStoreTypeUI();
+  }
+  /* Rebuild one type <select> from the live type list: a caller-
+     supplied placeholder first, every type in list order, and the
+     “＋ Add new store type…” option last. The current selection is
+     kept when it is still a real type. */
+  function populateStoreTypeSelect(sel, placeholderText, keepValue){
+    if(!sel) return;
+    var prev = (keepValue !== undefined) ? keepValue : sel.value;
+    if(prev === ADD_TYPE_VALUE) prev = '';
+    sel.innerHTML = '';
+    var ph = document.createElement('option');
+    ph.value = '';
+    ph.textContent = placeholderText;
+    sel.appendChild(ph);
+    STORE_TYPE_OPTIONS.forEach(function(t){
+      var o = document.createElement('option');
+      o.value = t;
+      o.textContent = t;
+      sel.appendChild(o);
+    });
+    var addOpt = document.createElement('option');
+    addOpt.value = ADD_TYPE_VALUE;
+    addOpt.textContent = '＋ Add new store type…';
+    sel.appendChild(addOpt);
+    sel.value = findStoreType(prev) || '';
+  }
+  function rebuildStoreTypeSelects(){
+    populateStoreTypeSelect(document.getElementById('settingsStoreType'), 'Not set — choose a type');
+    populateStoreTypeSelect(document.getElementById('storeNewType'), 'Choose a store type…');
+    populateStoreTypeSelect(document.getElementById('welcomeStoreType'), 'Choose a store type…');
+    /* The Settings control always shows the current store's type */
+    var cur = document.getElementById('settingsStoreType');
+    if(cur) cur.value = storeTypeOf(typeof activeStore !== 'undefined' ? activeStore : '358') || '';
+    renderStoreTypeList();
+  }
+  /* The Store settings type list in Settings: every available
+     type, with the current store's type highlighted */
+  function renderStoreTypeList(){
+    var list = document.getElementById('storeTypeList');
+    if(!list) return;
+    var current = (typeof activeStore !== 'undefined') ? storeTypeOf(activeStore) : '';
+    list.innerHTML = '';
+    STORE_TYPE_OPTIONS.forEach(function(t){
+      var li = document.createElement('li');
+      if(t === current) li.className = 'is-current';
+      var name = document.createElement('span');
+      name.textContent = t;
+      li.appendChild(name);
+      var tag = document.createElement('span');
+      tag.className = 'st-tag';
+      tag.textContent = BUILTIN_STORE_TYPES.indexOf(t) !== -1 ? '' : 'Added';
+      if(tag.textContent) li.appendChild(tag);
+      list.appendChild(li);
+    });
+  }
+  /* Wire one “add a store type” spot: a select that may land on
+     the Add option, an Add button, and an inline name form. On a
+     successful add the new type is registered (so it appears in
+     every dropdown and in the Store settings list) and handed to
+     onAdded, which decides what it means in that spot — in the
+     Add store flows it becomes the new store's chosen type; in
+     Settings it only becomes the current store's type when the
+     form was opened from the dropdown, not from the standalone
+     Add button in Store settings. */
+  function setupAddStoreType(cfg){
+    var sel = document.getElementById(cfg.selectId);
+    var btn = document.getElementById(cfg.btnId);
+    var form = document.getElementById(cfg.formId);
+    var input = document.getElementById(cfg.inputId);
+    var saveBtn = document.getElementById(cfg.saveId);
+    var cancelBtn = document.getElementById(cfg.cancelId);
+    var err = document.getElementById(cfg.errId);
+    if(!form || !input || !saveBtn || !cancelBtn) return;
+    var assignOnAdd = false;
+    var prevValue = '';
+    function showForm(assign){
+      assignOnAdd = !!assign;
+      prevValue = (sel && sel.value !== ADD_TYPE_VALUE) ? sel.value : '';
+      form.hidden = false;
+      if(err) err.hidden = true;
+      input.value = '';
+      input.focus();
+    }
+    function hideForm(restore){
+      form.hidden = true;
+      if(err) err.hidden = true;
+      input.value = '';
+      if(restore && sel) sel.value = findStoreType(prevValue) || prevValue || '';
+    }
+    if(btn) btn.addEventListener('click', function(){ showForm(!!cfg.assignFromButton); });
+    if(sel) sel.addEventListener('change', function(){
+      if(sel.value === ADD_TYPE_VALUE) showForm(true);
+    });
+    cancelBtn.addEventListener('click', function(){ hideForm(true); if(sel) sel.focus(); });
+    function submit(){
+      var clean = normalizeStoreTypeName(input.value);
+      if(!clean){
+        if(err){ err.textContent = 'Enter a name for the new store type.'; err.hidden = false; }
+        input.focus();
+        return;
+      }
+      var existing = findStoreType(clean);
+      if(existing){
+        if(err){ err.textContent = '“' + existing + '” is already in the store type list — pick it from the dropdown instead.'; err.hidden = false; }
+        input.focus();
+        return;
+      }
+      var added = registerStoreType(clean);
+      hideForm(false);
+      if(cfg.onAdded) cfg.onAdded(added, assignOnAdd);
+      syncToast('Store type “' + added + '” added — it is now a choice wherever a store type is picked.', false);
+    }
+    saveBtn.addEventListener('click', submit);
+    input.addEventListener('keydown', function(ev){ if(ev.key === 'Enter'){ ev.preventDefault(); submit(); } });
+  }
+  /* Reflect the current store's type across the UI: the Settings
+     store-type control, and which impact the store sees. Loblaws
+     stores see the Legacy Loblaws impact entries; any other type
+     (or no type yet) sees the not-loaded note in Documents instead,
+     and the impact-derived entries are hidden. */
+  var settingsStoreType = document.getElementById('settingsStoreType');
+  var storeTypeCurrent = document.getElementById('storeTypeCurrent');
+  var impactNote = document.getElementById('impactNote');
+  function applyStoreTypeUI(){
+    var type = storeTypeOf(activeStore);
+    var isLoblaws = (type === 'Loblaws');
+    if(storeTypeCurrent) storeTypeCurrent.textContent = 'Store ' + activeStore + (type ? ' · ' + type : ' · not set');
+    /* A type this device has not listed yet (e.g. set for this
+       store on another device) is learned before it is shown */
+    if(type && !findStoreType(type)) registerStoreType(type);
+    if(settingsStoreType) settingsStoreType.value = type;
+    renderStoreTypeList();
+    var p8 = document.getElementById('impactP8Link');
+    var p9 = document.getElementById('impactP9Link');
+    var cheat = document.getElementById('currentCheatSheet');
+    var sample = document.getElementById('sampleToday');
+    if(p8) p8.hidden = !isLoblaws;
+    if(p9) p9.hidden = !isLoblaws;
+    if(cheat) cheat.hidden = !isLoblaws;
+    if(sample) sample.hidden = !isLoblaws;
+    if(impactNote){
+      if(isLoblaws){
+        impactNote.hidden = true;
+        impactNote.textContent = '';
+      } else if(type){
+        impactNote.hidden = false;
+        impactNote.textContent = 'The ' + type + ' impact is not loaded yet. It can be added by uploading the ' + type + ' impact document — the P8 / P9 impact shown for Loblaws stores does not apply to ' + type + ' stores.';
+      } else {
+        impactNote.hidden = false;
+        impactNote.textContent = 'No store type is set for Store ' + activeStore + ' yet, so no impact is shown. Pick the store type under Store settings in Settings to see the right impact for this store.';
+      }
+    }
+  }
+  if(settingsStoreType){
+    settingsStoreType.addEventListener('change', function(){
+      var t = settingsStoreType.value;
+      /* The Add option is handled by the add-type wiring below —
+         it opens the name form instead of setting a type */
+      if(!t || t === ADD_TYPE_VALUE) return;
+      setStoreType(activeStore, t, true);
+      syncToast('Store ' + activeStore + ' is now a ' + t + ' store — the impact it sees has been updated.', false);
+    });
+  }
+  /* Add-a-store-type wiring for all three places a type is
+     chosen. Settings: opening the form from the dropdown and
+     adding assigns the new type to the current store; the
+     standalone Add button in Store settings only adds it to the
+     list. Add store flows: the added type becomes the type
+     chosen for the store being created. */
+  setupAddStoreType({
+    selectId: 'settingsStoreType', btnId: 'settingsAddTypeBtn',
+    formId: 'settingsAddTypeForm', inputId: 'settingsNewTypeName',
+    saveId: 'settingsAddTypeSave', cancelId: 'settingsAddTypeCancel',
+    errId: 'settingsAddTypeErr', assignFromButton: false,
+    onAdded: function(added, assign){
+      rebuildStoreTypeSelects();
+      if(assign){
+        setStoreType(activeStore, added, true);
+        syncToast('Store ' + activeStore + ' is now a ' + added + ' store — the impact it sees has been updated.', false);
+      } else {
+        applyStoreTypeUI();
+      }
+    }
+  });
+  setupAddStoreType({
+    selectId: 'storeNewType', btnId: 'storeAddTypeBtn',
+    formId: 'storeAddTypeForm', inputId: 'storeNewTypeName',
+    saveId: 'storeAddTypeSave', cancelId: 'storeAddTypeCancel',
+    errId: 'storeAddTypeErr', assignFromButton: true,
+    onAdded: function(added){
+      var s = document.getElementById('storeNewType');
+      if(s) s.value = added;
+    }
+  });
+  setupAddStoreType({
+    selectId: 'welcomeStoreType', btnId: 'welcomeAddTypeBtn',
+    formId: 'welcomeAddTypeForm', inputId: 'welcomeNewTypeName',
+    saveId: 'welcomeAddTypeSave', cancelId: 'welcomeAddTypeCancel',
+    errId: 'welcomeAddTypeErr', assignFromButton: true,
+    onAdded: function(added){
+      var s = document.getElementById('welcomeStoreType');
+      if(s) s.value = added;
+    }
+  });
+  rebuildStoreTypeSelects();
+
   /* ---------- First-visit store prompt ----------
      The welcome overlay is the header store selector, up front:
      the heading asks "Which store are you at?" and directly below
@@ -6028,11 +6848,17 @@
   var welcomeNum = document.getElementById('welcomeStoreNum');
   var welcomeErr = document.getElementById('welcomeErr');
   var welcomeNewWrap = document.getElementById('welcomeNewWrap');
+  var welcomeTypeWrap = document.getElementById('welcomeTypeWrap');
+  var welcomeType = document.getElementById('welcomeStoreType');
   var welcomeDone = false;
 
   function syncWelcomeNewField(){
     if(!welcomeSel || !welcomeNewWrap) return;
-    welcomeNewWrap.hidden = welcomeSel.value !== '__add__';
+    var adding = welcomeSel.value === '__add__';
+    welcomeNewWrap.hidden = !adding;
+    /* Creating a store also requires its type — it decides which
+       impact the new store sees */
+    if(welcomeTypeWrap) welcomeTypeWrap.hidden = !adding;
   }
   function renderWelcomeStores(){
     if(!welcomeSel) return;
@@ -6074,6 +6900,10 @@
   function openWelcome(){
     if(welcomeDone) return;
     renderWelcomeStores();
+    var wf = document.getElementById('welcomeAddTypeForm');
+    if(wf) wf.hidden = true;
+    var wi = document.getElementById('welcomeNewTypeName');
+    if(wi) wi.value = '';
     welcomeErr.hidden = true;
     welcomeOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -6085,6 +6915,7 @@
   }
   function welcomeChoose(){
     var num = '';
+    var newType = '';
     if(welcomeSel && welcomeSel.value === '__add__'){
       num = welcomeNum.value.trim();
       if(!/^\d+$/.test(num)){
@@ -6097,6 +6928,13 @@
         welcomeErr.textContent = 'Store ' + num + ' already exists — pick it in the dropdown instead.';
         welcomeErr.hidden = false;
         welcomeNum.focus();
+        return;
+      }
+      newType = welcomeType ? welcomeType.value : '';
+      if(!newType || newType === ADD_TYPE_VALUE){
+        welcomeErr.textContent = 'Pick a store type from the list, or use Add new store type to add one first.';
+        welcomeErr.hidden = false;
+        if(welcomeType) welcomeType.focus();
         return;
       }
     } else if(welcomeSel && welcomeSel.value){
@@ -6116,6 +6954,10 @@
       storeOrder.push(num);
       storeSets[num] = new Set();
       storeUnavailable[num] = new Set();
+      /* The type picked above is saved with the store (kept on
+         this device now, and pushed to the shared store record by
+         the sbSyncStoreSave call below) */
+      if(newType) setStoreType(num, newType, false);
     }
     activeStore = num;
     welcomeDone = true;
@@ -6152,7 +6994,10 @@
   }
   function syncStoreUI(){
     /* The header shows only the heading and the store dropdown, so
-       there is no header text under the store field left to update. */
+       there is no header text under the store field left to update.
+       What does follow the current store is its type: refresh the
+       Settings store-type control and which impact is shown. */
+    applyStoreTypeUI();
   }
   storeSel.addEventListener('change', function(){
     if(storeSel.value === '__add__'){
@@ -6177,6 +7022,8 @@
   var storeNum = document.getElementById('storeNum');
   var storeNewWrap = document.getElementById('storeNewWrap');
   var storeNewNum = document.getElementById('storeNewNum');
+  var storeTypeWrap = document.getElementById('storeTypeWrap');
+  var storeNewType = document.getElementById('storeNewType');
   var storeErr = document.getElementById('storeErr');
   var storeQ = document.getElementById('storeQ');
   var storeList = document.getElementById('storeList');
@@ -6267,11 +7114,15 @@
       dlgMode = 'add';
       storeTitle.textContent = 'Add store';
       storeNewWrap.hidden = false;
+      /* A new store also needs its type — it decides which impact
+         the store sees */
+      if(storeTypeWrap) storeTypeWrap.hidden = false;
       dlgSet = new Set();
     } else {
       dlgMode = 'edit';
       storeTitle.textContent = 'Store ' + num + ' — set products';
       storeNewWrap.hidden = true;
+      if(storeTypeWrap) storeTypeWrap.hidden = true;
       dlgSet = new Set(storeSets[num] || []);
     }
     storeErr.hidden = true;
@@ -6283,6 +7134,11 @@
   });
   function openStoreDialog(mode){
     storeNewNum.value = '';
+    if(storeNewType) storeNewType.value = '';
+    var sf = document.getElementById('storeAddTypeForm');
+    if(sf) sf.hidden = true;
+    var si = document.getElementById('storeNewTypeName');
+    if(si) si.value = '';
     storeQ.value = '';
     if(mode === 'add'){
       buildStoreNumOptions('__add__');
@@ -6319,12 +7175,26 @@
     function fail(msg){ storeErr.textContent = msg; storeErr.hidden = false; (wasAdd ? storeNewNum : storeNum).focus(); }
     if(!/^\d+$/.test(num)){ fail(wasAdd ? 'Enter the new store number using digits only.' : 'Pick a store from the dropdown.'); return; }
     if(wasAdd && storeSets[num]){ fail('Store ' + num + ' already exists — pick it in the dropdown instead.'); return; }
+    var newType = '';
+    if(wasAdd){
+      newType = storeNewType ? storeNewType.value : '';
+      if(!newType || newType === ADD_TYPE_VALUE){
+        storeErr.textContent = 'Pick a store type from the list, or use Add new store type to add one first.';
+        storeErr.hidden = false;
+        if(storeNewType) storeNewType.focus();
+        return;
+      }
+    }
     if(wasAdd){
       storeOrder.push(num);
       storeSets[num] = dlgSet;
       /* A brand-new store starts with nothing marked unavailable,
          whatever is unavailable at any other store */
       storeUnavailable[num] = new Set();
+      /* The type picked above is saved with the store (kept on
+         this device now, and pushed to the shared store record by
+         the sbSyncStoreSave call below) */
+      if(newType) setStoreType(num, newType, false);
     } else {
       if(!storeUnavailable[num]) storeUnavailable[num] = new Set();
       storeSets[num] = dlgSet;
@@ -6463,7 +7333,23 @@
         if(!window.ZXing || !window.ZXing.BrowserMultiFormatReader) throw new Error('no ZXing');
         scanZxing = new window.ZXing.BrowserMultiFormatReader();
         var cb = function(result){
-          if(result && result.getText) handleScannedCode(result.getText());
+          if(!result) return;
+          /* The decoded text must be CALLED off the result —
+             result.getText() — never passed on as the bare
+             getText function reference: a function reference
+             normalises to no digits, so the lookup silently
+             never happened and no barcode was ever recognised
+             or reported unrecognised on this fallback path.
+             This one callback serves both decode branches
+             below (decodeFromVideoElementContinuously and the
+             decodeFromStream fallback), so both are fixed here. */
+          var text = '';
+          try{ text = (result && typeof result.getText === 'function') ? result.getText() : ''; }catch(e){ text = ''; }
+          if(text && normalizeBarcode(text)){ handleScannedCode(text); return; }
+          /* A decode came back but yielded no barcode digits:
+             say so on screen instead of failing silently, and
+             point at the typed-barcode fallback */
+          setScanStatus('That code couldn\u2019t be read as a barcode \u2014 hold it steady in the frame and try again, or type the number below.');
         };
         if(scanZxing.decodeFromVideoElementContinuously) scanZxing.decodeFromVideoElementContinuously(scannerVideo, cb);
         else if(scanZxing.decodeFromStream && scanStream) scanZxing.decodeFromStream(scanStream, scannerVideo, cb);
@@ -6490,6 +7376,17 @@
         if(scannerOverlay.hidden){ stream.getTracks().forEach(function(t){ t.stop(); }); return; }
         scanStream = stream;
         scannerVideo.srcObject = stream;
+        /* Ask the camera for continuous focus where it supports
+           it, so the barcode stays sharp in the frame. This is a
+           supporting request only — where the track does not
+           support focusMode it is simply ignored. */
+        try{
+          var scanTrack = stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
+          if(scanTrack && scanTrack.applyConstraints){
+            var focusReq = scanTrack.applyConstraints({ advanced:[{ focusMode:'continuous' }] });
+            if(focusReq && focusReq.catch) focusReq.catch(function(){});
+          }
+        }catch(e){}
         var played = scannerVideo.play();
         if(played && played.catch) played.catch(function(){});
         scanActive = true;
@@ -6837,10 +7734,35 @@
       .then(function(){ return sbSyncBarcode(row, true); })
       .then(function(){ sbSaved('Product added to the global list — tick it in “Set store products” to add it to a store.'); }, sbFail('the new product'));
   }
+  /* Store type syncs separately from the store create POST, for
+     the same reason as barcode / sale on products: the shared
+     stores table may not have a store_type column yet (it is added
+     by running, in the Supabase SQL Editor:
+       alter table public.stores add column if not exists store_type text;
+     ), and sending an unknown column in the create POST would make
+     Supabase reject the whole store save. This PATCH carries only
+     store_type; while the column is missing it is refused and the
+     type simply stays on this device (localStorage). Once the
+     column exists, this same call starts succeeding and every
+     store's type syncs to every user with no further change here. */
+  function sbSyncStoreType(num){
+    var t = storeTypes[num];
+    if(!t) return Promise.resolve();
+    return sb('stores?store_number=eq.' + encodeURIComponent(num), {
+      method: 'PATCH', prefer: 'return=minimal',
+      body: { store_type: t }
+    }).then(function(){}, function(err){
+      if(window.console) console.warn('Store type not synced (shared list has no store_type column yet):', err);
+    });
+  }
   function sbSyncStoreSave(num, prevNum, idxSet){
     var pids = [];
     idxSet.forEach(function(idx){ if(rowPid[idx]) pids.push(rowPid[idx]); });
     var chain = sb('stores', { method: 'POST', body: { store_number: num }, prefer: 'resolution=merge-duplicates,return=minimal' });
+    /* Once the store row exists, save its type onto the record
+       (a no-op that fails quietly while the shared list has no
+       store_type column — the type stays on this device) */
+    chain = chain.then(function(){ return sbSyncStoreType(num); });
     if(prevNum && prevNum !== num){
       /* Rename: copy this store's unavailable marks to the new number
          before the old store row (and its cascading children) goes */
@@ -7122,14 +8044,33 @@
           newSets[n] = storeSets[n] || new Set();
           newUn[n] = storeUnavailable[n] || new Set();
           sb('stores', { method: 'POST', body: { store_number: n }, prefer: 'resolution=merge-duplicates,return=minimal' })
-            .then(function(){}, function(){});
+            .then(function(){ sbSyncStoreType(n); }, function(){});
         }
       });
       storeOrder = newOrder;
       storeSets = newSets;
       storeUnavailable = newUn;
       if(!storeSets[activeStore]) activeStore = storeOrder[0];
+      /* Store types: a type saved on the shared store record wins;
+         any type name arriving this way is learned into this
+         device's type list (that is how a custom type added on
+         one device reaches the others — on the record of a store
+         that uses it). Where the shared record carries none, this
+         device's saved type is kept and pushed up, so the shared
+         list catches up on its own once its store_type column
+         exists */
+      data.stores.forEach(function(s){
+        var n = s.store_number;
+        var remoteType = normalizeStoreTypeName(s.store_type || '');
+        if(remoteType && remoteType !== ADD_TYPE_VALUE){
+          storeTypes[n] = registerStoreType(remoteType);
+        } else if(storeTypes[n]){
+          sbSyncStoreType(n);
+        }
+      });
+      persistStoreTypes();
       rebuildStoreOptions();
+      applyStoreTypeUI();
     }
     /* Upload anything baked into the page that the shared list
        somehow lacks, with its store memberships, so no product is
@@ -7179,7 +8120,7 @@
      while any dialog is open so an edit in progress is never
      overwritten mid-type */
   setInterval(function(){
-    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden || !scannerOverlay.hidden || !scanLinkOverlay.hidden) return;
+    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden || !supportOverlay.hidden || !scannerOverlay.hidden || !scanLinkOverlay.hidden) return;
     /* Re-derive the scheduled sales too, so an app left open across
        a period boundary (e.g. midnight into Nov 9) switches on its
        own; sbLoad's apply then re-renders over the same state */
