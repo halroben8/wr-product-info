@@ -4297,7 +4297,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.4</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.5</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5265,7 +5265,7 @@
           <input class="combo-new" id="f-acidity-new" type="text" placeholder="New acidity level" hidden />
         </div>
         <div class="efield">
-          <label for="f-cooler">In cooler</label>
+          <label for="f-cooler" id="f-cooler-label">In cooler</label>
           <select id="f-cooler">
             <option value="">Not set</option>
             <option value="Yes">Yes</option>
@@ -5315,7 +5315,7 @@
         </button>
         <p class="barcode-help">Tap “Scan barcode with camera” to scan a barcode straight into the field instead of typing it, type or paste a new barcode to replace the registered one, or use Clear barcode to remove the link. Scanning fills the field and brings you back here — tap Save to register it. Saving updates the shared list for everyone: the new barcode will open this product, and the old one will no longer open it.</p>
       </section>
-      <p class="editor-note" id="editorNote">Price, tasting notes and product info are global — shared by every store. Availability is the exception: it is per store, so the Availability setting here only changes this product for the store you're viewing.</p>
+      <p class="editor-note" id="editorNote">Price, tasting notes and product info are global — shared by every store. Availability and In cooler are the exceptions: they are per store, so those settings here only change this product for the store you're viewing.</p>
       <div class="editor-actions">
         <button type="button" class="btn-ghost" id="editorCancel">Cancel</button>
         <button type="submit" class="btn-save" id="editorSave">Save for all stores</button>
@@ -5363,7 +5363,7 @@
       </div>
     </div>
     <p class="store-err" id="storeErr" role="alert" hidden></p>
-    <p class="editor-note">Ticking only sets which products this store carries, chosen from the one shared product list. Price, notes and product info are global — shared by all stores — and are never changed or copied per store here. Saving a store here updates the shared list, so every user sees the same stores and the same products in each.</p>
+    <p class="editor-note">Ticking only sets which products this store carries, chosen from the one shared product list. Price, notes and product info are global — shared by all stores — and are never changed or copied per store here. Cooler status is per store: a new store starts with all cooler values blank, and each product's cooler status is set for that store afterwards — it is never copied from Store 358 or any other store. Saving a store here updates the shared list, so every user sees the same stores and the same products in each.</p>
     <div class="efield store-search-field">
       <label for="storeQ">Products this store carries — tick to include</label>
       <input id="storeQ" type="search" placeholder="Filter the product list…" autocomplete="off" />
@@ -5425,7 +5425,7 @@
       <div class="editor-actions">
         <button type="submit" class="btn-save" id="welcomeGo">Continue</button>
       </div>
-      <p class="editor-note">New store? Once it's created, use the Settings gear (top right) → “Set store products” to tick the products it carries.</p>
+      <p class="editor-note">New store? Once it's created, use the Settings gear (top right) → “Set store products” to tick the products it carries. A new store starts with all cooler values blank — cooler status differs store to store, so set each product's cooler status for the new store afterwards.</p>
     </form>
   </div>
 </div>
@@ -5550,6 +5550,91 @@
   function unavailSet(store){
     if(!storeUnavailable[store]) storeUnavailable[store] = new Set();
     return storeUnavailable[store];
+  }
+
+  /* ---------- Per-store cooler ----------
+     COOLER STATUS IS PER STORE, like availability — it is NOT
+     global product info. Cooler line-ups differ store to store,
+     so a value set while viewing one store must never show up
+     in, or change, another store.
+     Three pieces of state, all keyed by product data-idx:
+       · globalCooler — the catalogue's original In cooler values
+         (the baked-in rows, kept in step with the shared list's
+         products.in_cooler column). Store 358 was built from
+         these, so they ARE Store 358's values: editing the cooler
+         for Store 358 updates this map (and the shared column),
+         and no other store's edit ever touches it.
+       · storeCooler — explicit per-store values:
+         storeCooler[store][idx] is 'Yes', 'No' or '' for a
+         product whose cooler status has been set for that store
+         (via the ⋮ menu's Cooler toggle or the editor's In
+         cooler field while viewing that store). An entry here
+         always wins for that store and that store only.
+       · blankCoolerStores — stores CREATED since cooler became
+         per-store (via the first-visit prompt's Add store or
+         Settings → Store settings → Add store). A brand-new
+         store starts with ALL cooler values erased/blank: it is
+         flagged here at creation, so every product reads ''
+         (Not set — no Cooler badge, no "No") for it, never a
+         value copied from Store 358 or any other store. Its
+         cooler values are then set one by one for that store
+         alone, landing in storeCooler as above.
+     A store that already existed before this split (358 and any
+     other pre-existing store) and has no explicit value for a
+     product falls back to globalCooler — which is exactly the
+     value it showed before, so existing stores keep their
+     current cooler values unchanged.
+     The maps are kept on this device (localStorage,
+     COOLER_STORE_KEY — the same device-only pattern as the store
+     types) and also pushed to the shared list per store by
+     sbSyncCooler (see the Shared list section), so a value set
+     for a store is that store's on every device. A row's
+     data-cooler attribute is only the RENDERED VIEW of the
+     current store's value (re-synced by refreshAllCooler() on
+     every store switch, exactly like the unavailable banner). */
+  var COOLER_STORE_KEY = 'wr-store-cooler-v1';
+  var globalCooler = {};
+  rows.forEach(function(r){ globalCooler[r.getAttribute('data-idx')] = r.getAttribute('data-cooler') || ''; });
+  var storeCooler = {};
+  var blankCoolerStores = {};
+  try{
+    var savedCooler = JSON.parse(localStorage.getItem(COOLER_STORE_KEY) || 'null');
+    if(savedCooler && typeof savedCooler === 'object'){
+      if(savedCooler.overrides && typeof savedCooler.overrides === 'object') storeCooler = savedCooler.overrides;
+      if(Array.isArray(savedCooler.blank)) savedCooler.blank.forEach(function(n){ blankCoolerStores[n] = true; });
+    }
+  }catch(e){}
+  function persistStoreCooler(){
+    try{
+      localStorage.setItem(COOLER_STORE_KEY, JSON.stringify({
+        overrides: storeCooler,
+        blank: Object.keys(blankCoolerStores)
+      }));
+    }catch(e){}
+  }
+  function coolerValueForStore(store, idx){
+    var m = storeCooler[store];
+    if(m && Object.prototype.hasOwnProperty.call(m, idx)) return m[idx] || '';
+    if(blankCoolerStores[store]) return '';
+    return globalCooler[idx] || '';
+  }
+  function setCoolerValueForStore(store, idx, val){
+    if(!storeCooler[store]) storeCooler[store] = {};
+    storeCooler[store][idx] = (val === 'Yes' || val === 'No') ? val : '';
+    /* Store 358's values are the catalogue's original values, so
+       an edit made for 358 keeps the global map (and, via
+       sbSyncCooler / rowToProduct, the shared products.in_cooler
+       column) in step — an edit for any other store never does */
+    if(store === '358') globalCooler[idx] = storeCooler[store][idx];
+    persistStoreCooler();
+  }
+  /* A newly created store starts with every cooler value erased:
+     no explicit values at all, and flagged blank so nothing falls
+     back to Store 358's (or any other store's) values for it */
+  function startStoreWithBlankCooler(num){
+    storeCooler[num] = {};
+    blankCoolerStores[num] = true;
+    persistStoreCooler();
   }
 
   function syncFiltersBtn(){
@@ -6091,7 +6176,7 @@
       varietal: cellVal(row, 'Varietal'),
       tannins: cellVal(row, 'Tannins'),
       acidity: cellVal(row, 'Acidity'),
-      cooler: row.getAttribute('data-cooler') || '',
+      cooler: coolerValueForStore(activeStore, row.getAttribute('data-idx')),
       barcode: row.getAttribute('data-barcode') || '',
       sale: row.getAttribute('data-sale') === 'Yes',
       salePrice: row.getAttribute('data-sale-price') || '',
@@ -6202,39 +6287,64 @@
     syncCoolerSearch(row);
   }
   /* ---------- Cooler badge — on/off from the ⋮ menu ----------
-     A product whose In cooler flag (data-cooler) is "Yes" carries
-     the plum "Cooler" badge under its name. The ⋮ menu's Cooler
-     item toggles that badge: tapping it turns the badge on
-     (data-cooler becomes "Yes") or off again (data-cooler becomes
-     "No"), and the menu item itself shows the current state
-     (☑ On / ☐ Off, mirrored in aria-pressed) so it is clear which
-     way the next tap will flip it. In cooler is global product
-     info — like the "In cooler" field in the editor, which reads
-     and writes this same data-cooler — so toggling here is the
-     same change the editor makes (unlike Mark unavailable, which
-     is per store). Search also matches "cooler" for products
-     whose badge is on. */
+     A product whose In cooler value FOR THE STORE BEING VIEWED
+     is "Yes" carries the plum "Cooler" badge under its name. The
+     ⋮ menu's Cooler item toggles that badge for the current
+     store only: tapping it sets this store's value to "Yes" or
+     "No" (storeCooler, at the top), and the menu item itself
+     shows the current state (☑ On / ☐ Off, mirrored in
+     aria-pressed) so it is clear which way the next tap will
+     flip it. The editor's In cooler field reads and writes this
+     same per-store value, so toggling here is the same change
+     the editor makes — and, like Mark unavailable, it never
+     changes any other store: switching stores re-renders every
+     badge from the newly viewed store's own values
+     (refreshAllCooler). A store created new starts with every
+     value blank ('' — Not set, no badge), never with another
+     store's values. Search also matches "cooler" for products
+     whose badge is on in the current store. */
   function isCooler(row){
-    return row.getAttribute('data-cooler') === 'Yes';
+    return coolerValueForStore(activeStore, row.getAttribute('data-idx')) === 'Yes';
   }
   function syncCoolerSearch(row){
     var s = (row.getAttribute('data-search') || '').replace(/\bcooler\b/g, '').replace(/\s+/g, ' ').trim();
     if(isCooler(row)) s += ' cooler';
     row.setAttribute('data-search', s);
   }
-  function setCooler(row, on){
-    if(isCooler(row) === !!on){ syncCoolerSearch(row); return; }
-    /* Go through readRow/writeRow so the badge, the data-cooler
-       flag and the editor's In cooler field all stay in step,
-       exactly as when it is changed in the editor. writeRow also
-       re-applies this store's unavailable state; the plano and
-       cooler search tokens are re-added after it, since writeRow
-       rebuilds data-search. */
-    var data = readRow(row);
-    data.cooler = on ? 'Yes' : 'No';
-    writeRow(row, data);
-    syncPlanoSearch(row);
+  /* Re-render one row's cooler view — its data-cooler attribute,
+     its Cooler badge and its "cooler" search token — from the
+     CURRENT store's value for that product, the same pattern as
+     syncUnavailableVisual for availability */
+  function syncCoolerVisual(row){
+    var v = coolerValueForStore(activeStore, row.getAttribute('data-idx'));
+    row.setAttribute('data-cooler', v);
+    var pcell = cellEl(row, 'Product');
+    if(pcell){
+      var badge = pcell.querySelector('.badge.cooler');
+      if(v === 'Yes' && !badge){
+        badge = document.createElement('span');
+        badge.className = 'badge cooler';
+        badge.textContent = 'Cooler';
+        var anchor = pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
+        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
+        else pcell.appendChild(badge);
+      } else if(v !== 'Yes' && badge){
+        badge.parentNode.removeChild(badge);
+      }
+    }
     syncCoolerSearch(row);
+  }
+  function refreshAllCooler(){
+    rows.forEach(syncCoolerVisual);
+  }
+  function setCooler(row, on){
+    var idx = row.getAttribute('data-idx');
+    var want = on ? 'Yes' : 'No';
+    if(coolerValueForStore(activeStore, idx) === want){ syncCoolerVisual(row); return; }
+    /* Only the current store's value changes — every other
+       store keeps its own value for this product */
+    setCoolerValueForStore(activeStore, idx, want);
+    syncCoolerVisual(row);
   }
   /* ---------- On sale — on/off from the ⋮ menu and the editor ----------
      A product on sale (data-sale="Yes") carries the pink SALE
@@ -6328,7 +6438,7 @@
   kebabCoolerBtn.addEventListener('click', function(){
     var row = menuRow;
     closeKebabMenu(false);
-    if(row){ setCooler(row, !isCooler(row)); apply(); sbSyncProduct(row); }
+    if(row){ setCooler(row, !isCooler(row)); apply(); sbSyncCooler(row); }
   });
   kebabSaleBtn.addEventListener('click', function(){
     var row = menuRow;
@@ -6574,10 +6684,11 @@
        is per store, so the note, the save button and the Availability
        label all say which parts are global and which are not */
     document.getElementById('editorNote').textContent = row
-      ? 'Price, tasting notes and product info are shared: saving here updates this product for every store that carries it and every user of this app. Availability is per store — the Availability setting above only changes Store ' + activeStore + ', and every other store keeps its own availability for this product.'
-      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. A new product is also added to Store ' + activeStore + ' — the store you are viewing — automatically, so it appears in this store\u2019s list straight away, is searchable, and can be scanned to. It is not added to any other store automatically; tick it in Settings \u2192 \u201cSet store products\u201d for other stores that should carry it, or untick it there to remove it from a store. Availability is per store: marking it unavailable here only makes it unavailable at Store ' + activeStore + '.';
+      ? 'Price, tasting notes and product info are shared: saving here updates this product for every store that carries it and every user of this app. Availability and In cooler are per store — those settings above only change Store ' + activeStore + ', and every other store keeps its own availability and cooler status for this product.'
+      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. A new product is also added to Store ' + activeStore + ' — the store you are viewing — automatically, so it appears in this store\u2019s list straight away, is searchable, and can be scanned to. It is not added to any other store automatically; tick it in Settings \u2192 \u201cSet store products\u201d for other stores that should carry it, or untick it there to remove it from a store. Availability and In cooler are per store: the values set here apply only at Store ' + activeStore + '.';
     document.getElementById('editorSave').textContent = row ? 'Save for all stores' : 'Add to Store ' + activeStore + ' & shared list';
     document.getElementById('f-availability-label').textContent = 'Availability — Store ' + activeStore + ' only';
+    document.getElementById('f-cooler-label').textContent = 'In cooler — Store ' + activeStore + ' only';
     var cur = row ? readRow(row) : {
       brand:'', name:'', size:'750mL', price:'', rs:'', sweet:'', rich:'',
       varietal:'', tannins:'', acidity:'', cooler:'', barcode:'', sale:false, salePrice:'', vqa:false, status:'Not In Plano', unavailable:false, notes:''
@@ -6803,6 +6914,12 @@
         storeSets[activeStore].add(target.getAttribute('data-idx'));
       }
     }
+    /* The In cooler value just saved belongs to the CURRENT
+       store only: record it as that store's own value for this
+       product, so no other store's cooler status changes (for
+       Store 358 this also keeps the catalogue's original values
+       in step — see setCoolerValueForStore) */
+    if(target) setCoolerValueForStore(activeStore, target.getAttribute('data-idx'), data.cooler);
     /* writeRow rebuilt data-search, so re-add the plano / cooler
        tokens to match the status and In cooler values just saved */
     if(target){ syncPlanoSearch(target); syncCoolerSearch(target); syncSaleSearch(target); }
@@ -6814,7 +6931,7 @@
     if(target){
       if(isNew) sbRegisterNewProduct(target);
       else {
-        sbSyncProduct(target); sbSyncUnavailable(target);
+        sbSyncProduct(target); sbSyncUnavailable(target); sbSyncCooler(target);
         /* Explicit barcode save: sbSyncProduct is routine sync and
            never writes the barcode, so a Barcode the user changed
            in this editor is written here, directly, as its own
@@ -6842,6 +6959,11 @@
   rows.forEach(syncCoolerSearch);
   /* Same for products that arrived already on sale */
   rows.forEach(syncSaleSearch);
+  /* The first paint already shows the CURRENT store's cooler
+     values: if this device starts on a store created new (its
+     cooler values were erased at creation and stay erased),
+     no badge from Store 358's values may show for it */
+  refreshAllCooler();
 
   /* ---------- Settings (gear, top right) ----------
      The gear in the header opens the Settings panel, which is where
@@ -7357,10 +7479,15 @@
      A store set holds ONLY product ids (membership): which products
      that store carries. Price, notes and all other product info live
      on the single shared row in the global catalogue and are edited
-     once, globally — never per store. Availability is the exception:
-     storeUnavailable (declared at the top, alongside activeStore)
-     holds a separate set of unavailable product ids for each store,
-     so “Mark unavailable” only ever changes the store being viewed. */
+     once, globally — never per store. Availability and cooler status
+     are the exceptions: storeUnavailable (declared at the top,
+     alongside activeStore) holds a separate set of unavailable
+     product ids for each store, so “Mark unavailable” only ever
+     changes the store being viewed, and the per-store cooler state
+     next to it (storeCooler / blankCoolerStores / globalCooler)
+     does the same for “In cooler” — a store created new starts
+     with every cooler value erased, and no store's cooler values
+     are ever copied to or from another store. */
   var storeSel = document.getElementById('storeSel');
   var storeOrder = ['358'];
   var storeSets = { '358': new Set(rows.map(function(r){ return r.getAttribute('data-idx'); })) };
@@ -7823,6 +7950,12 @@
       storeOrder.push(num);
       storeSets[num] = new Set();
       storeUnavailable[num] = new Set();
+      /* A brand-new store also starts with ALL cooler values
+         erased/blank — cooler line-ups differ store to store,
+         so nothing is copied from Store 358 or any other store;
+         this store's cooler values are set afterwards, for this
+         store alone */
+      startStoreWithBlankCooler(num);
       /* The type picked above is saved with the store (kept on
          this device now, and pushed to the shared store record by
          the sbSyncStoreSave call below) */
@@ -7836,6 +7969,7 @@
     rebuildStoreOptions();
     syncStoreUI();
     refreshAllUnavailable();
+    refreshAllCooler();
     closeWelcome();
     if(isNew){
       /* Push the new store to the shared list so every other
@@ -7890,6 +8024,9 @@
     /* Re-render every row's unavailable banner/red tint from the
        newly selected store's own unavailable set before filtering */
     refreshAllUnavailable();
+    /* …and every row's Cooler badge from the newly selected
+       store's own cooler values — never the previous store's */
+    refreshAllCooler();
     apply();
   });
 
@@ -8067,6 +8204,11 @@
       /* A brand-new store starts with nothing marked unavailable,
          whatever is unavailable at any other store */
       storeUnavailable[num] = new Set();
+      /* …and with ALL cooler values erased/blank, whatever the
+         cooler status is at Store 358 or any other store —
+         cooler line-ups differ store to store, so this store's
+         cooler values are set afterwards, for this store alone */
+      startStoreWithBlankCooler(num);
       /* The type picked above is saved with the store (kept on
          this device now, and pushed to the shared store record by
          the sbSyncStoreSave call below) */
@@ -8084,6 +8226,7 @@
     rebuildStoreOptions();
     syncStoreUI();
     refreshAllUnavailable();
+    refreshAllCooler();
     /* Shared list: push the store (and its product ticks) to
        Supabase so every other user sees it */
     sbSyncStoreSave(num, null, dlgSet);
@@ -8895,7 +9038,15 @@
       price: sbNum(d.price), rs: sbNum(d.rs),
       sweetness: isBask ? 'Extra Dry' : (d.sweet || null), richness: d.rich || null,
       varietal: d.varietal || null, acidity: d.acidity || null, tannins: d.tannins || null,
-      in_cooler: d.cooler === 'Yes', status: d.status || 'Planogram',
+      /* in_cooler on the shared product record holds the
+         catalogue's ORIGINAL cooler values — Store 358's values.
+         It is written from globalCooler, never from the current
+         store's view (d.cooler is the ACTIVE store's value), so
+         saving a product while viewing any other store can never
+         push that store's cooler status onto Store 358 or the
+         shared record. Per-store values travel separately, via
+         sbSyncCooler. */
+      in_cooler: globalCooler[row.getAttribute('data-idx')] === 'Yes', status: d.status || 'Planogram',
       vqa: !!d.vqa, tasting_notes: d.notes || null
     };
   }
@@ -9059,6 +9210,51 @@
       : sb('store_unavailable?store_number=eq.' + encodeURIComponent(activeStore) + '&product_id=eq.' + encodeURIComponent(pid), { method: 'DELETE', prefer: 'return=minimal' });
     p.then(function(){ sbSaved(); }, sbFail('availability'));
   }
+  /* Cooler syncs PER STORE, separately from the main product
+     payload: a store's cooler value for a product lives in the
+     store_cooler table (store_number + product_id, presence =
+     In Cooler for that store — the same shape as
+     store_unavailable), so setting it can never touch another
+     store's values, and the main product PATCH above never
+     carries a per-store cooler either (rowToProduct writes only
+     the catalogue's original / Store 358 value). While the
+     shared list has no store_cooler table yet (it is added by
+     running, in the Supabase SQL Editor:
+       create table if not exists public.store_cooler (
+         store_number text not null, product_id text not null,
+         primary key (store_number, product_id));
+     with the same open policies as store_unavailable), these
+     calls are refused and the value simply stays on this device
+     (localStorage, COOLER_STORE_KEY) — exactly how store types
+     behave while their column is missing. For Store 358 the
+     shared products.in_cooler column is ALSO kept in step,
+     because 358's values are the catalogue's original ones that
+     older copies of the app read. Failures here never take the
+     product save down: the cooler change itself is already
+     applied on screen and on this device. */
+  function sbSyncCooler(row, storeNum){
+    if(!row) return Promise.resolve();
+    var pid = rowPid[row.getAttribute('data-idx')];
+    if(!pid) return Promise.resolve();
+    var store = storeNum || activeStore;
+    var idx = row.getAttribute('data-idx');
+    var val = coolerValueForStore(store, idx);
+    var ops = [];
+    if(val === 'Yes'){
+      ops.push(sb('store_cooler', { method: 'POST', body: { store_number: store, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' })
+        .then(function(){}, function(err){ if(window.console) console.warn('Per-store cooler not synced (shared list has no store_cooler table yet):', err); }));
+    } else {
+      ops.push(sb('store_cooler?store_number=eq.' + encodeURIComponent(store) + '&product_id=eq.' + encodeURIComponent(pid), { method: 'DELETE', prefer: 'return=minimal' })
+        .then(function(){}, function(err){ if(window.console) console.warn('Per-store cooler not synced (shared list has no store_cooler table yet):', err); }));
+    }
+    if(store === '358'){
+      ops.push(sb('products?product_id=eq.' + encodeURIComponent(pid), {
+        method: 'PATCH', prefer: 'return=minimal',
+        body: { in_cooler: val === 'Yes' }
+      }).then(function(){}, function(err){ if(window.console) console.warn('Store 358 cooler not synced to the product record:', err); }));
+    }
+    return Promise.all(ops);
+  }
   function sbRegisterNewProduct(row){
     var pid = genPid();
     setRowPid(row, pid);
@@ -9097,6 +9293,10 @@
         }
       })
       .then(function(){ return sbSyncSale(row); })
+      /* The new product's In cooler value from the editor belongs
+         to the store it was added from (targetStore) only — sync
+         it per store, never as another store's value */
+      .then(function(){ return sbSyncCooler(row, targetStore); })
       /* This sbSyncBarcode call is NOT a routine sync: registering
          a new product only ever happens as the direct result of
          the user saving the product editor (including "Add as a
@@ -9368,6 +9568,13 @@
         seenKeys[nk] = 1;
         var row = createRow(nd);
         setRowPid(row, p.product_id);
+        /* nd.cooler is the catalogue's original (Store 358)
+           value: keep it as this product's global value, then
+           re-render the row from the CURRENT store's own cooler
+           value — blank for a store created new, its own set
+           value where it has one */
+        globalCooler[row.getAttribute('data-idx')] = nd.cooler || '';
+        syncCoolerVisual(row);
       }
     });
     /* Edits other users made replace the local copy of that product */
@@ -9381,6 +9588,16 @@
          state is kept — a sync must never wipe a sale marked on
          this screen just because the shared list can't store it */
       if(!('on_sale' in p)){ want.sale = cur.sale; want.salePrice = cur.salePrice; }
+      /* Cooler: the shared record's in_cooler is the catalogue's
+         original (Store 358) value — it updates globalCooler
+         only. The row keeps the ACTIVE store's own cooler value:
+         a refresh must never push Store 358's cooler status into
+         another store, nor erase a blank new store's values.
+         refreshAllCooler() at the end of this apply re-renders
+         every badge from the active store's values, including a
+         legacy store's fallback to a changed global value. */
+      globalCooler[row.getAttribute('data-idx')] = want.cooler || '';
+      want.cooler = cur.cooler;
       /* Barcode: the shared record's barcode wins EXACTLY — it
          replaces whatever this row carries, including a different
          baked-in value, and it is never pushed back the other way.
@@ -9491,7 +9708,33 @@
         })
         .then(function(){}, sbFail('the built-in list upload'));
     }
+    /* Per-store cooler values saved on the shared list
+       (store_cooler, presence = In Cooler for that store) are
+       learned as that store's own explicit values. Rows are
+       only ever ADDED here: a store with no rows — a new store
+       whose cooler values were erased at creation, or any store
+       while the table does not exist yet — keeps exactly the
+       values it already has on this device, and Store 358's
+       values keep coming from the product records as before */
+    if(data.cooler && data.cooler.length){
+      var coolerChanged = false;
+      data.cooler.forEach(function(c){
+        var crow = pidRow[c.product_id];
+        if(!crow) return;
+        if(!storeCooler[c.store_number]) storeCooler[c.store_number] = {};
+        var cidx = crow.getAttribute('data-idx');
+        if(storeCooler[c.store_number][cidx] !== 'Yes'){
+          storeCooler[c.store_number][cidx] = 'Yes';
+          coolerChanged = true;
+        }
+      });
+      if(coolerChanged) persistStoreCooler();
+    }
     refreshAllUnavailable();
+    /* Every Cooler badge re-renders from the CURRENT store's own
+       values over whatever the sync just applied — a new store
+       stays blank, Store 358 keeps its values */
+    refreshAllCooler();
     /* The date decides the LTO / flash-sale state, not the shared
        list: re-derive it over whatever the sync just applied */
     applyScheduledSales();
@@ -9503,10 +9746,15 @@
       sb('products?select=*'),
       sb('stores?select=*'),
       sb('store_products?select=*'),
-      sb('store_unavailable?select=*')
+      sb('store_unavailable?select=*'),
+      /* Per-store cooler is fetched separately and its failure
+         swallowed: while the shared list has no store_cooler
+         table yet it simply contributes nothing, and the main
+         load must never fail because of it */
+      sb('store_cooler?select=*').catch(function(){ return []; })
     ]).then(function(res){
       setSyncStatus('Shared list connected — everyone sees adds and edits. Last synced ' + new Date().toLocaleTimeString() + '.');
-      sbApplyRemote({ products: res[0] || [], stores: res[1] || [], memberships: res[2] || [], unavailable: res[3] || [] });
+      sbApplyRemote({ products: res[0] || [], stores: res[1] || [], memberships: res[2] || [], unavailable: res[3] || [], cooler: res[4] || [] });
     }).catch(function(err){
       setSyncStatus('Shared list unreachable — showing the built-in list. Changes made now won’t sync until the connection is back.');
       if(window.console) console.warn(err);
