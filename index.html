@@ -70,6 +70,14 @@
     padding:12px 16px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left}
   .settings-action:hover,.settings-action:focus-visible{background:var(--panel2);border-color:var(--plum2);outline:none}
   .settings-action .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
+  /* Full-document links in Settings (Full P8 / P9 Impact PDFs and the
+     Product Info Manual) are <a> elements wearing .settings-action.
+     They open PDF files that sit alongside index.html in the published
+     site — reference documents only, never synced anywhere. */
+  a.settings-action{text-decoration:none}
+  .settings-action .sa-ext{margin-left:auto;flex:none;font-size:12px;font-weight:800;letter-spacing:.05em;
+    color:var(--plum);border:1.5px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--panel)}
+  :root[data-theme="dark"] .settings-action .sa-ext{color:var(--lilac)}
   .settings-note{color:var(--muted);font-size:13.5px;margin:14px 0 0;line-height:1.5}
   /* Appearance — Dark / Light / Auto, in Settings. Light is the
      default look. The choice is a display setting saved on this
@@ -131,6 +139,41 @@
   .wk-sweet-list .wk-sweet-range{color:var(--ink);font-weight:600}
   .knowledge-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
   :root[data-theme="dark"] .knowledge-panel .editor-head h2{color:#e9d5ff}
+  /* What's on sample today + P9 Impact Cheat Sheet — two more static
+     reference panels opened from Settings, following the Wine
+     Knowledge pattern. Both show schedule content baked into this
+     page only; neither reads or writes product data and neither
+     syncs to the shared list. */
+  .sample-panel,.cheat-panel{max-width:680px}
+  .sample-panel .editor-head h2,.cheat-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .sample-panel .editor-head h2, :root[data-theme="dark"] .cheat-panel .editor-head h2{color:#e9d5ff}
+  .sample-date{margin:0 0 4px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .sample-date{color:var(--lilac)}
+  .sample-window{margin:0 0 12px;font-size:15px;font-weight:600;color:var(--ink)}
+  .sample-list{list-style:none;margin:0 0 12px;padding:0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+  .sample-list li{padding:11px 14px;font-size:16px;font-weight:650;color:var(--ink);background:var(--panel);border-top:1px solid var(--line)}
+  .sample-list li:first-child{border-top:none}
+  .sample-list li:nth-child(even){background:var(--violet-soft)}
+  .sample-none{margin:0 0 12px;padding:14px;border:1.5px dashed var(--line);border-radius:12px;
+    font-size:15.5px;font-weight:600;color:var(--ink);background:var(--panel)}
+  .sample-note{margin:0 0 10px;font-size:14px;line-height:1.55;color:var(--ink)}
+  .sample-note:last-child{margin-bottom:0}
+  .sample-next-head{margin:16px 0 6px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .sample-next-head{color:var(--lilac)}
+  .cs-sub{margin:-4px 0 14px;font-size:14px;font-weight:600;color:var(--muted)}
+  .cs-h{margin:18px 0 8px;font-size:14px;font-weight:800;color:#4c1d95;text-transform:uppercase;letter-spacing:.05em}
+  .cs-h:first-of-type{margin-top:0}
+  :root[data-theme="dark"] .cs-h{color:#e9d5ff}
+  .cs-table{width:100%;border-collapse:collapse;font-size:14.5px;margin:0 0 6px;color:var(--ink)}
+  .cs-table th,.cs-table td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+  .cs-table th{background:var(--violet-soft);color:#4c1d95;font-weight:800;white-space:nowrap;width:34%}
+  :root[data-theme="dark"] .cs-table th{color:#e9d5ff}
+  .cs-table td{font-weight:500}
+  .cs-list{margin:0 0 6px;padding-left:20px;font-size:15px;line-height:1.6;color:var(--ink)}
+  .cs-list li{margin-bottom:7px}
+  .cs-list li:last-child{margin-bottom:0}
+  .cs-note{margin:8px 0 0;font-size:13.5px;line-height:1.55;color:var(--muted)}
+  .cs-src{margin:16px 0 0;padding-top:10px;border-top:1px dashed var(--lilac);font-size:12.5px;line-height:1.55;color:var(--muted)}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -3841,6 +3884,11 @@
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
       <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, food pairing and red &amp; white wine varietals</span></span></button>
+      <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
+      <button type="button" class="settings-action" id="p9CheatSheet"><span>P9 Impact Cheat Sheet<span class="sa-sub">Key dates, sampling, must-do actions and promo notes for Nov 9&ndash;29</span></span></button>
+      <a class="settings-action" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+      <a class="settings-action" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+      <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
@@ -4088,6 +4136,82 @@
 
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="knowledgeCancel">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="sampleOverlay" hidden>
+  <div class="editor-panel sample-panel" role="dialog" aria-modal="true" aria-labelledby="sampleTitle">
+    <div class="editor-head">
+      <h2 id="sampleTitle">What&rsquo;s on sample today?</h2>
+      <button type="button" class="editor-x" id="sampleClose" aria-label="Close what's on sample today">×</button>
+    </div>
+    <div id="sampleBody"></div>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="sampleCancel">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="cheatOverlay" hidden>
+  <div class="editor-panel cheat-panel" role="dialog" aria-modal="true" aria-labelledby="cheatTitle">
+    <div class="editor-head">
+      <h2 id="cheatTitle">P9 Cheat Sheet</h2>
+      <button type="button" class="editor-x" id="cheatClose" aria-label="Close P9 cheat sheet">×</button>
+    </div>
+    <p class="cs-sub">Legacy Loblaws Boutique &bull; Period 9: November 9 &ndash; 29, 2026 &bull; Printed Oct 26</p>
+
+    <h3 class="cs-h">Key dates</h3>
+    <table class="cs-table">
+      <tbody>
+        <tr><th scope="row">Mon Oct 26</th><td>P9 POP Monday order day (delivery Thu Oct 29) &mdash; if you are a Monday-order store, order today</td></tr>
+        <tr><th scope="row">Mon Nov 2</th><td>Feature Learning issued: Vintage Ink Tequila Barrel Sauv Blanc ($17.99, Buy 2 Save $6)</td></tr>
+        <tr><th scope="row">Wed Nov 4, 5pm</th><td>DEADLINE: report missing P9 POP (Speakeasy form)</td></tr>
+        <tr><th scope="row">Mon Nov 9</th><td>P9 BEGINS + tasting/sampling notes DUE + Uline Poster 1 &lsquo;Prices Worth Celebrating&rsquo; up</td></tr>
+        <tr><th scope="row">Wed Nov 11</th><td>Remembrance Day</td></tr>
+        <tr><th scope="row">Mon Nov 16</th><td>Black Friday Flash Sale BEGINS + P10 POP ships with MDC order &mdash; do NOT forfeit</td></tr>
+        <tr><th scope="row">Mon Nov 23</th><td>P10 POP ships with MDC order (2nd shipping week) &mdash; do NOT forfeit</td></tr>
+        <tr><th scope="row">Wed Nov 25</th><td>P10 POP confirmation due</td></tr>
+        <tr><th scope="row">Fri Nov 27</th><td>Black Friday</td></tr>
+        <tr><th scope="row">Sun Nov 29</th><td>P9 ENDS (Flash Sale runs one more day)</td></tr>
+        <tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS (Cyber Monday) + changeover: Promo 3, WR093, Profit Panels + Flash Sale FINAL DAY</td></tr>
+        <tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 (not before)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>
+    <table class="cs-table">
+      <tbody>
+        <tr><th scope="row">Nov 9 &ndash; 11</th><td>B&ugrave; Cabernet Sauvignon &bull; B&ugrave; Chardonnay &bull; Inniskillin Discovery P3 VQA</td></tr>
+        <tr><th scope="row">Nov 12 &ndash; 15</th><td>Vintage Ink Tequila Barrel Sauv Blanc &bull; Sandbanks Baco Noir &bull; Inniskillin Fracette &bull; Cartier (Fri/Sat only)</td></tr>
+        <tr><th scope="row">Nov 16 &ndash; 18</th><td>Inniskillin Riesling Pinot Grigio &bull; JT Reserve Merlot &bull; JT Reserve Sparkling</td></tr>
+        <tr><th scope="row">Nov 19 &ndash; 22</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; KEW Fracette &bull; Cartier (Fri/Sat only)</td></tr>
+        <tr><th scope="row">Nov 23 &ndash; 25</th><td>JT Reserve Sauv Blanc &bull; Inniskillin DS Gamay Noir &bull; Sandbanks Sparkling Secco</td></tr>
+        <tr><th scope="row">Nov 26 &ndash; 29</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; Saintly Fracette &bull; Cartier (Fri/Sat only)</td></tr>
+      </tbody>
+    </table>
+    <p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day. If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>
+
+    <h3 class="cs-h">Must-do actions</h3>
+    <ul class="cs-list">
+      <li><strong>Feature wine:</strong> Vintage Ink Tequila Barrel Aged Sauv Blanc VQA $17.99, Buy 2 Save $6. Notes due Nov 9; 2+ shifts/week + up-to-date notes to receive a bottle.</li>
+      <li><strong>Mock houses:</strong> window-cutout side on rankings 1&ndash;2, image side on 3&ndash;5. Do not modify to fit a shelf.</li>
+      <li><strong>Icewine on the endcap:</strong> EMPTY display bottles only (loss prevention).</li>
+      <li><strong>Organza gift bag:</strong> FREE with any 750mL bottle $13.99+ after promos, before tax/deposit, while supplies last. Offer it at checkout.</li>
+    </ul>
+
+    <h3 class="cs-h">Promo notes</h3>
+    <ul class="cs-list">
+      <li><strong>Flash Sale Nov 16&ndash;30:</strong> Susse Reserve Riesling + JT Grand Reserve Shiraz, $3 off each. One-time order to fill the display only &mdash; no replenishment.</li>
+      <li><strong>Uline:</strong> Poster 1 &lsquo;Prices Worth Celebrating&rsquo; Nov 9&ndash;15; Poster 2 Flash Sale through END OF DAY Nov 30. RETAIN after P9 &mdash; reused in P10, no new units. Switch to the P10 poster Dec 1.</li>
+      <li><strong>Promo 3 / WR093 / Profit Panels:</strong> P10 changeover Mon Nov 30. New P9 case stackers &mdash; do not discard, used in P10.</li>
+      <li>All LTOs run Nov 9&ndash;29. TPR/clearance: sell through on-hand stock &mdash; no replenishment orders.</li>
+    </ul>
+
+    <p class="cs-src">Source: P9 In-Store Impact (Legacy Loblaws Boutiques), updated Oct 21, 2026. Doc quirks to watch: the POP checklist swaps the Promo 1 and Promo 2 sides; the sampling table&rsquo;s final weeks are merged into one row (split out above); Uline Poster 2 is listed as starting Nov 15 in one table and Nov 16 in another. Weekdays verified against the 2026 calendar.</p>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="cheatCancel">Close</button>
     </div>
   </div>
 </div>
@@ -5472,6 +5596,130 @@
     if(ev.key === 'Escape' && !knowledgeOverlay.hidden) closeKnowledge();
   });
 
+  /* ---------- What's on sample today + P9 Cheat Sheet (Settings) ----------
+     Two more static reference panels, same pattern as Wine Knowledge.
+     The sampling schedule below is the P8 and P9 in-store impact
+     sampling schedule, baked into this page as data. "What's on
+     sample today?" compares the device's local date against these
+     windows; Cartier pours Friday/Saturday only inside the windows
+     flagged cartier:true. Schedule/reference content only — nothing
+     here reads or writes product data, and it never syncs to the
+     shared list. */
+  var SAMPLE_YEAR = 2026;
+  var SAMPLE_SCHEDULE = [
+    { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['JT PS Cabernet Sauvignon','Inniskillin Late Autumn Riesling VQA','MXM Blackberry'] },
+    { period:'P8', start:[10,15], end:[10,18], cartier:true,  items:['Bù Cabernet Sauvignon','Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Saintly Fracette VQA'] },
+    { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['JT PS Pinot Grigio','JT Reserve Meritage VQA','MXM Lemonade'] },
+    { period:'P8', start:[10,22], end:[10,25], cartier:true,  items:['Inniskillin Discovery Series Gamay Noir VQA','Bù Chardonnay','Saintly Fracette VQA'] },
+    { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Sandbanks Reserve French Kiss Merlot-Cabernet VQA','JT PS Sauvignon Blanc','MXM Blackberry'] },
+    { period:'P8', start:[10,29], end:[11,1],  cartier:true,  items:['Vintage Ink Wicked White VQA','Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Vintage Ink Rebel Red VQA'] },
+    { period:'P8', start:[11,2],  end:[11,4],  cartier:false, items:['Bù Cabernet Sauvignon','Bù Chardonnay','Sidney Rosé'] },
+    { period:'P8', start:[11,5],  end:[11,8],  cartier:true,  items:['Sandbanks Reserve Marquette VQA','Inniskillin Reserve Pinot Gris VQA','Saintly Fracette VQA'] },
+    { period:'P9', start:[11,9],  end:[11,11], cartier:false, items:['Bù Cabernet Sauvignon','Bù Chardonnay','Inniskillin Discovery Series P3 VQA'] },
+    { period:'P9', start:[11,12], end:[11,15], cartier:true,  items:['Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Sandbanks Reserve Baco Noir VQA','Inniskillin Fracette VQA'] },
+    { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Inniskillin Riesling Pinot Grigio VQA','JT Reserve Merlot VQA','JT Reserve Sparkling VQA'] },
+    { period:'P9', start:[11,19], end:[11,22], cartier:true,  items:['Inniskillin Discovery Series Susse Reserve Riesling VQA','JT Grand Reserve Shiraz VQA','KEW Fracette VQA'] },
+    { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['JT Reserve Sauvignon Blanc VQA','Inniskillin Discovery Series Gamay Noir VQA','Sandbanks Sparkling Secco VQA'] },
+    { period:'P9', start:[11,26], end:[11,29], cartier:true,  items:['Inniskillin Discovery Series Susse Reserve Riesling VQA','JT Grand Reserve Shiraz VQA','Saintly Fracette VQA'] }
+  ];
+  var SAMPLE_WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var SAMPLE_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var SAMPLE_MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function sampleDayStart(md){ return new Date(SAMPLE_YEAR, md[0]-1, md[1]); }
+  function sampleRangeText(w){
+    var s = sampleDayStart(w.start), e = sampleDayStart(w.end);
+    if(s.getMonth() === e.getMonth()){
+      return SAMPLE_MONTHS_SHORT[s.getMonth()] + ' ' + s.getDate() + ' – ' + e.getDate();
+    }
+    return SAMPLE_MONTHS_SHORT[s.getMonth()] + ' ' + s.getDate() + ' – ' + SAMPLE_MONTHS_SHORT[e.getMonth()] + ' ' + e.getDate();
+  }
+  function sampleItemsHtml(w, dow){
+    /* dow: today's day of week (5 = Friday, 6 = Saturday) */
+    var html = '<ul class="sample-list">';
+    w.items.forEach(function(name){ html += '<li>' + name + '</li>'; });
+    if(w.cartier && (dow === 5 || dow === 6)) html += '<li>Cartier — any flavour</li>';
+    html += '</ul>';
+    if(w.cartier && dow !== 5 && dow !== 6){
+      html += '<p class="sample-note">Cartier (any flavour) pours Friday and Saturday only — not today.</p>';
+    }
+    return html;
+  }
+  function renderSampleToday(){
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var dow = now.getDay();
+    var body = document.getElementById('sampleBody');
+    var html = '<p class="sample-date">Today — ' + SAMPLE_WEEKDAYS[dow] + ', ' + SAMPLE_MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear() + '</p>';
+    var current = null, next = null;
+    for(var i = 0; i < SAMPLE_SCHEDULE.length; i++){
+      var w = SAMPLE_SCHEDULE[i];
+      if(today >= sampleDayStart(w.start) && today <= sampleDayStart(w.end)){ current = w; break; }
+      if(!next && sampleDayStart(w.start) > today) next = w;
+    }
+    if(current){
+      html += '<p class="sample-window">On sample ' + sampleRangeText(current) + ' (' + current.period + ' sampling):</p>';
+      html += sampleItemsHtml(current, dow);
+      html += '<p class="sample-note">If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price point and varietal.</p>';
+    } else {
+      html += '<p class="sample-none">Nothing is on sample today — today isn&rsquo;t in a sampling window.</p>';
+      if(next){
+        html += '<p class="sample-next-head">Next sampling window</p>';
+        html += '<p class="sample-window">' + sampleRangeText(next) + ' (' + next.period + ' sampling):</p>';
+        html += sampleItemsHtml(next, -1);
+        if(next.cartier) html += '<p class="sample-note">Plus Cartier (any flavour) on the Friday and Saturday of that window.</p>';
+      } else if(today > sampleDayStart(SAMPLE_SCHEDULE[SAMPLE_SCHEDULE.length-1].end)){
+        html += '<p class="sample-note">The P8 / P9 sampling schedule has ended — the last window was ' + sampleRangeText(SAMPLE_SCHEDULE[SAMPLE_SCHEDULE.length-1]) + '.</p>';
+      }
+    }
+    body.innerHTML = html;
+  }
+  var sampleOverlay = document.getElementById('sampleOverlay');
+  function openSample(){
+    renderSampleToday();
+    sampleOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('sampleClose').focus();
+  }
+  function closeSample(){
+    if(sampleOverlay.hidden) return;
+    sampleOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && cheatOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('sampleToday').addEventListener('click', function(){
+    closeSettings();
+    openSample();
+  });
+  document.getElementById('sampleClose').addEventListener('click', closeSample);
+  document.getElementById('sampleCancel').addEventListener('click', closeSample);
+  sampleOverlay.addEventListener('click', function(ev){ if(ev.target === sampleOverlay) closeSample(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !sampleOverlay.hidden) closeSample();
+  });
+
+  /* P9 Impact Cheat Sheet: the one-page sheet reproduced as markup
+     in the #cheatOverlay panel above — static reference content. */
+  var cheatOverlay = document.getElementById('cheatOverlay');
+  function openCheat(){
+    cheatOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('cheatClose').focus();
+  }
+  function closeCheat(){
+    if(cheatOverlay.hidden) return;
+    cheatOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('p9CheatSheet').addEventListener('click', function(){
+    closeSettings();
+    openCheat();
+  });
+  document.getElementById('cheatClose').addEventListener('click', closeCheat);
+  document.getElementById('cheatCancel').addEventListener('click', closeCheat);
+  cheatOverlay.addEventListener('click', function(ev){ if(ev.target === cheatOverlay) closeCheat(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !cheatOverlay.hidden) closeCheat();
+  });
+
   /* ---------- Stores ----------
      Store 358 is the store this list was built from, so it starts with
      every product ticked. The Store dropdown sits under the main
@@ -6351,7 +6599,7 @@
      while any dialog is open so an edit in progress is never
      overwritten mid-type */
   setInterval(function(){
-    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden) return;
+    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden) return;
     /* Re-derive the scheduled sales too, so an app left open across
        a period boundary (e.g. midnight into Nov 9) switches on its
        own; sbLoad's apply then re-renders over the same state */
