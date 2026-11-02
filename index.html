@@ -146,6 +146,10 @@
   .scanlink-item[aria-selected="true"] .sl-size{color:var(--badge-ink);opacity:.85}
   .btn-save[disabled]{opacity:.45;cursor:not-allowed}
   .settings-actions{display:grid;gap:10px;margin-top:6px}
+  /* "Documents" group heading inside Settings — the manual, the two
+     full impact PDFs and the date-aware cheat sheet sit under it. */
+  .settings-group-head{margin:12px 2px 0;font-size:12px;font-weight:800;color:var(--plum);
+    text-transform:uppercase;letter-spacing:.06em}
   .settings-action{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;
     background:var(--violet-soft);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;
     padding:12px 16px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left}
@@ -3997,10 +4001,11 @@
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
       <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, food pairing and red &amp; white wine varietals</span></span></button>
       <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
-      <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
+      <h3 class="settings-group-head" id="documentsHead">Documents</h3>
+      <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
       <a class="settings-action" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
       <a class="settings-action" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-      <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+      <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
