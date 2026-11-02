@@ -107,39 +107,27 @@
      The live camera fills the screen, darkened at the edges, with a
      clear viewfinder box in the centre: four corner brackets and a
      pink scan line sweeping across it. Cancel (top left) closes it
-     and stops the camera. Rotate view (top right) turns the camera
-     preview 90 degrees at a time, so a sideways barcode — bottle on
-     its side, bars running the wrong way — can be made upright on
-     screen; decoding also tries rotated orientations on its own
-     (see the scanner script). If the camera or automatic detection
-     is unavailable, the typed-barcode fallback at the bottom still
-     looks the product up (or offers to link it). */
+     and stops the camera. There is no manual rotation control:
+     decoding is automatic at any angle — sideways, tilted,
+     diagonal or upside down (see the scanner script). If the
+     camera or automatic detection is unavailable, the
+     typed-barcode fallback at the bottom still looks the product
+     up (or offers to link it). */
   .scanner-overlay{position:fixed;inset:0;z-index:95;background:#0b0616;color:#fff;
     display:flex;flex-direction:column}
   .scanner-overlay[hidden]{display:none}
-  .scanner-top{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  /* Cancel sits in the first column and the title in the middle
+     column; the third column stays empty so the title remains
+     centred where the old third element used to sit. */
+  .scanner-top{display:grid;grid-template-columns:76px 1fr 76px;align-items:center;gap:10px;
     padding:calc(12px + env(safe-area-inset-top)) 16px 10px}
   .scanner-top h2{margin:0;font-size:19px;font-weight:800;text-align:center}
   .scanner-cancel{min-width:76px;min-height:44px;background:rgba(255,255,255,.14);color:#fff;
     border:1.5px solid rgba(255,255,255,.55);border-radius:999px;padding:9px 16px;
     font:inherit;font-size:15px;font-weight:700;cursor:pointer}
   .scanner-cancel:hover,.scanner-cancel:focus-visible{background:rgba(255,255,255,.3);outline:none}
-  /* Rotate view — top right of the scanner bar, mirroring Cancel.
-     Each tap rotates the camera preview another 90 degrees (the
-     script resizes and rotates the video element to match), so a
-     sideways barcode can be turned upright in the frame. Solid
-     enough to be found at a glance in the dark camera view. */
-  .scanner-rotate{min-height:44px;background:rgba(255,255,255,.14);color:#fff;
-    border:1.5px solid rgba(255,255,255,.55);border-radius:999px;padding:9px 14px;
-    font:inherit;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
-  .scanner-rotate:hover,.scanner-rotate:focus-visible{background:rgba(255,255,255,.3);outline:none}
-  .scanner-rotate:active{background:rgba(255,255,255,.42)}
   .scanner-stage{position:relative;flex:1;min-height:0;background:#000;overflow:hidden}
-  .scanner-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-    transform-origin:center center;transition:transform .25s ease}
-  @media (prefers-reduced-motion: reduce){
-    .scanner-stage video{transition:none}
-  }
+  .scanner-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .scanner-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:min(80vw,440px);height:min(52vw,210px);min-height:150px;
     box-shadow:0 0 0 999px rgba(5,2,12,.55);border-radius:6px}
@@ -264,6 +252,15 @@
     color:var(--plum);border:1.5px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--panel)}
   :root[data-theme="dark"] .settings-action .sa-ext{color:var(--lilac)}
   .settings-note{color:var(--muted);font-size:13.5px;margin:14px 0 0;line-height:1.5}
+  /* Version code — at the very bottom of Settings, above the Close
+     button. Small but readable, in the plum accent so it is easy to
+     spot at a glance. BUMP THIS CODE ON EVERY NEW BUILD / PUSH: it is
+     how a user tells whether they are on the latest version or an old
+     cached tab. The code lives only in the #appVersion line in the
+     Settings markup below — change it there and nowhere else. */
+  .settings-version{color:var(--plum);font-size:13px;font-weight:700;margin:10px 0 0;line-height:1.5}
+  :root[data-theme="dark"] .settings-version{color:var(--lilac)}
+  .settings-version .version-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:800;letter-spacing:.02em;color:var(--ink)}
   /* Appearance — Dark / Light / Auto, in Settings. Light is the
      default look. The choice is a display setting saved on this
      device only; it is never synced to the shared list. */
@@ -4251,6 +4248,9 @@
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
+    <!-- VERSION CODE: bump this on every new build / push (see the
+         .settings-version note in the CSS above). -->
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.1</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5375,13 +5375,12 @@
   <div class="scanner-top">
     <button type="button" class="scanner-cancel" id="scannerCancel">Cancel</button>
     <h2 id="scannerTitle">Scan barcode</h2>
-    <button type="button" class="scanner-rotate" id="scannerRotate" aria-label="Rotate the camera view 90 degrees">&#8635; Rotate view</button>
   </div>
   <div class="scanner-stage">
     <video id="scannerVideo" playsinline muted autoplay aria-label="Camera view for scanning a barcode"></video>
     <div class="scanner-frame" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="scanner-line"></span></div>
   </div>
-  <p class="scanner-hint">Point the camera at the barcode. If the barcode is sideways, tap Rotate view or turn the phone until it sits upright in the frame.</p>
+  <p class="scanner-hint">Point the camera at the barcode — sideways, tilted, diagonal or upside down is fine.</p>
   <p class="scanner-status" id="scannerStatus" role="status"></p>
   <div class="scanner-manual">
     <label for="scannerManual">No camera? Type the barcode</label>
@@ -7873,24 +7872,34 @@
      decoded from the bottle, and the one saved in the shared
      list — so it is recognised even before the shared list
      carries it.
-     Detection uses the browser's built-in BarcodeDetector where
-     it exists (Chrome on Android, newer Safari); where it does
-     not, a ZXing reader is loaded from a CDN as a fallback; where
-     neither works, the camera view still opens and the typed
-     barcode box at the bottom does the same lookup and linking.
-     Sideways barcodes are handled two ways. (1) Multi-orientation
-     decoding: the BarcodeDetector loop, whenever the straight-on
-     frame yields nothing, re-tries the same frame drawn onto a
-     canvas rotated 90, 270 and 180 degrees, and the ZXing reader
-     is created with the TRY_HARDER hint, which makes ZXing retry
-     the frame rotated as well as straight — so a barcode whose
-     bars run the wrong way (bottle on its side, phone held
-     rotated) decodes without the user doing anything. (2) The
-     Rotate view button in the scanner bar turns the camera
-     preview itself 90 degrees per tap (layoutScannerVideo resizes
-     and rotates the video element to fill the stage at that
-     angle), so a sideways barcode can also be made upright on
-     screen to aim it in the viewfinder.
+     Detection prefers the browser's built-in BarcodeDetector
+     where it exists (Chrome on Android, newer Safari): that
+     detector is run directly on the live frame first, so browsers
+     whose implementation locates a supported barcode regardless
+     of its in-frame angle get the fastest, orientation-invariant
+     path. Where BarcodeDetector does not exist, a ZXing reader is
+     loaded from a CDN as a fallback; where neither works, the
+     camera view still opens and the typed barcode box at the
+     bottom does the same lookup and linking.
+     Any-angle decoding is automatic on BOTH paths, not just the
+     cardinal turns. Whenever a straight-on frame yields nothing,
+     the loop snapshots that frame once and sweeps the SAME
+     snapshot through a prioritised set of canvas rotations —
+     90 / 270 (sideways), 180 (upside down), then the diagonal
+     corrections ±45, ±30, ±60, ±15 and ±75 degrees — running the
+     detector over each rotated copy until one reads. Because a
+     one-dimensional barcode's axis repeats every 180 degrees,
+     those diagonal corrections (each paired with its opposite)
+     bring a barcode at any tilt to within a few degrees of
+     horizontal, which the detector then reads; the sweep repeats
+     on every new frame while the scanner is open, so a diagonal,
+     tilted, sideways or upside-down barcode decodes without the
+     user rotating the phone or tapping anything. The ZXing path
+     runs the same sweep through its canvas decode entry point
+     (with the TRY_HARDER hint set as well). There is deliberately
+     no manual rotation control in the scanner: automatic
+     any-angle decoding is the only orientation handling, and the
+     camera preview is never rotated by the page.
      Links save to the products.barcode column in the shared list.
      If a save is ever refused, the link is still kept and indexed
      on this screen for the next scan here, and a message says so —
@@ -7898,7 +7907,6 @@
      regardless. */
   var scannerOverlay = document.getElementById('scannerOverlay');
   var scannerVideo = document.getElementById('scannerVideo');
-  var scannerStage = document.querySelector('.scanner-stage');
   var scannerStatus = document.getElementById('scannerStatus');
   var scannerManual = document.getElementById('scannerManual');
   var scanLinkOverlay = document.getElementById('scanLinkOverlay');
@@ -7906,13 +7914,19 @@
   var scanLinkSearch = document.getElementById('scanLinkSearch');
   var scanLinkSaveBtn = document.getElementById('scanLinkSave');
   var scanStream = null, scanDetector = null, scanTimer = null;
-  var scanActive = false, scanHandled = false, scanZxing = null;
-  /* How far the camera preview is rotated by Rotate view, in
-     degrees clockwise (0 / 90 / 180 / 270), and the offscreen
-     canvas the BarcodeDetector loop reuses to retry the current
-     frame at rotated angles. Both start at rest every time the
-     scanner opens. */
-  var scanRotation = 0, scanCanvas = null, scanCtx = null;
+  var scanActive = false, scanHandled = false, scanZxing = null, scanZxingHints = null;
+  /* The offscreen canvases the decode loops reuse: one holds a
+     snapshot of the current camera frame, the other holds that
+     snapshot redrawn at each candidate rotation. */
+  var scanCanvas = null, scanCtx = null;
+  var scanSnapshot = null, scanSnapshotCtx = null;
+  /* The rotation sweep applied to a frame that did not read
+     straight-on, in the order tried: sideways first (the common
+     miss), then upside down, then the diagonal corrections.
+     Each diagonal appears with its opposite sign, and because a
+     barcode's axis repeats every 180 degrees the ±15…±75 set
+     covers every possible tilt in 15-degree steps. */
+  var SCAN_ROTATION_ANGLES = [90, 270, 180, 45, -45, 30, -30, 60, -60, 15, -15, 75, -75];
   var pendingBarcode = '', scanLinkRow = null;
   /* The shared list's barcode links, indexed by normalised code:
      normalised barcode -> Supabase product_id. Rebuilt from every
@@ -8030,16 +8044,6 @@
     if(scannerVideo){
       try{ scannerVideo.pause(); }catch(e){}
       scannerVideo.srcObject = null;
-      /* Clear the Rotate view sizing/rotation so the preview
-         starts unrotated the next time the scanner opens */
-      scanRotation = 0;
-      scannerVideo.style.transform = '';
-      scannerVideo.style.width = '';
-      scannerVideo.style.height = '';
-      scannerVideo.style.left = '';
-      scannerVideo.style.top = '';
-      scannerVideo.style.right = '';
-      scannerVideo.style.bottom = '';
     }
   }
   function closeScanner(){
@@ -8048,37 +8052,76 @@
     scannerOverlay.hidden = true;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && scanLinkOverlay.hidden) document.body.style.overflow = '';
   }
-  /* One rotated retry: draw the current camera frame onto the
-     shared canvas turned by deg, and run the detector over that.
-     Resolves with the decoded value, or '' if that orientation
-     holds no readable barcode. */
-  function detectFrameAtAngle(deg){
-    var vw = scannerVideo.videoWidth, vh = scannerVideo.videoHeight;
-    if(!vw || !vh) return Promise.resolve('');
+  /* Snapshot the current camera frame once, so every rotation
+     tried in one sweep is the SAME frame — the bottle does not
+     move between the sideways try and the diagonal tries, and
+     the video is copied only once per sweep instead of once per
+     angle. Returns false while the camera has no frame yet. */
+  function captureScanFrame(){
+    var vw = scannerVideo ? scannerVideo.videoWidth : 0;
+    var vh = scannerVideo ? scannerVideo.videoHeight : 0;
+    if(!vw || !vh || scannerVideo.readyState < 2) return false;
+    if(!scanSnapshot){ scanSnapshot = document.createElement('canvas'); scanSnapshotCtx = scanSnapshot.getContext('2d'); }
+    scanSnapshot.width = vw;
+    scanSnapshot.height = vh;
+    scanSnapshotCtx.drawImage(scannerVideo, 0, 0, vw, vh);
+    return true;
+  }
+  /* Draw the snapshotted frame onto the shared canvas turned by
+     deg — any angle, not just right angles. The canvas is sized
+     to the rotated frame's full bounding box, so nothing is
+     clipped away at diagonal angles, and the exposed corners are
+     filled white (the colour of a barcode label) rather than
+     left transparent-black. Returns the canvas, or null before
+     the first snapshot. */
+  function drawScanFrameAtAngle(deg){
+    if(!scanSnapshot) return null;
+    var sw = scanSnapshot.width, sh = scanSnapshot.height;
+    var rad = Math.abs(deg) * Math.PI / 180;
+    var cos = Math.cos(rad), sin = Math.sin(rad);
     if(!scanCanvas){ scanCanvas = document.createElement('canvas'); scanCtx = scanCanvas.getContext('2d'); }
-    var swap = (deg % 180 !== 0);
-    scanCanvas.width = swap ? vh : vw;
-    scanCanvas.height = swap ? vw : vh;
+    scanCanvas.width = Math.max(1, Math.ceil(sw * cos + sh * sin));
+    scanCanvas.height = Math.max(1, Math.ceil(sw * sin + sh * cos));
     var ctx = scanCtx;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, scanCanvas.width, scanCanvas.height);
     ctx.save();
     ctx.translate(scanCanvas.width / 2, scanCanvas.height / 2);
     ctx.rotate(deg * Math.PI / 180);
-    ctx.drawImage(scannerVideo, -vw / 2, -vh / 2, vw, vh);
+    ctx.drawImage(scanSnapshot, -sw / 2, -sh / 2, sw, sh);
     ctx.restore();
-    return scanDetector.detect(scanCanvas).then(function(codes){
-      return (codes && codes.length && codes[0].rawValue) ? codes[0].rawValue : '';
-    });
+    return scanCanvas;
   }
-  /* Try the sideways orientations in turn — 90 and 270 first
-     (a bottle on its side, the common miss), then 180 (upside
-     down). Resolves true as soon as one orientation decodes and
-     the code has been handled. */
+  /* The first usable value out of a BarcodeDetector result set,
+     or '' — a detected code with no rawValue is no use to the
+     lookup, so keep looking through the set instead of giving up
+     on the first entry. */
+  function firstDetectedCode(codes){
+    if(!codes) return '';
+    for(var i = 0; i < codes.length; i++){
+      if(codes[i] && codes[i].rawValue) return codes[i].rawValue;
+    }
+    return '';
+  }
+  /* One rotated retry: run the detector over the snapshot drawn
+     at deg. Resolves with the decoded value, or '' if that
+     orientation holds no readable barcode. */
+  function detectFrameAtAngle(deg){
+    var canvas = drawScanFrameAtAngle(deg);
+    if(!canvas || !scanDetector) return Promise.resolve('');
+    return scanDetector.detect(canvas).then(firstDetectedCode).catch(function(){ return ''; });
+  }
+  /* Sweep the snapshotted frame through every candidate
+     rotation in SCAN_ROTATION_ANGLES — sideways, upside down,
+     and the diagonal corrections — until one orientation reads.
+     Resolves true as soon as one orientation decodes and the
+     code has been handled. */
   function tryRotatedDetect(){
-    var angles = [90, 270, 180];
+    if(!captureScanFrame()) return Promise.resolve(false);
     var i = 0;
     function step(){
-      if(!scanActive || scanHandled || i >= angles.length) return Promise.resolve(false);
-      var deg = angles[i++];
+      if(!scanActive || scanHandled || i >= SCAN_ROTATION_ANGLES.length) return Promise.resolve(false);
+      var deg = SCAN_ROTATION_ANGLES[i++];
       return detectFrameAtAngle(deg).then(function(code){
         if(code){ handleScannedCode(code); return true; }
         return step();
@@ -8088,79 +8131,138 @@
   }
   function detectLoop(){
     if(!scanActive || !scanDetector) return;
-    var again = function(ms){ if(scanActive) scanTimer = setTimeout(detectLoop, ms); };
+    var again = function(ms){ if(scanActive && !scanHandled) scanTimer = setTimeout(detectLoop, ms); };
+    /* Preferred path first: the browser's own detector over the
+       live frame — where that implementation is orientation-
+       invariant it reads sideways, diagonal and upside-down
+       barcodes right here with no canvas work at all. */
     scanDetector.detect(scannerVideo).then(function(codes){
-      if(codes && codes.length && codes[0].rawValue){ handleScannedCode(codes[0].rawValue); return; }
-      /* Nothing straight-on: before the next cycle, retry this
-         frame rotated, so a sideways barcode is still read */
+      var direct = firstDetectedCode(codes);
+      if(direct){ handleScannedCode(direct); return; }
+      /* Nothing straight-on: before the next cycle, sweep this
+         frame through the rotation set, so a barcode at any
+         angle is still read automatically */
       tryRotatedDetect().then(function(found){ if(!found) again(200); }, function(){ again(200); });
     }).catch(function(){
       tryRotatedDetect().then(function(found){ if(!found) again(300); }, function(){ again(300); });
     });
   }
-  /* Size and rotate the camera preview to fill the stage at the
-     current Rotate view angle: at 90 / 270 the video element's
-     width and height swap, so the rotated feed still covers the
-     stage edge to edge instead of leaving black bands. Runs when
-     the scanner opens, on every Rotate view tap, when the camera
-     starts, and on window resize while the scanner is open. */
-  function layoutScannerVideo(){
-    if(!scannerVideo || !scannerStage) return;
-    var sw = scannerStage.clientWidth, sh = scannerStage.clientHeight;
-    if(!sw || !sh) return;
-    var sideways = (scanRotation % 180 !== 0);
-    scannerVideo.style.width = (sideways ? sh : sw) + 'px';
-    scannerVideo.style.height = (sideways ? sw : sh) + 'px';
-    scannerVideo.style.left = '50%';
-    scannerVideo.style.top = '50%';
-    scannerVideo.style.right = 'auto';
-    scannerVideo.style.bottom = 'auto';
-    scannerVideo.style.transform = 'translate(-50%,-50%) rotate(' + scanRotation + 'deg)';
+  /* The decoded text must be CALLED off a ZXing result —
+     result.getText() — never passed on as the bare getText
+     function reference: a function reference normalises to no
+     digits, so the lookup would silently never happen and no
+     barcode would ever be recognised or reported unrecognised
+     on this fallback path. Every ZXing decode branch below
+     extracts its text through here. */
+  function zxingResultText(result){
+    try{ return (result && typeof result.getText === 'function') ? result.getText() : ''; }
+    catch(e){ return ''; }
   }
-  /* Rotate view: turn the preview another 90 degrees clockwise.
-     Purely a view change — decoding already tries every
-     orientation on its own; this lets the user line a sideways
-     barcode up upright in the viewfinder. */
-  function rotateScannerView(){
-    scanRotation = (scanRotation + 90) % 360;
-    layoutScannerVideo();
-    setScanStatus(scanRotation === 0
-      ? 'View back to normal.'
-      : 'View rotated ' + scanRotation + '\u00B0 — tap Rotate view again to turn it further.');
+  /* Whether ZXing can be fed a canvas directly — either the
+     reader's own decodeFromCanvas, or by building a binary
+     bitmap from the canvas with ZXing's exported classes and
+     decoding that. The any-angle sweep needs one of these: the
+     reader's continuous video decoding cannot be handed a
+     diagonally rotated frame at all. */
+  function zxingCanvasDecodeAvailable(){
+    if(!scanZxing) return false;
+    if(typeof scanZxing.decodeFromCanvas === 'function') return true;
+    return !!(window.ZXing
+      && window.ZXing.HTMLCanvasElementLuminanceSource
+      && window.ZXing.BinaryBitmap
+      && window.ZXing.HybridBinarizer
+      && (typeof scanZxing.decodeBitmap === 'function' || typeof scanZxing.decode === 'function'));
+  }
+  /* Decode one canvas with ZXing, whichever canvas entry point
+     is available. Always resolves/rejects as a promise, whether
+     the underlying call is synchronous or async; a frame with
+     no readable barcode rejects (ZXing's NotFoundException),
+     which the sweep treats as "try the next angle". */
+  function decodeZxingCanvas(canvas){
+    if(!scanZxing || !canvas) return Promise.reject(new Error('no ZXing canvas decode'));
+    try{
+      if(typeof scanZxing.decodeFromCanvas === 'function'){
+        return Promise.resolve(scanZxing.decodeFromCanvas(canvas));
+      }
+      var source = new window.ZXing.HTMLCanvasElementLuminanceSource(canvas);
+      var bitmap = new window.ZXing.BinaryBitmap(new window.ZXing.HybridBinarizer(source));
+      if(typeof scanZxing.decodeBitmap === 'function') return Promise.resolve(scanZxing.decodeBitmap(bitmap));
+      if(typeof scanZxing.decode === 'function') return Promise.resolve(scanZxing.decode(bitmap, scanZxingHints || undefined));
+    }catch(e){ return Promise.reject(e); }
+    return Promise.reject(new Error('no ZXing canvas decode'));
+  }
+  /* The ZXing any-angle loop: the mirror of detectLoop for the
+     fallback path. Each cycle snapshots the current frame once,
+     then tries it straight-on and at every rotation in
+     SCAN_ROTATION_ANGLES — sideways, upside down, and the
+     diagonal corrections — feeding each rotated copy to ZXing
+     as a canvas, until one orientation reads. Then it takes a
+     fresh snapshot and sweeps again, for as long as the scanner
+     stays open. */
+  function zxingAngleLoop(){
+    if(!scanActive || scanHandled || !scanZxing) return;
+    var again = function(ms){ if(scanActive && !scanHandled) scanTimer = setTimeout(zxingAngleLoop, ms); };
+    if(!captureScanFrame()){ again(250); return; }
+    var angles = [0].concat(SCAN_ROTATION_ANGLES);
+    var i = 0, reportedUnusable = false;
+    function step(){
+      if(!scanActive || scanHandled) return;
+      if(i >= angles.length){ again(180); return; }
+      var canvas = drawScanFrameAtAngle(angles[i++]);
+      if(!canvas){ again(250); return; }
+      decodeZxingCanvas(canvas).then(function(result){
+        if(!scanActive || scanHandled) return;
+        var text = zxingResultText(result);
+        if(text && normalizeBarcode(text)){ handleScannedCode(text); return; }
+        if(text && !reportedUnusable){
+          /* A decode came back but yielded no barcode digits:
+             say so on screen instead of failing silently, and
+             point at the typed-barcode fallback */
+          reportedUnusable = true;
+          setScanStatus('That code couldn\u2019t be read as a barcode \u2014 hold it steady in the frame and try again, or type the number below.');
+        }
+        step();
+      }).catch(function(){
+        /* No barcode at this angle (or a transient decode
+           error): move on to the next rotation */
+        if(scanActive && !scanHandled) step();
+      });
+    }
+    step();
   }
   function startZxingFallback(){
     function begin(){
       try{
         if(!window.ZXing || !window.ZXing.BrowserMultiFormatReader) throw new Error('no ZXing');
-        /* TRY_HARDER: with this hint set, ZXing retries each frame
-           rotated (its decode path turns the frame counter-clockwise
-           and tries again) as well as straight, so a sideways
-           barcode — bars running the wrong way — still decodes on
-           this fallback path. If the hint enum is somehow absent,
-           fall back to a plain reader rather than failing. */
-        var scanHints = null;
+        /* TRY_HARDER: with this hint set, ZXing works harder on
+           each frame it is given (including retrying it turned
+           counter-clockwise) as well as straight. That alone only
+           covers right-angle turns, though — the diagonal angles
+           come from the canvas rotation sweep in zxingAngleLoop,
+           which feeds this reader one rotated copy of the frame
+           at a time. If the hint enum is somehow absent, fall
+           back to a plain reader rather than failing. */
+        scanZxingHints = null;
         try{
           if(window.ZXing.DecodeHintType && typeof Map !== 'undefined'){
-            scanHints = new Map();
-            scanHints.set(window.ZXing.DecodeHintType.TRY_HARDER, true);
+            scanZxingHints = new Map();
+            scanZxingHints.set(window.ZXing.DecodeHintType.TRY_HARDER, true);
           }
-        }catch(e){ scanHints = null; }
-        scanZxing = scanHints
-          ? new window.ZXing.BrowserMultiFormatReader(scanHints)
+        }catch(e){ scanZxingHints = null; }
+        scanZxing = scanZxingHints
+          ? new window.ZXing.BrowserMultiFormatReader(scanZxingHints)
           : new window.ZXing.BrowserMultiFormatReader();
+        /* Preferred on this path too: the any-angle canvas sweep,
+           so sideways, diagonal, tilted and upside-down barcodes
+           are all tried automatically on every frame. */
+        if(zxingCanvasDecodeAvailable()){ zxingAngleLoop(); return; }
+        /* No canvas entry point in this ZXing build: keep the
+           reader's own continuous video decoding as a last resort
+           (straight-on and right-angle turns only) rather than
+           leaving the camera with no automatic decoding at all. */
         var cb = function(result){
           if(!result) return;
-          /* The decoded text must be CALLED off the result —
-             result.getText() — never passed on as the bare
-             getText function reference: a function reference
-             normalises to no digits, so the lookup silently
-             never happened and no barcode was ever recognised
-             or reported unrecognised on this fallback path.
-             This one callback serves both decode branches
-             below (decodeFromVideoElementContinuously and the
-             decodeFromStream fallback), so both are fixed here. */
-          var text = '';
-          try{ text = (result && typeof result.getText === 'function') ? result.getText() : ''; }catch(e){ text = ''; }
+          var text = zxingResultText(result);
           if(text && normalizeBarcode(text)){ handleScannedCode(text); return; }
           /* A decode came back but yielded no barcode digits:
              say so on screen instead of failing silently, and
@@ -8205,7 +8307,6 @@
         }catch(e){}
         var played = scannerVideo.play();
         if(played && played.catch) played.catch(function(){});
-        layoutScannerVideo();
         scanActive = true;
         if('BarcodeDetector' in window){
           try{
@@ -8222,18 +8323,14 @@
   function openScanner(){
     scanHandled = false;
     scanDetector = null;
-    scanRotation = 0;
     scannerManual.value = '';
     scannerOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
-    layoutScannerVideo();
     document.getElementById('scannerCancel').focus();
     startScannerCamera();
   }
   document.getElementById('scanBtn').addEventListener('click', openScanner);
   document.getElementById('scannerCancel').addEventListener('click', closeScanner);
-  document.getElementById('scannerRotate').addEventListener('click', rotateScannerView);
-  window.addEventListener('resize', function(){ if(!scannerOverlay.hidden) layoutScannerVideo(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !scannerOverlay.hidden) closeScanner();
   });
