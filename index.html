@@ -4644,7 +4644,7 @@
         </ul>
 
         <h4>How the tastes interact</h4>
-        <p>Work with six things in the food — acidity, sweetness, salt, fat, tannin-friendly protein, and spice heat — and how each one changes the wine:</p>
+        <p>Work with seven things in the food — acidity, sweetness, salt, fat, tannin-friendly protein, spice heat, and bitterness and umami — and how each one changes the wine:</p>
         <ul>
           <li><strong>Acidity cuts fat and richness.</strong> A crisp, high-acid wine (or sparkling wine) cuts through fried, creamy or fatty food and cleans the palate between bites, so each mouthful tastes fresh again.</li>
           <li><strong>Salt softens tannin and acidity.</strong> Salty food makes a firm, tannic red taste smoother and fruitier, and it softens sharp acidity in whites too. It is one reason salty cheese and cured meats are such friendly foods for wine.</li>
@@ -6470,6 +6470,10 @@
       return;
     }
     var isNew = !editingRow;
+    /* The barcode this product held before this edit, so the
+       explicit barcode save below can tell a barcode the user
+       actually changed in the editor from one they never touched */
+    var prevBarcode = editingRow ? normalizeBarcode(readRow(editingRow).barcode || '') : '';
     var target;
     if(editingRow){ writeRow(editingRow, data); target = editingRow; }
     else {
@@ -6492,7 +6496,18 @@
        availability for it. */
     if(target){
       if(isNew) sbRegisterNewProduct(target);
-      else { sbSyncProduct(target); sbSyncUnavailable(target); }
+      else {
+        sbSyncProduct(target); sbSyncUnavailable(target);
+        /* Explicit barcode save: sbSyncProduct is routine sync and
+           never writes the barcode, so a Barcode the user changed
+           in this editor is written here, directly, as its own
+           action — and only when it actually changed, so saving
+           any other field in the editor can never push this
+           screen's barcode value over the shared list's. A new
+           product's barcode is saved by sbRegisterNewProduct once
+           its shared record exists. */
+        if(normalizeBarcode(data.barcode || '') !== prevBarcode) sbSyncBarcode(target, false);
+      }
     }
     closeEditor();
     applySort();
@@ -7781,11 +7796,13 @@
      Barcodes live on the row as data-barcode and are matched after
      normalising: digits only, and a 13-digit EAN with a leading 0
      is the same code as its 12-digit UPC form, so a scanner that
-     reports either form still finds the product. The lookup also
-     checks the shared list's own barcode links (sharedBarcodes,
+     reports either form still finds the product. The lookup checks
+     the shared list's own barcode links FIRST (sharedBarcodes,
      indexed from the Supabase products fetch), so a barcode saved
      to the shared list is recognised on the next scan on any
-     device, including one saved from the app itself. The first
+     device — even where this screen's row carries a different or
+     blank local barcode — and only then falls back to the barcode
+     each row itself carries. The first
      known link is baked into this page: Konzelmann Chardonnay
      750mL, barcode 624644001072 — the value the scanner actually
      decoded from the bottle, and the one saved in the shared
@@ -7828,16 +7845,19 @@
   function findRowByBarcode(code){
     var want = normalizeBarcode(code);
     if(!want) return null;
-    /* First the barcode each row itself carries — the baked-in
-       links and any link set on this screen */
+    /* FIRST the shared list's barcode index: a link saved to
+       Supabase (products.barcode) from any device wins over
+       whatever barcode this screen's rows happen to carry, so a
+       saved link is found even where the local built-in barcode
+       for that product is different or blank. */
+    var pid = sharedBarcodes[want];
+    if(pid && pidRow[pid]) return pidRow[pid];
+    /* Only then the barcode each row itself carries — the baked-in
+       links and any link set on this screen that the shared list
+       does not know about yet */
     for(var i = 0; i < rows.length; i++){
       if(normalizeBarcode(rows[i].getAttribute('data-barcode') || '') === want) return rows[i];
     }
-    /* Then the shared list's barcode field: a link saved to
-       Supabase (products.barcode) is recognised on the next scan
-       even if this screen's row has not picked the value up yet */
-    var pid = sharedBarcodes[want];
-    if(pid && pidRow[pid]) return pidRow[pid];
     return null;
   }
   function setScanStatus(msg){ if(scannerStatus) scannerStatus.textContent = msg || ''; }
@@ -8164,6 +8184,16 @@
   function rowToProduct(row){
     var d = normalizeProductData(readRow(row));
     var isBask = !!d.brand && d.brand.toUpperCase().indexOf('BASK') === 0;
+    /* NOTE: no barcode field here, on purpose. This payload is
+       used by routine product sync AND by the built-in rows
+       re-upload in sbApplyRemote (a POST with merge-duplicates,
+       which would overwrite the shared barcode with the local /
+       baked-in one if the field were present). Barcodes are only
+       ever written by sbSyncBarcode, called directly from the two
+       explicit user actions — Link barcode in the scanner prompt
+       and a changed Barcode saved in the product editor (for a
+       brand-new product, sbRegisterNewProduct performs that same
+       explicit editor save once the new record exists). */
     return {
       product_id: rowPid[row.getAttribute('data-idx')],
       brand: d.brand || null, product: d.name || null, size: d.size || null,
@@ -8264,13 +8294,22 @@
   /* Barcode syncs separately from the main product payload, for
      the same reason as sale above: this PATCH carries only the
      barcode, so a barcode save can never take the whole product
-     save down with it. The link is written to the shared
-     products.barcode column, indexed on this screen immediately
-     (sharedBarcodes), and picked up by every other device on its
-     next shared-list fetch. If the PATCH is ever refused, the
-     link stays on this screen (and baked-in links like the
-     Konzelmann Chardonnay's keep being recognised in the app),
-     and a non-quiet save says so. */
+     save down with it. This is the ONLY function that writes
+     products.barcode, and it is called directly only from
+     explicit user actions — "Link barcode" in the "Barcode not
+     on file" prompt, including clearing the code's previous
+     product as part of that same link, a changed Barcode saved
+     in the product editor, and a new product's editor save via
+     sbRegisterNewProduct. Routine sync (sbSyncProduct), the
+     30-second refresh (sbApplyRemote) and the built-in rows
+     re-upload never call it, so a shared barcode can never be
+     overwritten by a local or baked-in value. The link is written
+     to the shared products.barcode column, indexed on this screen
+     immediately (sharedBarcodes), and picked up by every other
+     device on its next shared-list fetch. If the PATCH is ever
+     refused, the link stays on this screen (and baked-in links
+     like the Konzelmann Chardonnay's keep being recognised in
+     the app), and a non-quiet save says so. */
   function sbSyncBarcode(row, quiet){
     if(!row) return Promise.resolve();
     var pid = rowPid[row.getAttribute('data-idx')];
@@ -8298,8 +8337,18 @@
     if(!pid) return;
     var payload = rowToProduct(row);
     delete payload.product_id;
+    /* Routine product sync NEVER writes the barcode. This helper
+       is called for ordinary edits and for the ⋮-menu toggles
+       (Not in plano / Cooler / On sale), none of which is a barcode
+       action, and rowToProduct deliberately carries no barcode
+       field — so this PATCH cannot overwrite a barcode saved on
+       the shared list with this screen's local or baked-in value.
+       The only paths that may write products.barcode are the two
+       explicit user actions that call sbSyncBarcode directly:
+       "Link barcode" in the "Barcode not on file" prompt, and a
+       changed Barcode saved in the product editor. */
     sb('products?product_id=eq.' + encodeURIComponent(pid), { method: 'PATCH', body: payload, prefer: 'return=minimal' })
-      .then(function(){ sbSaved(); sbSyncSale(row); sbSyncBarcode(row, true); }, sbFail('that product'));
+      .then(function(){ sbSaved(); sbSyncSale(row); }, sbFail('that product'));
   }
   function sbSyncUnavailable(row){
     if(!row) return;
@@ -8326,6 +8375,15 @@
         }
       })
       .then(function(){ return sbSyncSale(row); })
+      /* This sbSyncBarcode call is NOT a routine sync: registering
+         a new product only ever happens as the direct result of
+         the user saving the product editor (including "Add as a
+         new product" from the scanner prompt, which pre-fills the
+         Barcode field), the pid was generated a moment ago so the
+         shared list holds no barcode for it yet, and the barcode
+         can only be written once the new record exists — so this
+         is the editor's explicit barcode save, sequenced after
+         the create. */
       .then(function(){ return sbSyncBarcode(row, true); })
       .then(function(){ sbSaved('Product added to the global list — tick it in “Set store products” to add it to a store.'); }, sbFail('the new product'));
   }
@@ -8601,20 +8659,23 @@
          state is kept — a sync must never wipe a sale marked on
          this screen just because the shared list can't store it */
       if(!('on_sale' in p)){ want.sale = cur.sale; want.salePrice = cur.salePrice; }
-      /* Barcode: a barcode saved on the shared record wins — it
-         replaces whatever this row carries, including the baked-in
-         value, so the row itself holds the shared link and the
-         next scan finds this product. Only while the shared record
-         carries no barcode is the local link kept (a sync must
-         never wipe a link just because the shared list has none
-         for this product yet); when the column exists but is
-         empty and this screen holds a link, the link is pushed up
-         (quietly) so the shared list catches up on its own. */
-      if(p.barcode){
-        want.barcode = String(p.barcode).replace(/\D/g, '');
+      /* Barcode: the shared record's barcode wins EXACTLY — it
+         replaces whatever this row carries, including a different
+         baked-in value, and it is never pushed back the other way.
+         A routine refresh must never write a barcode: only an
+         explicit user action (Link barcode in the scanner prompt,
+         or a changed Barcode saved in the product editor) may do
+         that, via sbSyncBarcode called directly from those two
+         handlers. So while the shared record carries a barcode
+         column, the row takes that value as-is — including empty,
+         which is the shared list saying this product has no link.
+         Only when the shared record has no barcode field at all
+         (a response from before the column existed) is the local
+         value kept on screen, and even then it is not uploaded. */
+      if('barcode' in p){
+        want.barcode = p.barcode ? String(p.barcode).replace(/\D/g, '') : '';
       } else {
         want.barcode = cur.barcode;
-        if('barcode' in p && cur.barcode) sbSyncBarcode(row, true);
       }
       if(cur.brand !== want.brand || cur.name !== want.name || cur.size !== want.size ||
          String(cur.price) !== String(want.price) || String(cur.rs) !== String(want.rs) ||
@@ -8689,7 +8750,10 @@
     }
     /* Upload anything baked into the page that the shared list
        somehow lacks, with its store memberships, so no product is
-       ever lost between the page and the shared list */
+       ever lost between the page and the shared list. The upload
+       payload (rowToProduct) deliberately carries no barcode, so
+       this re-upload can never overwrite a barcode already saved
+       on the shared list with a baked-in value. */
     if(upload.length){
       sb('products', { method: 'POST', body: upload.map(rowToProduct), prefer: 'resolution=merge-duplicates,return=minimal' })
         .then(function(){
