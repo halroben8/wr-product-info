@@ -4288,7 +4288,7 @@
       </div>
       <p class="theme-note">The store type decides which impact this store sees. Loblaws stores see the Legacy Loblaws impact; every other type — including types added here — sees a note that its impact is not loaded yet, until that type&rsquo;s impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
       <div class="settings-actions" style="margin-top:14px">
-      <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
+      <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine — it goes into this store and the shared list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
       </div>
       </div>
@@ -4297,7 +4297,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.3</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.4</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -6575,8 +6575,8 @@
        label all say which parts are global and which are not */
     document.getElementById('editorNote').textContent = row
       ? 'Price, tasting notes and product info are shared: saving here updates this product for every store that carries it and every user of this app. Availability is per store — the Availability setting above only changes Store ' + activeStore + ', and every other store keeps its own availability for this product.'
-      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. A new product is not added to any store automatically — it appears unticked in Settings → “Set store products”, and you must tick it there for each store that should carry it. Availability is per store: marking it unavailable here only makes it unavailable at Store ' + activeStore + '.';
-    document.getElementById('editorSave').textContent = row ? 'Save for all stores' : 'Add to global list';
+      : 'New products join the shared product list, so everyone using this app sees them and the price, notes and info entered here are shared by all stores. A new product is also added to Store ' + activeStore + ' — the store you are viewing — automatically, so it appears in this store\u2019s list straight away, is searchable, and can be scanned to. It is not added to any other store automatically; tick it in Settings \u2192 \u201cSet store products\u201d for other stores that should carry it, or untick it there to remove it from a store. Availability is per store: marking it unavailable here only makes it unavailable at Store ' + activeStore + '.';
+    document.getElementById('editorSave').textContent = row ? 'Save for all stores' : 'Add to Store ' + activeStore + ' & shared list';
     document.getElementById('f-availability-label').textContent = 'Availability — Store ' + activeStore + ' only';
     var cur = row ? readRow(row) : {
       brand:'', name:'', size:'750mL', price:'', rs:'', sweet:'', rich:'',
@@ -6784,11 +6784,24 @@
       /* A product added from any store joins the one global
          catalogue (createRow pushes it onto `rows`, so it appears in
          every store's product checklist and its data is edited
-         globally like any other product). It is NOT ticked for any
-         store — not even the store being viewed: assortment stays
-         per store, and a store only carries it once someone ticks
-         it in Settings → “Set store products”. */
+         globally like any other product). It is ALSO added to the
+         store currently being viewed — the store the user is in
+         when they add it — straight away: its idx goes into that
+         store's set here, so apply() below shows it in this store's
+         list immediately (searchable, countable, and scannable via
+         jumpToProduct, which checks this same set), and
+         sbRegisterNewProduct writes the matching store_products
+         row to the shared list so every device sees it in this
+         store too. It is NOT added to any other store automatically:
+         other stores only carry it once someone ticks it in
+         Settings → “Set store products”, and it can still be
+         removed from any store there (or via Mark unavailable)
+         exactly as before. */
       target = createRow(data);
+      if(target){
+        if(!storeSets[activeStore]) storeSets[activeStore] = new Set();
+        storeSets[activeStore].add(target.getAttribute('data-idx'));
+      }
     }
     /* writeRow rebuilt data-search, so re-add the plano / cooler
        tokens to match the status and In cooler values just saved */
@@ -9049,16 +9062,38 @@
   function sbRegisterNewProduct(row){
     var pid = genPid();
     setRowPid(row, pid);
-    /* Only the product itself is registered in the shared list.
-       No store_products row is written here: a new product must not
-       be added to the current store (or any store) automatically.
-       It joins the global list and shows up unticked in Settings →
-       “Set store products”, where it can be ticked manually for
-       whichever stores should carry it. */
+    /* The product is registered in the shared list AND added to
+       the current store — the store being viewed when it was
+       added. The editor submit already put its idx in that
+       store's local set (so it shows on this screen straight
+       away); this repeats that locally as a safety net and then
+       writes the matching store_products row to the shared list,
+       so the product is in this store for every user/device and
+       survives a reload or the 30-second refresh (which rebuilds
+       store sets from store_products). It is NOT added to any
+       other store automatically — other stores still get it only
+       by ticking it in Settings → “Set store products”, and it
+       can still be removed from a store there (or marked
+       unavailable per store) exactly as before. The target store
+       is captured now, so a store switch while these requests
+       are in flight cannot send the product to the wrong store. */
+    var targetStore = activeStore;
+    if(row && targetStore){
+      if(!storeSets[targetStore]) storeSets[targetStore] = new Set();
+      storeSets[targetStore].add(row.getAttribute('data-idx'));
+    }
     sb('products', { method: 'POST', body: rowToProduct(row), prefer: 'resolution=merge-duplicates,return=minimal' })
       .then(function(){
+        /* Make sure the store row exists first (store_products
+           points at it), then add this product to that store */
+        return sb('stores', { method: 'POST', body: { store_number: targetStore }, prefer: 'resolution=merge-duplicates,return=minimal' });
+      })
+      .then(function(){
+        return sb('store_products', { method: 'POST', body: { store_number: targetStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
+      })
+      .then(function(){
         if(isUnavail(row)){
-          return sb('store_unavailable', { method: 'POST', body: { store_number: activeStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
+          return sb('store_unavailable', { method: 'POST', body: { store_number: targetStore, product_id: pid }, prefer: 'resolution=merge-duplicates,return=minimal' });
         }
       })
       .then(function(){ return sbSyncSale(row); })
@@ -9072,7 +9107,7 @@
          is the editor's explicit barcode save, sequenced after
          the create. */
       .then(function(){ return sbSyncBarcode(row, true); })
-      .then(function(){ sbSaved('Product added to the global list — tick it in “Set store products” to add it to a store.'); }, sbFail('the new product'));
+      .then(function(){ sbSaved('Product added — it\u2019s now in Store ' + targetStore + '\u2019s list and the shared list.'); }, sbFail('the new product'));
   }
   /* Store type syncs separately from the store create POST, for
      the same reason as barcode / sale on products: the shared
