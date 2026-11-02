@@ -492,6 +492,31 @@
   .chip.rose{background:var(--chip-rose-bg);color:var(--chip-rose)}
   .chip.cider{background:var(--chip-cider-bg);color:var(--chip-cider)}
   .flag{color:#b45309;font-weight:700;font-size:12px;white-space:nowrap}
+  /* Expand/collapse indicator on every product row: a subtle bar at
+     the bottom of the row — a hairline running across the Product
+     cell with the small words "tasting notes" and one small chevron
+     in the middle, the chevron rotating 180deg on expand. The bar
+     has real height and padding (about 30px) so the label and
+     chevron sit comfortably inside it rather than squeezed into a
+     hairline, but it is still just a hairline: no pill, no fill, no
+     bold or large text — the label is small, light and muted. It is
+     driven purely by the row's aria-expanded (the same pattern as
+     the Settings collapsibles above): the markup/JS only flips that
+     one attribute. pointer-events:none so taps anywhere on the bar
+     still land on the row, whose own click handler does the
+     expanding/collapsing exactly as before. */
+  .expand-hint{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;
+    min-height:30px;padding:7px 6px;box-sizing:border-box;
+    pointer-events:none;line-height:1.3}
+  .expand-hint::before,.expand-hint::after{content:"";flex:1;height:1px;background:var(--line)}
+  .expand-hint .eh-label{flex:none;color:var(--muted);font-size:12px;font-weight:500;
+    letter-spacing:.05em;line-height:1.3;white-space:nowrap}
+  .expand-hint .eh-chev{display:flex;align-items:center;justify-content:center;flex:none;
+    color:var(--muted);font-size:14px;font-weight:700;line-height:1.3;
+    transition:transform .2s ease}
+  tr.prow:hover .expand-hint .eh-label,tr.prow:focus-visible .expand-hint .eh-label,
+  tr.prow:hover .expand-hint .eh-chev,tr.prow:focus-visible .expand-hint .eh-chev{color:var(--plum2)}
+  tr.prow[aria-expanded="true"] .expand-hint .eh-chev{transform:rotate(180deg)}
   /* Open product + its notes read as one joined panel: the product row
      and the notes row below it share a plum outline and tint, with no
      break between them, and the notes open with the product's name */
@@ -574,7 +599,7 @@
     tr{display:block}
     tbody tr.prow{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:14px;row-gap:3px;
       position:relative;background:var(--panel);border:1px solid var(--line);border-radius:12px;
-      margin-top:8px;padding:10px 12px 11px;box-shadow:0 2px 8px rgba(76,29,149,.07);
+      margin-top:8px;padding:10px 12px 44px;box-shadow:0 2px 8px rgba(76,29,149,.07);
       -webkit-tap-highlight-color:transparent;touch-action:manipulation}
     tbody tr.prow:first-child{margin-top:0}
     tbody td{border-top:none;padding:0;display:flex;gap:5px;align-items:baseline;
@@ -590,9 +615,15 @@
     td[data-label="Price"]::before{display:none}
     td[data-label="Varietal"]{flex:1 1 55%}
     .chip{font-size:11.5px;padding:1px 8px}
-    tr.prow::after{content:"Notes ›";position:absolute;right:12px;bottom:9px;
-      font-size:11px;font-weight:700;color:var(--plum2)}
-    tr.prow[aria-expanded="true"]::after{content:"Hide ▴"}
+    /* On a phone card the expand bar sits at the very bottom of
+       the card, spanning its full width: a hairline with the small
+       words "tasting notes" and a small chevron in the middle,
+       given a comfortable 34px height with padding so the text and
+       chevron have room. The card carries extra bottom padding
+       (above) so the facts never run under it */
+    td[data-label="Product"] .expand-hint{position:absolute;left:12px;right:12px;bottom:5px;
+      width:auto;margin-top:0;min-height:34px;padding:8px 6px}
+    td[data-label="Product"] .expand-hint .eh-chev{font-size:15px}
     /* Joined card: when notes are open the product card loses its bottom
        edge and the notes sit flush against it — no gap, no separate card —
        so the two read as one tall card for that one wine */
@@ -864,7 +895,6 @@
           <option value="low">Low</option>
           <option value="medium">Medium</option>
           <option value="high">High</option>
-          <option value="unknown">Unknown</option>
         </select>
       </div>
       <div class="field">
@@ -4092,7 +4122,21 @@
       </div>
       <p class="theme-note">Light is the default look. Auto follows your phone&rsquo;s light / dark setting. Saved on this device only.</p>
     </div>
-    <div class="theme-setting store-type-setting" id="storeSettingsSection">
+    <div class="settings-actions">
+      <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
+      <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
+      <h3 class="settings-group-head" id="supportHead">Support Center</h3>
+      <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
+      <button type="button" class="settings-group-toggle collapsible-toggle" id="documentsHead" aria-expanded="false" aria-controls="documentsBody"><span class="collapsible-toggle-main"><span class="collapsible-title">Documents</span><span class="collapsible-subtitle">Manual, impact PDFs &amp; cheat sheet</span></span><span class="collapsible-toggle-side"><span class="tap-hint"><span class="tap-expand-text">Tap to expand</span><span class="tap-collapse-text">Tap to collapse</span></span><span class="collapsible-chevron" aria-hidden="true">▾</span></span></button>
+      <div class="docs-body" id="documentsBody" hidden>
+        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
+        <p class="docs-note" id="impactNote" hidden></p>
+      </div>
+    </div>
+    <div class="theme-setting store-type-setting" id="storeSettingsSection" style="margin-top:14px">
       <button type="button" class="collapsible-toggle" id="storeSettingsHead" aria-expanded="false" aria-controls="storeSettingsBody">
         <span class="collapsible-toggle-main">
           <span class="collapsible-title" id="storeTypeLabel">Store settings</span>
@@ -4127,22 +4171,10 @@
         </div>
       </div>
       <p class="theme-note">The store type decides which impact this store sees. Loblaws stores see the Legacy Loblaws impact; every other type — including types added here — sees a note that its impact is not loaded yet, until that type&rsquo;s impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
-      </div>
-    </div>
-    <div class="settings-actions">
+      <div class="settings-actions" style="margin-top:14px">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine to the global product list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
-      <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, food pairing and red &amp; white wine varietals</span></span></button>
-      <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
-      <h3 class="settings-group-head" id="supportHead">Support Center</h3>
-      <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
-      <button type="button" class="settings-group-toggle collapsible-toggle" id="documentsHead" aria-expanded="false" aria-controls="documentsBody"><span class="collapsible-toggle-main"><span class="collapsible-title">Documents</span><span class="collapsible-subtitle">Manual, impact PDFs &amp; cheat sheet</span></span><span class="collapsible-toggle-side"><span class="tap-hint"><span class="tap-expand-text">Tap to expand</span><span class="tap-collapse-text">Tap to collapse</span></span><span class="collapsible-chevron" aria-hidden="true">▾</span></span></button>
-      <div class="docs-body" id="documentsBody" hidden>
-        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
-        <p class="docs-note" id="impactNote" hidden></p>
+      </div>
       </div>
     </div>
     <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
@@ -4162,22 +4194,44 @@
     <p class="wk-intro">Reference from the Liquid Learning “Intro to Red Wine” training, with the white wine varietals added from general wine knowledge. Tap a topic to open it.</p>
 
     <details class="wk-section" open>
-      <summary>How to taste (3 steps)</summary>
+      <summary>How to taste (the 5 S's)</summary>
       <div class="wk-body">
-        <h4>Step 1: The Appearance</h4>
+        <p>Tasters follow the same five steps every time — <strong>See, Swirl, Sniff, Sip, Savor</strong>. Working through them in order means you notice appearance, aroma, taste and finish separately instead of just &ldquo;nice&rdquo; or &ldquo;not nice&rdquo;, and it is the fastest way to describe a wine clearly to a customer.</p>
+        <h4>1. See — the appearance</h4>
         <ul>
+          <li>Hold the glass by the stem against something white — a napkin, a tasting sheet, the counter — and tilt it away from you at about 45 degrees so you can judge the colour honestly.</li>
           <li><strong>Clarity:</strong> bright, clear, dull, cloudy? Most wines should look clear; very vivid colour can be described as bright. Dull, hazy or cloudy may indicate a fault, or that the wine is unfiltered.</li>
-          <li><strong>Colour (reds):</strong> purple, ruby, garnet, tawny. Young reds tend to show vibrant purple or ruby tones; older reds develop deeper garnet or tawny hues. Colour also hints at grape variety, winemaking style and age.</li>
+          <li><strong>Colour (reds):</strong> purple, ruby, garnet, tawny. Young reds tend to show vibrant purple or ruby tones; older reds develop deeper garnet or tawny hues. Colour also hints at grape variety, winemaking style and age. Whites run the other way: pale lemon when young, deepening to gold and then amber as they age.</li>
           <li><strong>Colour intensity:</strong> judged by how easily you can see through the wine (tilt the glass over white text). <strong>Pale</strong> — letters easily read through it. <strong>Medium</strong> — letters visible but less clear. <strong>Deep</strong> — rich and dark, letters hard to see. <strong>Opaque</strong> — very dark, letters not visible at all.</li>
+          <li><strong>The rim tells the age:</strong> look at the edge of the wine where it meets the glass. A red whose rim has turned orange-brown has age on it; a white that is deep gold at the rim is older or oak-aged, while a pale, watery rim means young and fresh.</li>
+          <li><strong>Legs (tears):</strong> after swirling, the droplets that run down the inside of the glass are called legs. Slow, thick legs hint at higher alcohol or a touch of sweetness; thin, fast legs suggest a lighter wine. Legs are a clue, not a quality score.</li>
         </ul>
-        <h4>Step 2: The Nose</h4>
+        <h4>2. Swirl</h4>
+        <ul>
+          <li>Swirling coats the inside of the glass and lets air mix with the wine, which releases far more aroma than a still glass. Five to ten seconds is plenty.</li>
+          <li>Easiest way: keep the base of the glass flat on the counter and move it in small circles — no spills, even when you are learning. Only fill the glass about one-third full so there is room to swirl.</li>
+          <li>Always take a first sniff <em>before</em> swirling as well: some delicate aromas are easiest to catch in the still wine, and comparing the two sniffs shows how much the wine opens up with air.</li>
+        </ul>
+        <h4>3. Sniff — the nose</h4>
         <ul>
           <li><strong>Condition:</strong> clean or unclean (faulty)? Clean = pleasant aromas typical of wine, no obvious faults. Unclean = unusual smells such as vinegar, wet newspaper or damp cardboard.</li>
-          <li><strong>Swirl</strong> the wine gently to release more aromas, then smell again.</li>
+          <li>Use <strong>short sniffs</strong>, not one long inhale: two or three quick sniffs pick up more than a single deep breath, because your nose tires (goes &ldquo;blind&rdquo;) within seconds. Pull the glass away, think, then sniff again.</li>
+          <li>Try the nose at different depths — just above the rim catches the lightest floral and fruit notes; deeper in the glass brings out the heavier oak and spice notes.</li>
           <li><strong>Aroma intensity:</strong> <strong>Light</strong> — subtle, nose close to or inside the rim to detect. <strong>Medium</strong> — easily noticeable with your nose just above the glass. <strong>Pronounced</strong> — very strong, detectable even with the glass held a short distance away.</li>
+          <li>Name what you smell in families first — red fruit, black fruit, floral, spice, oak — then narrow down. The aroma chart section below lists the usual suspects.</li>
         </ul>
-        <h4>Step 3: The Taste</h4>
-        <p>Move a small sip around your mouth so it touches all areas of the tongue and palate. Assess, in order: sweetness, acidity, tannin, alcohol, body, flavour, intensity, finish.</p>
+        <h4>4. Sip — the taste</h4>
+        <ul>
+          <li>Take a modest sip and move it around your whole mouth so it touches all areas of the tongue and palate. Drawing a little air in over the wine (a gentle slurp) carries the flavours up to your nose from inside and makes them much clearer — that is why tasters do it.</li>
+          <li>Assess, in order: sweetness, acidity, tannin, alcohol, body, flavour, intensity, finish. Sweetness hits first, acidity makes your mouth water at the sides of the tongue, and tannin dries your gums and cheeks as you swallow.</li>
+          <li><strong>Judge the balance:</strong> no single element — acid, tannin, alcohol, sweetness or fruit — should shout over the rest. A wine where everything sits in proportion tastes &ldquo;together&rdquo;; one where the alcohol burns, the acid is sharp or the tannin grips without fruit to match feels unbalanced.</li>
+        </ul>
+        <h4>5. Savor — the finish</h4>
+        <ul>
+          <li>After you swallow (or spit), pay attention to what stays behind: the flavours that linger are the wine&rsquo;s <strong>finish</strong>, covered in detail in the Finish section below.</li>
+          <li><strong>Finish length is a quality clue:</strong> a long, pleasant finish — flavours still evolving well after the sip — is one of the most reliable signs of a well-made wine. A finish that vanishes in a few seconds usually means a simpler wine, whatever the price tag says.</li>
+          <li>Finish on an overall impression: was it balanced, interesting, and would you pour it again? That judgement step is covered in the Judging a wine section below.</li>
+        </ul>
       </div>
     </details>
 
@@ -4213,6 +4267,23 @@
           <li><strong>Body and coating</strong> — sugar adds weight and richness, so higher-RS wines can feel fuller and leave a coating on the tongue.</li>
           <li><strong>Balance with acidity</strong> — acidity offsets sugar, so a wine with both high RS and high acidity (like many Rieslings) can taste less sweet than its g/L number suggests, while a low-acid wine can taste sweeter than its number.</li>
         </ul>
+        <h4>The range in plain language</h4>
+        <ul>
+          <li><strong>Extra Dry (0–4 g/L)</strong> — no sweetness you can taste; crisp and clean. What most people picture when they ask for &ldquo;a dry wine&rdquo;.</li>
+          <li><strong>Dry (up to 9 g/L)</strong> — still tastes dry; any sugar is there for balance and fruitiness, not sweetness.</li>
+          <li><strong>Off Dry (9–18 g/L)</strong> — the first level where sweetness is actually noticeable: a soft, rounded hint, like the sweetness in ripe fruit. A very common Ontario style, especially Riesling and Vidal.</li>
+          <li><strong>Med-Dry (18–50 g/L)</strong> — clearly sweet but not dessert-sweet; think a juicy, honeyed white you could still drink with dinner.</li>
+          <li><strong>Med-Sweet (50–120 g/L)</strong> — properly sweet, dessert territory for most people; late-harvest wines sit here.</li>
+          <li><strong>Sweet (+120 g/L)</strong> — rich and syrupy; icewine lives here. A little goes a long way.</li>
+        </ul>
+        <h4>Using the chart when recommending a wine</h4>
+        <ul>
+          <li><strong>Start with the words, then check the number.</strong> A customer who says &ldquo;dry&rdquo; usually means Extra Dry or Dry (under 9 g/L); &ldquo;not too sweet&rdquo; is usually Off Dry; &ldquo;I like sweet wine&rdquo; is Med-Dry and up. The g/L number on the product list lets you confirm instead of guessing.</li>
+          <li><strong>&ldquo;I like dry, but not too dry&rdquo;</strong> usually means an Off Dry wine with good acidity — the hint of sugar rounds it out without tasting sweet. Off-dry Riesling is the classic answer.</li>
+          <li><strong>Match sweetness to the food:</strong> the wine should be at least as sweet as the dish, and a little sweetness is the best tool for spicy food — see Food pairing 101.</li>
+          <li><strong>Watch the acidity.</strong> Two wines at the same g/L can taste quite different: high acidity hides sugar, low acidity shows it. When a customer found a wine &ldquo;sweeter than expected&rdquo;, reach for a higher-acid wine at the same level next time.</li>
+          <li><strong>When in doubt, step one level drier</strong> for food and one level sweeter for sipping on its own — sweetness tastes stronger in a wine drunk by itself than the same wine next to a meal.</li>
+        </ul>
       </div>
     </details>
 
@@ -4235,6 +4306,28 @@
           <li><strong>Medium</strong> — a noticeable grip that frames the fruit without dominating (Merlot, Cabernet Franc).</li>
           <li><strong>High</strong> — a firm, chewy grip that coats the mouth and lingers (Cabernet Sauvignon). Fatty foods like steak soften the feel of high tannins, which is why they pair so well together.</li>
         </ul>
+        <h4>Tannin or acidity? How to tell them apart</h4>
+        <p>They are easy to confuse because firm reds often have both, but they feel opposite in the mouth:</p>
+        <ul>
+          <li><strong>Tannin dries your mouth out</strong> — a puckering, gripping, almost fuzzy feeling on your gums, tongue and inner cheeks, like strong black tea. Your mouth feels <em>drier</em> after the sip than before.</li>
+          <li><strong>Acidity makes your mouth water</strong> — a fresh, tingling, saliva-producing feeling at the sides of your tongue, like lemon juice or a green apple. Your mouth feels <em>wetter</em> after the sip.</li>
+          <li><strong>Quick test:</strong> after swallowing, ask &ldquo;watering or drying?&rdquo; Watering = acidity. Drying and grippy = tannin. Many young reds give you both, one after the other — watering first, then the dry grip as you swallow.</li>
+        </ul>
+        <h4>Tannin vocabulary</h4>
+        <ul>
+          <li><strong>Silky / velvety</strong> — very fine, smooth tannins that glide; a sign of ripe grapes and careful winemaking (well-made Merlot, aged Pinot Noir).</li>
+          <li><strong>Smooth / rounded</strong> — tannins present but softened and easy; the wine feels polished rather than firm.</li>
+          <li><strong>Firm</strong> — a clear, structured grip that holds the wine together; typical of young Cabernet Sauvignon and Meritage.</li>
+          <li><strong>Grippy / chewy</strong> — strong tannins you can almost chew; the mouth dries noticeably and the grip lingers.</li>
+          <li><strong>Grainy / coarse</strong> — tannins that feel rough, sandy or rustic rather than fine; common in young, rustic reds.</li>
+          <li><strong>Green / harsh</strong> — bitter, astringent tannins from underripe grapes or too much seed and stem; a flaw in an otherwise ripe wine.</li>
+        </ul>
+        <h4>How tannin softens</h4>
+        <ul>
+          <li><strong>With age:</strong> over months and years in barrel and bottle, tannin molecules link together into longer chains and eventually fall out of the wine as sediment. The wine tastes progressively smoother — one of the main reasons firm reds are aged at all.</li>
+          <li><strong>With air:</strong> time in a decanter or an open bottle lets oxygen start the same softening process in hours instead of years, which is why young, firm reds often taste better on the second glass.</li>
+          <li><strong>With food:</strong> fat and protein bind to tannin, so a bite of steak, cheese or anything rich makes the same wine taste noticeably softer and fruitier — see Food pairing 101.</li>
+        </ul>
       </div>
     </details>
 
@@ -4242,17 +4335,45 @@
       <summary>Acidity</summary>
       <div class="wk-body">
         <p>Acidity creates a fresh, mouth-watering sensation. High-acid red wines make your mouth water more and can feel crisp, lively or tart — similar to biting into a sour cherry, cranberry or underripe berry. Low-acid wines feel softer, smoother and less mouth-watering.</p>
+        <h4>How to spot it</h4>
+        <ul>
+          <li><strong>The mouth-watering test:</strong> take a sip and notice your saliva. If your mouth waters noticeably — especially at the sides of your tongue, like it does with lemon juice — the wine is high in acidity. Little watering means low acidity.</li>
+          <li><strong>Words for it:</strong> high-acid wines taste <strong>crisp, bright, fresh, lively, zesty</strong> or, at the extreme, tart or sharp. Low-acid wines taste <strong>soft, round, smooth</strong> or, at the extreme, flat and flabby — the fruit feels dull and heavy, like warm cola.</li>
+          <li><strong>Don&rsquo;t confuse it with tannin:</strong> acidity makes your mouth <em>wetter</em>; tannin makes it <em>drier</em>. See the Tannins section for the side-by-side test.</li>
+          <li><strong>Where you feel it:</strong> acidity also makes the wine feel lighter and more refreshing overall, and it is a big reason a chilled white tastes so clean on a hot day.</li>
+        </ul>
+        <h4>Cool climate vs warm climate</h4>
+        <ul>
+          <li><strong>Cool climates</strong> (Ontario, Germany, northern France): grapes ripen slowly and hold on to their natural acidity, so wines come out higher in acid, lower in alcohol and lighter in body — crisp Riesling, Pinot Noir and Cabernet Franc are classic cool-climate styles.</li>
+          <li><strong>Warm climates</strong> (Australia, California, southern Spain): grapes ripen fully and quickly, sugar rises and acidity falls, so wines come out softer, fuller and higher in alcohol, with riper, jammier fruit.</li>
+          <li>Winemakers in warm regions sometimes pick grapes a little early, or add acidity in the winery, to keep a wine tasting fresh rather than flat.</li>
+        </ul>
+        <h4>Why acidity matters</h4>
+        <ul>
+          <li><strong>For food:</strong> acidity cuts through fat, cream and frying, cleansing your palate between bites — it is the single most food-friendly quality a wine can have (more in Food pairing 101).</li>
+          <li><strong>For aging:</strong> acidity is a natural preservative. High-acid wines age the most gracefully — top Rieslings improve for decades — while soft, low-acid wines fade quickly and are best drunk young.</li>
+          <li><strong>For balance:</strong> acidity is what stops a sweet or fruity wine from tasting syrupy. A wine can carry a lot of sugar and still taste fresh if the acidity is high enough to match it.</li>
+        </ul>
       </div>
     </details>
 
     <details class="wk-section">
       <summary>Alcohol</summary>
       <div class="wk-body">
-        <p>Alcohol is often felt as a warming sensation toward the back of your mouth or throat.</p>
+        <h4>How alcohol is made</h4>
+        <p>Alcohol is created by fermentation: yeast feeds on the natural sugar in ripe grapes and converts it into alcohol (and carbon dioxide, which escapes — unless the wine is sparkling, where it is trapped as bubbles). Roughly speaking, the riper the grapes and the more sugar they hold, the more alcohol the yeast can make. When nearly all the sugar is converted, the wine is dry; any sugar left over is the residual sugar on the sweetness chart.</p>
+        <h4>How to feel it</h4>
+        <p>Alcohol is often felt as a warming sensation toward the back of your mouth or throat — like the gentle heat of a spirit, but milder. In a well-balanced wine the warmth sits quietly behind the fruit; when alcohol is out of balance it feels &ldquo;hot&rdquo;, with a burning edge that overwhelms the flavours. Alcohol also adds weight and a slightly sweet, viscous feel, so it is one of the main drivers of body.</p>
         <ul>
-          <li><strong>Low (6–9%)</strong> — little to no warming.</li>
-          <li><strong>Medium (10–13%)</strong> — noticeable warmth, but not overpowering.</li>
-          <li><strong>High (14–17%)</strong> — a strong warming sensation that stands out.</li>
+          <li><strong>Low (6–9%)</strong> — little to no warming. Mostly lightly sweet or sparkling styles — Moscato and many spritz-style wines sit here.</li>
+          <li><strong>Medium (10–13%)</strong> — noticeable warmth, but not overpowering. Most table wines, and nearly all Ontario wines, are in this band.</li>
+          <li><strong>High (14–17%)</strong> — a strong warming sensation that stands out. Big warm-climate reds and fortified wines (where extra spirit is added) reach here.</li>
+        </ul>
+        <h4>Why warm-climate wines run higher</h4>
+        <ul>
+          <li><strong>Sunshine makes sugar:</strong> in warm regions grapes ripen further and build more sugar before picking — and more sugar means more potential alcohol.</li>
+          <li><strong>Cool climates the opposite:</strong> in a cool region like Ontario, grapes are picked with moderate sugar to preserve acidity, so wines typically land at 11–13% and taste lighter and fresher for it.</li>
+          <li><strong>The trade-off:</strong> higher alcohol brings body and richness but can overwhelm delicate food and amplify chilli heat; lower alcohol keeps a wine nimble and food-friendly. Neither is better — it is about the style the grower was aiming for.</li>
         </ul>
       </div>
     </details>
@@ -4260,29 +4381,46 @@
     <details class="wk-section">
       <summary>Body</summary>
       <div class="wk-body">
-        <p>Body describes how heavy or rich the wine feels in your mouth: light, medium or full/rich.</p>
-      </div>
-    </details>
-
-    <details class="wk-section">
-      <summary>Flavour intensity</summary>
-      <div class="wk-body">
+        <p>Body describes how heavy or rich the wine feels in your mouth: light, medium or full/rich. It is about weight and texture, not flavour — two wines can taste of the same fruit and still feel completely different.</p>
+        <h4>The milk-to-cream guide</h4>
         <ul>
-          <li><strong>Light</strong> — flavours are subtle and may take concentration to identify.</li>
-          <li><strong>Medium</strong> — flavours are noticeable and easy to recognize.</li>
-          <li><strong>Pronounced</strong> — flavours are bold, powerful and immediately stand out.</li>
+          <li><strong>Light-bodied</strong> — feels like skim milk: thin, refreshing, glides across the palate and disappears cleanly. Pinot Grigio, Gamay-style reds and most rosés.</li>
+          <li><strong>Medium-bodied</strong> — feels like whole (2–3.25%) milk: noticeable weight and coating, but still easy-drinking. Merlot, Cabernet Franc, unoaked Chardonnay and most Ontario reds.</li>
+          <li><strong>Full-bodied</strong> — feels like cream: heavy, rich, coats your whole mouth and lingers. Cabernet Sauvignon, Meritage, Shiraz and oaked Chardonnay.</li>
+        </ul>
+        <h4>What drives body</h4>
+        <ul>
+          <li><strong>Alcohol</strong> — the biggest factor. Alcohol is more viscous than water, so higher-alcohol wines feel heavier and richer in the mouth.</li>
+          <li><strong>Sugar</strong> — residual sugar adds weight and coating, which is part of why sweet wines and icewine feel so rich.</li>
+          <li><strong>Oak and tannin</strong> — barrel aging and firm tannin add texture and grip that read as extra body, even at the same alcohol level.</li>
+          <li><strong>Climate and ripeness</strong> — warm-climate grapes picked ripe give fuller wines; cool-climate wines are naturally lighter-bodied.</li>
+          <li><strong>Why it matters:</strong> body is the first thing to match with food — light wine with light food, full wine with rich food, so neither overwhelms the other (see Food pairing 101). It is also a personal preference: customers who say they like a wine that is &ldquo;smooth and easy&rdquo; usually want light-to-medium body; &ldquo;big and bold&rdquo; means full-bodied.</li>
         </ul>
       </div>
     </details>
 
     <details class="wk-section">
-      <summary>Finish</summary>
+      <summary>Flavour intensity and finish</summary>
       <div class="wk-body">
-        <p>How long flavours remain after swallowing or spitting.</p>
+        <h4>Flavour intensity</h4>
+        <p>How strongly the flavours come across on the palate — judged separately from whether you like them. Intensity is about volume, not quality, though the two often travel together.</p>
         <ul>
-          <li><strong>Short</strong> — fade quickly, under 15 seconds.</li>
-          <li><strong>Medium</strong> — remain noticeable for about 15–30 seconds.</li>
-          <li><strong>Long</strong> — linger more than 30 seconds and may evolve, revealing additional layers.</li>
+          <li><strong>Light</strong> — flavours are subtle and may take concentration to identify. Delicate wines like Pinot Grigio often sit here.</li>
+          <li><strong>Medium</strong> — flavours are noticeable and easy to recognize. Most everyday wines live here.</li>
+          <li><strong>Pronounced</strong> — flavours are bold, powerful and immediately stand out. Highly aromatic wines like Gewürztraminer, Moscato and big Shiraz are pronounced almost by definition.</li>
+        </ul>
+        <p>Intensity on the palate usually matches intensity on the nose: if a wine smells strong from a distance, expect it to taste strong too. Warm serving temperatures and a good swirl both make flavours seem more intense; a wine served too cold tastes muted.</p>
+        <h4>Finish</h4>
+        <p>The finish is how long flavours remain after swallowing or spitting — and what those lingering flavours are. Count the seconds quietly after you swallow; that number is your guide.</p>
+        <ul>
+          <li><strong>Short</strong> — fade quickly, under 15 seconds. The flavour drops away almost as soon as the wine is gone. Typical of simple, inexpensive wines.</li>
+          <li><strong>Medium</strong> — remain noticeable for about 15–30 seconds. A satisfying, clean fade — the standard for a good everyday wine.</li>
+          <li><strong>Long</strong> — linger more than 30 seconds and may evolve, revealing additional layers — fruit giving way to spice, then oak or earth. The mark of a well-made, concentrated wine.</li>
+        </ul>
+        <ul>
+          <li><strong>Length is a quality clue:</strong> of everything you assess, finish length is one of the most reliable signs of quality — it is very hard for a poorly made wine to fake a long finish.</li>
+          <li><strong>Judge what lingers, not just how long:</strong> a long finish should taste pleasant. If what lingers is bitterness, harsh alcohol heat or a sour edge, that is a fault in the wine, not a virtue — length only counts when the flavours are good ones.</li>
+          <li><strong>Practical use:</strong> when a customer asks what makes a pricier bottle &ldquo;better&rdquo;, the finish is the easiest difference to demonstrate — one sip of each, count the seconds, and the gap is obvious.</li>
         </ul>
       </div>
     </details>
@@ -4298,30 +4436,54 @@
         </ul>
         <p>In short: <strong>primary = the grape, secondary = the winemaking, tertiary = the aging</strong>. The same flavour can show up in more than one place — oak flavours, for example, start as secondary from the barrel and deepen into tertiary as the wine matures.</p>
         <ul>
-          <li><strong>Primary — Red fruit:</strong> strawberry, raspberry, cherry</li>
-          <li><strong>Primary — Black fruit:</strong> blackcurrant, blackberry</li>
-          <li><strong>Primary — Dried fruit:</strong> fig, prune, raisin, jam, baked fruit</li>
-          <li><strong>Primary — Spice:</strong> pepper, liquorice</li>
-          <li><strong>Secondary &amp; tertiary — Oak:</strong> vanilla, toast, caramel, mocha, smoke, charred wood, chocolate, coffee</li>
+          <li><strong>Primary — Red fruit:</strong> strawberry, raspberry, cherry, cranberry, redcurrant, red plum</li>
+          <li><strong>Primary — Black fruit:</strong> blackcurrant, blackberry, black cherry, black plum, blueberry, cassis</li>
+          <li><strong>Primary — Dried fruit:</strong> fig, prune, raisin, jam, baked fruit, fruitcake</li>
+          <li><strong>Primary — Floral and herbal:</strong> violet, rose, dried herbs, mint, eucalyptus, green bell pepper (a classic Cabernet-family note)</li>
+          <li><strong>Primary — Spice:</strong> black pepper, liquorice, clove, cinnamon</li>
+          <li><strong>Secondary — Malolactic fermentation:</strong> butter, cream, soft cheese and a rounder, creamier texture — the process converts sharp malic acid into softer lactic acid, and it is behind the buttery note in many oaked Chardonnays and richer reds</li>
+          <li><strong>Secondary — Lees aging:</strong> wines rested on their spent yeast (the lees) pick up brioche, fresh bread dough, biscuit and pastry notes — the signature of good sparkling wine — plus extra body and creaminess</li>
+          <li><strong>Secondary — Fermentation and yeast:</strong> fresh dough, beer-like and yoghurt notes in very young wines, before they settle</li>
+          <li><strong>Secondary &amp; tertiary — Oak:</strong> vanilla, toast, caramel, mocha, smoke, charred wood, chocolate, coffee, coconut, sweet spice (nutmeg, cinnamon), cedar</li>
+          <li><strong>Tertiary — Bottle aging:</strong> leather, earth, mushrooms, tobacco, forest floor, wet leaves, truffle, game and savoury meat</li>
+          <li><strong>Tertiary — Fruit development:</strong> fresh fruit dries and concentrates into cooked and dried red and black fruit, fig and prune; whites turn to honey, marmalade, nuts and dried apricot</li>
           <li><strong>Secondary &amp; tertiary — Maturation:</strong> leather, earth, mushrooms, tobacco, toffee, chocolate, coffee, dried red and black fruit</li>
         </ul>
-        <p>Some flavours and aromas may fall into two categories.</p>
+        <p>Some flavours and aromas may fall into two categories. A useful habit: when you smell something, ask which of the three families it belongs to — grape, winemaking or aging — because that tells you how the wine was made and how old it is, not just what it smells like.</p>
       </div>
     </details>
 
     <details class="wk-section">
       <summary>Judging a wine</summary>
       <div class="wk-body">
-        <p>Bring together what you observed through sight, smell and taste for an overall impression.</p>
+        <p>Bring together what you observed through sight, smell and taste for an overall impression. Professionals judge every wine on the same four things — <strong>balance, intensity, complexity and finish</strong> — and they are easy to use in the store too.</p>
+        <h4>The four quality checks</h4>
+        <ul>
+          <li><strong>Balance</strong> — a balanced wine has all its elements working well together: fruit, acidity, tannin, alcohol and sweetness in proportion, none shouting over the rest. If one element stands out in a negative way — burning alcohol, harsh tannin, sharp acid, syrupy sweetness — the wine feels unbalanced. A well-structured wine shows harmony and skill in winemaking.</li>
+          <li><strong>Intensity</strong> — how much flavour is actually there. A wine whose aromas and flavours are pronounced, clear and easy to identify scores higher than a watery, dilute-tasting wine, at any price.</li>
+          <li><strong>Complexity</strong> — how many different flavours you can find, and whether they change as you taste. A simple wine gives you one note (just cherry, say); a complex wine gives you layers — fruit, then spice, then earth or oak — and keeps developing in the glass.</li>
+          <li><strong>Finish</strong> — how long the flavours linger after swallowing. A long, pleasant finish is one of the surest signs of quality; a finish that stops dead in a few seconds points to a simpler wine.</li>
+        </ul>
+        <h4>A simple good / better / best scale</h4>
         <ul>
           <li><strong>Faulty or Poor quality</strong> — something may be wrong, or the wine tastes unbalanced or uninteresting; you would likely not choose it again.</li>
-          <li><strong>Acceptable</strong> — drinkable but not especially memorable; you might drink it but would probably choose something else if available.</li>
-          <li><strong>Good to Excellent</strong> — balanced, enjoyable and interesting; you would likely choose it again or serve it for a special occasion.</li>
+          <li><strong>Acceptable (good)</strong> — drinkable but not especially memorable: clean, balanced enough, but simple and short. You might drink it but would probably choose something else if available.</li>
+          <li><strong>Good to Very Good (better)</strong> — balanced and enjoyable, with clear flavours and a medium finish. This is where most well-made everyday wines sit, and where you would likely choose it again.</li>
+          <li><strong>Excellent to Outstanding (best)</strong> — balanced, intense and complex, with a long finish that keeps evolving. The wine you would serve for a special occasion, and remember afterwards.</li>
         </ul>
         <ul>
           <li>Liking a wine is different from judging its quality: a wine can be simple yet enjoyable, or high-quality even if it is not your personal preference.</li>
-          <li><strong>Balance:</strong> a balanced wine has all its elements working well together. If one element stands out in a negative way, the wine may feel unbalanced. A well-structured wine shows harmony and skill in winemaking.</li>
           <li><strong>Value:</strong> is the wine fairly priced for its quality? A good-value wine matches its price to its overall quality; a poor-value wine feels overpriced; an excellent-value wine exceeds expectations for its price.</li>
+        </ul>
+        <h4>Faults to watch for</h4>
+        <p>A fault is not the same as a style you dislike — it means something went wrong with that bottle. A faulted wine should not be sold or served as if it were fine.</p>
+        <ul>
+          <li><strong>Cork taint (&ldquo;corked&rdquo;)</strong> — the wine smells of wet cardboard, damp newspaper, a musty basement or a wet dog, and the fruit tastes flat and muted. It comes from a contaminated cork, affects a small percentage of cork-sealed bottles, and has nothing to do with bits of cork floating in the wine. It does not improve with air.</li>
+          <li><strong>Oxidation</strong> — too much air got to the wine: whites turn dark gold or brown and taste flat, stale or like sherry and bruised apple; reds go brown at the rim and lose their fruit. Often from a failed cork or a bottle left open too long.</li>
+          <li><strong>Volatile acidity (VA)</strong> — smells of vinegar or nail-polish remover; a little can lift a wine&rsquo;s aroma, a lot means it has turned.</li>
+          <li><strong>Heat damage (&ldquo;cooked&rdquo;)</strong> — a bottle stored somewhere hot tastes stewed and jammy in a dull way, with the cork sometimes pushed slightly out of the neck.</li>
+          <li><strong>Refermentation in the bottle</strong> — a still wine that is unexpectedly fizzy or cloudy has started fermenting again; it is not supposed to sparkle.</li>
+          <li><strong>Not faults:</strong> sediment in an older red is natural and harmless (decant it off), and white crystals in a white wine are just tartrates — cold-stored wine dropping harmless &ldquo;wine diamonds&rdquo;. Neither affects the taste.</li>
         </ul>
       </div>
     </details>
@@ -4331,21 +4493,174 @@
       <div class="wk-body">
         <h4>Stainless steel</h4>
         <p>Preserves fresh, fruity flavours and a lively style. Steel adds no flavours of its own, so the grape's natural flavours shine through. Result: often bright, fresh and fruit-forward.</p>
+        <ul>
+          <li><strong>What steel preserves:</strong> primary fruit, floral notes and natural acidity, exactly as they were at harvest. Steel is airtight, so no oxygen reaches the wine and nothing softens or changes — the wine is essentially paused.</li>
+          <li><strong>Temperature control:</strong> steel tanks are jacketed and chilled, letting winemakers ferment cool and slow, which keeps delicate aromas (think Sauvignon Blanc and Pinot Grigio) from blowing off.</li>
+          <li><strong>Best for:</strong> wines meant to be drunk young and fresh — most unoaked whites, rosés and light reds. Aging these in steel protects the very freshness they are sold on.</li>
+        </ul>
         <h4>Oak</h4>
         <p>Adds complexity, texture and depth of flavour, and can soften tannins for a smoother, rounder mouthfeel. Result: often richer, fuller and more complex, with added layers complementing the grape's fruit.</p>
+        <ul>
+          <li><strong>What oak adds:</strong> flavours from the wood itself (vanilla, toast, caramel, spice — see the aroma section), a little tannin of its own, and a creamier texture.</li>
+          <li><strong>What oak does slowly:</strong> barrels are not airtight — tiny amounts of oxygen pass through the wood, gradually softening tannins, settling colour and letting flavours knit together. That slow oxygen exposure is the main reason reds are barreled at all.</li>
+          <li><strong>New vs old oak:</strong> a brand-new barrel gives strong vanilla, toast and spice flavours and is expensive, so it is used for premium wines. A barrel that has held wine several times (&ldquo;neutral&rdquo; oak) adds almost no flavour — winemakers use it purely for the softening and texture, without the oaky taste.</li>
+          <li><strong>Toast levels:</strong> barrels are toasted over fire inside before use. Light toast keeps flavours subtle and adds gentle spice; medium toast brings vanilla and caramel; heavy toast adds dark chocolate, coffee, smoke and char. The heavier the toast, the darker the flavours.</li>
+          <li><strong>Cheaper alternatives:</strong> oak chips, staves or inner-staves dropped into a steel tank give everyday wines some oak flavour at a fraction of the cost of barrels — the label may say &ldquo;oak aged&rdquo; either way.</li>
+        </ul>
+        <h4>Two processes that happen during aging</h4>
+        <ul>
+          <li><strong>Malolactic fermentation (MLF)</strong> — a second, bacterial conversion that turns sharp malic acid (green-apple acid) into soft lactic acid (milk acid). It lowers the perceived acidity, rounds the mouthfeel and can add buttery, creamy notes. Nearly all reds go through it; whites go through it only when the winemaker wants a softer, richer style — classic in oaked Chardonnay, and deliberately blocked in crisp whites like Riesling to keep them bright.</li>
+          <li><strong>Lees aging</strong> — wine rested on its lees (the spent yeast left after fermentation) picks up body, creaminess and brioche, bread-dough and biscuit flavours. The longer the lees contact, the more pronounced the effect — it is the making of good sparkling wine, and it adds richness to Chardonnay too.</li>
+        </ul>
+        <h4>Which wines benefit from aging — and which don&rsquo;t</h4>
+        <ul>
+          <li><strong>Most wine is made to drink young.</strong> The large majority of bottles — and essentially every wine at an everyday price — are at their best within a year or two of release and only lose fruit after that. Fresher is better for Pinot Grigio, Sauvignon Blanc, rosé, Gamay-style reds and most unoaked whites.</li>
+          <li><strong>Wines that can improve:</strong> a wine needs structure to age — tannin, acidity, alcohol and concentrated fruit to hold it together while flavours develop. Structured reds (Cabernet Sauvignon, Meritage), high-acid whites (Riesling, including icewine) and sweet wines (sugar is also a preservative) are the candidates.</li>
+          <li><strong>What aging does:</strong> tannins soften and polymerize, fresh fruit turns to dried fruit and savoury tertiary notes (leather, earth, tobacco), colour fades in reds and deepens in whites, and sediment forms. The wine trades youthful fruit for complexity.</li>
+        </ul>
+        <h4>Rough aging guides</h4>
+        <ul>
+          <li><strong>Drink now (within 1–2 years):</strong> light whites, rosé, light fruity reds, most everyday bottles.</li>
+          <li><strong>Short term (2–5 years):</strong> Merlot, Cabernet Franc, unoaked-to-lightly-oaked Chardonnay, most mid-priced reds — tannins settle and flavours knit together.</li>
+          <li><strong>Medium term (5–10 years):</strong> good Cabernet Sauvignon and Meritage, structured Shiraz, quality Riesling.</li>
+          <li><strong>Long term (10+ years):</strong> only the most structured, concentrated wines — top Cabernet-based blends, fine Riesling and icewine. These are the exception, not the rule, and they need proper storage (see Storing wine) to get there.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Serving wine</summary>
+      <div class="wk-body">
+        <h4>Serving temperatures</h4>
+        <p>Temperature changes how a wine tastes more than almost anything else. Too cold and the flavours mute and the acidity bites; too warm and the alcohol stands out and the wine tastes flabby. The everyday mistake is whites served straight-from-the-fridge cold and reds served at warm room temperature — most reds want to be a little cooler than the room, and most whites a little warmer than the fridge.</p>
+        <ul>
+          <li><strong>Sparkling — 6–10°C:</strong> well chilled. Cold keeps the bubbles fine and the wine refreshing. Take it out of an ice bucket only to pour.</li>
+          <li><strong>Light whites and rosé — 7–11°C:</strong> chilled. Pinot Grigio, Sauvignon Blanc, dry rosé and light Riesling: cold enough to feel crisp, not so cold you can&rsquo;t taste the fruit.</li>
+          <li><strong>Full whites — 10–13°C:</strong> lightly chilled. Oaked Chardonnay and fuller whites lose their vanilla, texture and complexity if served fridge-cold — pull them out about 20 minutes before pouring.</li>
+          <li><strong>Light reds — 12–15°C:</strong> cool to the touch. Pinot Noir, Gamay-style reds and Baco Noir taste fresher and fruitier slightly chilled — 20–30 minutes in the fridge gets a room-temperature bottle there.</li>
+          <li><strong>Full reds — 15–18°C:</strong> just below room temperature. Cabernet Sauvignon, Meritage and Shiraz served this way taste focused rather than hot and soupy. &ldquo;Room temperature&rdquo; in the old advice meant a cool cellar, not a heated house.</li>
+          <li><strong>Sweet and icewine — 6–10°C:</strong> well chilled; cold keeps the sweetness fresh instead of syrupy.</li>
+        </ul>
+        <h4>Decanting</h4>
+        <ul>
+          <li><strong>Why:</strong> decanting does two different jobs — it gives a young, firm wine air so its tannins soften and aromas open up, and it pours an older wine off its sediment. Same tool, different reason.</li>
+          <li><strong>Young, tannic reds:</strong> decant 30 minutes to 2 hours before serving. The bigger and firmer the wine, the more air helps. Simply opening the bottle barely exposes any wine to air — pour it into the decanter (or a clean jug) to do the job.</li>
+          <li><strong>Older reds and sediment:</strong> sediment is harmless but gritty and bitter. Stand the bottle upright for at least a few hours (a day is better) so the sediment settles to the bottom, then pour slowly in one steady motion, stopping as soon as sediment reaches the neck. A light behind the neck — a phone torch works — helps you see it coming.</li>
+          <li><strong>What doesn&rsquo;t need it:</strong> most everyday reds, nearly all whites, rosés and sparkling wines are ready from the bottle. Decanting a delicate old wine for long can actually fade it — pour those gently and drink promptly.</li>
+        </ul>
+        <h4>Glassware and pouring</h4>
+        <ul>
+          <li><strong>Hold by the stem</strong> (or the base), never the bowl: fingers on the bowl warm the wine, leave prints on the glass and hide the colour you are trying to judge.</li>
+          <li><strong>Fill about one-third full</strong> — roughly 150 mL in a standard glass. The empty space above the wine is where aromas collect, and it leaves room to swirl without spilling.</li>
+          <li><strong>The shape helps:</strong> a bowl that narrows toward the rim gathers aromas to your nose. Big bowls suit reds (more air contact), narrower glasses suit whites and sparkling (keeping them cold and the bubbles lively); a tulip-shaped glass beats a flute for sparkling because it lets the aromas show.</li>
+          <li><strong>Clean glassware matters:</strong> detergent residue and cabinet smells kill aroma and flatten bubbles. Rinse glasses with hot water and polish them dry before a tasting.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="wk-section">
+      <summary>Storing wine</summary>
+      <div class="wk-body">
+        <p>Most wine is bought to drink soon and needs nothing special — a cool cupboard away from the stove will do. Proper storage matters when a bottle is being kept for months or years, and it comes down to five things: cool, dark, steady, still, and on its side if it has a cork.</p>
+        <ul>
+          <li><strong>Cool</strong> — around 10–15°C is ideal; a cellar or the coolest interior closet is the home version. Heat is wine&rsquo;s worst enemy: warm storage ages wine fast and unevenly, and a hot car in summer can cook a bottle in an afternoon.</li>
+          <li><strong>Steady temperature</strong> — consistency matters more than the exact number. Repeated swings make the wine expand and contract, pushing the cork in and out and letting air creep in. Avoid spots over fridges, beside ovens, or against outside walls that heat and cool daily.</li>
+          <li><strong>Dark</strong> — light, especially sunlight and fluorescent light, degrades wine (&ldquo;light strike&rdquo;), which is why most wine comes in coloured glass. Keep bottles out of windows and display lighting for long storage.</li>
+          <li><strong>On its side for cork</strong> — a corked bottle stored lying down keeps the cork moist and swollen, sealing the neck. Stored upright for a long time, the cork can dry, shrink and let air in. Screw caps and synthetic closures don&rsquo;t care — those bottles can stand upright.</li>
+          <li><strong>Still and odour-free</strong> — keep bottles away from vibration (on top of appliances) and strong smells (paint, cleaning products), which can work their way in around the cork over time.</li>
+        </ul>
+        <h4>How long to keep it</h4>
+        <ul>
+          <li><strong>Drink most wines within a couple of years</strong> of buying them — the large majority are made to be enjoyed young and will only lose freshness after that. See the Aging section for the exceptions that genuinely improve.</li>
+          <li><strong>Once opened:</strong> recork and refrigerate everything, reds included. Most wines hold 2–3 days; high-acid whites and sweet wines last longest (up to a week), delicate reds fade fastest. Let a red lose its fridge chill for 20 minutes before the next glass. Sparkling keeps a day or two with a proper stopper — cold and sealed is what holds the bubbles.</li>
+          <li><strong>The fridge is fine for weeks, not seasons:</strong> it is too cold and too dry (corks shrink) for long-term storage, and food odours build up — temporary holding only.</li>
+        </ul>
       </div>
     </details>
 
     <details class="wk-section">
       <summary>Food pairing 101</summary>
       <div class="wk-body">
-        <p>Five tastes to work with: sweet, sour, bitter, umami, salty.</p>
-        <h4>Compare — match weight and intensity</h4>
-        <p>Light-bodied wines pair best with lighter foods; fuller-bodied wines with richer dishes, so neither overpowers the other. Gamay Noir + charcuterie; Merlot + meat lasagna; Cabernet Sauvignon + grilled ribeye.</p>
-        <h4>Contrast — balance opposites</h4>
-        <p>A wine can refresh the palate, soften certain flavours or highlight different elements in a dish. Pinot Noir + grilled salmon; Cabernet Franc + pepperoni pizza; Baco Noir + spicy sausage.</p>
-        <h4>Regional — what grows together, goes together</h4>
-        <p>Many classic pairings come from the same region, where local wines naturally complement local ingredients and cooking styles. Niagara Pinot Noir + wild mushroom risotto; Prince Edward County Baco Noir + BBQ ribs; Ontario Cabernet Franc + herb-crusted lamb.</p>
+        <p>Good pairing is about balance, not rules for their own sake. Think about the dish as a whole — its weight, richness, acidity, sweetness, salt and heat — then pick a wine that either matches it or refreshes it. When a customer describes what they are eating, ask three quick questions: <strong>How is it cooked? What sauce is on it? How rich or spicy is it?</strong> The answers usually point straight to the right bottle.</p>
+
+        <h4>The core rules</h4>
+        <ul>
+          <li><strong>The wine should be more acidic than the food.</strong> If the food is more acidic than the wine — tomato sauce, a sharp vinaigrette, a squeeze of lemon — the wine tastes flat and dull. A wine with equal or higher acidity stays fresh and lively next to it.</li>
+          <li><strong>The wine should be sweeter than the food.</strong> This matters most at dessert, but it applies to sweet glazes and sauces too. If the food is sweeter, the wine tastes sour and thin by comparison.</li>
+          <li><strong>Match flavour intensity.</strong> Delicately flavoured food needs a delicately flavoured wine, and bold food needs a bold wine, so neither one washes the other out.</li>
+          <li><strong>Match body and weight.</strong> Light food with light wine, rich food with full wine. Think of it like matching weights: a light salad or grilled fish with a light white; a rich stew or grilled ribeye with a full-bodied red.</li>
+          <li><strong>Match the sauce, not just the protein.</strong> The same chicken is a different pairing in a creamy mushroom sauce (try oaked Chardonnay), a tomato sauce (try a higher-acid red like Cabernet Franc) or a sweet BBQ glaze (try a juicy, fruity red like Baco Noir). Sauces, marinades and cooking methods often matter more than whether it is chicken, pork or beef.</li>
+          <li><strong>What grows together, goes together.</strong> Many classic pairings come from the same region, where local wines naturally suit local ingredients and cooking. Niagara Pinot Noir + wild mushroom risotto; Prince Edward County Baco Noir + BBQ ribs; Ontario Cabernet Franc + herb-crusted lamb.</li>
+        </ul>
+
+        <h4>How the tastes interact</h4>
+        <p>Work with six things in the food — acidity, sweetness, salt, fat, tannin-friendly protein, and spice heat — and how each one changes the wine:</p>
+        <ul>
+          <li><strong>Acidity cuts fat and richness.</strong> A crisp, high-acid wine (or sparkling wine) cuts through fried, creamy or fatty food and cleans the palate between bites, so each mouthful tastes fresh again.</li>
+          <li><strong>Salt softens tannin and acidity.</strong> Salty food makes a firm, tannic red taste smoother and fruitier, and it softens sharp acidity in whites too. It is one reason salty cheese and cured meats are such friendly foods for wine.</li>
+          <li><strong>Fat softens tannin and acidity.</strong> Fatty food coats the mouth and softens both the grip of tannin and the edge of acidity — a fatty steak is what lets a big Cabernet show its fruit instead of just its grip.</li>
+          <li><strong>Sweetness balances spice and salt.</strong> A touch of sweetness in the wine calms chilli heat and balances salty food. This is why off-dry wines are the go-to for spicy and salty dishes.</li>
+          <li><strong>Tannin needs protein and fat.</strong> Tannin binds to protein and fat in food, which softens the wine and cleans the palate. Without them, a high-tannin red on its own — or with a light, lean dish — can taste bitter and drying.</li>
+          <li><strong>High alcohol amplifies spice heat.</strong> Alcohol makes chilli heat burn hotter, and firm tannin adds to the harshness. Avoid big, tannic, high-alcohol reds with very spicy food; reach for a lower-alcohol wine with a little sweetness instead.</li>
+          <li><strong>Bitterness and umami need care.</strong> Bitter flavours in food (char, bitter greens, dark chocolate) make tannin taste more bitter. Umami-rich food on its own (mushrooms, aged cheese, cured meat) can make reds taste harder — salt, fat or acidity in the dish brings it back into balance.</li>
+        </ul>
+
+        <h4>Congruent vs contrasting pairings</h4>
+        <p><strong>Congruent pairings</strong> match like with like, so shared flavours reinforce each other and the pairing tastes richer and rounder. <strong>Contrasting pairings</strong> use opposites to balance each other, so the pairing tastes fresher and cleaner. Both work — the dish decides which one you want.</p>
+        <ul>
+          <li><strong>Congruent:</strong> a smoky red with grilled or smoked meat — the smoke in the wine echoes the char on the food. Also: oaked Chardonnay with buttered lobster, earthy Pinot Noir with mushrooms, a rich red with a rich beef stew.</li>
+          <li><strong>Contrasting:</strong> a crisp, high-acid white cutting through fried food, refreshing the palate with every sip.</li>
+          <li><strong>Contrasting:</strong> off-dry Riesling with Thai curry — the wine&rsquo;s sweetness cools the heat while its acidity cuts the coconut richness.</li>
+          <li><strong>Contrasting:</strong> fried chicken with sparkling wine — bubbles and acidity cut the fat and salt, and the crunch of the coating matches the fizz.</li>
+          <li>More to have ready: Pinot Noir + grilled salmon; Cabernet Franc + pepperoni pizza; Baco Noir + spicy sausage (choose a juicier, lower-tannin bottle for hotter dishes); Merlot + meat lasagna; Gamay-style light reds + charcuterie.</li>
+        </ul>
+
+        <h4>Reds — varietal by varietal</h4>
+        <ul>
+          <li><strong>Baco Noir:</strong> BBQ ribs, pulled pork and burgers with smoky-sweet sauce; smoked sausage. Its juicy fruit, smoke and often a touch of sweetness suit grilled and barbecued meats especially well.</li>
+          <li><strong>Cabernet Franc:</strong> herb-crusted lamb, roast chicken with herbs, pepperoni or veggie pizza; grilled peppers and other roasted vegetables. Its acidity also handles tomato-based dishes well.</li>
+          <li><strong>Cabernet Sauvignon:</strong> grilled ribeye and other fatty steaks, roast beef, lamb chops; aged cheddar. It needs protein and fat to soften its firm tannins — serve it with the richest red-meat dishes.</li>
+          <li><strong>Meritage:</strong> prime rib and roast beef, hearty beef stew, grilled portobello mushrooms. Treat this Bordeaux-style blend like Cabernet: full, rich, savoury food.</li>
+          <li><strong>Merlot:</strong> meat lasagna and other tomato pasta bakes, roast chicken or duck, meatloaf. Softer and juicier than Cabernet, so it is the friendlier red for weeknight Italian and roasts.</li>
+          <li><strong>Pinot Noir:</strong> grilled salmon, roast turkey or duck, wild mushroom risotto. Light tannin makes it one of the few reds that works with fish and lighter dishes.</li>
+          <li><strong>Shiraz / Syrah:</strong> grilled or smoked lamb, pepper steak, BBQ brisket and other smoked meats. Its pepper and spice are congruent with peppery rubs and char — but keep it away from very hot chilli dishes, where its alcohol will fan the heat.</li>
+        </ul>
+
+        <h4>Whites — varietal by varietal</h4>
+        <ul>
+          <li><strong>Chardonnay — unoaked:</strong> grilled fish and shellfish, roast chicken, salads with a citrus dressing. Crisp and clean, so keep the food light and avoid heavy cream sauces.</li>
+          <li><strong>Chardonnay — oaked:</strong> lobster or shrimp in butter, creamy pasta, roast chicken with pan sauce; buttered corn on the cob. The wine&rsquo;s vanilla, toast and buttery notes are congruent with butter and cream.</li>
+          <li><strong>Gewürztraminer:</strong> Thai and Indian curries, spicy Asian dishes, aromatic dishes with ginger or lemongrass. Its perfume, low acidity and often a touch of sweetness suit spiced food — one of the best spicy-food whites.</li>
+          <li><strong>Moscato / Muscat:</strong> brunch dishes, fruit-based desserts and fruit salad, mild blue cheese; also a gentle match for lightly spiced food. The wine should be sweeter than the food, so pair it with foods no sweeter than the wine — light fruit desserts work well — or enjoy it on its own, and keep it light.</li>
+          <li><strong>Pinot Grigio / Pinot Gris:</strong> Italian-style Grigio — seafood, sushi, light salads and grilled white fish. Fuller Alsace-style Gris — roast pork, creamy chicken, richer fish. Either way, light-to-medium food is the safe range.</li>
+          <li><strong>Riesling:</strong> dry Riesling — pork chops, schnitzel, seafood and sushi. Off-dry or sweeter Riesling — Thai curry, spicy takeout, glazed ham. Its high acidity cuts richness at any sweetness level, and the sweeter styles cool spice.</li>
+          <li><strong>Sauvignon Blanc:</strong> goat cheese salads, oysters and other shellfish, grilled asparagus and green salads; fish tacos with lime. Its herbal, citrus character is congruent with green, herby flavours.</li>
+          <li><strong>Vidal Blanc:</strong> table Vidal — roast pork, fruit-glazed ham, mild curries. Vidal icewine — fruit desserts, crème brûlée, and blue cheese, where its rich sweetness needs food that is just as sweet or boldly salty.</li>
+        </ul>
+
+        <h4>Rosé, sparkling and cheese</h4>
+        <ul>
+          <li><strong>Rosé:</strong> one of the most versatile food wines. Charcuterie, grilled shrimp, salad Niçoise, pizza, burgers and Mediterranean dishes with olive oil and herbs. Dry rosé handles light-to-medium food that is too rich for a white and too light for a red.</li>
+          <li><strong>Sparkling:</strong> fried chicken, fish and chips, french fries and salty snacks; oysters, sushi and brunch eggs. Bubbles plus high acidity cut fat and salt — when in doubt with rich, salty or fried food, sparkling is a safe answer.</li>
+          <li><strong>Cheese — the general rule:</strong> match intensity (delicate cheese with delicate wine, strong cheese with a bold or sweet wine), and remember that salt in cheese softens tannin and acidity, so cheese is generally very wine-friendly.</li>
+          <li><strong>Goat cheese</strong> + Sauvignon Blanc — a classic congruent regional-style pairing; the wine&rsquo;s acidity matches the cheese&rsquo;s tang.</li>
+          <li><strong>Brie and Camembert</strong> + sparkling wine or oaked Chardonnay — bubbles and acidity cut the creaminess.</li>
+          <li><strong>Aged cheddar and other hard cheeses</strong> + Cabernet Sauvignon, Meritage or Merlot — salt and fat soften the tannin.</li>
+          <li><strong>Blue cheese</strong> + sweet wine only — Vidal or Riesling icewine, or Moscato. The wine must be sweeter than the cheese is salty and strong, or it will taste thin and sour.</li>
+          <li><strong>Gouda</strong> + Merlot; <strong>Parmesan</strong> + a fuller red or a crisp white; <strong>smoked cheese</strong> + Shiraz / Syrah, matching smoke with smoke.</li>
+        </ul>
+
+        <h4>Common pitfalls to avoid</h4>
+        <ul>
+          <li><strong>Big tannic red + very spicy food.</strong> Tannin, high alcohol and chilli heat clash and amplify each other. Choose an off-dry, lower-alcohol white instead.</li>
+          <li><strong>Tannic red + delicate fish.</strong> Tannin with fish can taste metallic and bitter. For salmon and richer fish, Pinot Noir is the red exception; otherwise pour a white.</li>
+          <li><strong>Wine less sweet than dessert.</strong> A dry wine next to a sweet dessert tastes sour. The dessert wine must be at least as sweet as the dish.</li>
+          <li><strong>Low-acid wine + acidic food.</strong> Tomato, citrus and vinaigrettes flatten a soft, low-acid wine. Match them with a wine of equal or higher acidity.</li>
+          <li><strong>Overpowering the dish — or being overpowered.</strong> A full, bold wine buries a delicate dish; a light wine disappears next to a rich stew. Match the weight first, then fine-tune.</li>
+          <li><strong>Tricky ingredients.</strong> Artichokes can make wine taste oddly sweet, asparagus and egg yolk are hard on many wines, and very bitter greens exaggerate tannin. For these, a crisp, unoaked, high-acid white is the safest pour.</li>
+          <li><strong>Dry red + dark chocolate.</strong> Bitter chocolate plus tannin is harsh. If wine must go with chocolate, it needs sweetness — otherwise suggest the chocolate on its own, or after the wine.</li>
+          <li><strong>Ignoring the sauce and cooking method.</strong> Grilled, smoked, creamed, tomato-based or glazed versions of the same protein need different wines. Always pair to the finished dish, not the raw ingredient.</li>
+        </ul>
       </div>
     </details>
 
@@ -4354,18 +4669,53 @@
       <div class="wk-body">
         <h4>Baco Noir</h4>
         <p>Niagara Peninsula, Prince Edward County, USA. Typically medium-bodied and off-dry, deep ruby-purple, with strawberry, cherry, pepper and smoky notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> medium body, medium acidity, low to medium tannin.</li>
+          <li><strong>Signature aromas:</strong> strawberry, cherry, blackberry, pepper and smoke.</li>
+          <li><strong>Serve &amp; pair:</strong> serve slightly cool (12–15°C); its juicy fruit and smoke are made for BBQ ribs, pulled pork and burgers — see Food pairing 101.</li>
+        </ul>
         <h4>Cabernet Franc</h4>
         <p>Niagara Peninsula, France, Argentina, Italy. Medium-bodied with medium to high acidity; raspberry, sometimes strawberry, and earthy notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> medium body, medium-high acidity, medium tannin.</li>
+          <li><strong>Signature aromas:</strong> raspberry, strawberry, red cherry, bell pepper, pencil shavings and earth.</li>
+          <li><strong>Serve &amp; pair:</strong> serve just below room temperature (15–17°C); a natural with herb-crusted lamb, roast chicken with herbs and tomato-based dishes.</li>
+        </ul>
         <h4>Cabernet Sauvignon</h4>
         <p>Niagara Peninsula, California, Australia. Deeply coloured and full-bodied, with heavy tannins and medium-to-high acidity; bold blackcurrant, chocolate, mint, bell pepper and earthy notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> full body, medium-high acidity, high tannin — the most structured red on this list.</li>
+          <li><strong>Signature aromas:</strong> blackcurrant, black cherry, cedar, chocolate, mint and bell pepper.</li>
+          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C and decant young bottles 1–2 hours so the tannins soften; pour with fatty steak and aged cheddar, which smooth out its grip.</li>
+        </ul>
         <h4>Meritage</h4>
         <p>Niagara Peninsula, France, Argentina. A Bordeaux-style blend of Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot and Malbec. Typically dry and medium- to full-bodied; winemakers adjust the blend from vintage to vintage for consistent quality. Pronunciation: rhymes with “heritage”.</p>
+        <ul>
+          <li><strong>Profile:</strong> medium to full body, medium acidity, medium to high tannin — it follows the Cabernet share of the blend.</li>
+          <li><strong>Signature aromas:</strong> blackcurrant, plum, black cherry, cedar, tobacco and chocolate.</li>
+          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C; treat it like Cabernet at the table — prime rib, roast beef and hearty stews.</li>
+        </ul>
         <h4>Merlot</h4>
         <p>Niagara Peninsula, France, Italy. Cedar, plum, licorice, black cherry and fruitcake; typically lower in acidity and tannin, with juicy fruit and higher alcohol.</p>
+        <ul>
+          <li><strong>Profile:</strong> medium to full body, medium-low acidity, low to medium (soft) tannin.</li>
+          <li><strong>Signature aromas:</strong> plum, black cherry, cedar, licorice, fruitcake and chocolate.</li>
+          <li><strong>Serve &amp; pair:</strong> serve at 15–17°C; the friendly weeknight red — meat lasagna, roast chicken and meatloaf all suit its soft tannins.</li>
+        </ul>
         <h4>Pinot Noir</h4>
         <p>Niagara Peninsula, Prince Edward County, France. Red and black cherry flavours are typical, along with raspberry and hints of currant; light to medium tannins.</p>
+        <ul>
+          <li><strong>Profile:</strong> light to medium body, medium-high acidity, low to medium tannin.</li>
+          <li><strong>Signature aromas:</strong> cherry, raspberry, strawberry, currant, mushroom and forest floor as it ages.</li>
+          <li><strong>Serve &amp; pair:</strong> serve slightly cool (12–15°C); one of the few reds that works with fish — grilled salmon, roast turkey and mushroom risotto.</li>
+        </ul>
         <h4>Shiraz / Syrah</h4>
         <p>Niagara Peninsula, France, Australia, Spain. Deeply coloured with firm tannins and jammy fruit; blackberry, currant, raspberry, violets, hawthorn, spice, savoury meat, black pepper and eucalyptus.</p>
+        <ul>
+          <li><strong>Profile:</strong> full body, medium acidity, firm (medium-high) tannin, often higher alcohol.</li>
+          <li><strong>Signature aromas:</strong> blackberry, blackcurrant, raspberry, violets, black pepper, spice and savoury meat.</li>
+          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C; peppery rubs, grilled lamb and smoked meats echo its spice — but keep it away from very hot chilli dishes, where its alcohol fans the heat.</li>
+        </ul>
       </div>
     </details>
 
@@ -4374,18 +4724,53 @@
       <div class="wk-body">
         <h4>Chardonnay</h4>
         <p>Niagara Peninsula, France, California, Australia. The most versatile white grape: unoaked Chardonnay is light- to medium-bodied and crisp, with high acidity and green apple, lemon and pear notes; oaked Chardonnay is medium- to full-bodied with more moderate acidity, and tropical fruit, peach, vanilla, toast and buttery notes. No tannin in either style.</p>
+        <ul>
+          <li><strong>Profile:</strong> body and acidity depend on the style — light to medium and crisp unoaked; medium to full and rounder oaked. No tannin in either style.</li>
+          <li><strong>Signature aromas:</strong> unoaked — green apple, lemon, pear; oaked — peach, tropical fruit, vanilla, toast and butter.</li>
+          <li><strong>Serve &amp; pair:</strong> unoaked well chilled (8–10°C) with grilled fish and salads; oaked a little warmer (10–13°C) with buttered lobster, creamy pasta and roast chicken.</li>
+        </ul>
         <h4>Gewürztraminer</h4>
         <p>Niagara Peninsula, France (Alsace), Germany. Medium- to full-bodied and highly aromatic, with low to medium-low acidity — the softest acidity of the whites here — and often a touch of sweetness; lychee, rose petal, ginger, tropical fruit and spice notes. In this list it appears in white blends such as Sandbanks Reserve Sleeping Giant White, alongside Chardonnay, Muscat and Marsanne.</p>
+        <ul>
+          <li><strong>Profile:</strong> medium to full body, low to medium-low acidity, no tannin; pronounced aroma intensity.</li>
+          <li><strong>Signature aromas:</strong> lychee, rose petal, ginger, tropical fruit and spice.</li>
+          <li><strong>Serve &amp; pair:</strong> serve well chilled (8–10°C) to keep the perfume fresh; the go-to white for Thai and Indian curries and other spiced dishes.</li>
+        </ul>
         <h4>Moscato / Muscat</h4>
         <p>Niagara Peninsula, Italy, France. Light- to medium-bodied, with low to medium acidity and little to no tannin; usually sweet or off-dry and often lightly sparkling, with pronounced peach, apricot, orange blossom, grape and honey notes. The same grape family is labelled Moscato in the Italian style and Muscat in the French style.</p>
+        <ul>
+          <li><strong>Profile:</strong> light to medium body, low to medium acidity, little to no tannin; often lightly sparkling and lower in alcohol.</li>
+          <li><strong>Signature aromas:</strong> peach, apricot, orange blossom, fresh grape and honey.</li>
+          <li><strong>Serve &amp; pair:</strong> serve well chilled (6–9°C); sip it on its own, or with brunch, light fruit desserts and lightly spiced food — just keep the food no sweeter than the wine.</li>
+        </ul>
         <h4>Pinot Grigio / Pinot Gris</h4>
         <p>Niagara Peninsula, Italy, France (Alsace). One grape, two names and two styles: Italian-style Pinot Grigio is light-bodied, dry and crisp; Pinot Gris in the Alsace style is riper, fuller and softer. Both show medium-high acidity and no tannin, with pear, green apple, citrus, peach and melon notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> light body (Italian style) to medium (Alsace style), medium-high acidity, no tannin.</li>
+          <li><strong>Signature aromas:</strong> pear, green apple, citrus, peach and melon.</li>
+          <li><strong>Serve &amp; pair:</strong> serve cold (7–10°C); Grigio with seafood, sushi and salads, fuller Gris with roast pork and creamy chicken.</li>
+        </ul>
         <h4>Riesling</h4>
         <p>Niagara Peninsula, Germany, France (Alsace). Light- to medium-bodied, with high to very high acidity and no tannin — that acidity keeps even sweet styles tasting fresh. Made from dry to sweet, and a classic Ontario icewine grape; lime, green apple, peach, apricot and floral notes, with honey in icewine.</p>
+        <ul>
+          <li><strong>Profile:</strong> light to medium body, high to very high acidity, no tannin; made from dry to sweet, and the high acid balances every level.</li>
+          <li><strong>Signature aromas:</strong> lime, green apple, peach, apricot and blossom; honey in icewine.</li>
+          <li><strong>Serve &amp; pair:</strong> serve well chilled (7–10°C); dry styles with pork chops and seafood, off-dry styles with Thai curry, spicy takeout and glazed ham.</li>
+        </ul>
         <h4>Sauvignon Blanc</h4>
         <p>Niagara Peninsula, France, New Zealand. Light- to medium-bodied and almost always dry, with high acidity and no tannin; grapefruit, lime, gooseberry, green apple and passion fruit notes, often with a fresh grassy or herbal edge. Oak- or barrel-aged versions add vanilla and toast notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> light to medium body, high acidity, no tannin; almost always dry.</li>
+          <li><strong>Signature aromas:</strong> grapefruit, lime, gooseberry, green apple, passion fruit and fresh-cut grass or herbs.</li>
+          <li><strong>Serve &amp; pair:</strong> serve cold (7–10°C); a classic with goat cheese salads, shellfish and grilled asparagus.</li>
+        </ul>
         <h4>Vidal Blanc</h4>
         <p>Niagara Peninsula and across Ontario. A cold-hardy hybrid grape suited to Canadian winters. Light- to medium-bodied as a dry or off-dry table wine, with medium-high to high acidity, none to low tannin, and peach, apricot, citrus and floral notes; left to freeze on the vine it makes rich, sweet icewine with honey, apricot and tropical fruit notes.</p>
+        <ul>
+          <li><strong>Profile:</strong> light to medium body as a table wine, medium-high to high acidity, none to low tannin; icewine is full, rich and sweet.</li>
+          <li><strong>Signature aromas:</strong> table — peach, apricot, citrus and flowers; icewine — honey, apricot and tropical fruit.</li>
+          <li><strong>Serve &amp; pair:</strong> table Vidal chilled (8–10°C) with roast pork and fruit-glazed ham; icewine well chilled (6–9°C) in small pours with fruit desserts, crème brûlée or blue cheese.</li>
+        </ul>
       </div>
     </details>
 
@@ -5725,6 +6110,34 @@
     wrap.appendChild(btn);
     td.appendChild(wrap);
   }
+  /* Expand/collapse indicator for every product row, appended at
+     the end of the Product cell: a subtle bar — a hairline with
+     the small words "tasting notes" and one small chevron in the
+     middle, given enough height and padding to carry the label
+     comfortably (styled in CSS; on phone cards it is pinned to the
+     bottom of the card), so it is clear what the row expands to.
+     The chevron's rotation is pure CSS off the row's
+     aria-expanded, so this only has to exist, never update. It is
+     aria-hidden and pointer-events:none: the row itself stays the
+     one tap target, exactly as before. writeRow() rebuilds the
+     Product cell, so it re-adds the bar the same way it re-adds
+     the ⋮ button. */
+  function addExpandHint(row){
+    var pcell = cellEl(row, 'Product');
+    if(!pcell || pcell.querySelector('.expand-hint')) return;
+    var hint = document.createElement('span');
+    hint.className = 'expand-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    var label = document.createElement('span');
+    label.className = 'eh-label';
+    label.textContent = 'tasting notes';
+    hint.appendChild(label);
+    var chev = document.createElement('span');
+    chev.className = 'eh-chev';
+    chev.textContent = '▾';
+    hint.appendChild(chev);
+    pcell.appendChild(hint);
+  }
   function writeRow(row, data){
     /* Brand consolidation, placeholder cleaning and promo-note
        stripping — enforced here, the one place every row (built-in,
@@ -5825,6 +6238,8 @@
     setCell(row, 'Acidity', data.acidity || '—');
     /* Setting the Acidity text above wipes that cell, so the ⋮ goes back on last */
     addKebabButton(row);
+    /* The Product cell was rebuilt above too, so the expand pill goes back on */
+    addExpandHint(row);
     var d = details[row.getAttribute('data-idx')];
     if(d){
       var np = d.querySelector('.notes');
@@ -6004,6 +6419,7 @@
   });
   document.getElementById('addProduct').addEventListener('click', function(){ openEditor(null); });
   rows.forEach(addKebabButton);
+  rows.forEach(addExpandHint);
   /* Products that arrived already marked Not In Plano get the
      "not in plano" search token too, matching ones toggled later */
   rows.forEach(syncPlanoSearch);
