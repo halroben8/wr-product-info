@@ -767,16 +767,18 @@
   .efield textarea:focus{outline:2px solid var(--plum2);outline-offset:1px;border-color:var(--plum2)}
   .combo-new{margin-top:6px}
   /* Barcode in the product editor — a prominent full-width section
-     at the TOP of the editor, never just another small grid field:
+     at the BOTTOM of the editor form, after all the other product
+     fields, never just another small grid field:
      a thick plum border and tinted panel set it apart, the heading
      says what the barcode does, a status line shows the barcode
      currently registered to this product (or that none is), the
-     input is large monospace, and a Clear barcode button removes
-     the link. Saving writes the change to the shared list (see
-     sbSyncBarcode): the new barcode opens this product and the old
-     one no longer does. */
+     input is large monospace, a Clear barcode button removes
+     the link, and a Scan barcode with camera button opens the
+     scanner to fill the field without typing. Saving writes the
+     change to the shared list (see sbSyncBarcode): the new
+     barcode opens this product and the old one no longer does. */
   .barcode-field{border:2px solid var(--plum2);background:var(--violet-soft);border-radius:14px;
-    padding:13px 14px 12px;margin:0 0 14px}
+    padding:13px 14px 12px;margin:14px 0}
   .barcode-head{display:flex;align-items:center;gap:9px;margin-bottom:7px}
   .barcode-head svg{width:26px;height:26px;flex:none;color:var(--plum)}
   :root[data-theme="dark"] .barcode-head svg{color:var(--lilac)}
@@ -795,6 +797,17 @@
   :root[data-theme="dark"] .barcode-clear{color:#fca5a5;border-color:#fca5a5;background:var(--panel)}
   :root[data-theme="dark"] .barcode-clear:hover, :root[data-theme="dark"] .barcode-clear:focus-visible{background:#3d0f1a}
   .barcode-help{margin:9px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+  /* Scan-with-camera button in the editor's Barcode section: a
+     full-width plum button under the barcode input, so scanning a
+     barcode into the field is one obvious tap instead of typing
+     the number in. It opens the same full-screen scanner in
+     return-to-editor mode (see scanForEditor in the script). */
+  .barcode-scan{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+    min-height:52px;margin-top:10px;background:var(--plum);color:#fff;border:1.5px solid var(--plum);
+    border-radius:10px;padding:10px 14px;font:inherit;font-size:15.5px;font-weight:800;cursor:pointer}
+  .barcode-scan svg{width:24px;height:24px;flex:none}
+  .barcode-scan:hover,.barcode-scan:focus-visible{background:var(--plum2);border-color:var(--plum2);
+    outline:2px solid var(--plum);outline-offset:2px}
   @media (max-width:520px){
     .barcode-row{flex-wrap:wrap}
     .barcode-row input{flex:1 1 100%}
@@ -4284,7 +4297,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.2</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.1</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5192,18 +5205,6 @@
       <button type="button" class="editor-x" id="editorClose" aria-label="Close editor">×</button>
     </div>
     <form id="editorForm">
-      <section class="barcode-field" aria-labelledby="f-barcode-label">
-        <div class="barcode-head">
-          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5H7a2 2 0 0 0-2 2v7"/><path d="M34 5h7a2 2 0 0 1 2 2v7"/><path d="M14 43H7a2 2 0 0 1-2-2v-7"/><path d="M34 43h7a2 2 0 0 0 2-2v-7"/><g fill="currentColor" stroke="none"><rect x="12.5" y="11" width="2.8" height="10"/><rect x="17.6" y="11" width="1.9" height="10"/><rect x="21.6" y="11" width="3.6" height="10"/><rect x="27.2" y="11" width="2.1" height="10"/><rect x="31.4" y="11" width="3.2" height="10"/><rect x="36.6" y="11" width="2.2" height="10"/><rect x="12.5" y="27" width="2.8" height="10"/><rect x="17.6" y="27" width="1.9" height="10"/><rect x="21.6" y="27" width="3.6" height="10"/><rect x="27.2" y="27" width="2.1" height="10"/><rect x="31.4" y="27" width="3.2" height="10"/><rect x="36.6" y="27" width="2.2" height="10"/></g><path d="M7 24h34" stroke-width="3"/></svg>
-          <label id="f-barcode-label" for="f-barcode">Barcode — scanning it opens this product</label>
-        </div>
-        <p class="barcode-current" id="f-barcode-status" role="status"></p>
-        <div class="barcode-row">
-          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="Barcode number, e.g. 624644001072" aria-describedby="f-barcode-status" />
-          <button type="button" class="barcode-clear" id="f-barcode-clear">Clear barcode</button>
-        </div>
-        <p class="barcode-help">Type or paste a new barcode to replace the registered one, or use Clear barcode to remove the link. Saving updates the shared list for everyone: the new barcode will open this product, and the old one will no longer open it.</p>
-      </section>
       <div class="editor-grid">
         <div class="efield">
           <label for="f-brand">Brand</label>
@@ -5298,6 +5299,22 @@
           <textarea id="f-notes" rows="4" placeholder="Notes of… Pairs well with…"></textarea>
         </div>
       </div>
+      <section class="barcode-field" aria-labelledby="f-barcode-label">
+        <div class="barcode-head">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5H7a2 2 0 0 0-2 2v7"/><path d="M34 5h7a2 2 0 0 1 2 2v7"/><path d="M14 43H7a2 2 0 0 1-2-2v-7"/><path d="M34 43h7a2 2 0 0 0 2-2v-7"/><g fill="currentColor" stroke="none"><rect x="12.5" y="11" width="2.8" height="10"/><rect x="17.6" y="11" width="1.9" height="10"/><rect x="21.6" y="11" width="3.6" height="10"/><rect x="27.2" y="11" width="2.1" height="10"/><rect x="31.4" y="11" width="3.2" height="10"/><rect x="36.6" y="11" width="2.2" height="10"/><rect x="12.5" y="27" width="2.8" height="10"/><rect x="17.6" y="27" width="1.9" height="10"/><rect x="21.6" y="27" width="3.6" height="10"/><rect x="27.2" y="27" width="2.1" height="10"/><rect x="31.4" y="27" width="3.2" height="10"/><rect x="36.6" y="27" width="2.2" height="10"/></g><path d="M7 24h34" stroke-width="3"/></svg>
+          <label id="f-barcode-label" for="f-barcode">Barcode — scanning it opens this product</label>
+        </div>
+        <p class="barcode-current" id="f-barcode-status" role="status"></p>
+        <div class="barcode-row">
+          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="Barcode number, e.g. 624644001072" aria-describedby="f-barcode-status" />
+          <button type="button" class="barcode-clear" id="f-barcode-clear">Clear barcode</button>
+        </div>
+        <button type="button" class="barcode-scan" id="f-barcode-scan">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5H7a2 2 0 0 0-2 2v7"/><path d="M34 5h7a2 2 0 0 1 2 2v7"/><path d="M14 43H7a2 2 0 0 1-2-2v-7"/><path d="M34 43h7a2 2 0 0 0 2-2v-7"/><g fill="currentColor" stroke="none"><rect x="12.5" y="11" width="2.8" height="10"/><rect x="17.6" y="11" width="1.9" height="10"/><rect x="21.6" y="11" width="3.6" height="10"/><rect x="27.2" y="11" width="2.1" height="10"/><rect x="31.4" y="11" width="3.2" height="10"/><rect x="36.6" y="11" width="2.2" height="10"/><rect x="12.5" y="27" width="2.8" height="10"/><rect x="17.6" y="27" width="1.9" height="10"/><rect x="21.6" y="27" width="3.6" height="10"/><rect x="27.2" y="27" width="2.1" height="10"/><rect x="31.4" y="27" width="3.2" height="10"/><rect x="36.6" y="27" width="2.2" height="10"/></g><path d="M7 24h34" stroke-width="3"/></svg>
+          Scan barcode with camera
+        </button>
+        <p class="barcode-help">Tap “Scan barcode with camera” to scan a barcode straight into the field instead of typing it, type or paste a new barcode to replace the registered one, or use Clear barcode to remove the link. Scanning fills the field and brings you back here — tap Save to register it. Saving updates the shared list for everyone: the new barcode will open this product, and the old one will no longer open it.</p>
+      </section>
       <p class="editor-note" id="editorNote">Price, tasting notes and product info are global — shared by every store. Availability is the exception: it is per store, so the Availability setting here only changes this product for the store you're viewing.</p>
       <div class="editor-actions">
         <button type="button" class="btn-ghost" id="editorCancel">Cancel</button>
@@ -6607,16 +6624,27 @@
     editingRow = null;
   }
   /* ---------- Barcode field in the editor ----------
-     The barcode section sits at the top of the editor (see the
-     markup): a status line states in plain words what is
-     registered now and what saving the field as it stands will
-     do — register a new barcode, replace the old one, or remove
-     the link — and the Clear barcode button empties the field so
-     removing a link is one tap, not fiddly selecting. The status
-     follows the field as the user types. editorBarcodeOriginal
-     holds the registered barcode the editor opened with; the
-     submit handler compares against it to decide whether the
-     shared list's barcode must be rewritten. */
+     The barcode section sits at the BOTTOM of the editor form,
+     after all the other product fields (see the markup): a status
+     line states in plain words what is registered now and what
+     saving the field as it stands will do — register a new
+     barcode, replace the old one, or remove the link — and the
+     Clear barcode button empties the field so removing a link is
+     one tap, not fiddly selecting. The status follows the field
+     as the user types. editorBarcodeOriginal holds the registered
+     barcode the editor opened with; the submit handler compares
+     against it to decide whether the shared list's barcode must
+     be rewritten.
+     The section's "Scan barcode with camera" button opens the
+     same full-screen scanner in return-to-editor mode
+     (scanForEditor, in the scanner section): the editor stays
+     open underneath the scanner, and a successful scan — camera
+     or the scanner's typed fallback — fills this Barcode field,
+     refreshes the status line via updateBarcodeStatus(), and
+     returns to the editor so the user can Save. Nothing is
+     saved to the shared list by scanning alone; only Save does
+     that, exactly as with a typed barcode. Cancelling the
+     scanner just returns to the editor with the field untouched. */
   var editorBarcodeOriginal = '';
   var barcodeInput = document.getElementById('f-barcode');
   var barcodeStatus = document.getElementById('f-barcode-status');
@@ -6663,6 +6691,18 @@
     updateBarcodeStatus();
     barcodeInput.focus();
   });
+  /* Scan a barcode into the field with the camera instead of
+     typing it: opens the scanner in return-to-editor mode. The
+     editor is NOT closed — the scanner overlays it, and
+     handleScannedCode (scanner section) fills the field and
+     returns here on a successful scan. openScanner and
+     scanForEditor are declared later in the scanner section;
+     both resolve by the time this can be clicked. */
+  var barcodeScanBtn = document.getElementById('f-barcode-scan');
+  if(barcodeScanBtn) barcodeScanBtn.addEventListener('click', function(){
+    scanForEditor = true;
+    openScanner();
+  });
   /* Sale price field only shows while On sale is Yes */
   document.getElementById('f-sale').addEventListener('change', function(){
     var on = this.value === 'Yes';
@@ -6673,7 +6713,13 @@
   document.getElementById('editorCancel').addEventListener('click', closeEditor);
   editorOverlay.addEventListener('click', function(ev){ if(ev.target === editorOverlay) closeEditor(); });
   document.addEventListener('keydown', function(ev){
-    if(ev.key === 'Escape' && !editorOverlay.hidden) closeEditor();
+    /* While the scanner is open over the editor (opened from the
+       Barcode section's Scan button), Escape belongs to the
+       scanner alone — it must close the scanner and return to
+       the editor, not close the editor underneath as well.
+       scannerOverlay is declared in the scanner section and is
+       set by the time a key can be pressed. */
+    if(ev.key === 'Escape' && !editorOverlay.hidden && (typeof scannerOverlay === 'undefined' || !scannerOverlay || scannerOverlay.hidden)) closeEditor();
   });
   editorForm.addEventListener('submit', function(ev){
     ev.preventDefault();
@@ -8058,6 +8104,13 @@
      product" opens the Add product editor with the barcode
      already filled in. Cancel in either view returns to the list
      without saving anything.
+     The scanner has a second caller: the "Scan barcode with
+     camera" button in the product editor's Barcode section
+     (at the bottom of the editor form). It opens this same
+     scanner with scanForEditor set; a successful scan then
+     fills the editor's Barcode field and returns to the editor
+     instead of jumping to a product (see handleScannedCode),
+     and Cancel simply returns to the editor.
      Barcodes live on the row as data-barcode and are matched after
      normalising: digits only, and a 13-digit EAN with a leading 0
      is the same code as its 12-digit UPC form, so a scanner that
@@ -8129,6 +8182,16 @@
      covers every possible tilt in 15-degree steps. */
   var SCAN_ROTATION_ANGLES = [90, 270, 180, 45, -45, 30, -30, 60, -60, 15, -15, 75, -75];
   var pendingBarcode = '', scanLinkRow = null;
+  /* Return-to-editor mode: set by the product editor's "Scan
+     barcode with camera" button before it opens the scanner.
+     While it is set, a successful scan does NOT jump to a
+     product or open the "Barcode not on file" prompt — it fills
+     the editor's Barcode field, refreshes that field's status
+     line, and returns to the still-open editor so the user can
+     Save. Cleared the moment a scan is handled, and by
+     closeScanner() so cancelling out of the scanner can never
+     leave the next ordinary scan in this mode. */
+  var scanForEditor = false;
   /* The shared list's barcode links, indexed by normalised code:
      normalised barcode -> Supabase product_id. Rebuilt from every
      shared-list fetch (sbApplyRemote) and updated the moment a
@@ -8288,6 +8351,28 @@
     var code = normalizeBarcode(raw);
     if(!code || scanHandled) return;
     scanHandled = true;
+    if(scanForEditor){
+      /* Opened from the product editor's Barcode section: the
+         scanned code goes into the editor's Barcode field —
+         whichever product (if any) it currently belongs to is
+         irrelevant here, because the user is registering it to
+         the product being edited and Save performs the usual
+         move-off-the-old-product handling. The editor stayed
+         open underneath, so closing the scanner returns
+         straight to it; the status line is refreshed to say
+         what saving this barcode will do, and the field is
+         focused (which also scrolls the Barcode section, now
+         at the bottom of the form, into view). */
+      scanForEditor = false;
+      closeScanner();
+      if(barcodeInput){
+        barcodeInput.value = code;
+        updateBarcodeStatus();
+        try{ barcodeInput.focus({ preventScroll:false }); }catch(e){ try{ barcodeInput.focus(); }catch(e2){} }
+      }
+      syncToast('Barcode ' + code + ' scanned into the editor — tap Save to register it to this product.', false);
+      return;
+    }
     var row = findRowByBarcode(code);
     closeScanner();
     if(row){ jumpToProduct(row); }
@@ -8311,6 +8396,14 @@
     if(scannerOverlay.hidden) return;
     stopScannerCamera();
     scannerOverlay.hidden = true;
+    /* Any close — Cancel, Escape, or a handled scan — ends
+       return-to-editor mode, so a later ordinary scan from the
+       main Scan button can never fill the editor by accident.
+       handleScannedCode reads the flag into its own handling
+       before calling here, so clearing it here is safe. When
+       the editor is still open underneath (the return-to-editor
+       case), the body scroll lock below correctly stays on. */
+    scanForEditor = false;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && scanLinkOverlay.hidden) document.body.style.overflow = '';
   }
   /* Snapshot the current camera frame once, so every rotation
