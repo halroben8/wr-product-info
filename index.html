@@ -766,6 +766,40 @@
     background:var(--panel);color:var(--ink);width:100%;resize:vertical}
   .efield textarea:focus{outline:2px solid var(--plum2);outline-offset:1px;border-color:var(--plum2)}
   .combo-new{margin-top:6px}
+  /* Barcode in the product editor — a prominent full-width section
+     at the TOP of the editor, never just another small grid field:
+     a thick plum border and tinted panel set it apart, the heading
+     says what the barcode does, a status line shows the barcode
+     currently registered to this product (or that none is), the
+     input is large monospace, and a Clear barcode button removes
+     the link. Saving writes the change to the shared list (see
+     sbSyncBarcode): the new barcode opens this product and the old
+     one no longer does. */
+  .barcode-field{border:2px solid var(--plum2);background:var(--violet-soft);border-radius:14px;
+    padding:13px 14px 12px;margin:0 0 14px}
+  .barcode-head{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+  .barcode-head svg{width:26px;height:26px;flex:none;color:var(--plum)}
+  :root[data-theme="dark"] .barcode-head svg{color:var(--lilac)}
+  .barcode-head label{font-size:15px;font-weight:800;color:var(--plum);text-transform:none;letter-spacing:.01em;line-height:1.3}
+  :root[data-theme="dark"] .barcode-head label{color:var(--lilac)}
+  .barcode-current{margin:0 0 10px;font-size:14.5px;font-weight:600;line-height:1.5;color:var(--ink)}
+  .barcode-current .bc-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-weight:800;font-size:16px;letter-spacing:.04em;color:var(--plum);white-space:nowrap}
+  :root[data-theme="dark"] .barcode-current .bc-code{color:var(--lilac)}
+  .barcode-row{display:flex;gap:8px;align-items:stretch}
+  .barcode-row input{flex:1;min-width:0;min-height:52px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:18px;font-weight:700;letter-spacing:.05em;background:var(--panel)}
+  .barcode-clear{flex:none;min-height:52px;background:var(--panel);color:#b91c1c;border:1.5px solid #b91c1c;
+    border-radius:10px;padding:9px 14px;font:inherit;font-size:14.5px;font-weight:700;cursor:pointer}
+  .barcode-clear:hover,.barcode-clear:focus-visible{background:#fef2f2;outline:2px solid #b91c1c;outline-offset:1px}
+  :root[data-theme="dark"] .barcode-clear{color:#fca5a5;border-color:#fca5a5;background:var(--panel)}
+  :root[data-theme="dark"] .barcode-clear:hover, :root[data-theme="dark"] .barcode-clear:focus-visible{background:#3d0f1a}
+  .barcode-help{margin:9px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+  @media (max-width:520px){
+    .barcode-row{flex-wrap:wrap}
+    .barcode-row input{flex:1 1 100%}
+    .barcode-clear{flex:1 1 100%}
+  }
   .editor-note{color:var(--muted);font-size:13px;margin:14px 0 0}
   .editor-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
   .btn-save{background:var(--plum);color:#fff;border:1.5px solid var(--plum);border-radius:999px;
@@ -4250,7 +4284,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.1</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.2</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5158,6 +5192,18 @@
       <button type="button" class="editor-x" id="editorClose" aria-label="Close editor">×</button>
     </div>
     <form id="editorForm">
+      <section class="barcode-field" aria-labelledby="f-barcode-label">
+        <div class="barcode-head">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5H7a2 2 0 0 0-2 2v7"/><path d="M34 5h7a2 2 0 0 1 2 2v7"/><path d="M14 43H7a2 2 0 0 1-2-2v-7"/><path d="M34 43h7a2 2 0 0 0 2-2v-7"/><g fill="currentColor" stroke="none"><rect x="12.5" y="11" width="2.8" height="10"/><rect x="17.6" y="11" width="1.9" height="10"/><rect x="21.6" y="11" width="3.6" height="10"/><rect x="27.2" y="11" width="2.1" height="10"/><rect x="31.4" y="11" width="3.2" height="10"/><rect x="36.6" y="11" width="2.2" height="10"/><rect x="12.5" y="27" width="2.8" height="10"/><rect x="17.6" y="27" width="1.9" height="10"/><rect x="21.6" y="27" width="3.6" height="10"/><rect x="27.2" y="27" width="2.1" height="10"/><rect x="31.4" y="27" width="3.2" height="10"/><rect x="36.6" y="27" width="2.2" height="10"/></g><path d="M7 24h34" stroke-width="3"/></svg>
+          <label id="f-barcode-label" for="f-barcode">Barcode — scanning it opens this product</label>
+        </div>
+        <p class="barcode-current" id="f-barcode-status" role="status"></p>
+        <div class="barcode-row">
+          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="Barcode number, e.g. 624644001072" aria-describedby="f-barcode-status" />
+          <button type="button" class="barcode-clear" id="f-barcode-clear">Clear barcode</button>
+        </div>
+        <p class="barcode-help">Type or paste a new barcode to replace the registered one, or use Clear barcode to remove the link. Saving updates the shared list for everyone: the new barcode will open this product, and the old one will no longer open it.</p>
+      </section>
       <div class="editor-grid">
         <div class="efield">
           <label for="f-brand">Brand</label>
@@ -5176,10 +5222,6 @@
         <div class="efield">
           <label for="f-price">Price ($)</label>
           <input id="f-price" type="number" min="0" step="0.01" placeholder="Leave blank if not known" />
-        </div>
-        <div class="efield">
-          <label for="f-barcode">Barcode (UPC)</label>
-          <input id="f-barcode" type="text" inputmode="numeric" autocomplete="off" placeholder="e.g. 624644001072 — scanning it opens this product" />
         </div>
         <div class="efield">
           <label for="f-sale">On sale</label>
@@ -5430,6 +5472,26 @@
   function saleOnlyOn(){ return !!saleToggle && saleToggle.getAttribute('aria-pressed') === 'true'; }
   var state = { sort:'product', dir:1 };
 
+  /* Accent-insensitive search folding: lowercases the text and
+     strips diacritics/accents, so "rose" matches "Rosé" and
+     "rosé" matches "Rose" — é folds to e, and every other accented
+     letter to its plain equivalent. NFD decomposition separates a
+     letter from its combining marks, which are then removed; the
+     few letters that do not decompose (ø, æ, œ, ß, đ, ł) are
+     mapped by hand. EVERY search in this app — the main product
+     search, the barcode-link product picker and the Set store
+     products filter — folds BOTH the typed query and the product
+     text through this one helper before matching, so they all
+     behave the same way. */
+  function foldAccents(s){
+    return String(s == null ? '' : s)
+      .toLowerCase()
+      .replace(/ø/g, 'o').replace(/æ/g, 'ae').replace(/œ/g, 'oe')
+      .replace(/ß/g, 'ss').replace(/đ/g, 'd').replace(/ł/g, 'l')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
   /* ---------- Per-store availability ----------
      Unlike price, notes and product info (which are global — one
      shared catalogue), AVAILABILITY IS PER STORE. storeUnavailable
@@ -5572,22 +5634,47 @@
       span.textContent = (th.getAttribute('data-sort') === key) ? (dir === 1 ? '▲' : '▼') : '';
     });
   }
+  /* Scanned-product single-item filter: after a successful scan,
+     the list is filtered down to ONLY the scanned product — exactly
+     as if it had been searched for. jumpToProduct (in the scanner
+     section below) records the scanned row here and puts that
+     product's brand + name + size into the Search box; while the
+     Search box still holds that exact text, apply() shows that one
+     row and nothing else. This is tied to the row, not just to the
+     search text, because a plain text search is not guaranteed to
+     be a single result: two sizes of the same wine share a name,
+     and a barcode found through the shared list may not be in this
+     row's search text yet. Clearing the Search box (deleting the
+     text or tapping its clear ×), typing a different search, or
+     pressing Reset filters all change the Search box text, so
+     apply() drops the scan filter and normal searching / the full
+     list resumes — exactly how clearing a normal search works. */
+  var scanOnlyIdx = null;
+  var scanOnlyQuery = '';
   function apply(){
-    var query = q.value.trim().toLowerCase();
+    var query = foldAccents(q.value.trim());
+    if(scanOnlyIdx !== null && query !== scanOnlyQuery){
+      scanOnlyIdx = null;
+      scanOnlyQuery = '';
+    }
     var b = brand.value, r = rich.value, s = sweet.value, t = tannins.value;
     var mp = parseFloat(maxprice.value);
     var shown = 0;
     rows.forEach(function(row){
       var ok = true;
-      if(query && row.getAttribute('data-search').indexOf(query) === -1) ok = false;
-      if(b && row.getAttribute('data-brand') !== b) ok = false;
-      if(r && row.getAttribute('data-rich') !== r) ok = false;
-      if(s && row.getAttribute('data-sweet').indexOf(s) !== 0) ok = false;
-      if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
-      if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
-      if(!isNaN(mp)){
-        var p = effectivePrice(row);
-        if(p === null || p > mp) ok = false;
+      if(scanOnlyIdx !== null){
+        if(row.getAttribute('data-idx') !== scanOnlyIdx) ok = false;
+      } else {
+        if(query && foldAccents(row.getAttribute('data-search')).indexOf(query) === -1) ok = false;
+        if(b && row.getAttribute('data-brand') !== b) ok = false;
+        if(r && row.getAttribute('data-rich') !== r) ok = false;
+        if(s && row.getAttribute('data-sweet').indexOf(s) !== 0) ok = false;
+        if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
+        if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
+        if(!isNaN(mp)){
+          var p = effectivePrice(row);
+          if(p === null || p > mp) ok = false;
+        }
       }
       if(!storeSets[activeStore].has(row.getAttribute('data-idx'))) ok = false;
       row.style.display = ok ? '' : 'none';
@@ -5698,6 +5785,7 @@
     });
   }
   document.getElementById('reset').addEventListener('click', function(){
+    scanOnlyIdx = null; scanOnlyQuery = '';
     q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     state.sort='product'; state.dir=1; sortsel.value='product';
@@ -6284,6 +6372,27 @@
     hint.appendChild(chev);
     pcell.appendChild(hint);
   }
+  /* The expanded detail's "Product ID … · Barcode …" line always
+     shows the barcode the row currently carries, so the registered
+     barcode can be seen there too and an edit never leaves a stale
+     number behind. The Product ID part is preserved (from the
+     shared-list mapping when known, else the line already shown). */
+  function syncDetailBarcode(row){
+    var d = details[row.getAttribute('data-idx')];
+    if(!d) return;
+    var src = d.querySelector('.src');
+    if(!src) return;
+    var pid = '';
+    if(typeof rowPid !== 'undefined' && rowPid) pid = rowPid[row.getAttribute('data-idx')] || '';
+    if(!pid) pid = row.getAttribute('data-pid') || '';
+    if(!pid){
+      var m = src.textContent.match(/Product ID\s+(\S+)/);
+      if(m) pid = m[1];
+    }
+    if(!pid) return;
+    var bc = normalizeBarcode(row.getAttribute('data-barcode') || '');
+    src.textContent = 'Product ID ' + pid + (bc ? ' · Barcode ' + bc : '');
+  }
   function writeRow(row, data){
     /* Brand consolidation, placeholder cleaning and promo-note
        stripping — enforced here, the one place every row (built-in,
@@ -6396,6 +6505,7 @@
       var dh = d.querySelector('.dh-name');
       if(dh) dh.textContent = detailLabel(row);
     }
+    syncDetailBarcode(row);
   }
   var nextIdx = 0;
   rows.forEach(function(r){
@@ -6472,7 +6582,15 @@
     document.getElementById('f-saleprice').value = cur.salePrice;
     document.getElementById('f-saleprice-field').hidden = !cur.sale;
     document.getElementById('f-rs').value = cur.rs;
-    document.getElementById('f-barcode').value = cur.barcode || '';
+    /* Barcode: the field shows the barcode REGISTERED to this
+       product — the shared list's link where there is one — not
+       just whatever this screen's row happens to carry, and that
+       registered value is remembered as the original so saving
+       can tell a barcode the user actually changed (or cleared)
+       from one they never touched */
+    editorBarcodeOriginal = row ? registeredBarcodeFor(row) : '';
+    document.getElementById('f-barcode').value = editorBarcodeOriginal;
+    updateBarcodeStatus();
     document.getElementById('f-cooler').value = cur.cooler;
     document.getElementById('f-vqa').value = cur.vqa ? 'Yes' : 'No';
     document.getElementById('f-status').value = cur.status;
@@ -6488,6 +6606,63 @@
     document.body.style.overflow = '';
     editingRow = null;
   }
+  /* ---------- Barcode field in the editor ----------
+     The barcode section sits at the top of the editor (see the
+     markup): a status line states in plain words what is
+     registered now and what saving the field as it stands will
+     do — register a new barcode, replace the old one, or remove
+     the link — and the Clear barcode button empties the field so
+     removing a link is one tap, not fiddly selecting. The status
+     follows the field as the user types. editorBarcodeOriginal
+     holds the registered barcode the editor opened with; the
+     submit handler compares against it to decide whether the
+     shared list's barcode must be rewritten. */
+  var editorBarcodeOriginal = '';
+  var barcodeInput = document.getElementById('f-barcode');
+  var barcodeStatus = document.getElementById('f-barcode-status');
+  function setBarcodeStatus(lead, code, tail){
+    if(!barcodeStatus) return;
+    barcodeStatus.textContent = '';
+    barcodeStatus.appendChild(document.createTextNode(lead));
+    if(code){
+      var s = document.createElement('span');
+      s.className = 'bc-code';
+      s.textContent = code;
+      barcodeStatus.appendChild(s);
+    }
+    if(tail) barcodeStatus.appendChild(document.createTextNode(tail));
+  }
+  function updateBarcodeStatus(){
+    var v = normalizeBarcode(barcodeInput ? barcodeInput.value : '');
+    var orig = editorBarcodeOriginal || '';
+    if(!editingRow && !orig && !v){
+      setBarcodeStatus('No barcode yet — type or paste one here and it will be registered to this product when you save.', '', '');
+    } else if(!v && !orig){
+      setBarcodeStatus('No barcode registered for this product yet. Type or paste one and Save to link it — scanning it will then open this product.', '', '');
+    } else if(!v && orig){
+      setBarcodeStatus('Currently registered: ', orig, ' — the field is empty, so Saving will REMOVE this link: that barcode will no longer open this product.');
+    } else if(v && orig && v === orig){
+      setBarcodeStatus('Currently registered: ', v, ' — scanning this barcode opens this product. Leave it as is, type a different one to replace it, or Clear barcode to remove the link.');
+    } else if(v && orig){
+      setBarcodeStatus('Saving will replace ', orig, '');
+      var s = document.createElement('span');
+      s.className = 'bc-code';
+      s.textContent = v;
+      barcodeStatus.appendChild(document.createTextNode(' with '));
+      barcodeStatus.appendChild(s);
+      barcodeStatus.appendChild(document.createTextNode(' — the new barcode will open this product, and the old one will no longer open it.'));
+    } else {
+      setBarcodeStatus('Saving will register ', v, ' for this product — scanning it will open this product.');
+    }
+  }
+  if(barcodeInput) barcodeInput.addEventListener('input', updateBarcodeStatus);
+  var barcodeClearBtn = document.getElementById('f-barcode-clear');
+  if(barcodeClearBtn) barcodeClearBtn.addEventListener('click', function(){
+    if(!barcodeInput) return;
+    barcodeInput.value = '';
+    updateBarcodeStatus();
+    barcodeInput.focus();
+  });
   /* Sale price field only shows while On sale is Yes */
   document.getElementById('f-sale').addEventListener('change', function(){
     var on = this.value === 'Yes';
@@ -6512,7 +6687,10 @@
     data.sale = document.getElementById('f-sale').value === 'Yes';
     data.salePrice = document.getElementById('f-saleprice').value.trim();
     data.rs = document.getElementById('f-rs').value.trim();
-    data.barcode = document.getElementById('f-barcode').value.replace(/\D/g, '');
+    /* Normalised exactly the way a scan is, so a barcode typed
+       here (spaces, or an EAN-13 leading zero) matches the same
+       product when it is scanned later */
+    data.barcode = normalizeBarcode(document.getElementById('f-barcode').value);
     data.cooler = document.getElementById('f-cooler').value;
     data.vqa = document.getElementById('f-vqa').value === 'Yes';
     data.status = document.getElementById('f-status').value;
@@ -6534,10 +6712,26 @@
       return;
     }
     var isNew = !editingRow;
-    /* The barcode this product held before this edit, so the
-       explicit barcode save below can tell a barcode the user
-       actually changed in the editor from one they never touched */
-    var prevBarcode = editingRow ? normalizeBarcode(readRow(editingRow).barcode || '') : '';
+    /* The barcode REGISTERED to this product before this edit
+       (captured when the editor opened — the shared list's link
+       where there is one), so the explicit barcode save below can
+       tell a barcode the user actually changed or cleared in the
+       editor from one they never touched */
+    var prevBarcode = editingRow ? (editorBarcodeOriginal || '') : '';
+    /* One barcode points to one product: if the barcode being
+       saved here is currently registered to a DIFFERENT product,
+       it is moved — cleared from that product on this screen and
+       in the shared list — so the next scan of it goes to this
+       product only, exactly as the scanner's Link barcode does */
+    if(data.barcode && data.barcode !== prevBarcode){
+      var prevOwner = findRowByBarcode(data.barcode);
+      if(prevOwner && prevOwner !== editingRow){
+        var pd = readRow(prevOwner); pd.barcode = '';
+        writeRow(prevOwner, pd);
+        syncPlanoSearch(prevOwner); syncCoolerSearch(prevOwner); syncSaleSearch(prevOwner);
+        sbSyncBarcode(prevOwner, true);
+      }
+    }
     var target;
     if(editingRow){ writeRow(editingRow, data); target = editingRow; }
     else {
@@ -7690,9 +7884,9 @@
     dlgCount();
   }
   function filterStoreList(){
-    var qv = storeQ.value.trim().toLowerCase();
+    var qv = foldAccents(storeQ.value.trim());
     dlgItems.forEach(function(item){
-      item.style.display = (!qv || item.textContent.toLowerCase().indexOf(qv) !== -1) ? '' : 'none';
+      item.style.display = (!qv || foldAccents(item.textContent).indexOf(qv) !== -1) ? '' : 'none';
     });
   }
   storeQ.addEventListener('input', filterStoreList);
@@ -7848,8 +8042,15 @@
   /* ---------- Barcode scanner ----------
      The Scan button under the settings gear opens a full-screen
      camera view. A recognised barcode jumps straight to its
-     product: the filters are cleared, the product's notes open,
+     product AND filters the list down to just that one product,
+     exactly as if it had been searched for: the other filters are
+     cleared, the product's brand + name + size goes into the
+     Search box as a single-item scan filter (see scanOnlyIdx in
+     apply(), above), the product's notes open fully expanded,
      it scrolls into view outlined in pink, and a toast names it.
+     Clearing the Search box, typing a different search, or
+     pressing Reset filters clears the scan filter and brings
+     the full list back, just like clearing a normal search.
      An unrecognised barcode opens the "Barcode not on file"
      prompt: pick the product, tap "Link barcode", and the link is
      saved to the shared list (sbSyncBarcode) so the next scan —
@@ -7959,44 +8160,100 @@
     }
     return null;
   }
+  /* The barcode REGISTERED to a product: the shared list's link
+     for this product wins (it is what every phone scans against),
+     and only where the shared list holds no link for the product
+     does the barcode the row itself carries count (a baked-in link
+     the shared list does not know about yet). The product editor
+     shows and edits THIS value, so what the editor displays is
+     the link a scan will actually follow. */
+  function registeredBarcodeFor(row){
+    if(!row) return '';
+    var pid = '';
+    if(typeof rowPid !== 'undefined' && rowPid) pid = rowPid[row.getAttribute('data-idx')] || '';
+    if(!pid) pid = row.getAttribute('data-pid') || detailSrcPid(row);
+    if(pid){
+      for(var code in sharedBarcodes){
+        if(sharedBarcodes[code] === pid) return code;
+      }
+    }
+    return normalizeBarcode(row.getAttribute('data-barcode') || '');
+  }
   function setScanStatus(msg){ if(scannerStatus) scannerStatus.textContent = msg || ''; }
 
+  /* The text a scan puts in the Search box: brand + product name
+     + size, in plain words — e.g. "Konzelmann Chardonnay 750mL" —
+     so the single-item result reads like a search the user typed
+     themselves and can be cleared the same way. */
+  function scanSearchText(row){
+    var parts = [];
+    var b = row.querySelector('.brand'), n = row.querySelector('.pname');
+    var s = row.querySelector('td[data-label="Size"]');
+    if(b && b.textContent.trim()) parts.push(b.textContent.trim());
+    if(n && n.textContent.trim()) parts.push(n.textContent.trim());
+    if(s && s.textContent.trim() && s.textContent.trim() !== '—') parts.push(s.textContent.trim());
+    return parts.join(' ') || detailLabel(row);
+  }
+
   function jumpToProduct(row){
-    /* A scanned product opens completely expanded — the same full
-       view as searching for a product and tapping it open: filter
-       pass first, then the shared expandProduct() (detail row with
-       the tasting notes and Product ID visible, aria-expanded
-       true, chevron turned), the pink scan outline, and a scroll
-       that brings the whole expanded view in from its top.
-       The order matters: the filters are cleared and apply() runs
-       BEFORE expanding, because apply() collapses the detail row
-       of anything it hides — expanding afterwards means nothing in
-       that pass can fold the product back up. The scroll is
+    /* A scanned product is the ONLY item shown, fully expanded —
+       exactly as if it had been searched for and then tapped
+       open: the single-item scan filter is set and apply() runs
+       FIRST (hiding every other product, and collapsing their
+       detail rows), then the shared expandProduct() opens this
+       product (detail row with the tasting notes and Product ID
+       visible, aria-expanded true, chevron turned), with the
+       pink scan outline, and a scroll that brings the whole
+       expanded view in from its top.
+       The order matters: apply() runs BEFORE expanding, because
+       apply() collapses the detail row of anything it hides —
+       expanding afterwards means nothing in that pass can fold
+       the product back up. The scroll is
        deferred until the scanner overlay has closed and layout
        has settled (camera teardown and the body scroll lock being
        released can shift the page after a synchronous scroll,
        stranding a compact-looking card on screen), and the
-       deferred pass re-asserts the expansion before scrolling,
-       so the product cannot be left collapsed or off-screen. */
-    q.value = ''; brand.value = ''; rich.value = ''; sweet.value = '';
+       deferred pass re-asserts both the scan filter and the
+       expansion before scrolling, so the product cannot be left
+       collapsed, hidden among the full list, or off-screen. */
+    brand.value = ''; rich.value = ''; sweet.value = '';
     tannins.value = ''; maxprice.value = '';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     var inStore = !!(storeSets[activeStore] && storeSets[activeStore].has(row.getAttribute('data-idx')));
-    apply();
     if(!inStore){
+      /* Not carried by this store: there is no single-item result
+         to show here, so leave no scan filter behind — clear the
+         Search box and show this store's full list as before */
+      scanOnlyIdx = null; scanOnlyQuery = '';
+      q.value = '';
+      apply();
       syncToast(detailLabel(row) + ' — found, but Store ' + activeStore + ' does not carry it, so it is not in this store\u2019s list.', true);
       return;
     }
+    scanOnlyIdx = row.getAttribute('data-idx');
+    q.value = scanSearchText(row);
+    scanOnlyQuery = foldAccents(q.value.trim());
+    apply();
     expandProduct(row);
     rows.forEach(function(r){ r.classList.remove('scan-found'); });
     row.classList.add('scan-found');
     var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     function scrollExpandedIntoView(){
-      /* Re-assert the full expansion first: if anything (a
-         shared-list refresh landing between the scan and this
-         scroll, say) folded the detail row back up, the scanned
-         product still opens completely expanded, exactly as a
-         searched-and-tapped product does */
+      /* Re-assert the single-item scan filter and the full
+         expansion first: if anything (a shared-list refresh
+         landing between the scan and this scroll, say) folded
+         the detail row back up or unhid the rest of the list,
+         the scanned product still ends up as the only item
+         shown, completely expanded, exactly as a
+         searched-and-tapped product does. Only re-assert while
+         the Search box still holds the scan text — if the user
+         has already cleared or changed it, their search wins. */
+      if(foldAccents(q.value.trim()) === scanOnlyQuery){
+        if(scanOnlyIdx !== row.getAttribute('data-idx')){
+          scanOnlyIdx = row.getAttribute('data-idx');
+        }
+        if(row.style.display === 'none') apply();
+      }
       expandProduct(row);
       if(row.scrollIntoView) row.scrollIntoView({ block:'start', behavior: reduceMotion ? 'auto' : 'smooth' });
       try{ row.focus({ preventScroll:true }); }catch(e){}
@@ -8012,6 +8269,10 @@
        chrome resizing around the closed scanner, a late refresh
        re-sorting the list), bring it in directly */
     window.setTimeout(function(){
+      if(foldAccents(q.value.trim()) === scanOnlyQuery && row.style.display === 'none'){
+        scanOnlyIdx = row.getAttribute('data-idx');
+        apply();
+      }
       if(row.getAttribute('aria-expanded') !== 'true') expandProduct(row);
       var rect = row.getBoundingClientRect ? row.getBoundingClientRect() : null;
       var vh = window.innerHeight || 0;
@@ -8347,9 +8608,11 @@
   /* The search box above the list filters it as the user types:
      every word typed must appear in the product's brand, name or
      size (its detailLabel), so "konzelmann chardonnay" or just
-     "750ml" narrows the list without scrolling the whole thing */
+     "750ml" narrows the list without scrolling the whole thing.
+     Matching folds accents on both sides (foldAccents), like the
+     main search: "rose" finds a Rosé here too */
   function buildScanLinkList(){
-    var query = scanLinkSearch ? scanLinkSearch.value.trim().toLowerCase() : '';
+    var query = scanLinkSearch ? foldAccents(scanLinkSearch.value.trim()) : '';
     var tokens = query ? query.split(/\s+/) : [];
     scanLinkList.innerHTML = '';
     var shown = 0, total = 0;
@@ -8357,7 +8620,7 @@
       total++;
       var label = detailLabel(row);
       if(tokens.length){
-        var hay = label.toLowerCase();
+        var hay = foldAccents(label);
         for(var t = 0; t < tokens.length; t++){
           if(hay.indexOf(tokens[t]) === -1) return;
         }
@@ -8450,6 +8713,7 @@
     /* The scanned barcode rides into the new product's Barcode
        field, so saving the editor saves the link with it */
     document.getElementById('f-barcode').value = code;
+    updateBarcodeStatus();
   });
 
   /* ---------- Shared list — Supabase ----------
@@ -8576,7 +8840,7 @@
         src.className = 'src';
         detail.appendChild(src);
       }
-      if(src) src.textContent = 'Product ID ' + pid;
+      if(src) syncDetailBarcode(row);
     }
   }
   function genPid(){
@@ -8642,15 +8906,20 @@
     var code = normalizeBarcode(row.getAttribute('data-barcode') || '');
     /* Index the link on this screen the moment it is saved, so a
        just-saved link works on the very next scan without waiting
-       for a reload or the next shared-list refresh; a cleared
-       barcode drops this product's old index entries with it */
+       for a reload or the next shared-list refresh. EVERY old
+       index entry for this product is dropped first — including
+       when a new barcode replaces an old one — so the old barcode
+       stops opening this product straight away, not just after
+       the next refresh rebuilds the index */
+    for(var bk in sharedBarcodes){ if(sharedBarcodes[bk] === pid) delete sharedBarcodes[bk]; }
     if(code) sharedBarcodes[code] = pid;
-    else for(var bk in sharedBarcodes){ if(sharedBarcodes[bk] === pid) delete sharedBarcodes[bk]; }
     return sb('products?product_id=eq.' + encodeURIComponent(pid), {
       method: 'PATCH', prefer: 'return=minimal',
       body: { barcode: code || null }
     }).then(function(){
-      if(!quiet) sbSaved('Barcode saved to the shared list — every phone can scan it now.');
+      if(!quiet) sbSaved(code
+        ? 'Barcode saved to the shared list — every phone can scan it now.'
+        : 'Barcode removed from the shared list — scanning it no longer opens this product.');
     }, function(err){
       if(window.console) console.warn('Barcode not synced to the shared list:', err);
       if(!quiet) syncToast('Linked on this screen for now — the barcode couldn\u2019t be saved to the shared list, check your connection and link it again.', true);
