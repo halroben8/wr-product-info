@@ -106,7 +106,7 @@
   /* Barcode scanner — a full-screen camera view over everything.
      The live camera fills the screen, darkened at the edges, with a
      clear viewfinder box in the centre: four corner brackets and a
-     pink scan line sweeping across it. Cancel (top left) closes it
+     static black scan line across the middle of it. Cancel (top left) closes it
      and stops the camera. There is no manual rotation control:
      decoding is automatic at any angle — sideways, tilted,
      diagonal or upside down (see the scanner script). If the
@@ -136,10 +136,9 @@
   .scanner-frame i.tr{top:-3px;right:-3px;border-top-width:5px;border-right-width:5px;border-top-right-radius:8px}
   .scanner-frame i.bl{bottom:-3px;left:-3px;border-bottom-width:5px;border-left-width:5px;border-bottom-left-radius:8px}
   .scanner-frame i.br{bottom:-3px;right:-3px;border-bottom-width:5px;border-right-width:5px;border-bottom-right-radius:8px}
-  .scanner-line{position:absolute;left:5%;right:5%;top:12%;height:3px;border-radius:2px;
-    background:#f472b6;box-shadow:0 0 10px rgba(244,114,182,.9);
-    animation:scanSweep 1.7s ease-in-out infinite alternate}
-  @keyframes scanSweep{from{top:12%}to{top:86%}}
+  .scanner-line{position:absolute;left:5%;right:5%;top:50%;height:3px;border-radius:2px;
+    transform:translateY(-50%);
+    background:#000;box-shadow:0 0 10px rgba(0,0,0,.9)}
   .scanner-hint{margin:0;padding:14px 18px 0;text-align:center;font-size:16px;font-weight:650}
   .scanner-status{margin:0;padding:6px 18px 0;text-align:center;font-size:14px;color:#e9d5ff;min-height:20px}
   .scanner-manual{padding:14px 18px calc(16px + env(safe-area-inset-bottom))}
@@ -1152,7 +1151,7 @@
           <td data-label="Acidity">Medium to High</td>
         </tr>
         <tr class="drow" data-detail-for="4" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant and black cherry, a hint of spice, and a smooth finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving. [from 750mL tag, romance-tags-5.csv]</p><p class="src">Product ID 80096815</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant and black cherry, a hint of spice, and a smooth finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80096815</p></div></td>
         </tr>
         <tr class="prow" data-idx="5" data-brand="BASK" data-rich="Medium White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="12.99" data-rs="0.0" data-search="bask chardonnay chardonnay 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Chardonnay</span><span class="badge cooler">Cooler</span></td>
@@ -1180,7 +1179,7 @@
           <td data-label="Acidity">Medium-High</td>
         </tr>
         <tr class="drow" data-detail-for="6" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries [as printed] with a hint of citrus on the finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80085899</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries with a hint of citrus on the finish. Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80085899</p></div></td>
         </tr>
         <tr class="prow" data-idx="7" data-brand="BASK" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="37.99" data-rs="0.0" data-search="bask crisp rosé rosé (generic style) 3l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Crisp Rosé</span><span class="badge cooler">Cooler</span></td>
@@ -1194,7 +1193,7 @@
           <td data-label="Acidity">Medium-High</td>
         </tr>
         <tr class="drow" data-detail-for="7" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries [as printed] with a hint of citrus on the finish. Stays fresh for up to 6 weeks! Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090375</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of tart strawberries and rasberries with a hint of citrus on the finish. Stays fresh for up to 6 weeks! Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090375</p></div></td>
         </tr>
         <tr class="prow" data-idx="8" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="No" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask hard sparkling water black tea goji &amp; blackberry n/a 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">Hard Sparkling Water Black Tea Goji &amp; Blackberry</span></td>
@@ -1348,7 +1347,7 @@
           <td data-label="Acidity">High</td>
         </tr>
         <tr class="drow" data-detail-for="18" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of lemongrass, citrus and gooseberry and a delightful acidic finish. *Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving. [from 750mL tag, romance-tags-1.csv]</p><p class="src">Product ID 80090370</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of lemongrass, citrus and gooseberry and a delightful acidic finish. *Zero Sugar refers to 0g sugar per 3/4 cup (188mL) serving.</p><p class="src">Product ID 80090370</p></div></td>
         </tr>
         <tr class="prow" data-idx="19" data-brand="BASK" data-rich="" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="3.49" data-rs="0.0" data-search="bask white wine spritz wine spritz 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">BASK</span><span class="pname">White Wine Spritz</span><span class="badge cooler">Cooler</span></td>
@@ -2006,7 +2005,7 @@
           <td data-label="Acidity">Variable</td>
         </tr>
         <tr class="drow" data-detail-for="65" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of tropical fruit balanced well with the clementine flavours. [BUY 6 &amp; SAVE panel ignored]</p><p class="src">Product ID 80082375</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Apple cider with flavours of tropical fruit balanced well with the clementine flavours.</p><p class="src">Product ID 80082375</p></div></td>
         </tr>
         <tr class="prow" data-idx="66" data-brand="Henry of Pelham" data-rich="" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="19.99" data-rs="12.0" data-search="henry of pelham old vines baco noir vqa baco noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Henry of Pelham</span><span class="pname">Old Vines Baco Noir</span><span class="badge vqa">VQA</span></td>
@@ -2202,7 +2201,7 @@
           <td data-label="Acidity">Medium to High</td>
         </tr>
         <tr class="drow" data-detail-for="79" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant with hints of vanilla and spice. Less Alcohol: 8% ABV compared to Jackson-Triggs Proprietors&#x27; Selection Cabernet Sauvignon wine 12.5% ABV. [romance-tags-2.csv] | Notes of blackcurrant with hints of vanilla and spice. Less Alcohol: 8% ABV compared to Jackson-Triggs Proprietors&#x27; Selection Cabernet Sauvignon wine 12.5% ABV. [romance-tags-4.csv]</p><p class="src">Product ID 80083707</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of blackcurrant with hints of vanilla and spice. Less Alcohol: 8% ABV compared to Jackson-Triggs Proprietors&#x27; Selection Cabernet Sauvignon wine 12.5% ABV.</p><p class="src">Product ID 80083707</p></div></td>
         </tr>
         <tr class="prow" data-idx="80" data-brand="Jackson-Triggs" data-rich="Rich Red" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection cabernet sauvignon cabernet sauvignon 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Cabernet Sauvignon</span></td>
@@ -2300,7 +2299,7 @@
           <td data-label="Acidity">Medium-High to High</td>
         </tr>
         <tr class="drow" data-detail-for="86" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of delicate pear, nectarine, and lemon with a touch of honey. [from 1.5L tag, romance-tags-4.csv]</p><p class="src">Product ID 80010509</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of delicate pear, nectarine, and lemon with a touch of honey.</p><p class="src">Product ID 80010509</p></div></td>
         </tr>
         <tr class="prow" data-idx="87" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span></td>
@@ -2314,7 +2313,7 @@
           <td data-label="Acidity">Medium</td>
         </tr>
         <tr class="drow" data-detail-for="87" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks! [from 4L tag, romance-tags-4.csv]</p><p class="src">Product ID 383711</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks!</p><p class="src">Product ID 383711</p></div></td>
         </tr>
         <tr class="prow is-sale" data-idx="88" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="Dry" data-cooler="No" data-status="Planogram" data-price="18.49" data-sale="Yes" data-sale-price="18.49" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 1.5l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span><span class="badge sale">Sale</span></td>
@@ -2328,7 +2327,7 @@
           <td data-label="Acidity">Medium</td>
         </tr>
         <tr class="drow" data-detail-for="88" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks! [from 4L tag, romance-tags-4.csv]</p><p class="src">Product ID 377820</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh blackberries, mocha and plum on the finish. Stays fresh for up to 6 weeks!</p><p class="src">Product ID 377820</p></div></td>
         </tr>
         <tr class="prow" data-idx="89" data-brand="Jackson-Triggs" data-rich="Light Red" data-sweet="Off-Dry" data-cooler="No" data-status="Planogram" data-price="41.99" data-rs="10.0" data-search="jackson-triggs proprietors&#x27; selection merlot merlot 4l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Merlot</span></td>
@@ -2384,7 +2383,7 @@
           <td data-label="Acidity">Medium-High</td>
         </tr>
         <tr class="drow" data-detail-for="92" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of peach, complimented by citrus with a floral finish. [from 750mL tag, romance-tags-4.csv]</p><p class="src">Product ID 80010511</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of peach, complimented by citrus with a floral finish.</p><p class="src">Product ID 80010511</p></div></td>
         </tr>
         <tr class="prow" data-idx="93" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="13.0" data-search="jackson-triggs proprietors&#x27; selection pinot grigio light pinot grigio / pinot gris 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Proprietors' Selection Pinot Grigio Light</span><span class="badge cooler">Cooler</span></td>
@@ -2566,7 +2565,7 @@
           <td data-label="Acidity">Medium</td>
         </tr>
         <tr class="drow" data-detail-for="105" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of dark plum, black cherry, mocha and vanilla. Pairs well with grilled steak. [from 750mL tag, romance-tags-5.csv]</p><p class="src">Product ID 988319</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of dark plum, black cherry, mocha and vanilla. Pairs well with grilled steak.</p><p class="src">Product ID 988319</p></div></td>
         </tr>
         <tr class="prow is-sale" data-idx="106" data-brand="Jackson-Triggs" data-rich="" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-sale="Yes" data-sale-price="12.99" data-rs="6.0" data-search="jackson-triggs reserve pinot grigio vqa pinot grigio / pinot gris 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Pinot Grigio</span><span class="badge sale">Sale</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
@@ -2594,7 +2593,7 @@
           <td data-label="Acidity">High</td>
         </tr>
         <tr class="drow" data-detail-for="107" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of lime zest, grapefruit, mango, papaya, and cantaloupe with hints of lemongrass and snap peas. Pairs well with pan-seared salmon or chickpea feta salad. [from 1.5L tag, romance-tags-2.csv]</p><p class="src">Product ID 618413</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of lime zest, grapefruit, mango, papaya, and cantaloupe with hints of lemongrass and snap peas. Pairs well with pan-seared salmon or chickpea feta salad.</p><p class="src">Product ID 618413</p></div></td>
         </tr>
         <tr class="prow" data-idx="108" data-brand="Jackson-Triggs" data-rich="Light White" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="7.0" data-search="jackson-triggs reserve sauvignon blanc vqa sauvignon blanc 1.5l" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Jackson-Triggs</span><span class="pname">Reserve Sauvignon Blanc</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
@@ -2902,7 +2901,7 @@
           <td data-label="Acidity">—</td>
         </tr>
         <tr class="drow" data-detail-for="129" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh berries, plum and a crisp finish. [from 1.5L tag, romance-tags-5.csv]</p><p class="src">Product ID 80099113</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of fresh berries, plum and a crisp finish.</p><p class="src">Product ID 80099113</p></div></td>
         </tr>
         <tr class="prow" data-idx="130" data-brand="SOLA-NERO" data-rich="Medium White" data-sweet="Off-Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="15.0" data-search="sola-nero white wine 1.5l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">SOLA-NERO</span><span class="pname">White Wine</span><span class="badge cooler">Cooler</span></td>
@@ -2930,7 +2929,7 @@
           <td data-label="Acidity">—</td>
         </tr>
         <tr class="drow" data-detail-for="131" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of apple and lemon with hint of vanilla. [from 1.5L tag, romance-tags-16.csv]</p><p class="src">Product ID 587584</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of apple and lemon with hint of vanilla.</p><p class="src">Product ID 587584</p></div></td>
         </tr>
         <tr class="prow" data-idx="132" data-brand="Saintly" data-rich="Medium White" data-sweet="Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="8.0" data-search="saintly saintly fracette vqa sparkling wine 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Saintly</span><span class="pname">Saintly Fracette</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
@@ -2986,7 +2985,7 @@
           <td data-label="Acidity">High</td>
         </tr>
         <tr class="drow" data-detail-for="135" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of strawberry, raspberry, peach, grapefruit, and lime, as well as subtle floral notes. Pairs well with cured meat or mild to moderate cheese. [from 200mL tag, romance-tags-8.csv]</p><p class="src">Product ID 80084913</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of strawberry, raspberry, peach, grapefruit, and lime, as well as subtle floral notes. Pairs well with cured meat or mild to moderate cheese.</p><p class="src">Product ID 80084913</p></div></td>
         </tr>
         <tr class="prow" data-idx="136" data-brand="Saintly" data-rich="Rosé" data-sweet="Extra Dry" data-cooler="Yes" data-status="Planogram" data-price="" data-rs="3.0" data-search="saintly the good sparkling rosé vqa sparkling wine 200ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Saintly</span><span class="pname">The Good Sparkling Rosé</span><span class="badge vqa">VQA</span><span class="badge cooler">Cooler</span></td>
@@ -3560,7 +3559,7 @@
           <td data-label="Acidity">N/A</td>
         </tr>
         <tr class="drow" data-detail-for="176" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Sparkling water spiked with a splash of wine infused with fruit and botanical flavours. Notes of juicy blackberries balanced by fresh, floral elderflower. [romance-tags-13.csv] | Sparkling water spiked with a splash of wine infused with fruit and botanical flavours. Notes of juicy blackberries balanced by fresh, floral elderflower. [romance-tags-14.csv]</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Sparkling water spiked with a splash of wine infused with fruit and botanical flavours. Notes of juicy blackberries balanced by fresh, floral elderflower.</p></div></td>
         </tr>
         <tr class="prow" data-idx="177" data-brand="Good Fortune" data-rich="" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="42.0" data-search="good fortune sparkling wine spritz citrus orange flower sparkling wine 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Sparkling Wine Spritz Citrus Orange Flower</span><span class="badge nip">Not in plano</span></td>
@@ -3574,7 +3573,7 @@
           <td data-label="Acidity">High</td>
         </tr>
         <tr class="drow" data-detail-for="177" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">A refreshing poolside paring! [as printed] Deep flavours of clementine and lemon turn into a light finish of white flowers and sweetness.</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">A refreshing poolside paring! Deep flavours of clementine and lemon turn into a light finish of white flowers and sweetness.</p></div></td>
         </tr>
         <tr class="prow" data-idx="178" data-brand="Good Fortune" data-rich="" data-sweet="Sweet" data-cooler="" data-status="Not In Plano" data-price="3.49" data-rs="47.0" data-search="good fortune sparkling wine spritz mango margarita sparkling wine 355ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Good Fortune</span><span class="pname">Sparkling Wine Spritz Mango Margarita</span><span class="badge nip">Not in plano</span></td>
@@ -3742,7 +3741,7 @@
           <td data-label="Acidity">High to Very High</td>
         </tr>
         <tr class="drow" data-detail-for="189" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of pear, green apples and cirtus [as printed] with flavours of honeydew, melon and peach. Pairs well with eggs benedict or fruit salad.</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of pear, green apples and cirtus with flavours of honeydew, melon and peach. Pairs well with eggs benedict or fruit salad.</p></div></td>
         </tr>
         <tr class="prow" data-idx="190" data-brand="Inniskillin" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="" data-status="Not In Plano" data-price="" data-rs="2.0" data-search="inniskillin reserve cabernet franc vqa cabernet franc 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Inniskillin</span><span class="pname">Reserve Cabernet Franc</span><span class="badge vqa">VQA</span><span class="badge nip">Not in plano</span></td>
@@ -3840,7 +3839,7 @@
           <td data-label="Acidity">Medium (unoaked: High; oaked: Moderate)</td>
         </tr>
         <tr class="drow" data-detail-for="196" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">A soft, delicate, honied perfume of orchard fruit, even Stone fruit, yellow apples with nutmeg, almonds, and lychee. Rich on the palate with crisp acidity, the lush texture is packed with spice; cream; light truffled notes. [romance-tags-10.csv] | A soft, delicate, honied perfume of orchard fruit, even Stone fruit, yellow apples with nutmeg, almonds, and lychee. Rich on the palate with crisp acidity, the lush texture is packed with spice; cream; light truffled notes. [romance-tags-9.csv]</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">A soft, delicate, honied perfume of orchard fruit, even Stone fruit, yellow apples with nutmeg, almonds, and lychee. Rich on the palate with crisp acidity, the lush texture is packed with spice; cream; light truffled notes.</p></div></td>
         </tr>
         <tr class="prow" data-idx="197" data-brand="Le Clos Jordanne" data-rich="Medium Red" data-sweet="Extra Dry" data-cooler="" data-status="Not In Plano" data-price="" data-rs="1.5" data-search="le clos jordanne claystone pinot noir vqa pinot noir 750ml" data-vqa="Yes" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Le Clos Jordanne</span><span class="pname">Claystone Pinot Noir</span><span class="badge vqa">VQA</span><span class="badge nip">Not in plano</span></td>
@@ -3854,7 +3853,7 @@
           <td data-label="Acidity">Medium-High to High</td>
         </tr>
         <tr class="drow" data-detail-for="197" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Wild black raspberry notes and fine-toned anisette, the Claystone Pinot Noir features a dense-berried nose of red currants and black cherries, with a complex brambly breadth of fruit in the mid-palate. [romance-tags-10.csv] | Wild black raspberry notes and fine-toned anisette, the Claystone Pinot Noir features a dense-berried nose of red currants and black cherries, with a complex brambly breadth of fruit in the mid-palate. [romance-tags-9.csv]</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Wild black raspberry notes and fine-toned anisette, the Claystone Pinot Noir features a dense-berried nose of red currants and black cherries, with a complex brambly breadth of fruit in the mid-palate.</p></div></td>
         </tr>
         <tr class="prow" data-idx="198" data-brand="Mazia" data-rich="Light White" data-sweet="Dry" data-cooler="" data-status="Not In Plano" data-price="" data-rs="7.0" data-search="mazia pinot grigio pinot grigio / pinot gris 1.5l" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Mazia</span><span class="pname">Pinot Grigio</span><span class="badge nip">Not in plano</span></td>
@@ -3966,7 +3965,7 @@
           <td data-label="Acidity">—</td>
         </tr>
         <tr class="drow" data-detail-for="205" hidden>
-          <td colspan="9"><div class="detail"><p class="notes">Notes of lush tropical fruit, jucy [as printed] pear and a crisp and refreshing honeysuckle finish. Pairs well with cucumber salad or grilled shrimp.</p></div></td>
+          <td colspan="9"><div class="detail"><p class="notes">Notes of lush tropical fruit, jucy pear and a crisp and refreshing honeysuckle finish. Pairs well with cucumber salad or grilled shrimp.</p></div></td>
         </tr>
         <tr class="prow" data-idx="206" data-brand="Wallaroo Trail" data-rich="Light White" data-sweet="Dry" data-cooler="" data-status="Not In Plano" data-price="13.49" data-rs="8.0" data-search="wallaroo trail pinot grigio pinot grigio / pinot gris 750ml" tabindex="0" aria-expanded="false">
           <td data-label="Product"><span class="brand">Wallaroo Trail</span><span class="pname">Pinot Grigio</span><span class="badge nip">Not in plano</span></td>
@@ -4327,7 +4326,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.8</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.9</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -6051,8 +6050,9 @@
      Merlot, Discovery Series Gamay Noir, …) so no product loses
      its distinction. A placeholder value is never a value: a field
      holding one is blank, the one fully-placeholder product is
-     gone entirely, and tasting notes never carry the promo-panel
-     tag line. normalizeProductData() is the single helper that
+     gone entirely, and tasting notes never carry any bracketed
+     provenance / reference note (romance-tag file references,
+     "as printed" markers, promo-panel lines). normalizeProductData() is the single helper that
      readRow(), writeRow(), productToRowData() and rowToProduct()
      all pass through, so neither the editor nor the shared list
      can bring any of them back. */
@@ -6080,9 +6080,58 @@
   function cleanPlaceholderValue(v){
     return isPlaceholderValue(v) ? '' : (v || '');
   }
-  function stripPromoNote(notes){
-    return String(notes || '').replace(/\s*\[?\s*Mix\s*(?:&|and)\s*Match promo panel ignored\s*\]?/gi, '').trim();
+  /* Strip every internal bracketed provenance / reference note
+     from tasting notes — e.g. a "from 4L tag" / "from 750mL tag"
+     romance-tags file reference, a bare romance-tags file
+     reference, a Mix &amp; Match / BUY-and-SAVE promo-panel-ignored
+     line, and an "as printed" marker, all in square brackets —
+     while keeping the tasting-note wording itself exactly as written.
+     Any bracketed [...] segment in a tasting note is one of these
+     internal references (tasting notes themselves never use
+     brackets), so all of them are removed; the unbracketed forms
+     of the promo-panel lines and a bare romance-tags file name are
+     removed too. Leftover double spaces, a space before
+     punctuation, and a trailing separator are tidied, and when
+     the same note was recorded twice (once per tag file) split
+     by " | ", the identical duplicate is collapsed to one copy —
+     no wording is lost. This is the single cleaner that
+     normalizeProductData() runs on every read, write, editor save
+     and shared-list load, and cleanAllDisplayedNotes() runs it
+     over the built-in rows on startup, so no bracketed reference
+     of this type can show in the expanded Notes again. */
+  function cleanTastingNotes(notes){
+    var s = String(notes || '');
+    s = s.replace(/\s*\[[^\]]*\]/g, '');
+    s = s.replace(/\s*\[?\s*Mix\s*(?:&|and)\s*Match promo panel ignored\s*\]?/gi, '');
+    s = s.replace(/\s*\[?\s*BUY\s+\d+\s*(?:&|and)\s*SAVE panel ignored\s*\]?/gi, '');
+    s = s.replace(/\s*\bromance-tags-\d+\.csv\b/gi, '');
+    if(s.indexOf('|') !== -1){
+      var seenParts = {}, uniqParts = [];
+      s.split(/\s*\|\s*/).forEach(function(part){
+        var p = part.trim();
+        if(p && !seenParts[p]){ seenParts[p] = 1; uniqParts.push(p); }
+      });
+      s = uniqParts.join(' | ');
+    }
+    s = s.replace(/\s+/g, ' ').replace(/\s+([.,!?;:])/g, '$1').trim();
+    s = s.replace(/\s*\|\s*$/, '').replace(/^\s*\|\s*/, '').trim();
+    return s;
   }
+  function stripPromoNote(notes){
+    return cleanTastingNotes(notes);
+  }
+  /* Run the cleaner over every tasting note already on the page
+     (the built-in rows) so the first paint is clean even before
+     any row passes through writeRow() / a shared-list refresh. */
+  function cleanAllDisplayedNotes(){
+    Array.prototype.forEach.call(document.querySelectorAll('.detail .notes'), function(np){
+      if(np.classList.contains('none')) return;
+      var cleaned = cleanTastingNotes(np.textContent);
+      if(cleaned && cleaned !== np.textContent.trim()) np.textContent = cleaned;
+      else if(!cleaned){ np.className = 'notes none'; np.textContent = 'No tasting notes recorded yet.'; }
+    });
+  }
+  cleanAllDisplayedNotes();
   function brandVariant(raw){
     if(!raw) return null;
     var k = String(raw).trim().toLowerCase().replace(/[’]/g, "'").replace(/\s+/g, ' ');
@@ -6839,11 +6888,12 @@
     src.textContent = 'Product ID ' + pid + (bc ? ' · Barcode ' + bc : '');
   }
   function writeRow(row, data){
-    /* Brand consolidation, placeholder cleaning and promo-note
-       stripping — enforced here, the one place every row (built-in,
-       shared-list, editor, new product) is written through, so no
-       path can show or save a variant brand, a placeholder value,
-       or the promo-panel tag line. */
+    /* Brand consolidation, placeholder cleaning and bracketed-
+       reference stripping from tasting notes — enforced here, the
+       one place every row (built-in, shared-list, editor, new
+       product) is written through, so no path can show or save a
+       variant brand, a placeholder value, or a bracketed
+       provenance / reference note in the tasting notes. */
     normalizeProductData(data);
     /* All BASK products are Extra Dry, no exceptions */
     if(data.brand && data.brand.toUpperCase().indexOf('BASK') === 0) data.sweet = 'Extra Dry';
@@ -9382,7 +9432,8 @@
        folds any variant brand the shared list still carries into
        its one canonical brand (moving the sub-brand words into
        the product name), blanks any placeholder field, and strips
-       the promo-panel tag line from the notes. */
+       every bracketed provenance / reference note from the
+       tasting notes loaded from the shared list. */
     var isBask = !!p.brand && p.brand.toUpperCase().indexOf('BASK') === 0;
     return normalizeProductData({
       brand: p.brand || '', name: p.product || '', size: p.size || '',
