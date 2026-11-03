@@ -541,6 +541,14 @@
   .detail .vegan-note{margin:2px 0;color:var(--muted);font-size:13px;line-height:1.5}
   .detail .vegan-note strong{color:var(--plum);font-weight:700}
   :root[data-theme="dark"] .detail .vegan-note strong{color:var(--lilac)}
+  /* Gluten-safe: the same soft violet pill family as the
+     Vegan-friendly badge, in the purple theme — shown only on
+     products flagged gluten-safe (see the Gluten-safe section in
+     the script). Badge only; no source/caveat line is shown in
+     the expanded notes. For pure wines this is the general
+     naturally-gluten-free principle, NOT a certification */
+  .badge.gluten{background:var(--violet-soft);color:var(--plum);border:1.5px solid var(--grape);font-weight:800}
+  :root[data-theme="dark"] .badge.gluten{color:var(--lilac)}
   /* On sale: vivid pink — a saturated pink given a dark outline,
      so a SALE badge sitting next to a VQA badge or a pale rosé
      chip never reads as the same thing. The same pink marks the
@@ -1049,6 +1057,7 @@
       <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
       <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly only</button>
+      <button type="button" class="toggle gluten-toggle" id="glutenToggle" aria-pressed="false">Gluten-safe only</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
       <span class="count" id="count" role="status"></span>
     </div>
@@ -4313,7 +4322,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.6</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.7</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5505,6 +5514,8 @@
   function saleOnlyOn(){ return !!saleToggle && saleToggle.getAttribute('aria-pressed') === 'true'; }
   var veganToggle = document.getElementById('veganToggle');
   function veganOnlyOn(){ return !!veganToggle && veganToggle.getAttribute('aria-pressed') === 'true'; }
+  var glutenToggle = document.getElementById('glutenToggle');
+  function glutenOnlyOn(){ return !!glutenToggle && glutenToggle.getAttribute('aria-pressed') === 'true'; }
   var state = { sort:'product', dir:1 };
 
   /* Accent-insensitive search folding: lowercases the text and
@@ -5665,6 +5676,7 @@
     if(maxprice.value) n++;
     if(saleOnlyOn()) n++;
     if(veganOnlyOn()) n++;
+    if(glutenOnlyOn()) n++;
     var open = controlsEl.classList.contains('open');
     filtersBtn.textContent = 'Filters' + (n ? ' · ' + n + ' on' : '') + (open ? ' ▴' : ' ▾');
     filtersBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -5809,6 +5821,7 @@
         if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
         if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
         if(veganOnlyOn() && row.getAttribute('data-vegan') !== 'Yes') ok = false;
+        if(glutenOnlyOn() && row.getAttribute('data-gluten') !== 'Yes') ok = false;
         if(!isNaN(mp)){
           var p = effectivePrice(row);
           if(p === null || p > mp) ok = false;
@@ -5933,11 +5946,18 @@
       apply();
     });
   }
+  if(glutenToggle){
+    glutenToggle.addEventListener('click', function(){
+      glutenToggle.setAttribute('aria-pressed', glutenOnlyOn() ? 'false' : 'true');
+      apply();
+    });
+  }
   document.getElementById('reset').addEventListener('click', function(){
     scanOnlyIdx = null; scanOnlyQuery = '';
     q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     if(veganToggle) veganToggle.setAttribute('aria-pressed', 'false');
+    if(glutenToggle) glutenToggle.setAttribute('aria-pressed', 'false');
     state.sort='product'; state.dir=1; sortsel.value='product';
     applySort(); apply();
   });
@@ -6566,6 +6586,108 @@
     rows.forEach(syncVeganVisual);
   }
   refreshAllVegan();
+  /* ---------- Gluten-safe — confirmed + pure wines, caution lines excluded ----------
+     Built from the 2026-11-02 gluten research (groups A, B and C),
+     following the same pattern as the Vegan-friendly flag above:
+     derived from brand + product name + richness every time a row
+     is rendered, never stored in or synced to the shared list.
+     Shown as a compact badge on the card only — no source/caveat
+     line is added to the expanded notes. Three cases:
+       · CONFIRMED — Growers ciders (Cider Crate product profiles
+         list them "Gluten Free: Yes") and Henry of Pelham wines
+         (winery FAQ: barrels cleaned, no flour/gluten exposure —
+         but the winery does not test for gluten specifically).
+         D'Ont Poke The Bear cider lines carry the same Cider
+         Crate confirmation.
+       · PURE WINES — every other pure, unflavoured grape wine
+         (red, white, rosé, sparkling, icewine) is flagged on the
+         general principle only. This is NOT a certification and
+         is never worded as one.
+       · CAUTION LINES — never flagged, and excluded by the
+         "Gluten-safe only" filter: flavoured wines, spritzes,
+         seltzers and cream liqueurs (BASK spritzes and Hard
+         Sparkling Waters, the Bodacious flavoured lines —
+         Moscato Rosé, Peach Fizz, Sangria, Bourbon Barrel Aged —
+         Cartier cream liqueurs, MXM, Sidney, Svelte, Good Fortune
+         seltzers and spritzes, Growers Spritz). They are simply
+         left unflagged until label-checked — no product in the
+         assortment is confirmed NOT gluten-free, so there is
+         deliberately no "not gluten-free" flag anywhere. */
+  function glutenSourceFor(brand, name, rich){
+    var b = foldAccents(brand || '').trim();
+    var n = foldAccents(name || '');
+    var r = foldAccents(rich || '').trim();
+    function has(s){ return n.indexOf(s) !== -1; }
+    /* Caution lines first: whole brands whose lines are all
+       flavoured / seltzer / cream / low-alcohol ICB */
+    if(b === 'cartier' || b === 'mxm' || b === 'sidney' || b === 'svelte' || b === 'good fortune') return '';
+    /* Caution product types under any brand: spritzes, seltzers,
+       sparkling waters and cream liqueurs */
+    if(has('spritz') || has('seltzer') || has('hard sparkling water') || has('cream liqueur') || has('irish cream') || has('sangria') || has('peach fizz')) return '';
+    /* The Bodacious flavoured lines (its still wines further
+       down are pure wines and do flag) */
+    if(b === 'bodacious' && (has('moscato rose') || has('bourbon barrel'))) return '';
+    /* Confirmed: Growers ciders — every non-spritz Growers line
+       in the list is a cider (the Spritz lines returned above) */
+    if(b === 'growers'){
+      return 'Growers ciders are listed as “Gluten Free: Yes” in Cider Crate product profiles.';
+    }
+    /* Confirmed: D'Ont Poke The Bear cider lines only — its wines
+       fall through to the pure-wine line like any other wine */
+    if(b === "d'ont poke the bear" && r === 'cider'){
+      return 'D’Ont Poke The Bear ciders are listed as “Gluten Free: Yes” in Cider Crate product profiles.';
+    }
+    /* Confirmed, with the not-tested caveat kept in the line */
+    if(b === 'henry of pelham'){
+      return 'Henry of Pelham winery FAQ: its barrels are cleaned so the wine is exposed only to the wood, with no flour/gluten exposure — but the winery does not test its wines for gluten specifically.';
+    }
+    /* Pure, unflavoured grape wine: naturally gluten-free in
+       principle — the caveat IS the line, verbatim */
+    return 'Pure grape wine is naturally gluten-free; no winery gluten-free claim or test for this specific bottle.';
+  }
+  function glutenSource(row){
+    var nameEl = row.querySelector('.pname');
+    return glutenSourceFor(row.getAttribute('data-brand') || '', nameEl ? nameEl.textContent : '', row.getAttribute('data-rich') || '');
+  }
+  function isGlutenSafe(row){
+    return row.getAttribute('data-gluten') === 'Yes';
+  }
+  /* Re-render one row's gluten view — its data-gluten attribute
+     and its Gluten-safe badge only — the same pattern as
+     syncVeganVisual, minus any notes line. No gluten
+     source/caveat line is added to the expanded notes.
+     Search also matches "gluten" for flagged products. */
+  function syncGlutenVisual(row){
+    var src = glutenSource(row);
+    var on = !!src;
+    if(on) row.setAttribute('data-gluten', 'Yes'); else row.removeAttribute('data-gluten');
+    var pcell = cellEl(row, 'Product');
+    if(pcell){
+      var badge = pcell.querySelector('.badge.gluten');
+      if(on && !badge){
+        badge = document.createElement('span');
+        badge.className = 'badge gluten';
+        badge.textContent = 'Gluten-safe';
+        var anchor = pcell.querySelector('.badge.vegan') || pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
+        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
+        else pcell.appendChild(badge);
+      } else if(!on && badge){
+        badge.parentNode.removeChild(badge);
+      }
+    }
+    var d = details[row.getAttribute('data-idx')];
+    if(d){
+      var staleNote = d.querySelector('.gluten-note');
+      if(staleNote) staleNote.parentNode.removeChild(staleNote);
+    }
+    var s = (row.getAttribute('data-search') || '').replace(/\bgluten-safe\b/g, '').replace(/\bgluten\b/g, '').replace(/\s+/g, ' ').trim();
+    if(on) s += ' gluten gluten-safe';
+    row.setAttribute('data-search', s);
+  }
+  function refreshAllGluten(){
+    rows.forEach(syncGlutenVisual);
+  }
+  refreshAllGluten();
   /* One shared ⋮ menu, positioned fixed next to whichever product's
      dots were tapped, so it is never clipped by the table or the card */
   var kebabMenu = document.getElementById('kebabMenu');
@@ -6828,6 +6950,8 @@
        Vegan-friendly badge and notes source line are re-derived
        for the row as now written */
     syncVeganVisual(row);
+    /* Same re-derivation for the Gluten-safe badge */
+    syncGlutenVisual(row);
   }
   var nextIdx = 0;
   rows.forEach(function(r){
@@ -9933,6 +10057,8 @@
     /* Vegan-friendly badges and source lines re-derive from the
        allowlist over whatever the sync just applied */
     refreshAllVegan();
+    /* Gluten-safe badges re-derive the same way */
+    refreshAllGluten();
     /* The date decides the LTO / flash-sale state, not the shared
        list: re-derive it over whatever the sync just applied */
     applyScheduledSales();
