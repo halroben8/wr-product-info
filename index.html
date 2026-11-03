@@ -106,7 +106,7 @@
   /* Barcode scanner — a full-screen camera view over everything.
      The live camera fills the screen, darkened at the edges, with a
      clear viewfinder box in the centre: four corner brackets and a
-     static black scan line across the middle of it. Cancel (top left) closes it
+     static black scan line across the middle of it. The back arrow (top left) closes it
      and stops the camera. There is no manual rotation control:
      decoding is automatic at any angle — sideways, tilted,
      diagonal or upside down (see the scanner script). If the
@@ -116,16 +116,16 @@
   .scanner-overlay{position:fixed;inset:0;z-index:95;background:#0b0616;color:#fff;
     display:flex;flex-direction:column}
   .scanner-overlay[hidden]{display:none}
-  /* Cancel sits in the first column and the title in the middle
-     column; the third column stays empty so the title remains
-     centred where the old third element used to sit. */
+  /* The back arrow sits in the first column and the title in the
+     middle column; the third column stays empty so the title
+     remains centred. */
   .scanner-top{display:grid;grid-template-columns:76px 1fr 76px;align-items:center;gap:10px;
     padding:calc(12px + env(safe-area-inset-top)) 16px 10px}
   .scanner-top h2{margin:0;font-size:19px;font-weight:800;text-align:center}
-  .scanner-cancel{min-width:76px;min-height:44px;background:rgba(255,255,255,.14);color:#fff;
-    border:1.5px solid rgba(255,255,255,.55);border-radius:999px;padding:9px 16px;
-    font:inherit;font-size:15px;font-weight:700;cursor:pointer}
-  .scanner-cancel:hover,.scanner-cancel:focus-visible{background:rgba(255,255,255,.3);outline:none}
+  .scanner-back{width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.55);
+    border-radius:999px;padding:0;font:inherit;font-size:23px;font-weight:800;line-height:1;cursor:pointer}
+  .scanner-back:hover,.scanner-back:focus-visible{background:rgba(255,255,255,.3);outline:none}
   .scanner-stage{position:relative;flex:1;min-height:0;background:#000;overflow:hidden}
   .scanner-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .scanner-frame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -139,8 +139,7 @@
   .scanner-line{position:absolute;left:5%;right:5%;top:50%;height:3px;border-radius:2px;
     transform:translateY(-50%);
     background:#000;box-shadow:0 0 10px rgba(0,0,0,.9)}
-  .scanner-hint{margin:0;padding:14px 18px 0;text-align:center;font-size:16px;font-weight:650}
-  .scanner-status{margin:0;padding:6px 18px 0;text-align:center;font-size:14px;color:#e9d5ff;min-height:20px}
+  .scanner-status{margin:0;padding:12px 18px 0;text-align:center;font-size:14px;color:#e9d5ff;min-height:20px}
   .scanner-manual{padding:14px 18px calc(16px + env(safe-area-inset-bottom))}
   .scanner-manual label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;
     text-transform:uppercase;color:#c4b5fd;margin-bottom:6px}
@@ -454,6 +453,113 @@
   .sc-afterhours{margin:14px 0 2px;font-size:12px;font-weight:800;letter-spacing:.06em;
     text-transform:uppercase;color:#b91c1c}
   :root[data-theme="dark"] .sc-afterhours{color:#fca5a5}
+  /* Product Info Manual (web version) — the responsive manual as an
+     in-app panel, opened from Documents. The prominent entry in
+     Documents is a solid plum button; the panel itself reuses the
+     app palette, reflows to the screen width (scroll, no zoom),
+     with tap-to-expand sections and its own search. All manual
+     classes are prefixed manual- so nothing collides with the
+     app's own .chip / .badge / section styles. */
+  .settings-action.manual-web-action{background:var(--badge-bg);color:#fff;border-color:var(--badge-bg);min-height:66px}
+  .settings-action.manual-web-action:hover,.settings-action.manual-web-action:focus-visible{background:var(--plum2);border-color:var(--plum2);outline:none}
+  .settings-action.manual-web-action .sa-sub{color:rgba(255,255,255,.87)}
+  .settings-action.manual-web-action .sa-ext{background:#fff;color:#4c1d95;border-color:#fff}
+  .manual-panel{max-width:680px}
+  .manual-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .manual-panel .editor-head h2{color:#e9d5ff}
+  .manual-lede{margin:0 0 10px;font-size:15.5px;line-height:1.6;color:var(--ink)}
+  .manual-meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+  .manual-pill{display:inline-flex;align-items:center;background:var(--panel2);border:1.5px solid var(--line);color:var(--ink);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:700}
+  .manual-pill.accent{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
+  .manual-print-note{margin:0 0 14px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--violet-soft);font-size:14.5px;line-height:1.55;color:var(--ink)}
+  .manual-searchbox{display:flex;gap:8px;background:var(--panel);border:1.5px solid var(--line);border-radius:999px;padding:6px 6px 6px 16px;align-items:center}
+  .manual-searchbox:focus-within{border-color:var(--plum2)}
+  .manual-searchbox input{flex:1;min-width:0;width:auto;border:0;background:transparent;color:var(--ink);font-size:16px;padding:8px 0}
+  .manual-searchbox input:focus{outline:none;border-color:transparent}
+  .manual-clear{display:none;border:0;background:var(--panel2);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px;cursor:pointer;font:inherit}
+  .manual-clear.show{display:block}
+  .manual-search-status{font-size:13.5px;color:var(--muted);margin:8px 2px 0;min-height:1.2em}
+  .manual-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+  .manual-tool-btn{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;cursor:pointer;font:inherit}
+  .manual-tool-btn:hover,.manual-tool-btn:focus-visible{border-color:var(--plum2);outline:none}
+  .manual-contents{margin:12px 0 4px}
+  .manual-contents h3{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--plum);margin:0 0 8px}
+  :root[data-theme="dark"] .manual-contents h3{color:var(--lilac)}
+  .manual-chips{display:flex;flex-wrap:wrap;gap:7px}
+  .manual-chip{border:1.5px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13.5px;font-weight:600;cursor:pointer;font:inherit}
+  .manual-chip span{color:var(--plum);font-weight:800;margin-right:5px}
+  :root[data-theme="dark"] .manual-chip span{color:var(--lilac)}
+  .manual-sections{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+  details.manual-sec{border:1.5px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+  details.manual-sec[hidden]{display:none}
+  details.manual-sec summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:14px;min-height:54px;-webkit-tap-highlight-color:transparent}
+  details.manual-sec summary::-webkit-details-marker{display:none}
+  .manual-sec-num{flex:none;width:32px;height:32px;border-radius:9px;background:var(--violet-soft);color:var(--plum);display:grid;place-items:center;font-weight:800;font-size:14px}
+  :root[data-theme="dark"] .manual-sec-num{color:var(--lilac)}
+  .manual-sec-title{flex:1;min-width:0}
+  .manual-sec-title strong{display:block;font-size:16px;line-height:1.25;color:var(--ink)}
+  .manual-sec-title small{display:block;color:var(--muted);font-size:13px;line-height:1.35;margin-top:1px}
+  .manual-chev{flex:none;width:26px;height:26px;border-radius:999px;border:1.5px solid var(--line);display:grid;place-items:center;color:var(--muted);transition:transform .18s ease}
+  details.manual-sec[open] .manual-chev{transform:rotate(180deg)}
+  .manual-sec-body{padding:2px 16px 18px;border-top:1px solid var(--line);font-size:15.5px;line-height:1.6;color:var(--ink)}
+  .manual-sec-body h3{font-size:15.5px;margin:18px 0 6px;color:var(--ink)}
+  .manual-sec-body h3:first-child{margin-top:10px}
+  .manual-sec-body p{margin:0 0 10px}
+  .manual-sec-body ul,.manual-sec-body ol{margin:0 0 12px;padding-left:22px}
+  .manual-sec-body li{margin-bottom:6px}
+  .manual-ui{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:0 7px;font-size:.88em;font-weight:700;white-space:nowrap;color:var(--ink)}
+  .manual-ui.purple{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
+  .manual-callout{border-radius:9px;padding:12px 14px;margin:12px 0;font-size:14.5px;line-height:1.55;color:var(--ink)}
+  .manual-callout.tip{background:var(--violet-soft)}
+  .manual-callout.warn{background:#fef3c7}
+  :root[data-theme="dark"] .manual-callout.warn{background:#3a2a08}
+  .manual-callout strong{display:block;margin-bottom:2px}
+  .manual-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+  .manual-bdg{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink)}
+  .manual-bdg.vqa{background:#fef3c7;color:#b45309;border-color:transparent}
+  :root[data-theme="dark"] .manual-bdg.vqa{background:#3a2a08;color:#fbbf24}
+  .manual-bdg.white{background:var(--chip-white-bg);color:var(--chip-white);border-color:transparent}
+  .manual-bdg.rose{background:var(--chip-rose-bg);color:var(--chip-rose);border-color:transparent}
+  .manual-bdg.flash{background:#111827;color:#fde047;border:1.5px solid #facc15;text-transform:uppercase;letter-spacing:.05em}
+  .manual-fields{width:100%;border-collapse:collapse;margin:8px 0 14px;font-size:14.5px}
+  .manual-fields th,.manual-fields td{text-align:left;padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+  .manual-fields th{width:32%;color:var(--plum);font-size:12px;letter-spacing:.04em;text-transform:uppercase;padding-top:10px}
+  :root[data-theme="dark"] .manual-fields th{color:var(--lilac)}
+  .manual-noresults{display:none;background:var(--panel);border:1.5px dashed var(--line);border-radius:12px;padding:20px 16px;text-align:center;color:var(--muted);margin-top:12px}
+  .manual-noresults.show{display:block}
+  .manual-noresults strong{color:var(--ink);display:block;margin-bottom:4px}
+  .manual-foot{margin:18px 0 0;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.55;text-align:center}
+  .manual-foot strong{color:var(--ink)}
+  @media (prefers-reduced-motion: reduce){ .manual-chev{transition:none} }
+  /* Flash sale: black-and-yellow, deliberately unlike the pink
+     SALE badge — a flash sale (a SALE_PERIODS entry flagged flash,
+     e.g. the Black Friday Flash Sale) shows this badge on the card
+     beside the SALE badge and a matching line in the expanded
+     details beside the Sale / Reg / Save lines, plus a gold ring
+     on the row so it reads differently at a glance */
+  .badge.flash-sale{background:#111827;color:#fde047;border:1.5px solid #facc15;
+    font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+  :root[data-theme="dark"] .badge.flash-sale{background:#000000;color:#fde047;border-color:#fde047}
+  tr.prow.is-flash-sale:not(.is-unavailable){box-shadow:inset 0 0 0 2px #eab308}
+  .detail .flash-sale-note{display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    margin-top:8px;font-weight:700;font-size:14px;color:var(--ink)}
+  /* Editor field hint — small explainer under a field (used under
+     the Sale price field, which now sits always-visible beside the
+     Regular price field) */
+  .efield .field-hint{margin:2px 0 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+  /* Loved wines in Documents as ONE connected group: the header
+     button and its entries share a single bordered container —
+     the header sits directly on top of the list with no gap, and
+     the entries are nested inside the same section on the panel
+     background, divided from the header by a single rule */
+  .loved-group{border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--violet-soft)}
+  .loved-group .loved-head{border:none;border-radius:0;background:transparent;width:100%}
+  .loved-group .loved-head:hover,.loved-group .loved-head:focus-visible{background:var(--panel2);outline:none}
+  .loved-group .loved-list{margin-top:0;border-top:1.5px solid var(--line);background:var(--panel);
+    padding:10px;display:grid;gap:8px}
+  .loved-group .loved-list[hidden]{display:none !important}
+  .loved-group .loved-item{margin-top:0}
+  .loved-group .loved-empty{margin:2px 0}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -1029,7 +1135,11 @@
   .toggle.liked-toggle[aria-pressed="true"]{background:#db2777;color:#fff;border-color:#be185d}
   /* Loved wines section in the Documents tab: only wines with at
      least one Love, most loved first; each entry is a big tap
-     target showing the wine and its "Loved by X merchants" count */
+     target showing the wine and its "Loved by X merchants" count.
+     Header and entries live in ONE .loved-group container (see the
+     manual / flash CSS block above): a shared border and
+     background, the header attached directly to the list, entries
+     nested inside — never separate floating cards */
   .loved-list{margin-top:2px}
   .loved-item{display:block;width:100%;text-align:left;background:var(--panel2);
     border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;
@@ -1112,9 +1222,6 @@
      out by the blocklist check) */
   .banned-panel{max-width:440px}
   .banned-panel p{line-height:1.55;margin:0 0 6px}
-  .appoint-row{display:flex;gap:8px;align-items:stretch;margin-top:4px}
-  .appoint-row input{flex:1 1 auto;min-width:0}
-  .appoint-row .btn-save-small{flex:none}
   /* Suggestions box: the form a signed-in user fills in from
      Settings → Suggestions, and the entries an appointed admin
      reads in the Admin area. The form panel follows the sign-in
@@ -1365,10 +1472,10 @@
       </div>
     </div>
     <div class="toggles">
-      <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
-      <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly only</button>
-      <button type="button" class="toggle gluten-toggle" id="glutenToggle" aria-pressed="false">Gluten-safe only</button>
-      <button type="button" class="toggle liked-toggle" id="likedToggle" aria-pressed="false">♥ Loved only</button>
+      <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale</button>
+      <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly</button>
+      <button type="button" class="toggle gluten-toggle" id="glutenToggle" aria-pressed="false">Gluten-safe</button>
+      <button type="button" class="toggle liked-toggle" id="likedToggle" aria-pressed="false">♥ Loved</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
       <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <span class="count" id="count" role="status"></span>
@@ -4657,7 +4764,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.10</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.12</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4677,9 +4784,13 @@
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
         <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
-        <button type="button" class="settings-action" id="lovedWinesBtn" aria-expanded="false" aria-controls="lovedWinesList"><span>Loved wines<span class="sa-sub">Every wine someone has loved, most loved first — tap one to open it</span></span></button>
-        <div class="loved-list" id="lovedWinesList" hidden></div>
-        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 23 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <div class="loved-group">
+          <button type="button" class="settings-action loved-head" id="lovedWinesBtn" aria-expanded="false" aria-controls="lovedWinesList"><span>Loved wines<span class="sa-sub">Every wine someone has loved, most loved first — tap one to open it</span></span></button>
+          <div class="loved-list" id="lovedWinesList" hidden></div>
+        </div>
+        <p class="settings-group-head" id="docsManualHead">Manual</p>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.12</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-support" role="tabpanel" aria-labelledby="settingsTab-support" hidden>
@@ -5508,6 +5619,409 @@
   </div>
 </div>
 
+
+<div class="editor-overlay" id="manualOverlay" hidden>
+  <div class="editor-panel manual-panel" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
+    <div class="editor-head">
+      <h2 id="manualTitle">Product Info Manual</h2>
+      <button type="button" class="editor-x" id="manualClose" aria-label="Close product info manual">×</button>
+    </div>
+    <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
+    <div class="manual-meta">
+      <span class="manual-pill accent">Version 2026.11.03.12</span>
+      <span class="manual-pill">Web edition — matches the app</span>
+    </div>
+    <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
+    <div class="manual-searchbar">
+      <div class="manual-searchbox">
+        <input id="manualSearch" type="search" inputmode="search" autocomplete="off" placeholder="Search the manual — try “love”, “barcode”, “store”…" aria-label="Search the manual" />
+        <button class="manual-clear" id="manualSearchClear" type="button">Clear</button>
+      </div>
+      <p class="manual-search-status" id="manualSearchStatus" aria-live="polite"></p>
+      <div class="manual-toolbar">
+        <button class="manual-tool-btn" id="manualExpandAll" type="button">Expand all sections</button>
+        <button class="manual-tool-btn" id="manualCollapseAll" type="button">Collapse all</button>
+      </div>
+    </div>
+    <nav class="manual-contents" aria-label="Manual contents">
+      <h3>Jump to</h3>
+      <div class="manual-chips" id="manualChips"></div>
+    </nav>
+    <div class="manual-noresults" id="manualNoResults">
+      <strong>No section matches that search</strong>
+      Try a shorter word — for example <em>love</em>, <em>scan</em>, <em>price</em>, <em>admin</em> or <em>store</em> — or tap Clear to see the whole manual again.
+    </div>
+    <div class="manual-sections" id="manualSections">
+    <!-- 1 -->
+    <details class="manual-sec" id="manual-getting-started" data-title="Getting started">
+      <summary><span class="manual-sec-num">1</span><span class="manual-sec-title"><strong>Getting started</strong><small>Open the app, pick your store, find your way around</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>WR Product Info is the shared wine list for Wine Rack stores. Everyone using it sees the same products, prices and notes — when one person fixes something, it is fixed for everybody.</p>
+        <h3>First time you open it</h3>
+        <ol>
+          <li>A popup asks <strong>“Which store are you at?”</strong></li>
+          <li>Pick your store from the list, or use <span class="manual-ui">Add store</span> to create a new one.</li>
+          <li>A brand-new store starts with <strong>no products ticked</strong>. Go to <span class="manual-ui">Settings → Set store products</span> and tick what your store carries.</li>
+        </ol>
+        <div class="manual-callout tip"><strong>You don&rsquo;t need to sign in to browse</strong>The full list, search, filters, scanner, Settings and Documents all work signed out. Signing in is only needed to love wines and to add or edit anything — so your loves are yours and your changes carry your name. See §11.</div>
+        <h3>The tabs at the top</h3>
+        <ul>
+          <li><strong>Products</strong> — the wine list, search and filters. This is where you&rsquo;ll spend most of your time.</li>
+          <li><strong>Documents</strong> — Loved wines, this manual, impact cheat sheets and support information.</li>
+          <li><strong>Settings</strong> — your account and sign-in, display name, appearance, store settings and the Support Center.</li>
+        </ul>
+        <h3>Header, at a glance</h3>
+        <ul>
+          <li>The <strong>store pill</strong> (just the number, e.g. <span class="manual-ui">358</span>) sits beside the heading — tap it to switch stores.</li>
+          <li>The <strong>gear</strong> at top right opens Settings.</li>
+          <li>The <strong>scan icon</strong> sits directly under the gear — tap it to scan a barcode (§4).</li>
+        </ul>
+        <h3>Getting back to the top</h3>
+        <p>Start scrolling <em>up</em> and a round up-arrow button appears. Tap it to smooth-scroll back to the top. It hides again when you scroll down or reach the top — it is never in your way while you read down the list.</p>
+      </div>
+    </details>
+
+    <!-- 2 -->
+    <details class="manual-sec" id="manual-finding-a-wine" data-title="Finding a wine — search and filters">
+      <summary><span class="manual-sec-num">2</span><span class="manual-sec-title"><strong>Finding a wine</strong><small>Search, filters, brands and price</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <h3>Search</h3>
+        <p>Type in the <span class="manual-ui">Search</span> box — it matches <strong>brand, product name or varietal</strong>. The line underneath tells you where you stand, e.g. <em>Showing 226 of 226 products · Store 358</em>. Clear the search to bring the full list back.</p>
+        <h3>Filters</h3>
+        <p>Tap <span class="manual-ui purple">Filters ▾</span> to open the filter panel:</p>
+        <ul>
+          <li><strong>Brand</strong> — pick one brand from the pull-down list.</li>
+          <li><span class="manual-ui">On sale</span> — only wines with a sale price.</li>
+          <li><span class="manual-ui">Vegan-friendly</span> — only wines confirmed vegan-friendly (§3).</li>
+          <li><span class="manual-ui">Gluten-safe</span> — only gluten-safe wines.</li>
+          <li><span class="manual-ui">♥ Loved</span> — only wines you have loved (§6).</li>
+          <li><strong>Under a price</strong> — set a maximum price. While that filter is on, results sort <strong>most expensive first</strong>, down to the cheapest, with unpriced wines last. Clear the filter and the normal order comes back.</li>
+        </ul>
+        <div class="manual-callout tip"><strong>Fastest path to one wine</strong>If you have the bottle in hand, don&rsquo;t type — scan it (§4). A successful scan clears your other filters and shows just that one wine, fully expanded.</div>
+      </div>
+    </details>
+
+    <!-- 3 -->
+    <details class="manual-sec" id="manual-reading-a-card" data-title="Reading a product card">
+      <summary><span class="manual-sec-num">3</span><span class="manual-sec-title"><strong>Reading a product card</strong><small>Badges, sugar, sweetness, richness and tasting notes</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Each wine is a card: brand in purple at the top, then the product name, price, and everything you need to answer a customer.</p>
+        <h3>Badges you may see</h3>
+        <div class="manual-badge-row">
+          <span class="manual-bdg vqa">VQA</span><span class="manual-bdg plain">Gluten-safe</span><span class="manual-bdg plain">Not in plano</span><span class="manual-bdg plain">Vegan-friendly</span><span class="manual-bdg plain">In cooler</span><span class="manual-bdg flash">⚡ Flash Sale</span>
+        </div>
+        <ul>
+          <li><strong>VQA</strong> — VQA Ontario wine.</li>
+          <li><strong>Gluten-safe</strong> — safe for a gluten-free customer.</li>
+          <li><strong>Not in plano</strong> — not on the current planogram. It stays on the list in case it comes back — it is not a mistake.</li>
+          <li><strong>Vegan-friendly</strong> — confirmed vegan-friendly. The Notes for that wine say where the determination came from.</li>
+          <li><strong>⚡ Flash Sale</strong> — the black-and-yellow badge for a short scheduled flash sale (e.g. Black Friday), shown beside the Sale badge on the card and in the details while that sale runs (§9).</li><li><strong>Unavailable</strong> — clearly marked when your store has marked it unavailable (§8). That mark is for your store only.</li>
+        </ul>
+        <h3>The fields</h3>
+        <table class="manual-fields">
+          <tr><th>Size</th><td>Bottle or box size, e.g. 750mL, 1.5L, 3L, 4L. The same wine in two sizes is two separate entries — details can differ between sizes.</td></tr>
+          <tr><th>Sugar (RS)</th><td>Residual sugar in grams per litre (g/L). Lower is drier. Sugar is <em>not</em> copied between sizes — a 750mL and a 3L of the same wine can genuinely differ.</td></tr>
+          <tr><th>Sweetness</th><td>The plain-language dryness label, e.g. Extra Dry, Dry, Medium, Sweet. All BASK wines are Extra Dry.</td></tr>
+          <tr><th>Richness</th><td>Body and colour together, exactly as printed on the shelf tag — e.g. Light White, Medium Red, Rich Red.</td></tr>
+          <tr><th>Varietal</th><td>The grape or blend, where known.</td></tr>
+          <tr><th>Tannins · Acidity</th><td>Low / Medium / High, where known. A dash (—) means it hasn&rsquo;t been recorded yet, not that it&rsquo;s zero.</td></tr>
+        </table>
+        <h3>Richness colours</h3>
+        <div class="manual-badge-row">
+          <span class="manual-bdg white">Medium White</span><span class="manual-bdg rose">Rosé</span><span class="manual-bdg plain">Rich Red</span>
+        </div>
+        <p>White wines carry a <strong>blue</strong> indicator, rosés a <strong>pink</strong> one, so you can spot the style at a glance while scanning a long list.</p>
+        <h3>Tasting notes</h3>
+        <p>Tap <span class="manual-ui">tasting notes ▾</span> on a card to expand it. The expanded view also shows the wine&rsquo;s <strong>product ID</strong> — quote that number if you ever report a problem with a listing. Tap again to collapse.</p>
+        <div class="manual-callout tip"><strong>Notes belong to the wine above them</strong>The Notes area sits under its own wine&rsquo;s details. If you&rsquo;re ever unsure which wine a note belongs to, it&rsquo;s always the product directly above the note.</div>
+      </div>
+    </details>
+
+    <!-- 4 -->
+    <details class="manual-sec" id="manual-scanner" data-title="Barcode scanner">
+      <summary><span class="manual-sec-num">4</span><span class="manual-sec-title"><strong>Barcode scanner</strong><small>Scan a bottle straight to its card</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <ol>
+          <li>Tap the <strong>scan icon</strong> under the settings gear, top right.</li>
+          <li>The scanner opens full-screen using the rear camera. Hold the barcode inside the viewfinder and hold steady — it focuses continuously where your phone supports it.</li>
+          <li>Tap the <strong>← back arrow</strong> at the top left to go back.</li>
+        </ol>
+        <h3>When it recognises the barcode</h3>
+        <p>You jump straight to that product: your other filters clear, the wine&rsquo;s brand, name and size appear in the Search box, and the list shows <strong>just that one wine, fully expanded</strong> — as if you had searched for it. Clear the search to restore the full list.</p>
+        <h3>“Barcode not on file”</h3>
+        <p>If the barcode isn&rsquo;t linked to any product yet, a prompt says so and shows the number you scanned. From there you can:</p>
+        <ul>
+          <li>Pick the right product from the list and tap <span class="manual-ui">Link barcode</span> — the link saves to the shared list, so that barcode works on everyone&rsquo;s phone from then on.</li>
+          <li>Tap <span class="manual-ui">Add as a new product</span> if the wine isn&rsquo;t listed at all (§8).</li>
+          <li>Tap <span class="manual-ui">Cancel</span> to do neither.</li>
+        </ul>
+        <h3>Camera can&rsquo;t read it?</h3>
+        <p>Use the <strong>typed-barcode fallback</strong> on the scanner screen — type the digits under the barcode and look it up that way. If the scanner can&rsquo;t read any digits at all, it tells you so and points you to the typed option rather than failing silently.</p>
+        <div class="manual-callout warn"><strong>If a link won&rsquo;t save</strong>The app says clearly when a barcode link can&rsquo;t be saved. Note the barcode number and the product it belongs to, and let Michael know — don&rsquo;t keep re-scanning and hoping.</div>
+      </div>
+    </details>
+
+    <!-- 5 -->
+    <details class="manual-sec" id="manual-stores" data-title="Stores — switching, adding and store types">
+      <summary><span class="manual-sec-num">5</span><span class="manual-sec-title"><strong>Stores</strong><small>Switching stores, adding one, and store types</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <h3>Switching store</h3>
+        <p>Tap the number-only pill beside the heading (e.g. <span class="manual-ui">358</span>) and pick another store. The list immediately shows what <em>that</em> store carries.</p>
+        <h3>What is per-store, and what is shared</h3>
+        <table class="manual-fields">
+          <tr><th>Per-store</th><td>Which products the store carries, and which are marked unavailable. Changing these affects only that store.</td></tr>
+          <tr><th>Shared by all</th><td>Prices, notes and product information. Edit a price or a tasting note and every store sees it.</td></tr>
+        </table>
+        <p>The shared list refreshes itself about every <strong>30 seconds</strong> while the app is open, so changes made on another phone appear without reloading.</p>
+        <h3>Adding a store</h3>
+        <ol>
+          <li>Choose <span class="manual-ui">Add store</span> — either in the first-visit popup or in Settings.</li>
+          <li>Enter the store number and choose a <strong>store type</strong>: Loblaws, Sobeys, Foodland, or Non-boutique.</li>
+          <li>The new store starts empty. Go to <strong>Settings → Store settings → Set store products</strong> and tick the products it carries from the checkbox list.</li>
+        </ol>
+        <h3>Store types and impact documents</h3>
+        <ul>
+          <li><strong>Loblaws</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws store.</li>
+          <li><strong>Sobeys, Foodland, Non-boutique</strong> and any custom type see a note that their impact isn&rsquo;t loaded yet.</li>
+          <li><strong>Store settings</strong> in Settings is a collapsible section — tap its heading to expand it. It shows your current store&rsquo;s type, the list of types, and an <span class="manual-ui">Add new store type</span> button if Michael adds more.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 6 -->
+    <details class="manual-sec" id="manual-love" data-title="Loving wines">
+      <summary><span class="manual-sec-num">6</span><span class="manual-sec-title"><strong>Loving wines ♥</strong><small>Hearts, Most loved, and your Loved wines list</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Loving a wine is your personal thumbs-up — your recommendations to each other. You must be <strong>signed in</strong> to love (§11); browsing never requires it.</p>
+        <ul>
+          <li>The <strong>heart</strong> sits near the three-dots menu on each card.</li>
+          <li><strong>Hollow heart</strong> = you haven&rsquo;t loved it. <strong>Filled red heart</strong> = you have. Tap to toggle.</li>
+          <li>A wine&rsquo;s Notes show <em>“Loved by X merchants”</em> — but only when X is above zero. No line at all means nobody has loved it yet.</li>
+          <li>The most-loved wine in the list earns a <strong>Most loved</strong> badge.</li>
+        </ul>
+        <h3>Your Loved wines list</h3>
+        <p>In <span class="manual-ui">Documents → Loved wines</span> you&rsquo;ll find only the wines you&rsquo;ve loved, <strong>most loved first</strong>. Tap one to open it. You can also use the <span class="manual-ui">♥ Loved</span> filter (§2) to see them in the main list.</p>
+        <div class="manual-callout warn"><strong>“Couldn&rsquo;t save that love”?</strong>That message meant the save was refused — it was a database problem (now fixed), not your connection, and it affected every wine the same way. If you ever see it again: note which wine, try once more in a fresh tab, and tell Michael if it persists.</div>
+      </div>
+    </details>
+
+    <!-- 7 -->
+    <details class="manual-sec" id="manual-comments" data-title="Wine comments">
+      <summary><span class="manual-sec-num">7</span><span class="manual-sec-title"><strong>Wine comments</strong><small>The comment bubble in a wine&rsquo;s notes</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Every wine can have a conversation attached to it — tasting impressions, customer feedback, “order more of this.” Comments were built <strong>not to slow searching down</strong>: nothing about comments loads while you search or filter.</p>
+        <h3>Finding the comments</h3>
+        <ul>
+          <li>Expand a wine&rsquo;s notes. The <strong>comment icon</strong> is in the notes area — comments live there, nowhere else.</li>
+          <li>A <strong>number badge</strong> beside the icon shows how many comments the wine has — only when there is at least one.</li>
+          <li>Comments stay <strong>hidden until you press the icon</strong>. Press it to open the thread; press again to put it away.</li>
+        </ul>
+        <h3>Posting, editing, deleting</h3>
+        <ul>
+          <li>Open the thread and write your comment. Comments show <strong>newest first</strong>.</li>
+          <li>Your own comments have <span class="manual-ui">Edit</span> and <span class="manual-ui">Delete</span> — you can fix a typo or remove a comment entirely. You can&rsquo;t edit or delete anyone else&rsquo;s.</li>
+          <li>Your name on a comment is your display name if you&rsquo;ve set one (§11).</li>
+          <li>Comment counts load quietly in the background after the list appears, refresh on the app&rsquo;s regular 30-second check, and update straight away when a comment on that wine is posted or deleted.</li>
+        </ul>
+        <div class="manual-callout tip"><strong>Comment or note?</strong>Notes are the shared facts about the wine (tasting notes, vegan source, and so on). Comments are conversation. If it&rsquo;s a fact the next person needs, it belongs in the notes via Edit (§8); if it&rsquo;s an opinion or a heads-up, it&rsquo;s a comment.</div>
+      </div>
+    </details>
+
+    <!-- 8 -->
+    <details class="manual-sec" id="manual-editing" data-title="Adding and editing products">
+      <summary><span class="manual-sec-num">8</span><span class="manual-sec-title"><strong>Adding &amp; editing products</strong><small>The three-dots menu, unavailable, cooler and plano</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Editing is locked behind <strong>sign-in</strong> — if you&rsquo;re signed out, you can browse everything but change nothing. Every change is recorded in the change history with your name (§13).</p>
+        <h3>The three-dots menu</h3>
+        <p>Tap the <strong>⋮ menu</strong> in a card&rsquo;s top-right corner for:</p>
+        <ul>
+          <li><span class="manual-ui">Edit</span> — open the product editor.</li>
+          <li><strong>Mark unavailable / available</strong> — for <em>your store only</em>. Other stores are unaffected.</li>
+          <li><strong>Not in plano</strong> — flag that the wine isn&rsquo;t on the planogram. It stays on the list (§3).</li>
+          <li><strong>Cooler on / off</strong> — whether this product belongs in the cooler.</li>
+        </ul>
+        <h3>In the editor</h3>
+        <ul>
+          <li><strong>Varietal</strong> is a pull-down list — or choose the add-new option and type a varietal that isn&rsquo;t listed yet.</li>
+          <li><strong>Barcode</strong> field — type or paste a barcode to link it to this product. Links save to the shared list for everyone (§4).</li>
+          <li><strong>Regular price</strong> — set or correct the regular price here (§9). Price changes are shared by all stores.</li>
+          <li>Sugar, sweetness, richness, tannins, acidity, tasting notes and notes can all be corrected here. Where a shelf (romance) tag and the web disagree, <strong>trust the tag</strong> — the tag is what the customer sees.</li>
+        </ul>
+        <h3>Adding a brand-new product</h3>
+        <ul>
+          <li>Use <strong>Add product</strong>, or a scan&rsquo;s <span class="manual-ui">Add as a new product</span>.</li>
+          <li>The new wine joins the shared list <strong>and your current store at the same time</strong> — it&rsquo;s searchable and scannable straight away, with no separate ticking-in step.</li>
+          <li>It is <em>not</em> added to other stores automatically. Each store ticks it in for itself if it carries it.</li>
+        </ul>
+        <div class="manual-callout warn"><strong>Before you add, search first</strong>The same wine in a different size is a separate product — but the same wine in the same size is a duplicate. Search the brand and name first so the shared list stays clean.</div>
+      </div>
+    </details>
+
+    <!-- 9 -->
+    <details class="manual-sec" id="manual-prices" data-title="Prices and sales">
+      <summary><span class="manual-sec-num">9</span><span class="manual-sec-title"><strong>Prices &amp; sales</strong><small>Sale / Reg / Save, and the broken-sale flag</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <h3>How a sale shows on a card</h3>
+        <ul>
+          <li><strong>Sale</strong> — the price the customer pays now. This is the big price on the card.</li>
+          <li><strong>Reg</strong> — the regular price.</li>
+          <li><strong>Save</strong> — the difference between the two.</li>
+        </ul>
+        <p>Not every wine has a price yet — a wine with no price simply shows no price. That&rsquo;s expected for part of the list, not an error.</p>
+        <h3>Fixing a price</h3>
+        <ul>
+          <li>Open the product editor (§8) and set the <strong>Regular price</strong>. Prices are shared — one correction fixes it for every store.</li>
+          <li><strong>Impact sale prices are locked.</strong> Sale prices that come from a period impact document can&rsquo;t be edited in the app — they follow the impact.</li>
+        </ul>
+        <h3>“Sale price not working”</h3>
+        <p>If a sale price is set but isn&rsquo;t displaying or saving properly, use the <strong>sale-broken flag</strong> on the product to mark it. That flags it for follow-up instead of the problem being silently lost — un-flag it once it&rsquo;s displaying correctly.</p><h3>Flash sales</h3><p>Some sales are <strong>flash sales</strong> — short scheduled sales like the <strong>Black Friday Flash Sale</strong> (Nov 16–30: Susse Reserve Riesling and JT Grand Reserve Shiraz, $3 off each). A wine in a flash sale carries a black-and-yellow <span class="manual-bdg flash">⚡ Flash Sale</span> badge beside its pink Sale badge — on the card, and again in the expanded details beside the Sale / Reg / Save lines — so a flash sale never just looks like an ordinary sale.</p><h3>When an impact sale ends, the sale clears itself</h3><p>When a scheduled impact sale period ends, the sale comes off the products in that impact automatically — <strong>both the on-sale flag and the sale price are cleared</strong>, even if that sale was typed in manually, so a stale sale never lingers past its impact. The <strong>regular price is never cleared</strong> — only the sale state is. A product that belongs to no impact sale is untouched: a one-off manual sale on it stays until someone turns it off.</p>
+      </div>
+    </details>
+
+    <!-- 10 -->
+    <details class="manual-sec" id="manual-documents" data-title="Documents tab">
+      <summary><span class="manual-sec-num">10</span><span class="manual-sec-title"><strong>Documents</strong><small>Loved wines, impact sheets, this manual and PDFs</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>The <span class="manual-ui">Documents</span> tab is a collapsible section — tap its heading to expand or collapse it. Inside:</p>
+        <ul>
+          <li><strong>Loved wines</strong> — your loved wines, most loved first (§6).</li>
+          <li><strong>This manual</strong> — the web version you&rsquo;re reading now, plus the <strong>Manual.pdf</strong> for printing. Same content, same version number as the app.</li>
+          <li><strong>Legacy Loblaws impact</strong> (Loblaws stores only) — the Current Impact Cheat Sheet, the full P8/P9 impact PDFs, and “What&rsquo;s on sample today.” Other store types see a note that their impact isn&rsquo;t loaded yet (§5).</li>
+        </ul>
+        <div class="manual-callout tip"><strong>Which manual should you open?</strong>On your phone, the web manual — text fits your screen and search works. The PDF is for the printer: fixed pages, made for paper.</div>
+      </div>
+    </details>
+
+    <!-- 11 -->
+    <details class="manual-sec" id="manual-settings-account" data-title="Settings, sign-in and display name">
+      <summary><span class="manual-sec-num">11</span><span class="manual-sec-title"><strong>Settings &amp; your account</strong><small>Google sign-in, display name, appearance</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Settings opens with your <strong>account status first</strong> — either the account you&rsquo;re signed in with, or that you&rsquo;re not signed in.</p>
+        <h3>Signing in with Google</h3>
+        <ol>
+          <li>In Settings → Account, tap the centred <span class="manual-ui">Sign in with Google</span> button.</li>
+          <li>Complete the Google sign-in. You&rsquo;ll be returned to the app, signed in.</li>
+          <li>If you&rsquo;re already signed into Google on the phone, Google may skip its login screen entirely — that&rsquo;s normal.</li>
+        </ol>
+        <div class="manual-callout tip"><strong>Why sign in at all?</strong>“You&rsquo;re seeing this because you&rsquo;re not signed in. You can browse and search without signing in — signing in lets you love wines and add or edit products, so your loves are yours and your changes carry your name.”</div>
+        <h3>Display name</h3>
+        <p>Don&rsquo;t want to appear under your Google account name? Set your own:</p>
+        <ul>
+          <li>In Settings → Account, enter a <strong>display name</strong> (up to 60 characters) and save. You can change it any time.</li>
+          <li>It&rsquo;s <strong>yours only</strong> — it never changes anyone else&rsquo;s name.</li>
+          <li>Your display name is used <strong>everywhere your name appears</strong>: the Account block, change history, wine comments, suggestions, and the Admin signed-in users list — including renaming your older entries.</li>
+          <li>Clear it with <span class="manual-ui">Use my Google name instead</span> to go back to your Google profile name.</li>
+          <li>Once set, it syncs across your devices.</li>
+        </ul>
+        <h3>Appearance</h3>
+        <ul>
+          <li>Choose <strong>Light</strong>, <strong>Dark</strong>, or <strong>Auto (Follow phone)</strong>.</li>
+          <li><strong>Light is the first-open default</strong> and is labelled “Default” in the setting. Dark has no label — if it isn&rsquo;t marked Default, it isn&rsquo;t the default.</li>
+          <li>Your choice is remembered and respected on reload.</li>
+        </ul>
+        <h3>Also in Settings</h3>
+        <ul>
+          <li><strong>Store settings</strong> — collapsible section with your store type, Set store products, and Add store (§5).</li>
+          <li><strong>Support Center</strong> — Wine Rack Store Support Centre contacts (§14).</li>
+          <li><strong>Admin</strong> — a button at the very bottom of Settings, visible to Michael and appointed admins (§13).</li>
+          <li>The footer line reads <em>“Created and maintained by Michael Benia WR 358.”</em></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 12 -->
+    <details class="manual-sec" id="manual-suggestions" data-title="Suggestions">
+      <summary><span class="manual-sec-num">12</span><span class="manual-sec-title"><strong>Suggestions</strong><small>Ask for a change, track what happened to it</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Found something missing, wrong, or worth adding? Send a suggestion instead of just mentioning it in passing — suggestions are tracked, so they don&rsquo;t get lost.</p>
+        <ul>
+          <li>Write and submit your suggestion — you&rsquo;ll get a <strong>thank-you</strong> confirming it landed.</li>
+          <li><strong>Your suggestions</strong> lists everything you&rsquo;ve sent. You can <span class="manual-ui">Edit</span> or <span class="manual-ui">Delete</span> your own suggestions.</li>
+          <li>When an admin deals with one, they can mark it <strong>Acted upon</strong> and <strong>reply</strong> to it — the reply shows with your suggestion, so you can see what was done.</li>
+          <li>You only ever see your own suggestions, not everyone else&rsquo;s.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 13 -->
+    <details class="manual-sec" id="manual-admin" data-title="Admin — users, bans and change history">
+      <summary><span class="manual-sec-num">13</span><span class="manual-sec-title"><strong>Admin</strong><small>For Michael and appointed admins</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Admin lives behind a button at the <strong>very bottom of Settings</strong>. It is restricted to Michael (halroben8@gmail.com, the default admin) and users he appoints. If you can&rsquo;t see it, you&rsquo;re not an admin — that&rsquo;s expected for most users.</p>
+        <h3>The signed-in users list</h3>
+        <p>Admin works from one list: <strong>everyone who has logged in</strong>. There is no appointing or banning by typing an email address — everything is done with buttons on the person&rsquo;s row:</p>
+        <ul>
+          <li><span class="manual-ui">Make admin</span> — appoint that user as an admin. The button becomes <span class="manual-ui">Remove admin</span> once they are one.</li>
+          <li><span class="manual-ui">Ban</span> — block that account. The button becomes <span class="manual-ui">Unban</span>; bans are reversible from the same row.</li>
+        </ul>
+        <h3>The safeguards</h3>
+        <ul>
+          <li>Only <strong>Michael</strong> can make or remove admins.</li>
+          <li><strong>Michael can never be banned</strong>, and nobody can ban themselves.</li>
+          <li>Making/removing an admin and banning/unbanning are all <strong>logged</strong>.</li>
+          <li>A banned user is signed out with a clear <strong>“Account blocked”</strong> notice. They can still <strong>browse</strong> the list, search and filters — but they cannot love, comment, suggest, or add/edit anything. The check runs at sign-in and on the app&rsquo;s regular 30-second check while it&rsquo;s open.</li>
+        </ul>
+        <h3>Change history</h3>
+        <ul>
+          <li>Every add and edit is recorded with <strong>who made it</strong> (display name if set), what changed, and when.</li>
+          <li>History is <strong>Admin-only</strong> — it isn&rsquo;t shown to regular users.</li>
+          <li>Admin also carries the action log for admin actions, and the suggestions queue (§12) for marking suggestions acted upon and replying.</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 14 -->
+    <details class="manual-sec" id="manual-support" data-title="Support Center contacts">
+      <summary><span class="manual-sec-num">14</span><span class="manual-sec-title"><strong>Support Center</strong><small>Who to call at Wine Rack Store Support</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>The app carries the <strong>Wine Rack Store Support Centre</strong> contact sheet (last updated April 21, 2026) in <span class="manual-ui">Settings → Support Center</span>, so it&rsquo;s in your pocket on the floor — no hunting for the sheet.</p>
+        <p>Contacts are grouped the same way as the sheet:</p>
+        <ul>
+          <li>Support Services</li>
+          <li>Marketing</li>
+          <li>Operations</li>
+          <li>Marketplace</li>
+          <li>Distribution / Shipment / Store Ordering</li>
+          <li>HR / Payroll / Safety</li>
+        </ul>
+        <p>Each entry shows the name, phone and email as supplied, with any notes. <strong>Tap a phone number to call it; tap an email to write to it.</strong></p>
+      </div>
+    </details>
+
+    <!-- 15 -->
+    <details class="manual-sec" id="manual-troubleshooting" data-title="Troubleshooting and FAQ">
+      <summary><span class="manual-sec-num">15</span><span class="manual-sec-title"><strong>Troubleshooting &amp; FAQ</strong><small>The problems people actually hit</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <h3>An old tab is showing an old version</h3>
+        <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
+        <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
+        <p>This was a database fault, fixed in version 2026.11.03.9 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
+        <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
+        <h3>The store popup keeps appearing</h3>
+        <p>The “Which store are you at?” popup asks on a fresh open. Pick your store from the list (don&rsquo;t just close it) so the app knows which list to show you.</p>
+        <h3>A wine shows one more product than expected</h3>
+        <p>Check the count line under Search (<em>Showing X of X products</em>). If the total has crept up, a duplicate or an extra product may have been added to the shared list — search the brand to find it and let Michael know rather than adding another copy.</p>
+        <h3>Scanner opens but doesn&rsquo;t recognise anything</h3>
+        <p>Hold the barcode flat, well-lit and inside the viewfinder, and give it a second to focus. Still nothing? Use the typed-barcode fallback on the scanner screen (§4).</p>
+        <h3>A sale price looks wrong</h3>
+        <p>Check Reg against the shelf tag — and remember, <strong>trust the tag</strong>. Correct the regular price in the editor if the tag disagrees with the app (§9); if the sale itself won&rsquo;t display, set the sale-broken flag.</p>
+        <h3>The manual PDF needs zooming on my phone</h3>
+        <p>That&rsquo;s the PDF, not you — a PDF is a fixed page, so a phone shrinks it to fit. Use <strong>this web manual</strong> on your phone; keep the PDF for printing.</p>
+        <h3>Who do I ask?</h3>
+        <p>For the app itself, send a suggestion (§12) so it&rsquo;s tracked. For Wine Rack store support, use the Support Center contacts in Settings (§14).</p>
+      </div>
+    </details>
+
+  
+    </div>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.12</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="manualCancel">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="editor-overlay" id="editorOverlay" hidden>
   <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
     <div class="editor-head">
@@ -5541,9 +6055,10 @@
             <option value="Yes">Yes — show pink SALE badge</option>
           </select>
         </div>
-        <div class="efield" id="f-saleprice-field" hidden>
+        <div class="efield" id="f-saleprice-field">
           <label for="f-saleprice">Sale price ($)</label>
           <input id="f-saleprice" type="number" min="0" step="0.01" placeholder="Leave blank to keep the regular price above as the sale price" />
+          <p class="field-hint">Separate from the Regular price above &mdash; both prices can always be seen and entered here. The Sale price is the price shown as the &ldquo;Sale&rdquo; line while On sale is Yes.</p>
         </div>
         <div class="efield" id="f-salebroken-field" hidden>
           <label for="f-salebroken">Sale price not working</label>
@@ -5752,14 +6267,13 @@
 
 <div class="scanner-overlay" id="scannerOverlay" hidden>
   <div class="scanner-top">
-    <button type="button" class="scanner-cancel" id="scannerCancel">Cancel</button>
+    <button type="button" class="scanner-back" id="scannerCancel" aria-label="Back — close the scanner">←</button>
     <h2 id="scannerTitle">Scan barcode</h2>
   </div>
   <div class="scanner-stage">
     <video id="scannerVideo" playsinline muted autoplay aria-label="Camera view for scanning a barcode"></video>
     <div class="scanner-frame" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="scanner-line"></span></div>
   </div>
-  <p class="scanner-hint">Point the camera at the barcode — sideways, tilted, diagonal or upside down is fine.</p>
   <p class="scanner-status" id="scannerStatus" role="status"></p>
   <div class="scanner-manual">
     <label for="scannerManual">No camera? Type the barcode</label>
@@ -5872,29 +6386,13 @@
       <button type="button" class="editor-x" id="adminClose" aria-label="Close admin">×</button>
     </div>
     <h3 class="be-head">Signed-in users</h3>
+    <p class="theme-note" style="margin-top:0">Everyone who has signed in is listed here. Use the buttons on a user&rsquo;s row: <strong>Make admin</strong> to appoint them (Michael only), <strong>Remove admin</strong> to undo it, <strong>Ban</strong> to block them, and <strong>Unban</strong> to reverse a ban. There is no appoint or ban by email — it is all done from this list.</p>
     <div id="adminUsers"><p class="hist-empty">Loading…</p></div>
     <h3 class="be-head">Appointed admins</h3>
     <div id="adminAdmins"><p class="hist-empty">Loading…</p></div>
-    <div id="adminAppointForm" hidden>
-      <label for="adminAppointEmail">Appoint an admin by email</label>
-      <div class="appoint-row">
-        <input id="adminAppointEmail" type="email" autocomplete="off" placeholder="name@example.com" />
-        <button type="button" class="btn-save-small" id="adminAppointBtn">Appoint</button>
-      </div>
-      <p class="store-err" id="adminAppointErr" role="alert" hidden></p>
-      <p class="theme-note">They get access the next time they open the app signed in with that email. You can also appoint anyone in the Signed-in users list above with one tap.</p>
-    </div>
     <h3 class="be-head">Banned users</h3>
     <div id="adminBanned"><p class="hist-empty">Loading…</p></div>
-    <div id="adminBanForm" hidden>
-      <label for="adminBanEmail">Ban a user by email</label>
-      <div class="appoint-row">
-        <input id="adminBanEmail" type="email" autocomplete="off" placeholder="name@example.com" />
-        <button type="button" class="btn-ban-small" id="adminBanBtn">Ban</button>
-      </div>
-      <p class="store-err" id="adminBanErr" role="alert" hidden></p>
-      <p class="theme-note">A banned user can&rsquo;t use signed-in features — if they&rsquo;re signed in when banned, they&rsquo;re signed out with a blocked message, and they can&rsquo;t love wines or make changes (they can still browse the list). Unban anyone from this list or from the Signed-in users list above. Michael (halroben8@gmail.com) can&rsquo;t be banned.</p>
-    </div>
+    <p class="theme-note">A banned user can&rsquo;t use signed-in features — if they&rsquo;re signed in when banned, they&rsquo;re signed out with a blocked message, and they can&rsquo;t love wines or make changes (they can still browse the list). Unban anyone from this list or from the Signed-in users list above. Michael (halroben8@gmail.com) can&rsquo;t be banned.</p>
     <h3 class="be-head">Suggestions</h3>
     <div id="adminSuggestions"><p class="hist-empty">Loading…</p></div>
     <h3 class="be-head">Change history</h3>
@@ -7077,6 +7575,41 @@
     }
     return wrap;
   }
+  /* ---------- Flash sale badge ----------
+     A product in an ACTIVE flash sale period (a SALE_PERIODS entry
+     flagged flash — the Black Friday Flash Sale) carries the
+     black-and-yellow “⚡ Flash Sale” badge beside its pink SALE
+     badge on the card, and a matching Flash Sale line in its
+     expanded details beside the Sale / Reg / Save lines (added by
+     syncSaleDetail below), so a flash sale never reads as an
+     ordinary sale. The state is DERIVED from the date and the
+     schedule on every render (flashSaleFor, in the scheduled-sales
+     section) — never stored in, or synced to, the shared list —
+     and shows only while the product is actually on sale inside
+     its flash period. Search also matches "flash" for these. */
+  function syncFlashBadge(row){
+    var flash = null;
+    try{ flash = isSale(row) ? flashSaleFor(row) : null; }catch(e){ flash = null; }
+    row.classList.toggle('is-flash-sale', !!flash);
+    row.setAttribute('data-flash', flash ? 'Yes' : 'No');
+    var pcell = cellEl(row, 'Product');
+    if(pcell){
+      var existing = pcell.querySelector('.badge.flash-sale');
+      if(flash && !existing){
+        var fb = document.createElement('span');
+        fb.className = 'badge flash-sale';
+        fb.textContent = '⚡ Flash Sale';
+        var anchor = pcell.querySelector('.badge.sale-broken') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
+        if(anchor && anchor.nextSibling) pcell.insertBefore(fb, anchor.nextSibling);
+        else pcell.appendChild(fb);
+      } else if(!flash && existing){
+        existing.parentNode.removeChild(existing);
+      }
+    }
+    var s = (row.getAttribute('data-search') || '').replace(/\bflash\b/g, '').replace(/\s+/g, ' ').trim();
+    if(flash) s += ' flash';
+    row.setAttribute('data-search', s);
+  }
   /* The expanded details carry the same Sale / Reg / Save lines,
      directly under the detail head and above the tasting notes.
      The block exists only while the product is on sale with a
@@ -7084,6 +7617,7 @@
      sales switching on or off by date, editor saves and ⋮-menu
      sale toggles all update it through writeRow below */
   function syncSaleDetail(row){
+    syncFlashBadge(row);
     var d = details[row.getAttribute('data-idx')];
     if(!d) return;
     var detail = d.querySelector('.detail');
@@ -7104,6 +7638,17 @@
     }
     el.innerHTML = '';
     el.appendChild(saleLinesEl(fig));
+    var flashInfo = flashSaleFor(row);
+    if(flashInfo){
+      var fnote = document.createElement('span');
+      fnote.className = 'flash-sale-note';
+      var fbadge = document.createElement('span');
+      fbadge.className = 'badge flash-sale';
+      fbadge.textContent = '⚡ Flash Sale';
+      fnote.appendChild(fbadge);
+      fnote.appendChild(document.createTextNode((flashInfo.period || 'Flash Sale') + (flashInfo.off ? ' — $' + Number(flashInfo.off).toFixed(0) + ' off the regular price' : '') + ' — this sale ends with its impact period.'));
+      el.appendChild(fnote);
+    }
     if(isSaleBroken(row)){
       var warn = document.createElement('span');
       warn.className = 'sale-broken-note';
@@ -7790,7 +8335,9 @@
     document.getElementById('f-price').value = cur.price;
     document.getElementById('f-sale').value = cur.sale ? 'Yes' : 'No';
     document.getElementById('f-saleprice').value = cur.salePrice;
-    document.getElementById('f-saleprice-field').hidden = !cur.sale;
+    /* The Sale price field stays visible beside the Regular price
+       field whether or not the product is on sale, so both prices
+       can always be seen and entered in the editor */
     document.getElementById('f-salebroken').value = cur.saleBroken ? 'Yes' : 'No';
     document.getElementById('f-salebroken-field').hidden = !cur.sale;
     /* Scheduled (impact) sale: while this product is in an ACTIVE
@@ -7810,9 +8357,11 @@
     if(impactOn){
       var impactPrice = parseFloat(sched.price);
       document.getElementById('f-sale-impact-note').textContent =
+        (sched.flash ? '⚡ Flash Sale — ' : '') +
         'On sale now from the ' + (sched.period || 'scheduled impact') + ' — the sale price' +
         (isNaN(impactPrice) ? '' : ' of $' + impactPrice.toFixed(2)) +
-        ' is set by the impact schedule, not typed here. The Regular price above is still yours to edit.';
+        ' is set by the impact schedule, not typed here. The Regular price above is still yours to edit.' +
+        (sched.flash ? ' The ⚡ Flash Sale badge shows on the card and in the details while this sale runs, and the sale clears itself when the flash sale ends.' : '');
       impactField.hidden = false;
     } else {
       impactField.hidden = true;
@@ -7922,11 +8471,11 @@
     scanForEditor = true;
     openScanner();
   });
-  /* Sale price and Sale price not working fields only show while
-     On sale is Yes */
+  /* The Sale price field is always visible beside the Regular
+     price field; only the Sale price not working field appears
+     while On sale is Yes */
   document.getElementById('f-sale').addEventListener('change', function(){
     var on = this.value === 'Yes';
-    document.getElementById('f-saleprice-field').hidden = !on;
     document.getElementById('f-salebroken-field').hidden = !on;
     if(on) document.getElementById('f-saleprice').focus();
   });
@@ -8614,11 +9163,13 @@
      The documents now live on their own Documents tab in the
      Settings panel (see the tab wiring where the Settings panel
      opens): What's on sample today? first, then the two full
-     impact PDFs, the Current Impact Cheat Sheet, Wine Knowledge
-     and — last — the Product Info Manual, shown directly when
-     the tab is
-     tapped. The document links and the date-aware cheat sheet
-     and sample buttons work exactly as before. */
+     impact PDFs, the Current Impact Cheat Sheet, Wine Knowledge,
+     Loved wines, and — last, under a Manual heading — the Product
+     Info Manual twice: the prominent mobile-friendly WEB version
+     first (it opens the in-app manual panel; the reading version,
+     and the default on phones), then the PDF manual labelled for
+     printing only. The document links and the date-aware cheat
+     sheet and sample buttons work exactly as before. */
 
   /* ---------- Store settings (Settings) ----------
      Store settings is a collapsible section with the same
@@ -8667,6 +9218,99 @@
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !supportOverlay.hidden) closeSupport();
   });
+
+  /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
+     The responsive web manual, baked into this page as a panel on
+     the Wine Knowledge / Support pattern: the prominent solid
+     entry at the top of the Manual section in Documents (above the
+     PDF entry, which is kept for printing only) opens it. Text
+     reflows to the screen width — scroll instead of zoom — every
+     section taps open, and the search filters the sections,
+     auto-opening matches. Same content and version as the app and
+     the print PDF (2026.11.03.12). Reference content only: nothing
+     here reads or writes product data. */
+  var manualOverlay = document.getElementById('manualOverlay');
+  function openManual(){
+    manualOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('manualClose').focus();
+  }
+  function closeManual(){
+    if(manualOverlay.hidden) return;
+    manualOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('webManualBtn').addEventListener('click', function(){
+    closeSettings();
+    openManual();
+  });
+  document.getElementById('manualClose').addEventListener('click', closeManual);
+  document.getElementById('manualCancel').addEventListener('click', closeManual);
+  manualOverlay.addEventListener('click', function(ev){ if(ev.target === manualOverlay) closeManual(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !manualOverlay.hidden) closeManual();
+  });
+  (function(){
+    var q = document.getElementById('manualSearch');
+    var clearBtn = document.getElementById('manualSearchClear');
+    var status = document.getElementById('manualSearchStatus');
+    var noResults = document.getElementById('manualNoResults');
+    var secs = Array.prototype.slice.call(manualOverlay.querySelectorAll('details.manual-sec'));
+    var chipsBox = document.getElementById('manualChips');
+    secs.forEach(function(sec, i){
+      var title = sec.getAttribute('data-title') || '';
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'manual-chip';
+      var num = document.createElement('span');
+      num.textContent = String(i + 1);
+      chip.appendChild(num);
+      chip.appendChild(document.createTextNode(title.replace(/ —.*$/, '').replace(/:.*$/, '')));
+      chip.addEventListener('click', function(){
+        sec.hidden = false;
+        sec.open = true;
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        sec.scrollIntoView({ block: 'start', behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+      chipsBox.appendChild(chip);
+    });
+    document.getElementById('manualExpandAll').addEventListener('click', function(){
+      secs.forEach(function(sec){ if(!sec.hidden) sec.open = true; });
+    });
+    document.getElementById('manualCollapseAll').addEventListener('click', function(){
+      secs.forEach(function(sec){ sec.open = false; });
+    });
+    function applyManualSearch(){
+      var term = q.value.trim().toLowerCase();
+      clearBtn.classList.toggle('show', term.length > 0);
+      if(!term){
+        secs.forEach(function(sec){ sec.hidden = false; });
+        status.textContent = '';
+        noResults.classList.remove('show');
+        return;
+      }
+      var words = term.split(/\s+/);
+      var shown = 0;
+      secs.forEach(function(sec){
+        var hay = ((sec.getAttribute('data-title') || '') + ' ' + sec.textContent).toLowerCase();
+        var match = words.every(function(w){ return hay.indexOf(w) !== -1; });
+        sec.hidden = !match;
+        if(match){ sec.open = true; shown++; }
+      });
+      status.textContent = shown === 1 ? '1 section matches \u201c' + q.value.trim() + '\u201d — opened for you.'
+        : shown > 0 ? shown + ' sections match \u201c' + q.value.trim() + '\u201d — opened for you.'
+        : 'No sections match \u201c' + q.value.trim() + '\u201d.';
+      noResults.classList.toggle('show', shown === 0);
+    }
+    q.addEventListener('input', applyManualSearch);
+    clearBtn.addEventListener('click', function(){
+      q.value = '';
+      applyManualSearch();
+      q.focus();
+    });
+    if(secs.length) secs[0].open = true;
+  })();
+
 
   /* ---------- Stores ----------
      Store 358 is the store this list was built from, so it starts with
@@ -11804,9 +12448,9 @@
      with the blocked message on their next check; they can
      still browse the public list, but signed-in features stay
      closed to them. Any appointed admin (Michael
-     or an appointed user) can ban or unban — from a row in the
-     Signed-in users list, from the Banned users list (unban),
-     or by email. The bootstrap admin can NEVER be banned:
+     or an appointed user) can ban or unban — only from a row in
+     the Signed-in users list, or Unban from the Banned users
+     list. There is no ban by email. The bootstrap admin can NEVER be banned:
      isUserBanned() always returns false for his email, and
      banUser() refuses the attempt outright. Nobody can ban
      themselves. Bans and unbans are written to the action log
@@ -11873,9 +12517,9 @@
   }
   /* A PostgREST or=(…) filter matching ONLY the signed-in
      user's own rows in a user-keyed table — by user_id, and by
-     their email exactly as signed in and lowercased (rows made
-     by appointing / banning by email carry only the email, in
-     whatever case it was typed). Used so a signed-in session
+     their email exactly as signed in and lowercased (older rows
+     created before list-based appoint / ban carry only the
+     email). Used so a signed-in session
      that merely needs to know its OWN status (am I appointed?
      am I banned?) never has to download everyone else's rows:
      the full lists are fetched only inside the Admin area, by
@@ -12181,7 +12825,7 @@
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = appointed ? 'btn-ghost-small' : 'btn-save-small';
-            btn.textContent = appointed ? 'Remove admin' : 'Appoint as admin';
+            btn.textContent = appointed ? 'Remove admin' : 'Make admin';
             btn.addEventListener('click', function(){
               if(appointed) removeAdmin({ user_id: u.user_id, user_email: u.user_email, user_name: resolvedNameFor(u) || u.user_name || null });
               else appointAdmin({ user_id: u.user_id, user_email: u.user_email, user_name: resolvedNameFor(u) || u.user_name || null });
@@ -12223,9 +12867,7 @@
   }
   function renderAdminAdmins(){
     var box = document.getElementById('adminAdmins');
-    var form = document.getElementById('adminAppointForm');
     if(!box) return;
-    if(form) form.hidden = !(isBootstrapAdmin() && adminsReady === true);
     if(adminsReady === false){
       adminMsg(box, 'Appointments are not set up yet \u2014 the app_admins table still needs to be created in the shared list. Michael is appointed by default either way; appointing others starts working once the table exists.');
       return;
@@ -12282,7 +12924,7 @@
     if(!shown){
       var none = document.createElement('p');
       none.className = 'hist-empty';
-      none.textContent = 'No one else is appointed yet. Appoint someone from the Signed-in users list, or by email below.';
+      none.textContent = 'No one else is appointed yet. Use Make admin on a user in the Signed-in users list above.';
       box.appendChild(none);
     }
     if(!isBootstrapAdmin()){
@@ -12294,9 +12936,7 @@
   }
   function renderAdminBanned(){
     var box = document.getElementById('adminBanned');
-    var form = document.getElementById('adminBanForm');
     if(!box) return;
-    if(form) form.hidden = !(isAppointed() && bannedReady === true);
     if(bannedReady === false){
       adminMsg(box, 'Banning is not set up yet \u2014 the banned_users table still needs to be created in the shared list. Once it exists, banned users show up here and are blocked from signing in and from signed-in features.');
       return;
@@ -12305,7 +12945,7 @@
     box.innerHTML = '';
     var visible = bannedUsers.filter(function(b){ return !isBootstrapEmail(b.user_email); });
     if(!visible.length){
-      adminMsg(box, 'No one is banned. Ban someone from the Signed-in users list above, or by email below.');
+      adminMsg(box, 'No one is banned. Use Ban on a user in the Signed-in users list above.');
       return;
     }
     visible.forEach(function(b){
@@ -12339,31 +12979,6 @@
       box.appendChild(item);
     });
   }
-  document.getElementById('adminBanBtn').addEventListener('click', function(){
-    var input = document.getElementById('adminBanEmail');
-    var errEl = document.getElementById('adminBanErr');
-    var email = input ? input.value.trim() : '';
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      if(errEl){ errEl.textContent = 'Enter a valid email address.'; errEl.hidden = false; }
-      if(input) input.focus();
-      return;
-    }
-    if(errEl) errEl.hidden = true;
-    if(isBootstrapEmail(email)){
-      if(errEl){ errEl.textContent = 'Michael (halroben8@gmail.com) can\u2019t be banned \u2014 he\u2019s the app owner.'; errEl.hidden = false; }
-      return;
-    }
-    if(authUser && authUser.email && String(authUser.email).toLowerCase() === email.toLowerCase()){
-      if(errEl){ errEl.textContent = 'You can\u2019t ban yourself.'; errEl.hidden = false; }
-      return;
-    }
-    if(findBanEntry(null, email)){
-      if(errEl){ errEl.textContent = 'That email is already banned.'; errEl.hidden = false; }
-      return;
-    }
-    if(input) input.value = '';
-    banUser({ user_email: email });
-  });
   /* ----- Change history (Admin area ONLY) -----
      This is the one and only place change history is read. It is
      called only from openAdmin(), which is itself gated to
@@ -12415,11 +13030,12 @@
   }
   function appointAdmin(entry){
     if(!isBootstrapAdmin()) return;
-    if(!entry || (!entry.user_id && !entry.user_email)){ syncToast('Nothing to appoint \u2014 no user or email given.', true); return; }
+    if(!entry || (!entry.user_id && !entry.user_email)){ syncToast('Nothing to appoint \u2014 no user given.', true); return; }
     sb('app_admins', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
       user_id: entry.user_id || null, user_email: entry.user_email || null, user_name: entry.user_name || null,
       appointed_by: authDisplayName() + (authUser.email ? ' (' + authUser.email + ')' : '')
     } }).then(function(){
+      sbLogChange(null, 'Made admin: ' + (entry.user_name || entry.user_email || ''));
       return loadAdminsFull();
     }).then(function(){
       renderAdminUsers(); renderAdminAdmins();
@@ -12439,6 +13055,7 @@
       ? 'user_id=eq.' + encodeURIComponent(entry.user_id)
       : 'user_email=eq.' + encodeURIComponent(entry.user_email || '');
     sb('app_admins?' + q, { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+      sbLogChange(null, 'Removed admin: ' + (entry.user_name || entry.user_email || ''));
       return loadAdminsFull();
     }).then(function(){
       renderAdminUsers(); renderAdminAdmins();
@@ -12448,23 +13065,6 @@
       syncToast('Couldn\u2019t remove that appointment \u2014 check your connection and try again.', true);
     });
   }
-  document.getElementById('adminAppointBtn').addEventListener('click', function(){
-    var input = document.getElementById('adminAppointEmail');
-    var errEl = document.getElementById('adminAppointErr');
-    var email = input ? input.value.trim() : '';
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-      if(errEl){ errEl.textContent = 'Enter a valid email address.'; errEl.hidden = false; }
-      if(input) input.focus();
-      return;
-    }
-    if(errEl) errEl.hidden = true;
-    if(isUserAppointed(null, email)){
-      if(errEl){ errEl.textContent = 'That email is already an appointed admin.'; errEl.hidden = false; }
-      return;
-    }
-    if(input) input.value = '';
-    appointAdmin({ user_email: email });
-  });
   function openAdmin(){
     /* The gate, checked again at the door: no appointment, no
        entry — and none of the three lists is even fetched */
@@ -13376,18 +13976,26 @@
      day, and from Dec 1 nothing here is on sale until a later period
      is added to this table. Products that appear in no period are
      left exactly as they are, so a one-off manual sale set in the
-     editor is untouched.
+     editor on one of those is untouched. Products that DO appear
+     in a period are different once that period has ENDED: their
+     sale is cleared in full — the on-sale flag AND the sale price —
+     even when the sale showing was entered manually, so no stale
+     sale persists past its impact (see clearPrice in
+     scheduledSaleFor). The regular price is never cleared.
      Items are matched by product id where the row carries one, and
      otherwise — the Not In Plano rows for Inniskillin Discovery
      Series P3 and Susse Reserve Riesling carry no Product ID line —
      by consolidated brand + product + size, the same key the shared
      list matches on. Names below are the app's consolidated names.
-     This is display logic only: applying the schedule never calls
-     any sbSync* helper, so scheduled sale state is never written to
-     the shared list (whose products table has no on_sale /
-     sale_price columns yet). A manual On sale toggle on a scheduled
-     product still works until the next load or refresh re-derives
-     the sale state from the date. */
+     Scheduled on/off state is otherwise display logic only and
+     is never written to the shared list (whose products table has
+     no on_sale / sale_price columns yet); the one exception is a
+     period-end clear, which best-effort pushes the cleared state
+     via sbSyncSale so the shared list drops the stale sale too
+     where those columns exist — and every load re-derives the
+     clear locally either way. A manual On sale toggle on a
+     scheduled product still works until the next load or refresh
+     re-derives the sale state from the date. */
   var SALE_PERIODS = [
     { name: 'P8 LTOs', start: new Date(2026, 9, 12), end: new Date(2026, 10, 8), items: [
       { pid: '80085897', brand: 'BASK', product: 'Pinot Noir', size: '750mL', price: '11.99' },
@@ -13418,7 +14026,7 @@
       { pid: '80010507', brand: 'Jackson-Triggs', product: "Proprietors' Selection Merlot", size: '4L', price: '41.99' },
       { pid: '80010385', brand: 'Jackson-Triggs', product: "Proprietors' Selection Sauvignon Blanc", size: '4L', price: '41.99' }
     ] },
-    { name: 'Black Friday Flash Sale', start: new Date(2026, 10, 16), end: new Date(2026, 10, 30), items: [
+    { name: 'Black Friday Flash Sale', flash: true, start: new Date(2026, 10, 16), end: new Date(2026, 10, 30), items: [
       { pid: '80020465', brand: 'Inniskillin', product: 'Discovery Series Susse Reserve Riesling', size: '750mL', off: 3 },
       { pid: '80011979', brand: 'Jackson-Triggs', product: 'Grand Reserve Shiraz', size: '750mL', off: 3 }
     ] }
@@ -13438,30 +14046,48 @@
      { on:true, price } while its period runs — the fixed LTO price,
      or for the flash sale the row's regular price minus the amount
      off ('' when the row has no regular price to take it off, so the
-     SALE badge still shows and the price cell keeps its "—"). */
+     SALE badge still shows and the price cell keeps its "—").
+     An { on:false } result also carries endedPeriod / clearPrice
+     when a period containing the product has already ENDED:
+     clearPrice tells applyScheduledSales to remove the stored sale
+     price as well as the flag, so the sale is cleared in full at
+     the impact's end. Active results from a flash period carry
+     flash / off (see flashSaleFor). */
   function scheduledSaleFor(row){
     var pid = rowPid[row.getAttribute('data-idx')] || row.getAttribute('data-pid') || detailSrcPid(row);
     var d = readRow(row);
     var key = normKey(d.brand, d.name, d.size);
     var now = new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    var matched = false, active = null, activePeriod = '';
+    var matched = false, active = null, activePeriod = '', activeFlash = false, activeOff = 0, endedPeriod = '';
     SALE_PERIODS.forEach(function(period){
       var running = today >= period.start && today <= period.end;
+      var ended = today > period.end;
       period.items.forEach(function(item){
         if(!saleEntryMatches(item, pid, key)) return;
         matched = true;
-        if(running && !active){ active = item; activePeriod = period.name; }
+        if(ended && !running) endedPeriod = period.name;
+        if(running && !active){ active = item; activePeriod = period.name; activeFlash = !!period.flash; activeOff = item.off || 0; }
       });
     });
     if(!matched) return null;
-    if(!active) return { on: false, price: null };
+    if(!active) return { on: false, price: null, endedPeriod: endedPeriod, clearPrice: !!endedPeriod };
     if(active.off){
       var reg = parseFloat(row.getAttribute('data-price'));
       var p = (!isNaN(reg) && reg > active.off) ? (reg - active.off).toFixed(2) : '';
-      return { on: true, price: p, period: activePeriod };
+      return { on: true, price: p, period: activePeriod, flash: activeFlash, off: activeOff };
     }
-    return { on: true, price: active.price, period: activePeriod };
+    return { on: true, price: active.price, period: activePeriod, flash: activeFlash, off: activeOff };
+  }
+  /* The flash-sale state the schedule wants for one row today:
+     the scheduledSaleFor result when the product is on sale in an
+     ACTIVE flash period, otherwise null. Guarded for the first
+     paint, which renders sale details before SALE_PERIODS below
+     has been initialised. */
+  function flashSaleFor(row){
+    if(typeof SALE_PERIODS === 'undefined' || !SALE_PERIODS) return null;
+    var s = scheduledSaleFor(row);
+    return (s && s.on && s.flash) ? s : null;
   }
   function applyScheduledSales(){
     var changed = false;
@@ -13475,13 +14101,29 @@
         var b = parseFloat(want.price);
         samePrice = (isNaN(a) && isNaN(b)) || (!isNaN(a) && !isNaN(b) && Math.abs(a - b) < 0.005);
       }
-      if(curOn === want.on && (!want.on || samePrice)) return;
+      var stalePrice = !!(!want.on && want.clearPrice && (row.getAttribute('data-sale-price') || '') !== '');
+      if(curOn === want.on && (!want.on || samePrice) && !stalePrice) return;
       var data = readRow(row);
       data.sale = want.on;
-      /* Turning off keeps the stored sale price for later, exactly
-         like the ⋮ menu toggle; turning on sets the scheduled one */
+      /* Turning on sets the scheduled price. Turning off while no
+         period of this product's has ended yet keeps the stored
+         sale price for later, exactly like the ⋮ menu toggle — but
+         once a period this product belongs to has ENDED, the sale
+         is cleared in full: flag off AND sale price removed, even
+         when the sale on the row was entered manually, so no stale
+         sale survives its impact. The regular price (data.price)
+         is never touched by any of this. */
       if(want.on) data.salePrice = want.price;
+      else if(want.clearPrice) data.salePrice = '';
       writeRow(row, data);
+      if(!want.on && want.clearPrice && (curOn || stalePrice)){
+        /* Make the period-end clear durable, not just local: push
+           the cleared sale state to the shared list (best effort —
+           where the sale columns do not exist yet sbSyncSale
+           swallows the failure, and every load re-derives the
+           clear locally either way) */
+        try{ if(typeof sbSyncSale === 'function') sbSyncSale(row); }catch(e){}
+      }
       syncPlanoSearch(row);
       syncCoolerSearch(row);
       syncSaleSearch(row);
@@ -13497,6 +14139,14 @@
        closed) to catch up. When nothing changed this is skipped,
        so a routine re-derivation never disturbs the list. */
     if(changed){ applySort(); apply(); }
+    /* Flash badges follow the same derivation: refresh them (and
+       the expanded sale blocks carrying the Flash Sale line) on
+       every row that is in, or was in, a flash sale, so a flash
+       sale starting or ending by date shows or clears its badge
+       even where the sale flag itself did not change */
+    rows.slice().forEach(function(row){
+      if(flashSaleFor(row) || row.classList.contains('is-flash-sale')){ syncFlashBadge(row); syncSaleDetail(row); }
+    });
   }
   /* Live day-switch for sales — the same pattern as the impact
      expiry check (cheatDayCheck above): re-check the date twice
