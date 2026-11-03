@@ -172,6 +172,25 @@
   .scanlink-item[aria-selected="true"] .sl-size{color:var(--badge-ink);opacity:.85}
   .btn-save[disabled]{opacity:.45;cursor:not-allowed}
   .settings-actions{display:grid;gap:10px;margin-top:6px}
+  /* Settings panel tabs — a segmented control at the top of the
+     Settings panel with exactly three tabs: Settings, Documents
+     and Support. The selected tab is the solid plum pill; tapping
+     a tab shows only that tab's panel below (see the tab script).
+     Settings is the default tab. */
+  .settings-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
+    background:var(--violet-soft);border:1.5px solid var(--line);border-radius:12px;
+    padding:4px;margin:0 0 14px}
+  :root[data-theme="dark"] .settings-tabs{background:var(--panel2)}
+  .settings-tab{appearance:none;-webkit-appearance:none;min-height:46px;padding:8px 4px;
+    border:1.5px solid transparent;border-radius:9px;background:transparent;color:var(--plum);
+    font:inherit;font-size:15px;font-weight:800;cursor:pointer;text-align:center;line-height:1.2}
+  :root[data-theme="dark"] .settings-tab{color:var(--lilac)}
+  .settings-tab:hover,.settings-tab:focus-visible{border-color:var(--plum2);outline:none}
+  .settings-tab[aria-selected="true"]{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
+  .settings-tabpanel[hidden]{display:none !important}
+  @media (max-width:520px){
+    .settings-tab{font-size:14px;min-height:44px}
+  }
   /* "Documents" group heading inside Settings — the manual, the two
      full impact PDFs and the date-aware cheat sheet sit under it. */
   .settings-group-head{margin:12px 2px 0;font-size:12px;font-weight:800;color:var(--plum);
@@ -4253,6 +4272,12 @@
       <h2 id="settingsTitle">Settings</h2>
       <button type="button" class="editor-x" id="settingsClose" aria-label="Close settings">×</button>
     </div>
+    <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+      <button type="button" class="settings-tab" id="settingsTab-settings" role="tab" aria-selected="true" aria-controls="settingsPanel-settings" data-settings-tab="settings">Settings</button>
+      <button type="button" class="settings-tab" id="settingsTab-documents" role="tab" aria-selected="false" aria-controls="settingsPanel-documents" data-settings-tab="documents">Documents</button>
+      <button type="button" class="settings-tab" id="settingsTab-support" role="tab" aria-selected="false" aria-controls="settingsPanel-support" data-settings-tab="support">Support</button>
+    </div>
+    <div class="settings-tabpanel" id="settingsPanel-settings" role="tabpanel" aria-labelledby="settingsTab-settings">
     <div class="theme-setting">
       <div class="theme-setting-head">
         <span class="theme-label" id="themeLabel">Appearance</span>
@@ -4264,20 +4289,6 @@
         <button type="button" class="theme-opt" data-theme-opt="auto" role="radio" aria-checked="false">Auto<span class="theme-opt-sub">Follow phone</span></button>
       </div>
       <p class="theme-note">Light is the default look. Auto follows your phone&rsquo;s light / dark setting. Saved on this device only.</p>
-    </div>
-    <div class="settings-actions">
-      <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
-      <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
-      <h3 class="settings-group-head" id="supportHead">Support Center</h3>
-      <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
-      <button type="button" class="settings-group-toggle collapsible-toggle" id="documentsHead" aria-expanded="false" aria-controls="documentsBody"><span class="collapsible-toggle-main"><span class="collapsible-title">Documents</span><span class="collapsible-subtitle">Manual, impact PDFs &amp; cheat sheet</span></span><span class="collapsible-toggle-side"><span class="tap-hint"><span class="tap-expand-text">Tap to expand</span><span class="tap-collapse-text">Tap to collapse</span></span><span class="collapsible-chevron" aria-hidden="true">▾</span></span></button>
-      <div class="docs-body" id="documentsBody" hidden>
-        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
-        <p class="docs-note" id="impactNote" hidden></p>
-      </div>
     </div>
     <div class="theme-setting store-type-setting" id="storeSettingsSection" style="margin-top:14px">
       <button type="button" class="collapsible-toggle" id="storeSettingsHead" aria-expanded="false" aria-controls="storeSettingsBody">
@@ -4324,7 +4335,24 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.11</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.12</span></p>
+    </div>
+    <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
+      <div class="settings-actions" style="margin-top:0">
+        <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
+        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
+        <p class="docs-note" id="impactNote" hidden></p>
+        <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
+        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+      </div>
+    </div>
+    <div class="settings-tabpanel" id="settingsPanel-support" role="tabpanel" aria-labelledby="settingsTab-support" hidden>
+      <div class="settings-actions" style="margin-top:0">
+        <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
+      </div>
+    </div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -4837,56 +4865,21 @@
     </details>
 
     <details class="wk-section">
-      <summary>Red wine varietals</summary>
+      <summary>Red varietals we carry</summary>
       <div class="wk-body">
-        <h4>Baco Noir</h4>
-        <p>Niagara Peninsula, Prince Edward County, USA. Typically medium-bodied and off-dry, deep ruby-purple, with strawberry, cherry, pepper and smoky notes.</p>
+        <p>Every red grape varietal in the WR#358 list, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
         <ul>
-          <li><strong>Profile:</strong> medium body, medium acidity, low to medium tannin.</li>
-          <li><strong>Signature aromas:</strong> strawberry, cherry, blackberry, pepper and smoke.</li>
-          <li><strong>Serve &amp; pair:</strong> serve slightly cool (12–15°C); its juicy fruit and smoke are made for BBQ ribs, pulled pork and burgers — see Food pairing 101.</li>
-        </ul>
-        <h4>Cabernet Franc</h4>
-        <p>Niagara Peninsula, France, Argentina, Italy. Medium-bodied with medium to high acidity; raspberry, sometimes strawberry, and earthy notes.</p>
-        <ul>
-          <li><strong>Profile:</strong> medium body, medium-high acidity, medium tannin.</li>
-          <li><strong>Signature aromas:</strong> raspberry, strawberry, red cherry, bell pepper, pencil shavings and earth.</li>
-          <li><strong>Serve &amp; pair:</strong> serve just below room temperature (15–17°C); a natural with herb-crusted lamb, roast chicken with herbs and tomato-based dishes.</li>
-        </ul>
-        <h4>Cabernet Sauvignon</h4>
-        <p>Niagara Peninsula, California, Australia. Deeply coloured and full-bodied, with heavy tannins and medium-to-high acidity; bold blackcurrant, chocolate, mint, bell pepper and earthy notes.</p>
-        <ul>
-          <li><strong>Profile:</strong> full body, medium-high acidity, high tannin — the most structured red on this list.</li>
-          <li><strong>Signature aromas:</strong> blackcurrant, black cherry, cedar, chocolate, mint and bell pepper.</li>
-          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C and decant young bottles 1–2 hours so the tannins soften; pour with fatty steak and aged cheddar, which smooth out its grip.</li>
-        </ul>
-        <h4>Meritage</h4>
-        <p>Niagara Peninsula, France, Argentina. A Bordeaux-style blend of Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot and Malbec. Typically dry and medium- to full-bodied; winemakers adjust the blend from vintage to vintage for consistent quality. Pronunciation: rhymes with “heritage”.</p>
-        <ul>
-          <li><strong>Profile:</strong> medium to full body, medium acidity, medium to high tannin — it follows the Cabernet share of the blend.</li>
-          <li><strong>Signature aromas:</strong> blackcurrant, plum, black cherry, cedar, tobacco and chocolate.</li>
-          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C; treat it like Cabernet at the table — prime rib, roast beef and hearty stews.</li>
-        </ul>
-        <h4>Merlot</h4>
-        <p>Niagara Peninsula, France, Italy. Cedar, plum, licorice, black cherry and fruitcake; typically lower in acidity and tannin, with juicy fruit and higher alcohol.</p>
-        <ul>
-          <li><strong>Profile:</strong> medium to full body, medium-low acidity, low to medium (soft) tannin.</li>
-          <li><strong>Signature aromas:</strong> plum, black cherry, cedar, licorice, fruitcake and chocolate.</li>
-          <li><strong>Serve &amp; pair:</strong> serve at 15–17°C; the friendly weeknight red — meat lasagna, roast chicken and meatloaf all suit its soft tannins.</li>
-        </ul>
-        <h4>Pinot Noir</h4>
-        <p>Niagara Peninsula, Prince Edward County, France. Red and black cherry flavours are typical, along with raspberry and hints of currant; light to medium tannins.</p>
-        <ul>
-          <li><strong>Profile:</strong> light to medium body, medium-high acidity, low to medium tannin.</li>
-          <li><strong>Signature aromas:</strong> cherry, raspberry, strawberry, currant, mushroom and forest floor as it ages.</li>
-          <li><strong>Serve &amp; pair:</strong> serve slightly cool (12–15°C); one of the few reds that works with fish — grilled salmon, roast turkey and mushroom risotto.</li>
-        </ul>
-        <h4>Shiraz / Syrah</h4>
-        <p>Niagara Peninsula, France, Australia, Spain. Deeply coloured with firm tannins and jammy fruit; blackberry, currant, raspberry, violets, hawthorn, spice, savoury meat, black pepper and eucalyptus.</p>
-        <ul>
-          <li><strong>Profile:</strong> full body, medium acidity, firm (medium-high) tannin, often higher alcohol.</li>
-          <li><strong>Signature aromas:</strong> blackberry, blackcurrant, raspberry, violets, black pepper, spice and savoury meat.</li>
-          <li><strong>Serve &amp; pair:</strong> serve at 15–18°C; peppery rubs, grilled lamb and smoked meats echo its spice — but keep it away from very hot chilli dishes, where its alcohol fans the heat.</li>
+          <li><strong>Baco Noir</strong> — Medium-bodied, typically off-dry, deep ruby-purple; strawberry, cherry, pepper, smoky notes.</li>
+          <li><strong>Cabernet Franc</strong> — Medium-bodied, medium to high acidity; raspberry, sometimes strawberry, earthy notes. Blanc de Franc is a white wine made from Cabernet Franc grapes, so it falls under Cabernet Franc, not a separate varietal.</li>
+          <li><strong>Cabernet Sauvignon</strong> — Full-bodied, heavy tannins, medium-to-high acidity; bold blackcurrant, chocolate, mint, bell pepper, earthy notes.</li>
+          <li><strong>Gamay Noir</strong> — Light- to medium-bodied, medium-high acidity, low to medium tannins; bright red cherry, raspberry, strawberry, earthy notes, easy-drinking.</li>
+          <li><strong>Marquette</strong> — Medium- to full-bodied, medium-high acidity, moderate tannins; black cherry, plum, blackberry, spice, earthy notes; a cold-hardy hybrid grape.</li>
+          <li><strong>Merlot</strong> — Typically lower in acidity and tannin, juicy fruit, higher alcohol; cedar, plum, licorice, black cherry, fruitcake.</li>
+          <li><strong>Meritage</strong> — A Bordeaux-style blend of Cabernet Sauvignon, Merlot, Cabernet Franc, Petit Verdot and Malbec; typically dry, medium- to full-bodied. Pronunciation: rhymes with &ldquo;heritage&rdquo;.</li>
+          <li><strong>Pinot Noir</strong> — Light- to medium-bodied, light to medium tannins; red and black cherry, raspberry, hints of currant.</li>
+          <li><strong>Syrah / Shiraz</strong> — Deeply coloured, firm tannins, jammy fruit; blackberry, currant, raspberry, violets, spice, savoury meat, black pepper, eucalyptus.</li>
+          <li><strong>Tempranillo</strong> — Medium- to full-bodied, medium tannins, medium acidity; cherry, plum, strawberry, with tobacco, vanilla and leather when oaked.</li>
+          <li><strong>Red blends</strong> — Combine their components’ traits. Cabernet Franc–Cabernet Sauvignon blends are medium-full and structured; Merlot–Cabernet blends are softer than straight Cabernet; Pinot Noir–Gamay is light-medium and bright with red fruit; Merlot–Petit Verdot blends are soft and structured; Foch–Baco Noir blends are deep, rustic and fruity.</li>
         </ul>
 
         <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
@@ -4894,56 +4887,17 @@
     </details>
 
     <details class="wk-section">
-      <summary>White wine varietals</summary>
+      <summary>White varietals we carry</summary>
       <div class="wk-body">
-        <h4>Chardonnay</h4>
-        <p>Niagara Peninsula, France, California, Australia. The most versatile white grape: unoaked Chardonnay is light- to medium-bodied and crisp, with high acidity and green apple, lemon and pear notes; oaked Chardonnay is medium- to full-bodied with more moderate acidity, and tropical fruit, peach, vanilla, toast and buttery notes. No tannin in either style.</p>
+        <p>Every white grape varietal in the WR#358 list, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
         <ul>
-          <li><strong>Profile:</strong> body and acidity depend on the style — light to medium and crisp unoaked; medium to full and rounder oaked. No tannin in either style.</li>
-          <li><strong>Signature aromas:</strong> unoaked — green apple, lemon, pear; oaked — peach, tropical fruit, vanilla, toast and butter.</li>
-          <li><strong>Serve &amp; pair:</strong> unoaked well chilled (8–10°C) with grilled fish and salads; oaked a little warmer (10–13°C) with buttered lobster, creamy pasta and roast chicken.</li>
-        </ul>
-        <h4>Gewürztraminer</h4>
-        <p>Niagara Peninsula, France (Alsace), Germany. Medium- to full-bodied and highly aromatic, with low to medium-low acidity — the softest acidity of the whites here — and often a touch of sweetness; lychee, rose petal, ginger, tropical fruit and spice notes. In this list it appears in white blends such as Sandbanks Reserve Sleeping Giant White, alongside Chardonnay, Muscat and Marsanne.</p>
-        <ul>
-          <li><strong>Profile:</strong> medium to full body, low to medium-low acidity, no tannin; pronounced aroma intensity.</li>
-          <li><strong>Signature aromas:</strong> lychee, rose petal, ginger, tropical fruit and spice.</li>
-          <li><strong>Serve &amp; pair:</strong> serve well chilled (8–10°C) to keep the perfume fresh; the go-to white for Thai and Indian curries and other spiced dishes.</li>
-        </ul>
-        <h4>Moscato / Muscat</h4>
-        <p>Niagara Peninsula, Italy, France. Light- to medium-bodied, with low to medium acidity and little to no tannin; usually sweet or off-dry and often lightly sparkling, with pronounced peach, apricot, orange blossom, grape and honey notes. The same grape family is labelled Moscato in the Italian style and Muscat in the French style.</p>
-        <ul>
-          <li><strong>Profile:</strong> light to medium body, low to medium acidity, little to no tannin; often lightly sparkling and lower in alcohol.</li>
-          <li><strong>Signature aromas:</strong> peach, apricot, orange blossom, fresh grape and honey.</li>
-          <li><strong>Serve &amp; pair:</strong> serve well chilled (6–9°C); sip it on its own, or with brunch, light fruit desserts and lightly spiced food — just keep the food no sweeter than the wine.</li>
-        </ul>
-        <h4>Pinot Grigio / Pinot Gris</h4>
-        <p>Niagara Peninsula, Italy, France (Alsace). One grape, two names and two styles: Italian-style Pinot Grigio is light-bodied, dry and crisp; Pinot Gris in the Alsace style is riper, fuller and softer. Both show medium-high acidity and no tannin, with pear, green apple, citrus, peach and melon notes.</p>
-        <ul>
-          <li><strong>Profile:</strong> light body (Italian style) to medium (Alsace style), medium-high acidity, no tannin.</li>
-          <li><strong>Signature aromas:</strong> pear, green apple, citrus, peach and melon.</li>
-          <li><strong>Serve &amp; pair:</strong> serve cold (7–10°C); Grigio with seafood, sushi and salads, fuller Gris with roast pork and creamy chicken.</li>
-        </ul>
-        <h4>Riesling</h4>
-        <p>Niagara Peninsula, Germany, France (Alsace). Light- to medium-bodied, with high to very high acidity and no tannin — that acidity keeps even sweet styles tasting fresh. Made from dry to sweet, and a classic Ontario icewine grape; lime, green apple, peach, apricot and floral notes, with honey in icewine.</p>
-        <ul>
-          <li><strong>Profile:</strong> light to medium body, high to very high acidity, no tannin; made from dry to sweet, and the high acid balances every level.</li>
-          <li><strong>Signature aromas:</strong> lime, green apple, peach, apricot and blossom; honey in icewine.</li>
-          <li><strong>Serve &amp; pair:</strong> serve well chilled (7–10°C); dry styles with pork chops and seafood, off-dry styles with Thai curry, spicy takeout and glazed ham.</li>
-        </ul>
-        <h4>Sauvignon Blanc</h4>
-        <p>Niagara Peninsula, France, New Zealand. Light- to medium-bodied and almost always dry, with high acidity and no tannin; grapefruit, lime, gooseberry, green apple and passion fruit notes, often with a fresh grassy or herbal edge. Oak- or barrel-aged versions add vanilla and toast notes.</p>
-        <ul>
-          <li><strong>Profile:</strong> light to medium body, high acidity, no tannin; almost always dry.</li>
-          <li><strong>Signature aromas:</strong> grapefruit, lime, gooseberry, green apple, passion fruit and fresh-cut grass or herbs.</li>
-          <li><strong>Serve &amp; pair:</strong> serve cold (7–10°C); a classic with goat cheese salads, shellfish and grilled asparagus.</li>
-        </ul>
-        <h4>Vidal Blanc</h4>
-        <p>Niagara Peninsula and across Ontario. A cold-hardy hybrid grape suited to Canadian winters. Light- to medium-bodied as a dry or off-dry table wine, with medium-high to high acidity, none to low tannin, and peach, apricot, citrus and floral notes; left to freeze on the vine it makes rich, sweet icewine with honey, apricot and tropical fruit notes.</p>
-        <ul>
-          <li><strong>Profile:</strong> light to medium body as a table wine, medium-high to high acidity, none to low tannin; icewine is full, rich and sweet.</li>
-          <li><strong>Signature aromas:</strong> table — peach, apricot, citrus and flowers; icewine — honey, apricot and tropical fruit.</li>
-          <li><strong>Serve &amp; pair:</strong> table Vidal chilled (8–10°C) with roast pork and fruit-glazed ham; icewine well chilled (6–9°C) in small pours with fruit desserts, crème brûlée or blue cheese.</li>
+          <li><strong>Chardonnay</strong> — Medium- to full-bodied, low to medium acidity; apple, pear and citrus when unoaked; butter, vanilla and toast when oaked.</li>
+          <li><strong>Sauvignon Blanc</strong> — Light- to medium-bodied, high acidity; grapefruit, lime, passion fruit, gooseberry, grassy or herbal notes.</li>
+          <li><strong>Pinot Grigio / Pinot Gris</strong> — Light- to medium-bodied, medium-high acidity; pear, apple, citrus, white flowers. Grigio-style wines tend to be crisper and lighter; Gris-style wines rounder.</li>
+          <li><strong>Riesling</strong> — Light- to medium-bodied, high acidity; lime, green apple, peach, floral notes; ranges from dry to sweet.</li>
+          <li><strong>Vidal Blanc</strong> — Medium-bodied, medium-high acidity; grapefruit, pineapple, apple; a hardy hybrid grape, also the usual base for our icewines.</li>
+          <li><strong>Moscato / Muscat</strong> — Light-bodied, low to medium acidity, aromatic; peach, orange blossom and grape, often off-dry to sweet.</li>
+          <li><strong>White blends</strong> — Combine their components’ traits. Riesling–Pinot Grigio is aromatic, crisp and light-medium; Chardonnay–Sauvignon Blanc–Riesling blends balance richness, citrus and aroma.</li>
         </ul>
 
         <div class="wk-collapse-row"><button type="button" class="wk-collapse-btn">Collapse <span class="wk-collapse-chev" aria-hidden="true">↑</span></button></div>
@@ -7339,7 +7293,30 @@
      (their own listeners, registered above/below, open the editor or
      the store dialog on top). */
   var settingsOverlay = document.getElementById('settingsOverlay');
+  /* Settings panel tabs: exactly three — Settings, Documents and
+     Support. Tapping a tab shows only that tab's panel and marks
+     that tab selected; the panel always opens on the Settings tab
+     (the default). Display state only — every button inside the
+     panels keeps its own existing behaviour. */
+  var settingsTabBtns = document.querySelectorAll('[data-settings-tab]');
+  function switchSettingsTab(name){
+    if(name !== 'documents' && name !== 'support') name = 'settings';
+    for(var ti = 0; ti < settingsTabBtns.length; ti++){
+      settingsTabBtns[ti].setAttribute('aria-selected', settingsTabBtns[ti].getAttribute('data-settings-tab') === name ? 'true' : 'false');
+    }
+    var names = ['settings','documents','support'];
+    for(var pi = 0; pi < names.length; pi++){
+      var panel = document.getElementById('settingsPanel-' + names[pi]);
+      if(panel) panel.hidden = names[pi] !== name;
+    }
+  }
+  for(var tbi = 0; tbi < settingsTabBtns.length; tbi++){
+    settingsTabBtns[tbi].addEventListener('click', function(){
+      switchSettingsTab(this.getAttribute('data-settings-tab'));
+    });
+  }
   function openSettings(){
+    switchSettingsTab('settings');
     settingsOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     document.getElementById('settingsClose').focus();
@@ -7508,12 +7485,14 @@
     return SAMPLE_MONTHS_SHORT[s.getMonth()] + ' ' + s.getDate() + ' – ' + SAMPLE_MONTHS_SHORT[e.getMonth()] + ' ' + e.getDate();
   }
   function sampleItemsHtml(w, dow){
-    /* dow: today's day of week (5 = Friday, 6 = Saturday) */
+    /* dow: today's day of week (5 = Friday, 6 = Saturday), or -1
+       when previewing a future window — a preview never gets the
+       "not today" Cartier note, which is only about today */
     var html = '<ul class="sample-list">';
     w.items.forEach(function(name){ html += '<li>' + name + '</li>'; });
     if(w.cartier && (dow === 5 || dow === 6)) html += '<li>Cartier — any flavour</li>';
     html += '</ul>';
-    if(w.cartier && dow !== 5 && dow !== 6){
+    if(w.cartier && dow >= 0 && dow !== 5 && dow !== 6){
       html += '<p class="sample-note">Cartier (any flavour) pours Friday and Saturday only — not today.</p>';
     }
     return html;
@@ -7524,11 +7503,18 @@
     var dow = now.getDay();
     var body = document.getElementById('sampleBody');
     var html = '<p class="sample-date">Today — ' + SAMPLE_WEEKDAYS[dow] + ', ' + SAMPLE_MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear() + '</p>';
+    /* Date accuracy: scan the WHOLE schedule every render. A
+       window is "current" only when today falls inside it
+       (start <= today <= end); a window whose end has passed is
+       never current and never "next", so an expired window's
+       wines can never be shown as today's or as upcoming. "Next"
+       is the earliest window that starts after today. */
     var current = null, next = null;
     for(var i = 0; i < SAMPLE_SCHEDULE.length; i++){
       var w = SAMPLE_SCHEDULE[i];
-      if(today >= sampleDayStart(w.start) && today <= sampleDayStart(w.end)){ current = w; break; }
-      if(!next && sampleDayStart(w.start) > today) next = w;
+      var wStart = sampleDayStart(w.start), wEnd = sampleDayStart(w.end);
+      if(today >= wStart && today <= wEnd){ current = w; }
+      else if(wStart > today && (!next || wStart < sampleDayStart(next.start))){ next = w; }
     }
     if(current){
       html += '<p class="sample-window">On sample ' + sampleRangeText(current) + ' (' + current.period + ' sampling):</p>';
@@ -7577,11 +7563,16 @@
      across midnight into a new period switches to the new period's
      sheet on its own, and the Settings button label always names
      the current period. No app update is ever needed for the switch.
-     Only one sheet is rendered at a time. Outside Oct 12 – Nov 29
-     the nearest sheet is shown instead — P8 (upcoming) before
-     Oct 12, P9 (most recent) after Nov 29 — with a clear note
-     about its dates. Reference content only: nothing here reads
-     or writes product data, and it never syncs to the shared list. */
+     Only the currently active period is EVER shown: a period that
+     has not started yet or has already ended is never rendered as
+     the cheat sheet, and when no period is running the cheat-sheet
+     entry is hidden from Documents altogether (see
+     updateCheatButton / applyImpactExpiry). The same expiry rule
+     hides each Full Impact PDF in Documents once its period ends:
+     P8 after Nov 8, 2026 and P9 after Nov 29, 2026 — automatically,
+     with no manual removal and no empty entry left behind.
+     Reference content only: nothing here reads or writes product
+     data, and it never syncs to the shared list. */
   var IMPACT_SHEETS = [
     {
       id: 'P8',
@@ -7680,6 +7671,10 @@
         '<p class="cs-src">Source: P9 In-Store Impact (Legacy Loblaws Boutiques), updated Oct 21, 2026. Doc quirks to watch: the POP checklist swaps the Promo 1 and Promo 2 sides; the sampling table&rsquo;s final weeks are merged into one row (split out above); Uline Poster 2 is listed as starting Nov 15 in one table and Nov 16 in another. Weekdays verified against the 2026 calendar.</p>'
     }
   ];
+  /* Only a period running TODAY counts. An expired period
+     (today past its end date) and a period that has not started
+     yet both yield no selection, so their sheets are never shown
+     as the "current" cheat sheet. */
   function impactSelection(date){
     var now = date || new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -7688,24 +7683,47 @@
       s = IMPACT_SHEETS[i];
       if(today >= s.start && today <= s.end) return { sheet: s, status: 'current' };
     }
-    for(i = 0; i < IMPACT_SHEETS.length; i++){
-      s = IMPACT_SHEETS[i];
-      if(today < s.start) return { sheet: s, status: 'upcoming' };
+    return { sheet: null, status: 'none' };
+  }
+  function impactSheetById(id){
+    for(var i = 0; i < IMPACT_SHEETS.length; i++){
+      if(IMPACT_SHEETS[i].id === id) return IMPACT_SHEETS[i];
     }
-    return { sheet: IMPACT_SHEETS[IMPACT_SHEETS.length - 1], status: 'past' };
+    return null;
+  }
+  function impactExpired(sheet, date){
+    if(!sheet) return false;
+    var now = date || new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return today > sheet.end;
+  }
+  /* Expiry hiding for the Documents tab: once a period has ended,
+     its Full Impact PDF link is hidden so an expired impact never
+     shows in Documents. This only ever hides — visibility for
+     non-expired links is owned by applyStoreTypeUI (the Loblaws
+     rule), which applies the same expiry check itself, so the two
+     never fight. Called on load and on every day-change check. */
+  function applyImpactExpiry(){
+    var p8 = document.getElementById('impactP8Link');
+    var p9 = document.getElementById('impactP9Link');
+    if(p8 && impactExpired(impactSheetById('P8'))) p8.hidden = true;
+    if(p9 && impactExpired(impactSheetById('P9'))) p9.hidden = true;
   }
   function impactStatusNote(sel){
-    if(sel.status === 'upcoming'){
-      return '<p class="cs-status">Not yet running &mdash; this is the next impact period. ' + sel.sheet.id + ' runs ' + sel.sheet.rangeLong + ' and becomes the current cheat sheet on its first day.</p>';
-    }
-    if(sel.status === 'past'){
-      return '<p class="cs-status">This period has ended &mdash; ' + sel.sheet.id + ' ran ' + sel.sheet.rangeLong + '. This is the most recent cheat sheet.</p>';
-    }
     return '<p class="cs-status">Current impact &mdash; ' + sel.sheet.id + ' runs ' + sel.sheet.rangeLong + '.</p>';
   }
   var cheatOverlay = document.getElementById('cheatOverlay');
   function renderCheatSheet(){
     var sel = impactSelection(new Date());
+    if(!sel.sheet){
+      /* No period is running today: never render an expired or
+         upcoming sheet — say so plainly instead (the Documents
+         entry itself is hidden in this state) */
+      document.getElementById('cheatTitle').textContent = 'Impact Cheat Sheet';
+      document.getElementById('cheatClose').setAttribute('aria-label', 'Close impact cheat sheet');
+      document.getElementById('cheatBody').innerHTML = '<p class="sample-none">No impact period is running today, so there is no current cheat sheet to show.</p>';
+      return sel;
+    }
     document.getElementById('cheatTitle').textContent = sel.sheet.id + ' Cheat Sheet';
     document.getElementById('cheatClose').setAttribute('aria-label', 'Close ' + sel.sheet.id + ' cheat sheet');
     document.getElementById('cheatBody').innerHTML = impactStatusNote(sel) + sel.sheet.html;
@@ -7713,12 +7731,20 @@
   }
   function updateCheatButton(){
     var sel = impactSelection(new Date());
+    var btn = document.getElementById('currentCheatSheet');
+    if(!sel.sheet){
+      /* No current period: the cheat-sheet entry leaves Documents
+         entirely rather than pointing at an expired or upcoming
+         sheet. (applyStoreTypeUI applies this same rule alongside
+         the Loblaws rule whenever the store type changes.) */
+      if(btn) btn.hidden = true;
+      return sel;
+    }
     var label = document.getElementById('cheatBtnLabel');
     var sub = document.getElementById('cheatBtnSub');
     if(label) label.textContent = sel.sheet.id + ' Impact Cheat Sheet';
     if(sub){
-      var when = sel.status === 'current' ? 'Current impact' : (sel.status === 'upcoming' ? 'Next impact' : 'Most recent impact');
-      sub.textContent = when + ' \u2014 key dates, sampling, must-do actions and promo notes for ' + sel.sheet.rangeShort;
+      sub.textContent = 'Current impact \u2014 key dates, sampling, must-do actions and promo notes for ' + sel.sheet.rangeShort;
     }
     return sel;
   }
@@ -7747,7 +7773,12 @@
   /* Live day-switch: re-check the date twice a minute, and whenever
      the app comes back to the foreground, so the button label — and
      the sheet itself, if the panel is open — follow the calendar
-     day with no reload and no app update. */
+     day with no reload and no app update. The same check enforces
+     impact expiry in Documents (a period that ended at midnight
+     loses its PDF link and, when it was the last running period,
+     the cheat-sheet entry) and re-renders "What's on sample
+     today?" if that panel is open, so it can never keep showing
+     yesterday's window after midnight. */
   var cheatDayStamp = '';
   function cheatDayCheck(){
     var now = new Date();
@@ -7755,7 +7786,9 @@
     if(stamp === cheatDayStamp) return;
     cheatDayStamp = stamp;
     updateCheatButton();
+    applyImpactExpiry();
     if(!cheatOverlay.hidden) renderCheatSheet();
+    if(sampleOverlay && !sampleOverlay.hidden) renderSampleToday();
   }
   cheatDayCheck();
   renderCheatSheet();
@@ -7763,21 +7796,15 @@
   document.addEventListener('visibilitychange', function(){ if(!document.hidden) cheatDayCheck(); });
   window.addEventListener('focus', cheatDayCheck);
 
-  /* ---------- Documents (Settings) ----------
-     The Documents group in Settings is collapsible, like the
-     Wine Knowledge / Support Center sections: tapping the
-     Documents heading expands it to show the manual, the two
-     full impact PDFs and the Current Impact Cheat Sheet, and
-     tapping it again collapses it and hides them. It starts
-     collapsed. Display state only — the document links and the
-     date-aware cheat sheet button inside work exactly as before. */
-  var documentsToggle = document.getElementById('documentsHead');
-  var documentsBody = document.getElementById('documentsBody');
-  documentsToggle.addEventListener('click', function(){
-    var open = documentsToggle.getAttribute('aria-expanded') === 'true';
-    documentsToggle.setAttribute('aria-expanded', open ? 'false' : 'true');
-    documentsBody.hidden = open;
-  });
+  /* ---------- Documents (Settings panel, Documents tab) ----------
+     The documents now live on their own Documents tab in the
+     Settings panel (see the tab wiring where the Settings panel
+     opens): What's on sample today? first, then the two full
+     impact PDFs, the Current Impact Cheat Sheet, Wine Knowledge
+     and — last — the Product Info Manual, shown directly when
+     the tab is
+     tapped. The document links and the date-aware cheat sheet
+     and sample buttons work exactly as before. */
 
   /* ---------- Store settings (Settings) ----------
      Store settings is a collapsible section with the same
@@ -8108,9 +8135,16 @@
     var p9 = document.getElementById('impactP9Link');
     var cheat = document.getElementById('currentCheatSheet');
     var sample = document.getElementById('sampleToday');
-    if(p8) p8.hidden = !isLoblaws;
-    if(p9) p9.hidden = !isLoblaws;
-    if(cheat) cheat.hidden = !isLoblaws;
+    /* Impact expiry, applied together with the Loblaws rule so
+       neither can resurrect the other: a Full Impact PDF shows
+       only for a Loblaws store AND only until its period ends
+       (P8 after Nov 8, 2026; P9 after Nov 29, 2026). The cheat
+       sheet shows only for a Loblaws store AND only while a
+       period is actually running today — never for an expired
+       or upcoming period. */
+    if(p8) p8.hidden = !isLoblaws || impactExpired(impactSheetById('P8'));
+    if(p9) p9.hidden = !isLoblaws || impactExpired(impactSheetById('P9'));
+    if(cheat) cheat.hidden = !isLoblaws || !impactSelection(new Date()).sheet;
     if(sample) sample.hidden = !isLoblaws;
     if(impactNote){
       if(isLoblaws){
@@ -9738,8 +9772,11 @@
      The LTO / flash-sale items switch on and off BY DATE, with no
      manual swap and nothing to remember: which products are on sale
      is derived from the calendar every time this runs — on first
-     paint, after every shared-list load/refresh, and on the 30-second
-     refresh tick. Periods (all dates inclusive, local calendar):
+     paint, after every shared-list load/refresh, on the 30-second
+     refresh tick, and on the live day-switch check below (the same
+     twice-a-minute / on-foreground date check the impact expiry
+     uses), so an app left open across midnight switches on its own.
+     Periods (all dates inclusive, local calendar):
        · P8 LTOs — Oct 12 to Nov 8, 2026: the 15 products that were
          marked on sale for P8, at the sale prices shown then.
        · P9 LTOs — Nov 9 to Nov 29, 2026 (P9 Legacy Loblaws Impact):
@@ -9843,6 +9880,7 @@
     return { on: true, price: active.price };
   }
   function applyScheduledSales(){
+    var changed = false;
     rows.slice().forEach(function(row){
       var want = scheduledSaleFor(row);
       if(!want) return;
@@ -9863,8 +9901,46 @@
       syncPlanoSearch(row);
       syncCoolerSearch(row);
       syncSaleSearch(row);
+      changed = true;
     });
+    /* A sale switching on or off changes more than the row's own
+       badge and price: price sorting and the Max price filter both
+       run on the effective (sale) price, and the "On sale only"
+       filter follows data-sale. Re-sort and re-filter right here,
+       as part of the switch itself, so the whole list follows the
+       new day's sales immediately — never left waiting on the
+       next shared-list load succeeding (or on every panel being
+       closed) to catch up. When nothing changed this is skipped,
+       so a routine re-derivation never disturbs the list. */
+    if(changed){ applySort(); apply(); }
   }
+  /* Live day-switch for sales — the same pattern as the impact
+     expiry check (cheatDayCheck above): re-check the date twice
+     a minute and whenever the app comes back to the foreground,
+     and the moment the calendar day changes, re-derive the
+     scheduled sales, so an app left open across midnight (into
+     Nov 9, Nov 16, Nov 30 or Dec 1) switches its SALE badges,
+     sale prices, price sorting and Max price filtering to the
+     new day with no reload. Unlike the shared-list refresh tick
+     below, this check is NOT skipped while a panel is open: a
+     period boundary must land even with Settings (or any other
+     panel) on screen, exactly like the impact expiry does. Phone
+     browsers throttle or suspend timers in a background tab, so
+     the visibility / focus hooks are what catch a midnight that
+     passed while the app was backgrounded. Within a day the
+     schedule cannot change, so a matching stamp is a no-op. */
+  var saleDayStamp = '';
+  function saleDayCheck(){
+    var now = new Date();
+    var stamp = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
+    if(stamp === saleDayStamp) return;
+    saleDayStamp = stamp;
+    applyScheduledSales();
+  }
+  saleDayCheck();
+  setInterval(saleDayCheck, 30000);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) saleDayCheck(); });
+  window.addEventListener('focus', saleDayCheck);
   /* ----- inbound: apply the shared list over the local rows ----- */
   function sbApplyRemote(data){
     /* The one fully-placeholder product is never shown: a shared
@@ -10140,9 +10216,11 @@
      overwritten mid-type */
   setInterval(function(){
     if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden || !supportOverlay.hidden || !scannerOverlay.hidden || !scanLinkOverlay.hidden) return;
-    /* Re-derive the scheduled sales too, so an app left open across
-       a period boundary (e.g. midnight into Nov 9) switches on its
-       own; sbLoad's apply then re-renders over the same state */
+    /* Re-derive the scheduled sales too (the day-switch check
+       above is the midnight guarantee — it runs even while a
+       panel is open; this tick additionally catches a flash-sale
+       price following a regular-price edit). applyScheduledSales
+       re-sorts and re-filters itself whenever a sale switches */
     applyScheduledSales();
     sbLoad();
   }, 30000);
