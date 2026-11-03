@@ -483,6 +483,11 @@
   .controls .row{display:flex;flex-wrap:wrap;gap:10px}
   .field{display:flex;flex-direction:column;gap:4px;flex:1 1 150px;min-width:0}
   .field.grow{flex:2 1 220px}
+  /* Sort by: full-width on desktop too, matching the Brand
+     dropdown's full-width span (Brand carries .wide, which spans
+     the full row in the phone grid below). Scoped to the Sort by
+     field only, so no other filter's layout changes */
+  .field.sort-field{flex:1 1 100%}
   label{font-size:12px;font-weight:700;color:var(--plum);text-transform:uppercase;letter-spacing:.06em}
   :root[data-theme="dark"] label{color:var(--lilac)}
   input,select{font:inherit;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;
@@ -1040,7 +1045,7 @@
         <label for="maxprice">Max price</label>
         <input id="maxprice" type="number" min="0" step="1" placeholder="No limit" />
       </div>
-      <div class="field">
+      <div class="field wide sort-field">
         <label for="sortsel">Sort by</label>
         <select id="sortsel">
           <option value="product">Product A–Z</option>
@@ -1054,11 +1059,11 @@
       </div>
     </div>
     <div class="toggles">
-      <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
       <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly only</button>
       <button type="button" class="toggle gluten-toggle" id="glutenToggle" aria-pressed="false">Gluten-safe only</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
+      <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <span class="count" id="count" role="status"></span>
     </div>
   </section>
@@ -4322,7 +4327,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.7</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.8</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
