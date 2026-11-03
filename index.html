@@ -435,8 +435,6 @@
   .sc-afterhours{margin:14px 0 2px;font-size:12px;font-weight:800;letter-spacing:.06em;
     text-transform:uppercase;color:#b91c1c}
   :root[data-theme="dark"] .sc-afterhours{color:#fca5a5}
-  .sc-trunc{margin:10px 0 0;padding:10px 12px;border:1.5px dashed var(--lilac);border-radius:10px;
-    font-size:13.5px;font-weight:600;line-height:1.5;color:var(--ink);background:var(--violet-soft)}
   /* Unavailable products: unmissable at a glance — a solid red
      UNAVAILABLE banner under the product name, a red-tinted row/card,
      and the price struck through. Set from the product's ⋮ menu or
@@ -4326,7 +4324,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.10</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.11</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -4341,7 +4339,7 @@
     </div>
     <p class="wk-intro">Reference from the Liquid Learning “Intro to Red Wine” training, with the white wine varietals added from general wine knowledge. Tap a topic to open it.</p>
 
-    <details class="wk-section" open>
+    <details class="wk-section">
       <summary>How to taste (the 5 S's)</summary>
       <div class="wk-body">
         <p>Tasters follow the same five steps every time — <strong>See, Swirl, Sniff, Sip, Savor</strong>. Working through them in order means you notice appearance, aroma, taste and finish separately instead of just &ldquo;nice&rdquo; or &ldquo;not nice&rdquo;, and it is the fastest way to describe a wine clearly to a customer.</p>
@@ -5212,11 +5210,6 @@
           <p class="sc-detail"><span class="sc-k">Name</span> NA</p>
           <p class="sc-detail"><span class="sc-k">Phone</span> <a href="tel:+18006619675">1-800-661-9675</a></p>
           <p class="sc-detail"><span class="sc-k">Web</span> <a href="https://arterracanada.confidenceline.com" target="_blank" rel="noopener">arterracanada.confidenceline.com</a></p>
-        </div>
-        <div class="sc-contact">
-          <h4 class="sc-func">EMPLOYEE ASSISTANCE PROGRAM</h4>
-          <p class="sc-detail"><span class="sc-k">Info</span> Available to All Wine Rack employees 24/7</p>
-          <p class="sc-trunc">The rest of this entry was cut off (truncated) in the photo &mdash; no further details are shown, so none are listed here.</p>
         </div>
       </div>
     </details>
@@ -7811,10 +7804,7 @@
      Wine Rack Store Support Centre contact sheet (last updated
      April 21, 2026), baked into this page as plain markup in the
      supportOverlay. Reference content only — nothing here reads
-     or writes product data, and it never syncs to the shared list.
-     The Employee Assistance Program entry is shown only as far as
-     the source photo shows it; the rest was truncated in the
-     photo and is marked as such in the panel, not guessed. */
+     or writes product data, and it never syncs to the shared list. */
   var supportOverlay = document.getElementById('supportOverlay');
   function openSupport(){
     supportOverlay.hidden = false;
