@@ -526,6 +526,21 @@
     padding:2px 8px;border-radius:999px;background:var(--badge-bg);color:var(--badge-ink)}
   .badge.nip{background:transparent;color:var(--grape);border:1.5px solid var(--grape)}
   .badge.chk{background:#b45309;color:#fff}
+  /* Vegan-friendly: a soft violet pill with a plum border and plum
+     text — squarely in the purple family like the other badges, but
+     distinct from the solid plum Cooler badge it can sit beside.
+     Shown only on products confirmed vegan-friendly (see the
+     Vegan-friendly section in the script); never a label claim */
+  .badge.vegan{background:var(--violet-soft);color:var(--plum);border:1.5px solid var(--plum2);font-weight:800}
+  :root[data-theme="dark"] .badge.vegan{color:var(--lilac)}
+  /* Vegan source line in the expanded notes: reference data saying
+     how the product's vegan status was determined. It is its own
+     line under the tasting notes (styled like the Product ID line),
+     never part of the tasting-notes text itself, so it is never
+     edited or synced as if it were a tasting note */
+  .detail .vegan-note{margin:2px 0;color:var(--muted);font-size:13px;line-height:1.5}
+  .detail .vegan-note strong{color:var(--plum);font-weight:700}
+  :root[data-theme="dark"] .detail .vegan-note strong{color:var(--lilac)}
   /* On sale: vivid pink — a saturated pink given a dark outline,
      so a SALE badge sitting next to a VQA badge or a pale rosé
      chip never reads as the same thing. The same pink marks the
@@ -1033,6 +1048,7 @@
     <div class="toggles">
       <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
+      <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly only</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
       <span class="count" id="count" role="status"></span>
     </div>
@@ -4297,7 +4313,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.5</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.6</span></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
     </div>
@@ -5487,6 +5503,8 @@
   var filtersBtn = document.getElementById('filtersBtn');
   var saleToggle = document.getElementById('saleToggle');
   function saleOnlyOn(){ return !!saleToggle && saleToggle.getAttribute('aria-pressed') === 'true'; }
+  var veganToggle = document.getElementById('veganToggle');
+  function veganOnlyOn(){ return !!veganToggle && veganToggle.getAttribute('aria-pressed') === 'true'; }
   var state = { sort:'product', dir:1 };
 
   /* Accent-insensitive search folding: lowercases the text and
@@ -5646,6 +5664,7 @@
     if(tannins.value) n++;
     if(maxprice.value) n++;
     if(saleOnlyOn()) n++;
+    if(veganOnlyOn()) n++;
     var open = controlsEl.classList.contains('open');
     filtersBtn.textContent = 'Filters' + (n ? ' · ' + n + ' on' : '') + (open ? ' ▴' : ' ▾');
     filtersBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -5715,8 +5734,24 @@
     if(key === 'acidity'){ return cellText(row,'Acidity'); }
     return '';
   }
+  /* Max price filter sorting: while a Max price is entered, the
+     list is shown most expensive first — the items closest to the
+     limit at the top, down to the least expensive — with unpriced
+     products last (applySort's comparator already sorts missing
+     values last in both directions). state.sort / state.dir keep
+     holding the user's own sort choice untouched the whole time,
+     so clearing the Max price returns the list to exactly that
+     sort; the maxprice listeners below re-run applySort as the
+     value changes so the switch happens the moment the filter
+     turns on or off. With no Max price entered, applySort behaves
+     exactly as before — the Price low/high options and every
+     other sort are unaffected. */
+  function maxPriceActive(){
+    return !isNaN(parseFloat(maxprice.value));
+  }
   function applySort(){
     var key = state.sort, dir = state.dir;
+    if(maxPriceActive()){ key = 'price'; dir = -1; }
     var sorted = rows.slice().sort(function(a,b){
       var ka = sortKey(a,key), kb = sortKey(b,key);
       if(ka === null && kb === null) return 0;
@@ -5773,6 +5808,7 @@
         if(s && row.getAttribute('data-sweet').indexOf(s) !== 0) ok = false;
         if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
         if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
+        if(veganOnlyOn() && row.getAttribute('data-vegan') !== 'Yes') ok = false;
         if(!isNaN(mp)){
           var p = effectivePrice(row);
           if(p === null || p > mp) ok = false;
@@ -5797,6 +5833,11 @@
     el.addEventListener('input', apply);
     el.addEventListener('change', apply);
   });
+  /* Re-sort as the Max price changes: applySort switches to
+     most-expensive-first while a Max price is active and restores
+     the user's own sort the moment it is cleared */
+  maxprice.addEventListener('input', function(){ applySort(); });
+  maxprice.addEventListener('change', function(){ applySort(); });
   sortsel.addEventListener('change', function(){
     var v = sortsel.value;
     if(v === 'price-asc'){ state.sort='price'; state.dir=1; }
@@ -5886,10 +5927,17 @@
       apply();
     });
   }
+  if(veganToggle){
+    veganToggle.addEventListener('click', function(){
+      veganToggle.setAttribute('aria-pressed', veganOnlyOn() ? 'false' : 'true');
+      apply();
+    });
+  }
   document.getElementById('reset').addEventListener('click', function(){
     scanOnlyIdx = null; scanOnlyQuery = '';
     q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
+    if(veganToggle) veganToggle.setAttribute('aria-pressed', 'false');
     state.sort='product'; state.dir=1; sortsel.value='product';
     applySort(); apply();
   });
@@ -6375,6 +6423,149 @@
     syncCoolerSearch(row);
     syncSaleSearch(row);
   }
+  /* ---------- Vegan-friendly — CONFIRMED products only ----------
+     A product is flagged vegan-friendly ONLY when it matches the
+     allowlist in veganSourceFor() below, which encodes the
+     2026-11-02 brand research (winery statements collected by
+     Barnivore, winery tech sheets, and Pelee Island's VegeCert
+     certification). Anything not on the list — unknown brands,
+     mixed brands, and every Arterra brand (Jackson-Triggs,
+     Inniskillin, Bodacious, BASK, Bù, Caleta, Saintly, Sawmill
+     Creek, Vintage Ink), plus Sandbanks, Vineland, Henry of
+     Pelham, KEW, Konzelmann, Megalomaniac, MXM, Sidney, SOLA-NERO,
+     Svelte, The Noble Experiment, Peninsula Ridge and Maria
+     Christina — returns '' and is NEVER flagged; when a product
+     cannot be confidently matched it stays unflagged rather than
+     guessed. The flag is derived from brand + product name + VQA
+     status every time a row is rendered (this section runs for the
+     built-in rows at startup, and writeRow re-runs it for
+     shared-list rows, editor saves and new products), so it is
+     never stored in, or synced to, the shared list, and an edit to
+     a product's name or brand re-derives it. A flagged product
+     gets the compact plum "Vegan-friendly" badge under its name
+     and a source line in its expanded notes saying how the status
+     was determined — reference data, not a label claim; only
+     Pelee Island VQA is described as certified, because it is
+     (VegeCert). The "Vegan-friendly only" filter toggle in the
+     filter area shows just these products. */
+  function veganSourceFor(brand, name, vqa){
+    var b = foldAccents(brand || '').trim();
+    var n = foldAccents(name || '');
+    function has(s){ return n.indexOf(s) !== -1; }
+    if(b === '13th street'){
+      /* The two Burger Blends, on the winery's consistent
+         house-wide practice — they are not individually on a
+         vegan tech sheet, and the source line says so */
+      if(has('burger blend')) return 'winery tech sheets list 13th Street wines as vegan-friendly — a house-wide practice, not a label claim; the Burger Blends are not individually on a vegan tech sheet.';
+      return '';
+    }
+    if(b === 'cave spring'){
+      if(has('pinot gris') || has('riesling')) return 'winery email to Barnivore (Apr 2020): all Cave Spring wines are vegan-friendly, made with no animal by-products.';
+      return '';
+    }
+    if(b === 'creekside'){
+      if(has('sauvignon blanc') || has('syrah')) return 'winemaker email to Barnivore (Sept 2017): Creekside’s current portfolio is 100% vegan-friendly.';
+      return '';
+    }
+    if(b === "d'ont poke the bear"){
+      return 'company email to Barnivore (Mar 2021): all D’Ont Poke The Bear wines are entirely vegan-friendly.';
+    }
+    if(b === 'fielding'){
+      /* Current wines only — the two historical exceptions are
+         never flagged */
+      if(has('2006 cabernet sauvignon') || has('2008 gewurztraminer')) return '';
+      return 'company email to Barnivore (Mar 2020): all current Fielding wines are vegan-friendly.';
+    }
+    if(b === '20 bees'){
+      return 'company emails to Barnivore (Apr 2016 / Dec 2018): all 20 Bees wines are vegan-friendly; older white and icewine vintages may have been gelatin-fined.';
+    }
+    if(b === 'chateau des charmes'){
+      /* Whites only — the Barrel Fermented Chardonnay is the
+         confirmed white in the list; its reds are never flagged */
+      if(has('barrel fermented chardonnay')) return 'winery email to Barnivore (June 2015): all Chateau Des Charmes white wines are vegan-friendly (its reds are not confirmed).';
+      return '';
+    }
+    if(b === 'strewn'){
+      /* NOT vegan per the same winery email: barrel-fermented /
+         barrel-aged Chardonnay, Muscat, Pinot Blanc, Pinot Grigio */
+      if(has('barrel fermented chardonnay') || has('barrel aged chardonnay') || has('muscat') || has('pinot blanc') || has('pinot grigio')) return '';
+      /* Vegan per the email: reds, Fumé Blanc, Gewürztraminer,
+         ice wines, Riesling, Sparkler, Viognier */
+      if(has('fume blanc') || has('gewurztraminer') || has('ice wine') || has('icewine') || has('riesling') || has('sparkler') || has('viognier') ||
+         has('cabernet') || has('merlot') || has('pinot noir') || has('syrah') || has('shiraz') || has('baco') || has('gamay') || has('rogue'))
+        return 'winery email to Barnivore (Apr 2018): Strewn’s reds, Fumé Blanc, Gewürztraminer, ice wines, Riesling, Sparkler and Viognier are vegan-friendly.';
+      return '';
+    }
+    if(b === 'pelee island'){
+      /* VQA wines only (vintage 2017+): the certified case. ICB
+         blends carry no VQA badge and are never flagged */
+      if(vqa) return 'Pelee Island VQA wines (vintage 2017 and later) are VegeCert Vegan Certified, per the winery.';
+      return '';
+    }
+    return '';
+  }
+  function veganSource(row){
+    var nameEl = row.querySelector('.pname');
+    return veganSourceFor(row.getAttribute('data-brand') || '', nameEl ? nameEl.textContent : '', isVqa(row));
+  }
+  function isVegan(row){
+    return row.getAttribute('data-vegan') === 'Yes';
+  }
+  /* Re-render one row's vegan view — its data-vegan attribute, its
+     Vegan-friendly badge and its notes source line — from the
+     allowlist, the same pattern as syncCoolerVisual. The source
+     line is a separate .vegan-note element under the tasting
+     notes, so readRow / the editor / the shared-list sync (which
+     only ever read the .notes paragraph) never pick it up as a
+     tasting note. Search also matches "vegan" for flagged
+     products. */
+  function syncVeganVisual(row){
+    var src = veganSource(row);
+    var on = !!src;
+    if(on) row.setAttribute('data-vegan', 'Yes'); else row.removeAttribute('data-vegan');
+    var pcell = cellEl(row, 'Product');
+    if(pcell){
+      var badge = pcell.querySelector('.badge.vegan');
+      if(on && !badge){
+        badge = document.createElement('span');
+        badge.className = 'badge vegan';
+        badge.textContent = 'Vegan-friendly';
+        var anchor = pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
+        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
+        else pcell.appendChild(badge);
+      } else if(!on && badge){
+        badge.parentNode.removeChild(badge);
+      }
+    }
+    var d = details[row.getAttribute('data-idx')];
+    if(d){
+      var detail = d.querySelector('.detail');
+      var note = d.querySelector('.vegan-note');
+      if(on && detail){
+        if(!note){
+          note = document.createElement('p');
+          note.className = 'vegan-note';
+          var np = detail.querySelector('.notes');
+          if(np && np.nextSibling) detail.insertBefore(note, np.nextSibling);
+          else detail.appendChild(note);
+        }
+        note.textContent = '';
+        var strong = document.createElement('strong');
+        strong.textContent = 'Vegan-friendly: ';
+        note.appendChild(strong);
+        note.appendChild(document.createTextNode(src));
+      } else if(!on && note){
+        note.parentNode.removeChild(note);
+      }
+    }
+    var s = (row.getAttribute('data-search') || '').replace(/\bvegan-friendly\b/g, '').replace(/\bvegan\b/g, '').replace(/\s+/g, ' ').trim();
+    if(on) s += ' vegan vegan-friendly';
+    row.setAttribute('data-search', s);
+  }
+  function refreshAllVegan(){
+    rows.forEach(syncVeganVisual);
+  }
+  refreshAllVegan();
   /* One shared ⋮ menu, positioned fixed next to whichever product's
      dots were tapped, so it is never clipped by the table or the card */
   var kebabMenu = document.getElementById('kebabMenu');
@@ -6633,6 +6824,10 @@
       if(dh) dh.textContent = detailLabel(row);
     }
     syncDetailBarcode(row);
+    /* The Product cell and name were rebuilt above, so the
+       Vegan-friendly badge and notes source line are re-derived
+       for the row as now written */
+    syncVeganVisual(row);
   }
   var nextIdx = 0;
   rows.forEach(function(r){
@@ -9735,6 +9930,9 @@
        values over whatever the sync just applied — a new store
        stays blank, Store 358 keeps its values */
     refreshAllCooler();
+    /* Vegan-friendly badges and source lines re-derive from the
+       allowlist over whatever the sync just applied */
+    refreshAllVegan();
     /* The date decides the LTO / flash-sale state, not the shared
        list: re-derive it over whatever the sync just applied */
     applyScheduledSales();
