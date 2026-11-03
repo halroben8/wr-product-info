@@ -1463,6 +1463,8 @@
           <option value="product">Product A–Z</option>
           <option value="price-asc">Price: low to high</option>
           <option value="price-desc">Price: high to low</option>
+          <option value="size-asc">Size: smallest to largest</option>
+          <option value="size-desc">Size: largest to smallest</option>
           <option value="rs-asc">Sugar: low to high</option>
           <option value="rs-desc">Sugar: high to low</option>
           <option value="tannins-asc">Tannins: low to high</option>
@@ -4764,7 +4766,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.12</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.13</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4789,7 +4791,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.12</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.13</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5628,7 +5630,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.12</span>
+      <span class="manual-pill accent">Version 2026.11.03.13</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6015,7 +6017,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.12</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.13</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -6747,12 +6749,38 @@
     var p = parseFloat(row.getAttribute('data-price'));
     return isNaN(p) ? null : p;
   }
+  /* Size sorts by actual volume, not alphabetically: the size
+     text is parsed into millilitres, converting litres, so the
+     order runs 200mL < 355mL < 375mL < 473mL < 750mL < 1L (1000mL)
+     < 1.5L (1500mL) < 2L < 3L < 4L instead of the alphabetical
+     "1.5L, 1L, 2L, 200mL, 3L..." a plain text sort would give.
+     Handles "750mL", "750 mL", "1.5L" and "1 L" alike; on a
+     multipack ("4 x 355mL") the single-bottle size after the x
+     is what counts. A size with no parseable volume returns null
+     and sorts last in both directions, like a missing price. */
+  function sizeMl(text){
+    var s = String(text || '').toLowerCase().replace(/,/g,'').trim();
+    if(!s) return null;
+    var m = s.match(/[x×]\s*(\d+(?:\.\d+)?)\s*(ml|l)\b/) || s.match(/(\d+(?:\.\d+)?)\s*(ml|l)\b/);
+    if(m){
+      var n = parseFloat(m[1]);
+      if(isNaN(n)) return null;
+      return m[2] === 'l' ? n * 1000 : n;
+    }
+    var bare = s.match(/(\d+(?:\.\d+)?)/);
+    if(bare){
+      var b = parseFloat(bare[1]);
+      if(isNaN(b)) return null;
+      return b >= 50 ? b : b * 1000;
+    }
+    return null;
+  }
   function sortKey(row, key){
     if(key === 'price'){ return effectivePrice(row); }
     if(key === 'rs'){ var r = parseFloat(row.getAttribute('data-rs')); return isNaN(r) ? null : r; }
     if(key === 'brand'){ return cellText(row,'Product'); }
     if(key === 'product'){ return cellText(row,'Product'); }
-    if(key === 'size'){ return cellText(row,'Size'); }
+    if(key === 'size'){ return sizeMl(cellText(row,'Size')); }
     if(key === 'sweet'){ return row.getAttribute('data-sweet').toLowerCase(); }
     if(key === 'rich'){ return row.getAttribute('data-rich').toLowerCase(); }
     if(key === 'varietal'){ return cellText(row,'Varietal'); }
@@ -6781,11 +6809,21 @@
     if(maxPriceActive()){ key = 'price'; dir = -1; }
     var sorted = rows.slice().sort(function(a,b){
       var ka = sortKey(a,key), kb = sortKey(b,key);
-      if(ka === null && kb === null) return 0;
+      if(ka === null && kb === null){
+        /* Size sort only: products with no parseable size sit
+           last together, in Product A–Z order among themselves */
+        return key === 'size' ? cellText(a,'Product').localeCompare(cellText(b,'Product')) : 0;
+      }
       if(ka === null) return 1;
       if(kb === null) return -1;
-      if(typeof ka === 'number' && typeof kb === 'number') return (ka-kb)*dir;
-      return String(ka).localeCompare(String(kb))*dir;
+      var cmp;
+      if(typeof ka === 'number' && typeof kb === 'number') cmp = (ka-kb)*dir;
+      else cmp = String(ka).localeCompare(String(kb))*dir;
+      /* Size sort only: products sharing a size (e.g. all the
+         750mL wines) fall back to Product A–Z within that size,
+         in both directions, so each size group reads in order */
+      if(cmp === 0 && key === 'size') cmp = cellText(a,'Product').localeCompare(cellText(b,'Product'));
+      return cmp;
     });
     sorted.forEach(function(row){
       tbody.appendChild(row);
@@ -6871,6 +6909,8 @@
     var v = sortsel.value;
     if(v === 'price-asc'){ state.sort='price'; state.dir=1; }
     else if(v === 'price-desc'){ state.sort='price'; state.dir=-1; }
+    else if(v === 'size-asc'){ state.sort='size'; state.dir=1; }
+    else if(v === 'size-desc'){ state.sort='size'; state.dir=-1; }
     else if(v === 'rs-asc'){ state.sort='rs'; state.dir=1; }
     else if(v === 'rs-desc'){ state.sort='rs'; state.dir=-1; }
     else if(v === 'tannins-asc'){ state.sort='tannins'; state.dir=1; }
@@ -9227,7 +9267,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.03.12). Reference content only: nothing
+     the print PDF (2026.11.03.13). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
