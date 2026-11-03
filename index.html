@@ -585,6 +585,40 @@
   .price .sale-now{color:#be185d;font-weight:800}
   .price .was{color:var(--muted);font-weight:600;font-size:.82em;
     text-decoration:line-through;margin-left:6px;white-space:nowrap}
+  /* Sale / Reg / Save — the three price lines shown together on
+     every product on sale, in the price cell and again in the
+     expanded details: the sale price leads in pink, the regular
+     price follows muted, and the saving (regular minus sale)
+     closes the block in pink. Sale and Reg always print to the
+     cent; a whole-dollar Save prints without cents ("Save $3").
+     The Reg and Save lines appear only when a regular price
+     higher than the sale price is recorded — otherwise the Sale
+     line stands alone (see saleFigures in the script) */
+  .sale-lines{display:block}
+  .sale-lines .sl-line{display:block;white-space:nowrap;line-height:1.32}
+  .sale-lines .sl-k{font-weight:800;margin-right:5px}
+  .sale-lines .sl-sale{color:#be185d;font-weight:800}
+  .sale-lines .sl-reg{color:var(--muted);font-weight:650;font-size:.88em}
+  .sale-lines .sl-save{color:#be185d;font-weight:800;font-size:.94em}
+  :root[data-theme="dark"] .sale-lines .sl-sale,
+  :root[data-theme="dark"] .sale-lines .sl-save{color:#f9a8d4}
+  .detail .sale-detail{margin:0 0 10px;font-size:15px}
+  /* "Sale price not working" — the pricing-error flag on a product
+     on sale: an amber warning badge under the product name beside
+     the SALE badge, and a matching warning line under the
+     Sale / Reg / Save lines in the expanded details, so staff can
+     see at a glance that the item is meant to be on sale but its
+     sale price isn't going through. Amber (not the pink of a
+     sale, not the red reserved for Unavailable) is the warning
+     colour */
+  .badge.sale-broken{background:#f59e0b;color:#241536;border:1.5px solid #92400e;
+    font-weight:800;letter-spacing:.04em}
+  .detail .sale-broken-note{display:block;margin-top:7px;font-weight:800;color:#b45309;font-size:14.5px}
+  :root[data-theme="dark"] .detail .sale-broken-note{color:#fbbf24}
+  /* Editor note shown when a product's sale comes from an impact
+     schedule: the sale price is set by the impact, not typed */
+  .sale-impact-note{margin:0;padding:10px 12px;border:1.5px solid var(--plum2);border-radius:10px;
+    background:var(--violet-soft);color:var(--ink);font-size:14px;font-weight:600;line-height:1.5}
   :root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
 :root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable):hover{background:#5f143d}
 :root[data-theme="dark"] .price .sale-now{color:#f9a8d4}
@@ -596,6 +630,16 @@
   .badge.vqa{background:#eab308;color:#221a02;border:1px solid #a16207;
     font-weight:800;letter-spacing:.09em}
   :root[data-theme="dark"] .badge.vqa{background:#facc15;color:#221a02;border-color:#facc15}
+  /* Most loved: the badge for the product(s) with the highest
+     Love count — a deep rose-red pill with a star, distinct from
+     the heart itself (an icon in the Acidity cell), from the pink
+     SALE badge, the gold VQA seal, and the amber Sale-price-not-
+     working badge. The same badge shows in the expanded details
+     (in a .most-loved-note line above the tasting notes) */
+  .badge.most-loved{background:#9f1239;color:#fff;border:1.5px solid #881337;
+    font-weight:800;letter-spacing:.05em}
+  :root[data-theme="dark"] .badge.most-loved{background:#be123c;border-color:#fda4af}
+  .detail .most-loved-note{margin:0 0 8px}
   .chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--violet-soft);color:var(--plum)}
   :root[data-theme="dark"] .chip{color:var(--plum2)}
   .chip.red{background:var(--chip-red-bg);color:var(--chip-red)}
@@ -772,7 +816,7 @@
      three-dot button in its top-right corner (on desktop it anchors to
      the Acidity cell, the row's rightmost cell; on phones to the card
      itself). Tapping it opens a small menu with the Edit action. */
-  td[data-label="Acidity"]{position:relative;padding-right:40px}
+  td[data-label="Acidity"]{position:relative;padding-right:76px}
   .kebab-wrap{position:absolute;top:4px;right:4px;z-index:5;line-height:1}
   .kebab-btn{appearance:none;-webkit-appearance:none;background:transparent;border:none;
     color:var(--muted);width:32px;height:32px;border-radius:999px;padding:0;cursor:pointer;
@@ -870,8 +914,14 @@
     td[data-label="Acidity"]{position:static;padding-right:56px}
     .kebab-wrap{top:2px;right:2px}
     .kebab-btn{width:40px;height:40px;font-size:22px}
-    td[data-label="Price"]{right:48px}
-    td[data-label="Product"]{padding-right:112px}
+    /* The Love heart joins the ⋮ in the card's top-right corner,
+       immediately to its left, so the price and the product name
+       both shift left to clear the pair */
+    .like-wrap{top:2px;right:44px}
+    .like-btn{width:40px;height:40px}
+    .like-btn svg{width:23px;height:23px}
+    td[data-label="Price"]{right:88px}
+    td[data-label="Product"]{padding-right:152px}
     /* Add product and Set store products live in the Settings panel
        (gear, top right), not in Filters, so no filter-panel sizing
        rules apply to them; .settings-action gives them full-width
@@ -941,6 +991,230 @@
     padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);text-align:center}
   .sync-toast.err{background:#b91c1c}
   .sync-toast[hidden]{display:none}
+  /* ---------- Love hearts, account, change history ----------
+     The Love heart sits beside the ⋮ menu in the row's Acidity
+     cell (the same top-right corner), mirroring the ⋮ button's
+     placement: on desktop it anchors just left of the ⋮ wrap, on
+     phone cards the same pairing rides at the card's corner. It
+     shows ONLY the signed-in user's own Love state — a hollow
+     outline heart when they have not loved the wine, a filled
+     RED heart when they have — and tapping toggles it. No count
+     rides on the button: the all-users total lives in the
+     expanded notes as "Loved by X merchants" (.loved-by below),
+     a separate thing entirely. */
+  .like-wrap{position:absolute;top:4px;right:40px;z-index:5;line-height:1}
+  .like-btn{appearance:none;-webkit-appearance:none;background:transparent;border:none;
+    width:32px;height:32px;border-radius:999px;padding:0;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-tap-highlight-color:transparent}
+  .like-btn svg{width:21px;height:21px;fill:none;stroke:var(--muted);stroke-width:2;
+    stroke-linejoin:round;transition:fill .15s ease,stroke .15s ease}
+  .like-btn:hover,.like-btn:focus-visible{background:var(--violet-soft);outline:none}
+  .like-btn:hover svg,.like-btn:focus-visible svg{stroke:#dc2626}
+  .like-btn.liked svg{fill:#dc2626;stroke:#dc2626}
+  .like-btn:active{transform:scale(.9)}
+  /* Wine comments live in the expanded NOTES, not on the card:
+     the comment toggle (bubble icon + "Comments" + count badge)
+     and its hidden thread are styled with the comments-view
+     rules further down, beside the suggestions styles. The card
+     itself carries only the heart and the ⋮, exactly as before
+     comments existed. */
+  /* "Loved by X merchants" in the expanded notes, under the
+     tasting notes and above the Product ID line. Written only
+     when the count is above zero (the script removes the element
+     at zero), so a wine nobody has loved shows nothing extra. */
+  .detail .loved-by{margin:0 0 6px;font-weight:750;color:#be185d}
+  .detail .loved-by .lb-heart{color:#dc2626}
+  :root[data-theme="dark"] .detail .loved-by{color:#f9a8d4}
+  .toggle.liked-toggle[aria-pressed="true"]{background:#db2777;color:#fff;border-color:#be185d}
+  /* Loved wines section in the Documents tab: only wines with at
+     least one Love, most loved first; each entry is a big tap
+     target showing the wine and its "Loved by X merchants" count */
+  .loved-list{margin-top:2px}
+  .loved-item{display:block;width:100%;text-align:left;background:var(--panel2);
+    border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px;
+    cursor:pointer;font:inherit;color:var(--ink)}
+  .loved-item:hover,.loved-item:focus-visible{border-color:var(--plum2);outline:none}
+  .loved-item .lw-name{font-weight:750;color:var(--plum);line-height:1.35}
+  :root[data-theme="dark"] .loved-item .lw-name{color:var(--lilac)}
+  .loved-item .lw-count{display:block;margin-top:2px;font-size:13px;font-weight:700;color:#be185d}
+  :root[data-theme="dark"] .loved-item .lw-count{color:#f9a8d4}
+  .loved-empty{color:var(--muted);line-height:1.5;margin:10px 0 2px}
+  /* Account block at the top of the Settings TAB only — the first
+     thing inside the Settings tab panel, below the Settings /
+     Documents / Support tab control (which sits at the very top of
+     the panel). It never appears above the tabs, and never in the
+     Documents or Support tabs. Same shell as Appearance */
+  .account-who{margin:2px 0 10px;font-size:14px;line-height:1.45}
+  .account-who .account-email{color:var(--muted);font-size:13px}
+  .btn-google{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:10px;
+    background:#fff;color:#1f1f1f;border:1.5px solid #dadce0;border-radius:999px;
+    min-height:44px;padding:9px 18px;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+  .btn-google:hover,.btn-google:focus-visible{border-color:var(--plum2);outline:none}
+  .btn-google svg{flex:none}
+  /* Change history entries (rendered only in the Admin area) */
+  .hist-item{border-top:1px solid var(--line);padding:10px 0}
+  .hist-item:first-child{border-top:none;padding-top:2px}
+  .hist-prod{font-weight:750;color:var(--plum)}
+  :root[data-theme="dark"] .hist-prod{color:var(--lilac)}
+  .hist-change{margin:2px 0;line-height:1.45}
+  .hist-meta{color:var(--muted);font-size:12.5px}
+  .hist-empty{color:var(--muted);line-height:1.5}
+  .signin-panel{max-width:440px}
+  .signin-panel p{line-height:1.55;margin:0 0 6px}
+  /* Backend (admin only): signed-in users + the change history,
+     one compact line per entry so it stays readable on a phone */
+  .be-head{font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--grape);margin:18px 0 2px}
+  .be-head:first-of-type{margin-top:2px}
+  .be-user{border-top:1px solid var(--line);padding:8px 0;line-height:1.4}
+  .be-user:first-child{border-top:none}
+  .be-user .be-name{font-weight:750;color:var(--plum)}
+  :root[data-theme="dark"] .be-user .be-name{color:var(--lilac)}
+  .be-user .be-meta{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .be-log-item{border-top:1px solid var(--line);padding:7px 0;font-size:13.5px;line-height:1.45}
+  .be-log-item:first-child{border-top:none}
+  .be-log-item .be-who{font-weight:750;color:var(--plum)}
+  :root[data-theme="dark"] .be-log-item .be-who{color:var(--lilac)}
+  .be-log-item .be-when{color:var(--muted);font-size:12.5px;white-space:nowrap}
+  .be-user .be-actions{margin-top:5px;display:flex;gap:8px;flex-wrap:wrap}
+  .be-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;
+    color:var(--plum);background:var(--violet-soft);border:1.5px solid var(--plum2);
+    border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+  :root[data-theme="dark"] .be-tag{color:var(--lilac)}
+  /* Banned tag on a user row in the Admin area: solid red, so a
+     blocked account reads as blocked at a glance */
+  .be-tag.banned{background:#b91c1c;color:#fff;border-color:#b91c1c}
+  :root[data-theme="dark"] .be-tag.banned{background:#dc2626;border-color:#dc2626;color:#fff}
+  /* Ban / unban buttons in the Admin area: Ban is a red-outline
+     danger button; Unban reuses the plum save style */
+  .btn-ban-small{background:var(--panel);color:#b91c1c;border:1.5px solid #b91c1c;border-radius:999px;
+    padding:8px 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;min-height:40px}
+  .btn-ban-small:hover,.btn-ban-small:focus-visible{background:#fef2f2;outline:2px solid #b91c1c;outline-offset:1px}
+  :root[data-theme="dark"] .btn-ban-small{color:#fca5a5;border-color:#fca5a5}
+  :root[data-theme="dark"] .btn-ban-small:hover, :root[data-theme="dark"] .btn-ban-small:focus-visible{background:#3d0f1a}
+  /* Blocked-account notice (shown when a banned user is signed
+     out by the blocklist check) */
+  .banned-panel{max-width:440px}
+  .banned-panel p{line-height:1.55;margin:0 0 6px}
+  .appoint-row{display:flex;gap:8px;align-items:stretch;margin-top:4px}
+  .appoint-row input{flex:1 1 auto;min-width:0}
+  .appoint-row .btn-save-small{flex:none}
+  /* Suggestions box: the form a signed-in user fills in from
+     Settings → Suggestions, and the entries an appointed admin
+     reads in the Admin area. The form panel follows the sign-in
+     prompt's shape; each admin entry is one block — who, when,
+     then the suggestion text with its line breaks kept */
+  .suggest-panel{max-width:520px}
+  .suggest-panel p.suggest-intro{line-height:1.55;margin:0 0 12px}
+  .suggest-panel .efield textarea{font-size:16px}
+  .suggest-panel .btn-save[disabled]{opacity:.45;cursor:not-allowed}
+  .be-sug{border-top:1px solid var(--line);padding:9px 0;line-height:1.45}
+  .be-sug:first-child{border-top:none}
+  .be-sug .be-name{font-weight:750;color:var(--plum)}
+  :root[data-theme="dark"] .be-sug .be-name{color:var(--lilac)}
+  .be-sug .be-sug-meta{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .be-sug .be-sug-text{margin:4px 0 0;font-size:14.5px;line-height:1.55;
+    white-space:pre-wrap;overflow-wrap:break-word}
+  /* Thank-you banner in the Suggestions panel, shown in place
+     right after a suggestion is sent (the panel stays open so the
+     sender also sees the new entry land in Your suggestions) */
+  .suggest-thanks{margin:0 0 12px;padding:11px 13px;border:1.5px solid var(--plum2);border-radius:10px;
+    background:var(--violet-soft);font-size:14.5px;font-weight:650;line-height:1.5;color:var(--ink)}
+  .suggest-thanks[hidden]{display:none !important}
+  /* Your suggestions: the signed-in user's OWN submitted
+     suggestions, listed in the Suggestions panel under the form,
+     each with Edit / Delete for that entry only. Same block shape
+     as the Admin entries, plus an action row, an inline editor
+     and a two-tap delete confirm (no browser confirm dialogs — they do
+     not work in this shell) */
+  .my-sug-head{font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--grape);margin:18px 0 2px}
+  .my-sug{border-top:1px solid var(--line);padding:9px 0;line-height:1.45}
+  .my-sug .my-sug-meta{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .my-sug .my-sug-text{margin:4px 0 0;font-size:14.5px;line-height:1.55;
+    white-space:pre-wrap;overflow-wrap:break-word}
+  .my-sug-actions{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .my-sug-confirm{font-size:13.5px;font-weight:700;color:#b91c1c}
+  :root[data-theme="dark"] .my-sug-confirm{color:#fca5a5}
+  .my-sug-edit{margin-top:6px}
+  .my-sug-edit textarea{width:100%;font-size:16px}
+  .my-sug-edit .my-sug-actions{margin-top:8px}
+  /* Acted upon + admin replies on a suggestion — shown in BOTH
+     the Admin Suggestions view and the submitter's own Your
+     suggestions list, with the same pieces: a solid plum
+     "Acted upon" tag, an optional by/when line, and the reply
+     thread (oldest first, so a follow-up conversation reads in
+     order) as indented blocks under the suggestion */
+  .sug-acted-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.04em;
+    color:#fff;background:var(--plum);border:1.5px solid var(--plum);
+    border-radius:999px;padding:1px 9px;vertical-align:middle}
+  :root[data-theme="dark"] .sug-acted-tag{background:var(--badge-bg);border-color:var(--badge-bg)}
+  .sug-acted-line{margin-top:5px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .sug-acted-meta{color:var(--muted);font-size:12.5px}
+  .sug-actions{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .sug-replies{margin-top:9px;border-left:3px solid var(--lilac);padding-left:10px}
+  .sug-replies-head{font-size:11.5px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--grape);margin:0 0 4px}
+  .sug-reply{padding:5px 0;line-height:1.45}
+  .sug-reply-meta{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .sug-reply-meta .sug-reply-who{font-weight:750;color:var(--plum)}
+  :root[data-theme="dark"] .sug-reply-meta .sug-reply-who{color:var(--lilac)}
+  .sug-reply-text{margin:2px 0 0;font-size:14.5px;line-height:1.55;
+    white-space:pre-wrap;overflow-wrap:break-word}
+  .sug-reply-form{margin-top:8px}
+  .sug-reply-form textarea{width:100%;font-size:16px}
+  .sug-reply-form .sug-actions{margin-top:7px}
+  /* Wine comments, in the expanded notes: a "Comments" toggle
+     (bubble icon + label + count badge) under the tasting notes,
+     and the thread under it — HIDDEN until the toggle is
+     pressed, hidden again when it is pressed again or the notes
+     are closed. The thread lists comments newest first (name +
+     time, then the text with line breaks kept), with the
+     add-a-comment form under the list. A signed-in user's OWN
+     comments carry Edit / Delete, in the same inline shape as
+     Your suggestions (inline editor, two-tap delete confirm).
+     The count badge shows ONLY above zero — a wine with no
+     comments shows no badge. The counts arrive in the
+     background after the list has rendered (one grouped query
+     for every wine — see loadCommentCounts), so the badge never
+     delays the list or a search. */
+  .detail .comments-entry{margin:10px 0 2px}
+  .comments-toggle{appearance:none;-webkit-appearance:none;display:inline-flex;align-items:center;gap:7px;
+    background:var(--panel2);color:var(--plum);border:1.5px solid var(--line);border-radius:999px;
+    min-height:40px;padding:7px 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;
+    -webkit-tap-highlight-color:transparent}
+  .comments-toggle svg{width:18px;height:18px;flex:none;fill:none;stroke:var(--plum2);stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+  .comments-toggle:hover,.comments-toggle:focus-visible{border-color:var(--plum2);background:var(--violet-soft);outline:none}
+  :root[data-theme="dark"] .comments-toggle{color:var(--lilac)}
+  .comment-count{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;
+    padding:0 6px;border-radius:999px;background:var(--plum);color:#fff;box-sizing:border-box;
+    font-size:11px;font-weight:800;line-height:1;text-align:center}
+  .comment-count[hidden]{display:none !important}
+  .wine-comments{margin-top:8px;border-top:1px dashed var(--lilac);padding-top:4px}
+  .wine-comments[hidden]{display:none !important}
+  .wc-form{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .wc-form-label{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--grape);margin-bottom:4px}
+  .wc-form textarea{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1.5px solid var(--line);
+    border-radius:10px;background:var(--panel);color:var(--ink);resize:vertical;box-sizing:border-box}
+  .wc-form textarea:focus{outline:2px solid var(--plum2);outline-offset:1px;border-color:var(--plum2)}
+  .wc-form .btn-save-small[disabled]{opacity:.45;cursor:not-allowed}
+  .wine-comment{border-top:1px solid var(--line);padding:9px 0;line-height:1.45}
+  .wine-comment:first-child{border-top:none}
+  .wine-comment .wc-meta{color:var(--muted);font-size:12.5px;word-break:break-word}
+  .wine-comment .wc-meta .wc-who{font-weight:750;color:var(--plum);font-size:13.5px}
+  :root[data-theme="dark"] .wine-comment .wc-meta .wc-who{color:var(--lilac)}
+  .wine-comment .wc-text{margin:3px 0 0;font-size:14.5px;line-height:1.55;
+    white-space:pre-wrap;overflow-wrap:break-word}
+  .wc-actions{margin-top:7px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .wc-confirm{font-size:13.5px;font-weight:700;color:#b91c1c}
+  :root[data-theme="dark"] .wc-confirm{color:#fca5a5}
+  .wc-edit{margin-top:6px}
+  .wc-edit textarea{width:100%;font-size:16px}
+  .wc-edit .wc-actions{margin-top:8px}
+  .comments-signin-note{margin:8px 0 0;color:var(--muted);font-size:13.5px;line-height:1.5}
+  .comments-signin-note[hidden]{display:none !important}
   @media (prefers-reduced-motion: reduce){ *{transition:none !important} }
 </style>
 </head>
@@ -1071,6 +1345,7 @@
           <option value="rs-desc">Sugar: high to low</option>
           <option value="tannins-asc">Tannins: low to high</option>
           <option value="tannins-desc">Tannins: high to low</option>
+          <option value="likes-desc">Most loved</option>
         </select>
       </div>
     </div>
@@ -1078,6 +1353,7 @@
       <button type="button" class="toggle sale-toggle" id="saleToggle" aria-pressed="false">On sale only</button>
       <button type="button" class="toggle vegan-toggle" id="veganToggle" aria-pressed="false">Vegan-friendly only</button>
       <button type="button" class="toggle gluten-toggle" id="glutenToggle" aria-pressed="false">Gluten-safe only</button>
+      <button type="button" class="toggle liked-toggle" id="likedToggle" aria-pressed="false">♥ Loved only</button>
       <button type="button" class="reset" id="reset">Reset filters</button>
       <button type="button" class="toggle filtersbtn" id="filtersBtn" aria-expanded="false">Filters ▾</button>
       <span class="count" id="count" role="status"></span>
@@ -4264,6 +4540,7 @@
   <button type="button" id="kebabPlano" role="menuitem" aria-pressed="false">☐ Not in plano — Off</button>
   <button type="button" id="kebabCooler" role="menuitem" aria-pressed="false">☐ Cooler — Off</button>
   <button type="button" id="kebabSale" role="menuitem" aria-pressed="false">☐ On sale — Off</button>
+  <button type="button" id="kebabSaleBroken" role="menuitem" aria-pressed="false">☐ Sale price not working — Off</button>
 </div>
 
 <div class="editor-overlay" id="settingsOverlay" hidden>
@@ -4278,7 +4555,27 @@
       <button type="button" class="settings-tab" id="settingsTab-support" role="tab" aria-selected="false" aria-controls="settingsPanel-support" data-settings-tab="support">Support</button>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-settings" role="tabpanel" aria-labelledby="settingsTab-settings">
-    <div class="theme-setting">
+    <div class="theme-setting account-setting" id="accountSection">
+      <div class="theme-setting-head">
+        <span class="theme-label" id="accountLabel">Account</span>
+        <span class="theme-current" id="accountCurrent">Not signed in</span>
+      </div>
+      <div id="accountSignedOut">
+        <button type="button" class="btn-google" id="signInBtn"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34.3 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34.3 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>Sign in with Google</button>
+        <p class="theme-note">Sign-in is required to use this app — you&rsquo;re seeing this because you&rsquo;re signed in. Signing in lets you love wines and add or edit products, so your loves are yours and your changes carry your name.</p>
+      </div>
+      <div id="accountSignedIn" hidden>
+        <p class="account-who">Signed in as <strong id="accountName"></strong><br /><span class="account-email" id="accountEmail"></span></p>
+        <button type="button" class="btn-ghost-small" id="signOutBtn">Sign out</button>
+        <p class="theme-note">Your loves are saved to your account, and products you add or edit are tagged with your name in the change history.</p>
+      </div>
+      <p class="theme-note" id="likesSetupNote" hidden></p>
+    </div>
+    <div class="settings-actions" style="margin-top:14px">
+      <button type="button" class="settings-action" id="suggestionsBtn"><span>Suggestions<span class="sa-sub">Leave a comment or suggestion for the moderator, and edit or delete your own — sign-in required</span></span></button>
+    </div>
+
+    <div class="theme-setting" style="margin-top:14px">
       <div class="theme-setting-head">
         <span class="theme-label" id="themeLabel">Appearance</span>
         <span class="theme-current" id="themeCurrent">Light</span>
@@ -4335,7 +4632,17 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.02.12</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.7</span></p>
+    <!-- Admin sits at the very bottom of Settings, below the
+         Version line and everything else. The button itself is
+         visible to everyone, but what it opens — the signed-in
+         users list and the full action log — only opens for an
+         appointed admin (see isAppointed in the script); anyone
+         else who taps it gets a clear restricted message and
+         none of the lists. -->
+    <div class="settings-actions" style="margin-top:14px">
+      <button type="button" class="settings-action" id="adminBtn"><span>Admin<span class="sa-sub">Signed-in users, suggestions, banned users and change history — appointed users only</span></span></button>
+    </div>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -4345,7 +4652,9 @@
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
         <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
-        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 15 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <button type="button" class="settings-action" id="lovedWinesBtn" aria-expanded="false" aria-controls="lovedWinesList"><span>Loved wines<span class="sa-sub">Every wine someone has loved, most loved first — tap one to open it</span></span></button>
+        <div class="loved-list" id="lovedWinesList" hidden></div>
+        <a class="settings-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual<span class="sa-sub">How to use this app &mdash; the full manual, 23 pages</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
       </div>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-support" role="tabpanel" aria-labelledby="settingsTab-support" hidden>
@@ -4867,7 +5176,7 @@
     <details class="wk-section">
       <summary>Red varietals we carry</summary>
       <div class="wk-body">
-        <p>Every red grape varietal in the WR#358 list, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
+        <p>Every red grape varietal we carry, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
         <ul>
           <li><strong>Baco Noir</strong> — Medium-bodied, typically off-dry, deep ruby-purple; strawberry, cherry, pepper, smoky notes.</li>
           <li><strong>Cabernet Franc</strong> — Medium-bodied, medium to high acidity; raspberry, sometimes strawberry, earthy notes. Blanc de Franc is a white wine made from Cabernet Franc grapes, so it falls under Cabernet Franc, not a separate varietal.</li>
@@ -4889,7 +5198,7 @@
     <details class="wk-section">
       <summary>White varietals we carry</summary>
       <div class="wk-body">
-        <p>Every white grape varietal in the WR#358 list, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
+        <p>Every white grape varietal we carry, with its typical characteristics. Cider, seltzer, sparkling wine, spritz, sangria, cream liqueur and generic rosé are styles, not grape varietals, so they are not listed here; icewine is also a style (ours are Vidal-based).</p>
         <ul>
           <li><strong>Chardonnay</strong> — Medium- to full-bodied, low to medium acidity; apple, pear and citrus when unoaked; butter, vanilla and toast when oaked.</li>
           <li><strong>Sauvignon Blanc</strong> — Light- to medium-bodied, high acidity; grapefruit, lime, passion fruit, gooseberry, grassy or herbal notes.</li>
@@ -5197,7 +5506,7 @@
           <input class="combo-new" id="f-size-new" type="text" placeholder="New size, e.g. 500mL" hidden />
         </div>
         <div class="efield">
-          <label for="f-price">Price ($)</label>
+          <label for="f-price">Regular price ($)</label>
           <input id="f-price" type="number" min="0" step="0.01" placeholder="Leave blank if not known" />
         </div>
         <div class="efield">
@@ -5209,7 +5518,17 @@
         </div>
         <div class="efield" id="f-saleprice-field" hidden>
           <label for="f-saleprice">Sale price ($)</label>
-          <input id="f-saleprice" type="number" min="0" step="0.01" placeholder="Leave blank to keep the price above as the sale price" />
+          <input id="f-saleprice" type="number" min="0" step="0.01" placeholder="Leave blank to keep the regular price above as the sale price" />
+        </div>
+        <div class="efield" id="f-salebroken-field" hidden>
+          <label for="f-salebroken">Sale price not working</label>
+          <select id="f-salebroken">
+            <option value="No">No — sale price is working</option>
+            <option value="Yes">Yes — flag a pricing error</option>
+          </select>
+        </div>
+        <div class="efield wide" id="f-sale-impact-field" hidden>
+          <p class="sale-impact-note" id="f-sale-impact-note"></p>
         </div>
         <div class="efield">
           <label for="f-rs">Sugar — RS (g/L)</label>
@@ -5444,8 +5763,134 @@
   </div>
 </div>
 
+<!-- Sign-in prompt: shown when a signed-out user taps a heart,
+     Edit, Add product, or a scan's "Add as a new product". Browsing
+     never triggers it — only likes and edits/adds do. -->
+<div class="editor-overlay" id="signinOverlay" hidden>
+  <div class="editor-panel signin-panel" role="dialog" aria-modal="true" aria-labelledby="signinTitle">
+    <div class="editor-head">
+      <h2 id="signinTitle">Sign in first</h2>
+      <button type="button" class="editor-x" id="signinClose" aria-label="Close sign-in prompt">×</button>
+    </div>
+    <p id="signinMsg">Sign in with Google to continue.</p>
+    <p>Loves are saved to your account, and changes are tagged with your name so the team can see who loved and changed what. Sign-in is required to use this app.</p>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="signinCancel">Not now</button>
+      <button type="button" class="btn-save" id="signinGo">Sign in with Google</button>
+    </div>
+  </div>
+</div>
+
+<!-- Suggestions box: a signed-in user writes a comment or
+     suggestion for the moderator. Opened from Settings →
+     Suggestions (signed-out taps get the sign-in prompt instead —
+     see the Suggestions section in the script). Submissions are
+     stored in the shared user_suggestions table. Sending one shows
+     a thank-you in this panel. Under the form, "Your suggestions"
+     lists ONLY the signed-in user's own submissions, each with
+     Edit / Delete for that entry alone; the full list of
+     everyone's suggestions is read back only in the Admin area,
+     by appointed admins. -->
+<div class="editor-overlay" id="suggestOverlay" hidden>
+  <div class="editor-panel suggest-panel" role="dialog" aria-modal="true" aria-labelledby="suggestTitle">
+    <div class="editor-head">
+      <h2 id="suggestTitle">Suggestions</h2>
+      <button type="button" class="editor-x" id="suggestClose" aria-label="Close suggestions">×</button>
+    </div>
+    <p class="suggest-intro">Leave a comment or suggestion for the moderator. It&rsquo;s sent with your name and email. Only you, the moderator and appointed admins can read your suggestions &mdash; yours are listed under the form, where you can edit or delete them, and see when one has been acted upon or replied to.</p>
+    <p class="suggest-thanks" id="suggestThanks" role="status" hidden></p>
+    <div class="efield wide">
+      <label for="suggestText">Your comment or suggestion</label>
+      <textarea id="suggestText" rows="5" maxlength="2000" placeholder="What would make this app better?"></textarea>
+    </div>
+    <p class="store-err" id="suggestErr" role="alert" hidden></p>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="suggestCancel">Cancel</button>
+      <button type="button" class="btn-save" id="suggestSend">Send suggestion</button>
+    </div>
+    <h3 class="my-sug-head">Your suggestions</h3>
+    <div id="mySuggestions"><p class="hist-empty">Loading&hellip;</p></div>
+  </div>
+</div>
+
+<!-- Blocked-account notice: shown when the blocklist check
+     (see the Admin / banned users section in the script) finds
+     the signed-in user on the shared banned_users list. They are
+     signed out straight away and this explains why. Browsing
+     stays open — closing it returns to the product list, which
+     the blocked account can still view; it just can't use
+     signed-in features. -->
+<div class="editor-overlay" id="bannedOverlay" hidden>
+  <div class="editor-panel banned-panel" role="dialog" aria-modal="true" aria-labelledby="bannedTitle">
+    <div class="editor-head">
+      <h2 id="bannedTitle">Account blocked</h2>
+      <button type="button" class="editor-x" id="bannedClose" aria-label="Close blocked notice">×</button>
+    </div>
+    <p id="bannedMsg">This account has been blocked by an admin, so it can&rsquo;t sign in or use signed-in features.</p>
+    <p>You&rsquo;ve been signed out. You can still browse the product list, but this account can&rsquo;t love wines or make changes. If you think this is a mistake, speak to Michael or another appointed admin — an admin can unblock the account from the Admin area.</p>
+    <div class="editor-actions">
+      <button type="button" class="btn-save" id="bannedDone">Back to browsing</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin (appointed users only): who has signed in, who is
+     appointed, who is banned, the suggestions users have left,
+     and the change history from the shared product_changes
+     table. The overlay is only ever opened for an appointed
+     admin — the gate is in the script, and this markup alone
+     reveals none of the lists. -->
+<div class="editor-overlay" id="adminOverlay" hidden>
+  <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+    <div class="editor-head">
+      <h2 id="adminTitle">Admin</h2>
+      <button type="button" class="editor-x" id="adminClose" aria-label="Close admin">×</button>
+    </div>
+    <h3 class="be-head">Signed-in users</h3>
+    <div id="adminUsers"><p class="hist-empty">Loading…</p></div>
+    <h3 class="be-head">Appointed admins</h3>
+    <div id="adminAdmins"><p class="hist-empty">Loading…</p></div>
+    <div id="adminAppointForm" hidden>
+      <label for="adminAppointEmail">Appoint an admin by email</label>
+      <div class="appoint-row">
+        <input id="adminAppointEmail" type="email" autocomplete="off" placeholder="name@example.com" />
+        <button type="button" class="btn-save-small" id="adminAppointBtn">Appoint</button>
+      </div>
+      <p class="store-err" id="adminAppointErr" role="alert" hidden></p>
+      <p class="theme-note">They get access the next time they open the app signed in with that email. You can also appoint anyone in the Signed-in users list above with one tap.</p>
+    </div>
+    <h3 class="be-head">Banned users</h3>
+    <div id="adminBanned"><p class="hist-empty">Loading…</p></div>
+    <div id="adminBanForm" hidden>
+      <label for="adminBanEmail">Ban a user by email</label>
+      <div class="appoint-row">
+        <input id="adminBanEmail" type="email" autocomplete="off" placeholder="name@example.com" />
+        <button type="button" class="btn-ban-small" id="adminBanBtn">Ban</button>
+      </div>
+      <p class="store-err" id="adminBanErr" role="alert" hidden></p>
+      <p class="theme-note">A banned user can&rsquo;t use signed-in features — if they&rsquo;re signed in when banned, they&rsquo;re signed out with a blocked message, and they can&rsquo;t love wines or make changes (they can still browse the list). Unban anyone from this list or from the Signed-in users list above. Michael (halroben8@gmail.com) can&rsquo;t be banned.</p>
+    </div>
+    <h3 class="be-head">Suggestions</h3>
+    <div id="adminSuggestions"><p class="hist-empty">Loading…</p></div>
+    <h3 class="be-head">Change history</h3>
+    <div id="adminLog"><p class="hist-empty">Loading…</p></div>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="adminDone">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="sync-toast" id="syncToast" hidden role="status"></div>
 
+<!-- Supabase JS client, used ONLY for Google sign-in (Auth). The
+     product / store data keeps travelling over the plain fetch
+     calls below, exactly as before; this library just owns the
+     sign-in redirect, the persisted session (it survives reloads
+     and reopening the app) and the signed-in user's identity.
+     If it ever fails to load, window.supabase is simply absent and
+     every sign-in feature below degrades to a clear message —
+     the list itself never depends on it. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (function(){
   var tbody = document.getElementById('tbody');
@@ -5467,6 +5912,75 @@
   function veganOnlyOn(){ return !!veganToggle && veganToggle.getAttribute('aria-pressed') === 'true'; }
   var glutenToggle = document.getElementById('glutenToggle');
   function glutenOnlyOn(){ return !!glutenToggle && glutenToggle.getAttribute('aria-pressed') === 'true'; }
+  var likedToggle = document.getElementById('likedToggle');
+  function likedOnlyOn(){ return !!likedToggle && likedToggle.getAttribute('aria-pressed') === 'true'; }
+  /* ---------- Sign-in, likes and change history — shared state ----------
+     Declared up here, before the row/filter/editor code that reads
+     it, because hearts are rendered by writeRow() and the sign-in
+     gate sits inside openEditor() and the ⋮-menu handlers, all of
+     which are defined before the Auth section near the bottom of
+     this script (that section fills these in and wires the actual
+     Supabase Auth client). Until it runs — or if the auth library
+     failed to load — authUser stays null and the app behaves
+     exactly as the signed-out app always has.
+       · authUser / authSession — the signed-in user and session
+         from Supabase Auth (Google), null when signed out.
+       · myLikes — the set of product_ids the signed-in user has
+         liked (empty when signed out).
+       · likeCounts — product_id -> total likes across ALL users,
+         shown on the heart and used by the Most loved sort.
+       · likesReady / changesReady — null until the first fetch
+         settles, then true/false: whether the shared list's
+         user_likes / product_changes tables answered. False
+         means the table has not been created yet, and the
+         features degrade to a clear message instead of breaking
+         anything (see the Auth section at the bottom). */
+  var authClient = null, authSession = null, authUser = null;
+  var myLikes = {}, likeCounts = {}, likesReady = null, changesReady = null;
+  /* Wine-comment state, declared HERE with the like state for
+     the same reason: ensureCommentsEntry runs in the init pass
+     (long before the Wine comments section at the bottom), and
+     syncCommentBadge reads commentCounts on that very first
+     call — if the initialiser lived down in the comments
+     section, commentCounts would still be undefined at init,
+     the read would throw, and the init pass would stop after
+     the first row, leaving every other wine's notes without a
+     comment icon.
+       · commentsReady / commentsCountsReady — null until the
+         first fetch settles, then whether the product_comments
+         table answered (false = not created yet).
+       · commentsPid — the product_id of the thread most
+         recently rendered ('' while none has been).
+       · commentCounts — product_id -> total comments, filled
+         in the background by loadCommentCounts for the badges. */
+  var commentsReady = null, commentsPid = '', commentCounts = {}, commentsCountsReady = null;
+  var signinOverlay = null, adminOverlay = null, bannedOverlay = null, suggestOverlay = null;
+  /* Icon paths for the Love heart and the comment bubble,
+     declared HERE — before the init pass at the editor section
+     adds those buttons to every baked-in row — because a var
+     assignment further down the script has not run yet at that
+     point, and a button built before its path constant is
+     assigned would get d="undefined" and render nothing until
+     the next writeRow. The Love hearts section and the Wine
+     comments section use these same constants. */
+  var LOVE_HEART_PATH = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
+  var COMMENT_BUBBLE_PATH = 'M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z';
+  /* Browsing is OPEN: there is no sign-in wall. The product
+     list, search, filters, Settings, Documents and scanner are
+     all visible and usable signed out; sign-in is required only
+     to make changes (edit / add / toggles / barcode links),
+     to love a wine, and for Admin actions — see requireSignIn()
+     in the Auth section at the bottom. */
+  /* The shared product_id for a row, from whichever source knows
+     it first: the live shared-list mapping, the row's data-pid,
+     or the Product ID line in its notes. '' while unknown (the
+     shared list has not been applied yet). */
+  function rowPidOf(row){
+    if(!row) return '';
+    var idx = row.getAttribute('data-idx');
+    if(typeof rowPid !== 'undefined' && rowPid && rowPid[idx]) return rowPid[idx];
+    return row.getAttribute('data-pid') || detailSrcPid(row) || '';
+  }
   var state = { sort:'product', dir:1 };
 
   /* Accent-insensitive search folding: lowercases the text and
@@ -5628,6 +6142,7 @@
     if(saleOnlyOn()) n++;
     if(veganOnlyOn()) n++;
     if(glutenOnlyOn()) n++;
+    if(likedOnlyOn()) n++;
     var open = controlsEl.classList.contains('open');
     filtersBtn.textContent = 'Filters' + (n ? ' · ' + n + ' on' : '') + (open ? ' ▴' : ' ▾');
     filtersBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -5694,6 +6209,7 @@
     if(key === 'rich'){ return row.getAttribute('data-rich').toLowerCase(); }
     if(key === 'varietal'){ return cellText(row,'Varietal'); }
     if(key === 'tannins'){ return tanninRank(cellText(row,'Tannins')); }
+    if(key === 'likes'){ var lp = rowPidOf(row); return lp ? (likeCounts[lp] || 0) : 0; }
     if(key === 'acidity'){ return cellText(row,'Acidity'); }
     return '';
   }
@@ -5773,6 +6289,7 @@
         if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
         if(veganOnlyOn() && row.getAttribute('data-vegan') !== 'Yes') ok = false;
         if(glutenOnlyOn() && row.getAttribute('data-gluten') !== 'Yes') ok = false;
+        if(likedOnlyOn()){ var lpid = rowPidOf(row); if(!lpid || !myLikes[lpid]) ok = false; }
         if(!isNaN(mp)){
           var p = effectivePrice(row);
           if(p === null || p > mp) ok = false;
@@ -5810,6 +6327,7 @@
     else if(v === 'rs-desc'){ state.sort='rs'; state.dir=-1; }
     else if(v === 'tannins-asc'){ state.sort='tannins'; state.dir=1; }
     else if(v === 'tannins-desc'){ state.sort='tannins'; state.dir=-1; }
+    else if(v === 'likes-desc'){ state.sort='likes'; state.dir=-1; }
     else { state.sort=v; state.dir=1; }
     applySort();
   });
@@ -5872,6 +6390,10 @@
     if(!d) return;
     d.hidden = true;
     row.setAttribute('aria-expanded', 'false');
+    /* Closing the notes closes the comment thread too: it
+       never reappears on its own when the notes are expanded
+       again — it takes a fresh press of the comment icon */
+    closeCommentsThread(row);
   }
   function wireRow(row){
     function toggle(){
@@ -5903,12 +6425,24 @@
       apply();
     });
   }
+  if(likedToggle){
+    likedToggle.addEventListener('click', function(){
+      /* Loved only is a view of YOUR loves, so it needs the
+         signed-in account that owns them: signed out, the tap
+         opens the sign-in prompt instead of toggling */
+      if(likedOnlyOn()){ likedToggle.setAttribute('aria-pressed', 'false'); apply(); return; }
+      if(!requireSignIn('see your loved wines')) return;
+      likedToggle.setAttribute('aria-pressed', 'true');
+      apply();
+    });
+  }
   document.getElementById('reset').addEventListener('click', function(){
     scanOnlyIdx = null; scanOnlyQuery = '';
     q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     if(veganToggle) veganToggle.setAttribute('aria-pressed', 'false');
     if(glutenToggle) glutenToggle.setAttribute('aria-pressed', 'false');
+    if(likedToggle) likedToggle.setAttribute('aria-pressed', 'false');
     state.sort='product'; state.dir=1; sortsel.value='product';
     applySort(); apply();
   });
@@ -6249,6 +6783,7 @@
       barcode: row.getAttribute('data-barcode') || '',
       sale: row.getAttribute('data-sale') === 'Yes',
       salePrice: row.getAttribute('data-sale-price') || '',
+      saleBroken: row.getAttribute('data-sale-broken') === 'Yes',
       vqa: isVqa(row),
       status: row.getAttribute('data-status') || 'Planogram',
       unavailable: isUnavail(row),
@@ -6417,9 +6952,9 @@
   }
   /* ---------- On sale — on/off from the ⋮ menu and the editor ----------
      A product on sale (data-sale="Yes") carries the pink SALE
-     badge under its name, a pale-pink row/card tint, and — when a
-     sale price is set — the sale price in place of the regular
-     price, with the regular price struck through beside it. The
+     badge under its name, a pale-pink row/card tint, and the
+     Sale / Reg / Save price lines in its price cell and expanded
+     details (see the Sale / Reg / Save display section below). The
      ⋮ menu's On sale item toggles the flag, keeping the sale price
      for when it is turned back on; the editor's On sale / Sale
      price fields edit both. On sale is global product info, like
@@ -6435,10 +6970,148 @@
     if(isSale(row)) s += ' on sale sale';
     row.setAttribute('data-search', s);
   }
+  /* ---------- Sale / Reg / Save display ----------
+     Every product on sale shows its prices as three lines
+     together — Sale, Reg and Save (= regular price − sale
+     price) — in the product card's price cell and again in its
+     expanded details:
+       Sale $12.99
+       Reg $15.99
+       Save $3
+     Sale and Reg always print to the cent; Save prints whole
+     dollars without cents ($3) and otherwise to the cent
+     ($2.50). The Reg and Save lines appear ONLY when a regular
+     price is recorded that is higher than the sale price: a
+     sale item with no regular price recorded (blank, or the
+     same figure as the sale price) shows the Sale line alone —
+     a regular price is never invented. A blank sale price in
+     the editor means the regular price IS the sale price, so
+     that shows the Sale line alone too. This is display only:
+     price sorting and the Max price filter keep using the
+     sale price via effectivePrice(), exactly as before. */
+  function fmtSaleMoney(n){ return '$' + n.toFixed(2); }
+  function fmtSaveMoney(n){
+    var r = Math.round(n * 100) / 100;
+    return (r === Math.round(r)) ? '$' + Math.round(r) : '$' + r.toFixed(2);
+  }
+  function saleFigures(sale, price, salePrice){
+    if(!sale) return null;
+    var reg = parseFloat(price);
+    var sp = parseFloat(salePrice);
+    var blankSalePrice = isNaN(sp);
+    if(blankSalePrice) sp = reg;
+    if(isNaN(sp)) return { sale: null, reg: null, save: null };
+    var fig = { sale: sp, reg: null, save: null };
+    if(!blankSalePrice && !isNaN(reg)){
+      var save = Math.round((reg - sp) * 100) / 100;
+      if(save > 0){ fig.reg = reg; fig.save = save; }
+    }
+    return fig;
+  }
+  function saleLinesEl(fig){
+    var wrap = document.createElement('span');
+    wrap.className = 'sale-lines';
+    function line(cls, label, text){
+      var l = document.createElement('span');
+      l.className = 'sl-line ' + cls;
+      var k = document.createElement('span');
+      k.className = 'sl-k'; k.textContent = label;
+      l.appendChild(k);
+      l.appendChild(document.createTextNode(text));
+      wrap.appendChild(l);
+    }
+    line('sl-sale', 'Sale', fmtSaleMoney(fig.sale));
+    if(fig.reg !== null){
+      line('sl-reg', 'Reg', fmtSaleMoney(fig.reg));
+      line('sl-save', 'Save', fmtSaveMoney(fig.save));
+    }
+    return wrap;
+  }
+  /* The expanded details carry the same Sale / Reg / Save lines,
+     directly under the detail head and above the tasting notes.
+     The block exists only while the product is on sale with a
+     price to show, and is rebuilt on every render, so scheduled
+     sales switching on or off by date, editor saves and ⋮-menu
+     sale toggles all update it through writeRow below */
+  function syncSaleDetail(row){
+    var d = details[row.getAttribute('data-idx')];
+    if(!d) return;
+    var detail = d.querySelector('.detail');
+    if(!detail) return;
+    var fig = saleFigures(isSale(row), row.getAttribute('data-price'), row.getAttribute('data-sale-price'));
+    var el = detail.querySelector('.sale-detail');
+    if(!fig || fig.sale === null){
+      if(el) el.parentNode.removeChild(el);
+      return;
+    }
+    if(!el){
+      el = document.createElement('div');
+      el.className = 'sale-detail';
+      var head = detail.querySelector('.detail-head');
+      if(head && head.nextSibling) detail.insertBefore(el, head.nextSibling);
+      else if(detail.firstChild) detail.insertBefore(el, detail.firstChild);
+      else detail.appendChild(el);
+    }
+    el.innerHTML = '';
+    el.appendChild(saleLinesEl(fig));
+    if(isSaleBroken(row)){
+      var warn = document.createElement('span');
+      warn.className = 'sale-broken-note';
+      warn.textContent = '⚠ Sale price not working — this item is meant to be on sale, but the sale price isn’t going through (pricing error).';
+      el.appendChild(warn);
+    }
+  }
+  /* Re-render one row's price cell from its data attributes:
+     the Sale / Reg / Save lines for a product on sale, the
+     plain price otherwise. Also refreshes the expanded
+     details' sale block, so the two never disagree */
+  function renderPriceCell(row){
+    var priceTd = cellEl(row, 'Price');
+    if(priceTd){
+      var fig = saleFigures(isSale(row), row.getAttribute('data-price'), row.getAttribute('data-sale-price'));
+      priceTd.innerHTML = '';
+      if(fig){
+        if(fig.sale === null) priceTd.textContent = '—';
+        else priceTd.appendChild(saleLinesEl(fig));
+      } else {
+        var pn = parseFloat(row.getAttribute('data-price'));
+        priceTd.textContent = isNaN(pn) ? '—' : fmtSaleMoney(pn);
+      }
+    }
+    syncSaleDetail(row);
+  }
   function setSale(row, on){
     if(isSale(row) === !!on){ syncSaleSearch(row); return; }
     var data = readRow(row);
     data.sale = !!on;
+    writeRow(row, data);
+    syncPlanoSearch(row);
+    syncCoolerSearch(row);
+    syncSaleSearch(row);
+  }
+  /* ---------- Sale price not working — the pricing-error flag ----------
+     A product that is meant to be on sale but whose sale price
+     isn't going through (it scans at the wrong price) can be
+     flagged, from the ⋮ menu or the editor's "Sale price not
+     working" field. The flag is global product info, like the
+     sale flag itself. While a product is on sale AND flagged,
+     its card carries the amber "⚠ Sale price not working" badge
+     beside the SALE badge and its expanded details carry the
+     matching warning under the Sale / Reg / Save lines, so staff
+     see it at a glance. The flag is kept when the sale is off
+     (like the sale price) and shows again when the sale returns.
+     Toggling follows the same sign-in rule as every other edit,
+     is logged to the change history, and syncs separately via
+     sbSyncSaleBroken, so a shared list without the column yet
+     can never lose the flag on this screen (sbApplyRemote keeps
+     the local value when the record carries no sale_broken). */
+  function isSaleBroken(row){
+    return row.getAttribute('data-sale-broken') === 'Yes';
+  }
+  function setSaleBroken(row, on){
+    if(isSaleBroken(row) === !!on) return;
+    var data = readRow(row);
+    data.saleBroken = !!on;
     writeRow(row, data);
     syncPlanoSearch(row);
     syncCoolerSearch(row);
@@ -6697,6 +7370,7 @@
   var kebabPlanoBtn = document.getElementById('kebabPlano');
   var kebabCoolerBtn = document.getElementById('kebabCooler');
   var kebabSaleBtn = document.getElementById('kebabSale');
+  var kebabSaleBrokenBtn = document.getElementById('kebabSaleBroken');
   var menuRow = null, menuBtn = null;
   function closeKebabMenu(refocus){
     if(kebabMenu.hidden) return;
@@ -6723,6 +7397,9 @@
     var sale = isSale(row);
     kebabSaleBtn.textContent = sale ? '☑ On sale — On' : '☐ On sale — Off';
     kebabSaleBtn.setAttribute('aria-pressed', sale ? 'true' : 'false');
+    var saleBroken = isSaleBroken(row);
+    kebabSaleBrokenBtn.textContent = saleBroken ? '☑ Sale price not working — On' : '☐ Sale price not working — Off';
+    kebabSaleBrokenBtn.setAttribute('aria-pressed', saleBroken ? 'true' : 'false');
     btn.setAttribute('aria-expanded', 'true');
     kebabMenu.hidden = false;
     var r = btn.getBoundingClientRect();
@@ -6739,25 +7416,55 @@
     closeKebabMenu(false);
     if(row) openEditor(row);
   });
+  /* The ⋮ toggles below are product edits too, so they carry the
+     same sign-in rule as Edit (requireSignIn, which also covers
+     the Edit item via openEditor): signed out, the tap shows the
+     sign-in prompt and nothing changes; signed in, the change is
+     logged to the change history with the user's name. */
   kebabAvailBtn.addEventListener('click', function(){
     var row = menuRow;
     closeKebabMenu(false);
-    if(row){ setUnavailable(row, !isUnavail(row)); apply(); sbSyncUnavailable(row); }
+    if(!row) return;
+    if(!requireSignIn('edit products')) return;
+    var nowUn = !isUnavail(row);
+    setUnavailable(row, nowUn); apply(); sbSyncUnavailable(row);
+    sbLogChange(row, nowUn ? 'Marked unavailable at Store ' + activeStore : 'Marked available again at Store ' + activeStore);
   });
   kebabPlanoBtn.addEventListener('click', function(){
     var row = menuRow;
     closeKebabMenu(false);
-    if(row){ setNotInPlano(row, !isNotInPlano(row)); apply(); sbSyncProduct(row); }
+    if(!row) return;
+    if(!requireSignIn('edit products')) return;
+    var nowNip = !isNotInPlano(row);
+    setNotInPlano(row, nowNip); apply(); sbSyncProduct(row);
+    sbLogChange(row, nowNip ? 'Not in plano turned on' : 'Not in plano turned off');
   });
   kebabCoolerBtn.addEventListener('click', function(){
     var row = menuRow;
     closeKebabMenu(false);
-    if(row){ setCooler(row, !isCooler(row)); apply(); sbSyncCooler(row); }
+    if(!row) return;
+    if(!requireSignIn('edit products')) return;
+    var nowCool = !isCooler(row);
+    setCooler(row, nowCool); apply(); sbSyncCooler(row);
+    sbLogChange(row, (nowCool ? 'Cooler turned on' : 'Cooler turned off') + ' at Store ' + activeStore);
   });
   kebabSaleBtn.addEventListener('click', function(){
     var row = menuRow;
     closeKebabMenu(false);
-    if(row){ setSale(row, !isSale(row)); apply(); sbSyncProduct(row); }
+    if(!row) return;
+    if(!requireSignIn('edit products')) return;
+    var nowSale = !isSale(row);
+    setSale(row, nowSale); apply(); sbSyncProduct(row);
+    sbLogChange(row, nowSale ? 'On sale turned on' : 'On sale turned off');
+  });
+  kebabSaleBrokenBtn.addEventListener('click', function(){
+    var row = menuRow;
+    closeKebabMenu(false);
+    if(!row) return;
+    if(!requireSignIn('edit products')) return;
+    var nowBroken = !isSaleBroken(row);
+    setSaleBroken(row, nowBroken); apply(); sbSyncSaleBroken(row);
+    sbLogChange(row, nowBroken ? 'Sale price not working flagged (pricing error)' : 'Sale price not working flag cleared');
   });
   document.addEventListener('click', function(ev){
     if(!kebabMenu.hidden && !kebabMenu.contains(ev.target)) closeKebabMenu(false);
@@ -6853,6 +7560,7 @@
     row.setAttribute('data-price', data.price);
     row.setAttribute('data-sale', data.sale ? 'Yes' : 'No');
     row.setAttribute('data-sale-price', data.salePrice || '');
+    row.setAttribute('data-sale-broken', data.saleBroken ? 'Yes' : 'No');
     row.classList.toggle('is-sale', !!data.sale);
     row.setAttribute('data-rs', data.rs);
     row.setAttribute('data-barcode', data.barcode ? String(data.barcode).replace(/\D/g, '') : '');
@@ -6869,6 +7577,11 @@
       var sb2 = document.createElement('span');
       sb2.className = 'badge sale'; sb2.textContent = 'Sale';
       pcell.appendChild(sb2);
+    }
+    if(data.sale && data.saleBroken){
+      var sbb = document.createElement('span');
+      sbb.className = 'badge sale-broken'; sbb.textContent = '⚠ Sale price not working';
+      pcell.appendChild(sbb);
     }
     if(data.vqa){
       var vb = document.createElement('span');
@@ -6893,30 +7606,14 @@
     /* Availability banner goes on after the name/badges are rebuilt */
     setUnavailable(row, !!data.unavailable);
     setCell(row, 'Size', data.size || '—');
-    /* Price cell: on sale with a sale price, the sale price leads in
-       bold and the regular price follows struck through; on sale
-       with no separate sale price, the regular price stands (the
-       pink SALE badge and row tint carry the sale signal) */
-    var priceN = parseFloat(data.price);
+    /* Price cell: on sale, the Sale / Reg / Save lines from the
+       sale-display section above (the Sale line alone when no
+       higher regular price is recorded); otherwise the regular
+       price. The row's data attributes were set at the top of
+       this function, so renderPriceCell reads the new values —
+       and it refreshes the expanded details' sale block too */
     var priceTd = cellEl(row, 'Price');
-    if(priceTd){
-      priceTd.innerHTML = '';
-      var saleN = data.sale ? parseFloat(data.salePrice) : NaN;
-      if(!isNaN(saleN)){
-        var now = document.createElement('span');
-        now.className = 'sale-now';
-        now.textContent = '$' + saleN.toFixed(2);
-        priceTd.appendChild(now);
-        if(!isNaN(priceN) && priceN !== saleN){
-          var was = document.createElement('span');
-          was.className = 'was';
-          was.textContent = '$' + priceN.toFixed(2);
-          priceTd.appendChild(was);
-        }
-      } else {
-        priceTd.textContent = isNaN(priceN) ? '—' : '$' + priceN.toFixed(2);
-      }
-    }
+    if(priceTd) renderPriceCell(row);
     var rsN = parseFloat(data.rs);
     setCell(row, 'Sugar (RS)', isNaN(rsN) ? '—' : rsN + ' g/L');
     setCell(row, 'Sweetness', data.sweet || '—');
@@ -6935,6 +7632,8 @@
     setCell(row, 'Acidity', data.acidity || '—');
     /* Setting the Acidity text above wipes that cell, so the ⋮ goes back on last */
     addKebabButton(row);
+    /* The Product cell was rebuilt above too, so the like heart goes back on */
+    addLikeButton(row);
     /* The Product cell was rebuilt above too, so the expand pill goes back on */
     addExpandHint(row);
     var d = details[row.getAttribute('data-idx')];
@@ -6954,6 +7653,12 @@
     syncVeganVisual(row);
     /* Same re-derivation for the Gluten-safe badge */
     syncGlutenVisual(row);
+    /* The notes' comment entry (icon + count badge + hidden
+       thread) lives in the detail, which writeRow does not
+       rebuild — ensure it exists for the row as now written.
+       Building it fetches nothing: comments load only when the
+       icon is pressed open */
+    ensureCommentsEntry(row);
   }
   var nextIdx = 0;
   rows.forEach(function(r){
@@ -6998,6 +7703,12 @@
     return row;
   }
   function openEditor(row){
+    /* Adding and editing products are signed-in actions (the
+       change is tagged with who made it): a signed-out user gets
+       the sign-in prompt here and the editor never opens. This
+       one gate covers every way in — the ⋮ menu's Edit, Settings'
+       Add product, and the scanner's "Add as a new product". */
+    if(!requireSignIn(row ? 'edit products' : 'add products')) return;
     editingRow = row || null;
     editorTitle.textContent = row ? 'Edit product' : 'Add product';
     /* The editor works on the global catalogue for price, notes and
@@ -7012,7 +7723,7 @@
     document.getElementById('f-cooler-label').textContent = 'In cooler — Store ' + activeStore + ' only';
     var cur = row ? readRow(row) : {
       brand:'', name:'', size:'750mL', price:'', rs:'', sweet:'', rich:'',
-      varietal:'', tannins:'', acidity:'', cooler:'', barcode:'', sale:false, salePrice:'', vqa:false, status:'Not In Plano', unavailable:false, notes:''
+      varietal:'', tannins:'', acidity:'', cooler:'', barcode:'', sale:false, salePrice:'', saleBroken:false, vqa:false, status:'Not In Plano', unavailable:false, notes:''
     };
     comboFields.forEach(function(cf){
       var sel = document.getElementById(cf.sel), nw = document.getElementById(cf.nw);
@@ -7030,6 +7741,32 @@
     document.getElementById('f-sale').value = cur.sale ? 'Yes' : 'No';
     document.getElementById('f-saleprice').value = cur.salePrice;
     document.getElementById('f-saleprice-field').hidden = !cur.sale;
+    document.getElementById('f-salebroken').value = cur.saleBroken ? 'Yes' : 'No';
+    document.getElementById('f-salebroken-field').hidden = !cur.sale;
+    /* Scheduled (impact) sale: while this product is in an ACTIVE
+       scheduled sale period (P8/P9 LTOs, Black Friday Flash Sale),
+       its sale price is set by the impact schedule — the On sale
+       and Sale price fields are locked and a note says so, naming
+       the impact and its price. The Regular price above stays
+       editable (the flash sale's price and every saving are
+       worked out from it, and the schedule re-derives the sale
+       price from it). Products in no active period keep the
+       manual sale fields exactly as before */
+    var sched = row ? scheduledSaleFor(row) : null;
+    var impactOn = !!(sched && sched.on);
+    document.getElementById('f-sale').disabled = impactOn;
+    document.getElementById('f-saleprice').disabled = impactOn;
+    var impactField = document.getElementById('f-sale-impact-field');
+    if(impactOn){
+      var impactPrice = parseFloat(sched.price);
+      document.getElementById('f-sale-impact-note').textContent =
+        'On sale now from the ' + (sched.period || 'scheduled impact') + ' — the sale price' +
+        (isNaN(impactPrice) ? '' : ' of $' + impactPrice.toFixed(2)) +
+        ' is set by the impact schedule, not typed here. The Regular price above is still yours to edit.';
+      impactField.hidden = false;
+    } else {
+      impactField.hidden = true;
+    }
     document.getElementById('f-rs').value = cur.rs;
     /* Barcode: the field shows the barcode REGISTERED to this
        product — the shared list's link where there is one — not
@@ -7135,10 +7872,12 @@
     scanForEditor = true;
     openScanner();
   });
-  /* Sale price field only shows while On sale is Yes */
+  /* Sale price and Sale price not working fields only show while
+     On sale is Yes */
   document.getElementById('f-sale').addEventListener('change', function(){
     var on = this.value === 'Yes';
     document.getElementById('f-saleprice-field').hidden = !on;
+    document.getElementById('f-salebroken-field').hidden = !on;
     if(on) document.getElementById('f-saleprice').focus();
   });
   document.getElementById('editorClose').addEventListener('click', closeEditor);
@@ -7155,6 +7894,10 @@
   });
   editorForm.addEventListener('submit', function(ev){
     ev.preventDefault();
+    /* Backstop for the openEditor gate: if the session ended
+       while the editor was open, the save does not go through
+       signed out — the prompt shows and the editor stays open */
+    if(!requireSignIn(editingRow ? 'edit products' : 'add products')) return;
     var data = {};
     comboFields.forEach(function(cf){ data[cf.key] = resolveCombo(cf); });
     /* Adding: no name field — the new product takes its Varietal as
@@ -7164,6 +7907,7 @@
     data.price = document.getElementById('f-price').value.trim();
     data.sale = document.getElementById('f-sale').value === 'Yes';
     data.salePrice = document.getElementById('f-saleprice').value.trim();
+    data.saleBroken = document.getElementById('f-salebroken').value === 'Yes';
     data.rs = document.getElementById('f-rs').value.trim();
     /* Normalised exactly the way a scan is, so a barcode typed
        here (spaces, or an EAN-13 leading zero) matches the same
@@ -7189,6 +7933,10 @@
       document.getElementById(editingRow ? 'f-name' : 'f-varietal').focus();
       return;
     }
+    /* Snapshot for the change-history entry: what this product
+       looked like before this save, so the log can name the
+       fields that actually changed (describeChanges below) */
+    var oldData = editingRow ? readRow(editingRow) : null;
     var isNew = !editingRow;
     /* The barcode REGISTERED to this product before this edit
        (captured when the editor opened — the shared list's link
@@ -7264,6 +8012,15 @@
         if(normalizeBarcode(data.barcode || '') !== prevBarcode) sbSyncBarcode(target, false);
       }
     }
+    /* Tag the save in the change history with the signed-in
+       user: "Added product" for a new one, otherwise the list of
+       fields that changed. A save that changed nothing writes
+       no entry. Fire-and-forget — a missing product_changes
+       table never takes the save down (see sbLogChange). */
+    if(target){
+      var changeText = isNew ? 'Added product' : describeChanges(oldData, data);
+      if(changeText) sbLogChange(target, changeText);
+    }
     closeEditor();
     applySort();
     apply();
@@ -7271,6 +8028,8 @@
   });
   document.getElementById('addProduct').addEventListener('click', function(){ openEditor(null); });
   rows.forEach(addKebabButton);
+  rows.forEach(addLikeButton);
+  rows.forEach(ensureCommentsEntry);
   rows.forEach(addExpandHint);
   /* Products that arrived already marked Not In Plano get the
      "not in plano" search token too, matching ones toggled later */
@@ -7280,6 +8039,11 @@
   rows.forEach(syncCoolerSearch);
   /* Same for products that arrived already on sale */
   rows.forEach(syncSaleSearch);
+  /* Same for the Sale / Reg / Save display: the first paint shows
+     the three lines in the price cell and the expanded details of
+     every product already on sale (the baked rows carry only the
+     plain sale price) */
+  rows.forEach(renderPriceCell);
   /* The first paint already shows the CURRENT store's cooler
      values: if this device starts on a store created new (its
      cooler values were erased at creation and stay erased),
@@ -9336,6 +10100,9 @@
   });
   scanLinkSaveBtn.addEventListener('click', function(){
     if(!scanLinkRow || !pendingBarcode) return;
+    /* Linking a barcode edits the product, so it carries the
+       same sign-in rule as the other edits */
+    if(!requireSignIn('edit products')) return;
     var row = scanLinkRow, code = pendingBarcode;
     /* One barcode points to one product: clear it from any other
        product that had it, locally and in the shared list */
@@ -9351,6 +10118,7 @@
     syncPlanoSearch(row); syncCoolerSearch(row); syncSaleSearch(row);
     closeScanLink();
     sbSyncBarcode(row, false);
+    sbLogChange(row, 'Barcode ' + code + ' linked to this product');
     jumpToProduct(row);
   });
   document.getElementById('scanLinkAddNew').addEventListener('click', function(){
@@ -9405,7 +10173,11 @@
   }
   function sb(path, opts){
     opts = opts || {};
-    var headers = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json' };
+    /* opts.token swaps the publishable key for the signed-in
+       user's access token — used by the likes / change-history
+       calls, so those rows are written as that user (auth.uid())
+       whenever the shared list's policies ask for it */
+    var headers = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + (opts.token || SB_KEY), 'Content-Type': 'application/json' };
     if(opts.prefer) headers['Prefer'] = opts.prefer;
     return fetch(SB_URL + '/rest/v1/' + path, {
       method: opts.method || 'GET', headers: headers,
@@ -9467,6 +10239,7 @@
       varietal: p.varietal || '', tannins: p.tannins || '', acidity: p.acidity || '',
       cooler: p.in_cooler ? 'Yes' : 'No',
       sale: !!p.on_sale, salePrice: (p.sale_price === null || p.sale_price === undefined) ? '' : String(p.sale_price),
+      saleBroken: !!p.sale_broken,
       barcode: (p.barcode === null || p.barcode === undefined) ? '' : String(p.barcode),
       vqa: !!p.vqa,
       status: p.status || 'Planogram', unavailable: false, notes: p.tasting_notes || ''
@@ -9514,6 +10287,2309 @@
     setSyncStatus('Shared list connected — adds and edits save for everyone.');
     if(msg) syncToast(msg, false);
   }
+
+  /* ---------- Sign-in (Supabase Auth, Google), likes, change history ----------
+     Sign-in is Supabase Auth with the Google provider (enabled in
+     the Supabase project with the Crew Connect Web OAuth client;
+     the redirect returns to this page). The supabase-js client
+     loaded in the <head> area owns ONLY auth: it persists the
+     session itself (localStorage, auto-refresh), so a sign-in
+     survives reloads and reopening the app. Product data keeps
+     using the plain sb() fetch calls; the likes and change-log
+     calls pass the signed-in user's access token (sb opts.token)
+     so those rows are written as that user.
+     BROWSING IS OPEN — there is no sign-in wall. The product
+     list, search, filters, Settings, Documents and the scanner
+     are all visible and usable without signing in, exactly as
+     before sign-in existed. Sign-in is required only to MAKE
+     CHANGES: requireSignIn() guards loves and product
+     edits/adds at the heart button, openEditor() (Edit / Add
+     product / the scanner's "Add as a new product"), the
+     ⋮-menu toggles, the barcode link save, Admin appointments
+     and bans, and as a backstop in the editor's submit — a
+     signed-out user gets a clear sign-in prompt and the action
+     does not proceed. The supabase-js session persists across
+     visits, so a returning signed-in user is still signed in.
+     A banned account is signed out and blocked from signed-in
+     features only; it can still browse the public list.
+     Two new shared tables, both OPTIONAL in the same way
+     store_cooler was: while either is missing its feature
+     degrades to a clear message and everything else keeps
+     working; the moment the table exists the same calls start
+     succeeding with no app change. SQL (Supabase SQL Editor,
+     with the same open policies as the other tables):
+       create table if not exists public.user_likes (
+         user_id uuid not null, product_id text not null,
+         user_email text, user_name text,
+         created_at timestamptz not null default now(),
+         primary key (user_id, product_id));
+       create table if not exists public.product_changes (
+         id bigint generated always as identity primary key,
+         product_id text, product_label text, change text,
+         user_id uuid, user_email text, user_name text,
+         created_at timestamptz not null default now());
+     Loves are one per user per product (the primary key), the
+     heart shows the total across all users, "Loved only" shows
+     the signed-in user's own loves, and "Most loved" sorts by
+     that total. Change entries are written by sbLogChange() from
+     the editor save (with the fields that changed), the ⋮-menu
+     toggles and the barcode link, always with the signed-in
+     user's name/email; the Change history view lives ONLY in
+     the Admin area (see renderAdminLog) and reads them back
+     newest first for appointed admins only. */
+  signinOverlay = document.getElementById('signinOverlay');
+  adminOverlay = document.getElementById('adminOverlay');
+  bannedOverlay = document.getElementById('bannedOverlay');
+  suggestOverlay = document.getElementById('suggestOverlay');
+  try{
+    if(window.supabase && typeof window.supabase.createClient === 'function'){
+      authClient = window.supabase.createClient(SB_URL, SB_KEY);
+    }
+  }catch(e){ authClient = null; if(window.console) console.warn('Sign-in unavailable:', e); }
+  function sbAuthToken(){ return authSession && authSession.access_token ? authSession.access_token : null; }
+  function authDisplayName(){
+    if(!authUser) return '';
+    var md = authUser.user_metadata || {};
+    return md.full_name || md.name || authUser.email || 'Signed-in user';
+  }
+  function updateAccountUI(){
+    var signedIn = !!authUser;
+    var cur = document.getElementById('accountCurrent');
+    if(cur) cur.textContent = signedIn ? 'Signed in' : 'Not signed in';
+    var out = document.getElementById('accountSignedOut');
+    if(out) out.hidden = signedIn;
+    var inn = document.getElementById('accountSignedIn');
+    if(inn) inn.hidden = !signedIn;
+    if(signedIn){
+      var nm = document.getElementById('accountName');
+      if(nm) nm.textContent = authDisplayName();
+      var em = document.getElementById('accountEmail');
+      if(em) em.textContent = authUser.email || '';
+    }
+    syncLikesSetupNote();
+  }
+  function syncLikesSetupNote(){
+    var el = document.getElementById('likesSetupNote');
+    if(!el) return;
+    var msgs = [];
+    if(likesReady === false) msgs.push('Loves are not set up yet: the user_likes table still needs to be created in the shared list. The hearts show, but loves can\u2019t be saved until then \u2014 everything else works as normal.');
+    if(changesReady === false) msgs.push('Change logging is not set up yet: the product_changes table still needs to be created in the shared list. Edits still save; they just aren\u2019t logged until then.');
+    el.textContent = msgs.join(' ');
+    el.hidden = msgs.length === 0;
+  }
+  function signInWithGoogle(){
+    if(!authClient){
+      syncToast('Sign-in couldn\u2019t load \u2014 check your connection, reopen the app and try again.', true);
+      return;
+    }
+    var redirectTo = window.location.origin + window.location.pathname;
+    authClient.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: redirectTo } }).then(function(res){
+      if(res && res.error){
+        if(window.console) console.warn(res.error);
+        syncToast('Sign-in didn\u2019t start \u2014 ' + (res.error.message || 'please try again.'), true);
+      }
+      /* On success the browser is already on its way to Google */
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Sign-in didn\u2019t start \u2014 check your connection and try again.', true);
+    });
+  }
+  /* ----- the per-action sign-in check ----- */
+  function requireSignIn(what){
+    if(authUser){
+      /* A banned account is blocked here even before the
+         blocklist check signs it out: no loving, no edits/adds */
+      if(isCurrentUserBanned()){
+        enforceBanIfNeeded();
+        return false;
+      }
+      return true;
+    }
+    showSignInPrompt(what);
+    return false;
+  }
+  /* ----- the blocked-account notice ----- */
+  function showBannedPrompt(){
+    var msg = document.getElementById('bannedMsg');
+    if(msg && authUser && authUser.email){
+      msg.textContent = 'The account ' + authUser.email + ' has been blocked by an admin, so it can\u2019t sign in or use signed-in features.';
+    }
+    if(!bannedOverlay) return;
+    bannedOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    var done = document.getElementById('bannedDone');
+    if(done) done.focus();
+  }
+  function closeBannedPrompt(){
+    if(!bannedOverlay || bannedOverlay.hidden) return;
+    bannedOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && adminOverlay.hidden && suggestOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('bannedClose').addEventListener('click', closeBannedPrompt);
+  document.getElementById('bannedDone').addEventListener('click', closeBannedPrompt);
+  if(bannedOverlay) bannedOverlay.addEventListener('click', function(ev){ if(ev.target === bannedOverlay) closeBannedPrompt(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && bannedOverlay && !bannedOverlay.hidden) closeBannedPrompt();
+  });
+  function showSignInPrompt(what){
+    var msg = document.getElementById('signinMsg');
+    if(msg) msg.textContent = 'Sign in with Google to ' + (what || 'continue') + '.';
+    if(!signinOverlay) return;
+    signinOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    var go = document.getElementById('signinGo');
+    if(go) go.focus();
+  }
+  function closeSignInPrompt(){
+    if(!signinOverlay || signinOverlay.hidden) return;
+    signinOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && suggestOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('signinClose').addEventListener('click', closeSignInPrompt);
+  document.getElementById('signinCancel').addEventListener('click', closeSignInPrompt);
+  document.getElementById('signinGo').addEventListener('click', function(){
+    closeSignInPrompt();
+    signInWithGoogle();
+  });
+  if(signinOverlay) signinOverlay.addEventListener('click', function(ev){ if(ev.target === signinOverlay) closeSignInPrompt(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && signinOverlay && !signinOverlay.hidden) closeSignInPrompt();
+  });
+  document.getElementById('signInBtn').addEventListener('click', signInWithGoogle);
+  document.getElementById('signOutBtn').addEventListener('click', function(){
+    if(!authClient) return;
+    authClient.auth.signOut().then(function(){}, function(err){ if(window.console) console.warn(err); });
+    /* onAuthStateChange clears the session, the hearts and the UI */
+  });
+  /* ----- Love hearts ----- */
+  /* The heart lives in the Acidity cell beside the ⋮ button (the
+     row's top-right corner, exactly where addKebabButton puts the
+     ⋮ wrap) and shows ONLY the signed-in user's own Love state:
+     the CSS draws it as a hollow outline heart, or a filled red
+     heart once loved (.liked). writeRow() wipes the Acidity
+     cell's text on every write, so the heart is re-added there
+     alongside the ⋮, the same way the ⋮ itself is. */
+  /* LOVE_HEART_PATH itself is declared with the shared state at
+     the top of this script, before the init pass that first
+     calls addLikeButton */
+  function addLikeButton(row){
+    var acell = cellEl(row, 'Acidity');
+    if(!acell || acell.querySelector('.like-wrap')) return;
+    var wrap = document.createElement('span');
+    wrap.className = 'like-wrap';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'like-btn';
+    btn.setAttribute('aria-pressed', 'false');
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', LOVE_HEART_PATH);
+    svg.appendChild(path);
+    btn.appendChild(svg);
+    /* The heart is its own tap target: it must not expand the
+       row (click) or trigger the row's keyboard toggle */
+    btn.addEventListener('keydown', function(ev){ ev.stopPropagation(); });
+    btn.addEventListener('click', function(ev){ ev.stopPropagation(); toggleLike(row); });
+    wrap.appendChild(btn);
+    acell.appendChild(wrap);
+    syncLikeVisual(row);
+  }
+  function syncLikeVisual(row){
+    var btn = row.querySelector('.like-btn');
+    if(!btn) return;
+    var pid = rowPidOf(row);
+    var mine = !!(pid && myLikes[pid]);
+    var total = pid ? (likeCounts[pid] || 0) : 0;
+    btn.classList.toggle('liked', mine);
+    btn.setAttribute('aria-pressed', mine ? 'true' : 'false');
+    var nameEl = row.querySelector('.pname');
+    var label = (mine ? 'Un-love ' : 'Love ') + (nameEl ? nameEl.textContent.trim() : 'this product');
+    if(total > 0) label += ' \u2014 loved by ' + total + (total === 1 ? ' merchant' : ' merchants');
+    btn.setAttribute('aria-label', label);
+    btn.title = mine ? 'You loved this \u2014 tap to un-love' : 'Love this wine';
+    /* The expanded notes carry the same count in plain words
+       for everyone, signed in or not */
+    syncLovedBy(row);
+    syncMostLoved(row);
+  }
+  /* ---------- Most loved badge ----------
+     The product with the highest Love count in the shared
+     user_likes counts (at least one Love) carries a "★ Most
+     loved" badge on its card and in its expanded details. Ties
+     share it: every product at the top count gets the badge.
+     No badge anywhere while no wine has been loved yet. The
+     badge is derived from likeCounts on every like sync — the
+     same moments the hearts refresh (load, the 30-second tick,
+     sign-in changes, and a Love tap's optimistic update and its
+     rollback, which re-sync every row via refreshAllLikes) — so
+     it appears, moves and disappears as counts change across
+     phones, and writeRow re-derives it through addLikeButton
+     whenever a card is rebuilt. It is display only: never
+     stored or synced itself. */
+  function mostLovedMax(){
+    var m = 0;
+    for(var k in likeCounts){ var v = likeCounts[k] || 0; if(v > m) m = v; }
+    return m;
+  }
+  function syncMostLoved(row){
+    var pid = rowPidOf(row);
+    var total = pid ? (likeCounts[pid] || 0) : 0;
+    var isTop = total > 0 && total === mostLovedMax();
+    var pcell = cellEl(row, 'Product');
+    if(pcell){
+      var badge = pcell.querySelector('.badge.most-loved');
+      if(isTop && !badge){
+        badge = document.createElement('span');
+        badge.className = 'badge most-loved';
+        badge.textContent = '★ Most loved';
+        var hint = pcell.querySelector('.expand-hint');
+        if(hint) pcell.insertBefore(badge, hint);
+        else pcell.appendChild(badge);
+      } else if(!isTop && badge){
+        badge.parentNode.removeChild(badge);
+      }
+    }
+    var d = details[row.getAttribute('data-idx')];
+    if(!d) return;
+    var detail = d.querySelector('.detail');
+    if(!detail) return;
+    var note = detail.querySelector('.most-loved-note');
+    if(isTop && !note){
+      note = document.createElement('p');
+      note.className = 'most-loved-note';
+      var nb = document.createElement('span');
+      nb.className = 'badge most-loved';
+      nb.textContent = '★ Most loved';
+      note.appendChild(nb);
+      var notes = detail.querySelector('.notes');
+      if(notes) detail.insertBefore(note, notes);
+      else detail.appendChild(note);
+    } else if(!isTop && note){
+      note.parentNode.removeChild(note);
+    }
+  }
+  /* "Loved by X merchants" in the wine's expanded details: the
+     count is the shared user_likes total for this product (the
+     same likeCounts the heart shows), so it is identical on
+     every phone and updates whenever likes reload — on load, on
+     the 30-second tick, and the moment anyone loves or un-loves.
+     Shown ONLY above zero: a wine nobody has loved gets no line
+     at all, and the element is removed again if the count falls
+     back to zero. Singular "merchant" for exactly one. */
+  function syncLovedBy(row){
+    var d = details[row.getAttribute('data-idx')];
+    if(!d) return;
+    var detail = d.querySelector('.detail');
+    if(!detail) return;
+    var pid = rowPidOf(row);
+    var n = pid ? (likeCounts[pid] || 0) : 0;
+    var el = detail.querySelector('.loved-by');
+    if(n <= 0){
+      if(el) el.parentNode.removeChild(el);
+      return;
+    }
+    if(!el){
+      el = document.createElement('p');
+      el.className = 'loved-by';
+      var heart = document.createElement('span');
+      heart.className = 'lb-heart';
+      heart.setAttribute('aria-hidden', 'true');
+      heart.textContent = '\u2665 ';
+      el.appendChild(heart);
+      var txt = document.createElement('span');
+      txt.className = 'lb-text';
+      el.appendChild(txt);
+      /* Sits under the tasting notes, above the Product ID line */
+      var src = detail.querySelector('.src');
+      if(src) detail.insertBefore(el, src);
+      else detail.appendChild(el);
+    }
+    var txtEl = el.querySelector('.lb-text');
+    if(txtEl) txtEl.textContent = 'Loved by ' + n + (n === 1 ? ' merchant' : ' merchants');
+  }
+  function refreshAllLikes(){ rows.forEach(syncLikeVisual); }
+  function toggleLike(row){
+    if(!requireSignIn('love wines')) return;
+    if(likesReady === false){
+      syncToast('Loves aren\u2019t set up yet \u2014 the user_likes table still needs to be created in the shared list. Everything else works as normal.', true);
+      return;
+    }
+    var pid = rowPidOf(row);
+    if(!pid){
+      syncToast('Still connecting to the shared list \u2014 try the heart again in a moment.', true);
+      return;
+    }
+    var liked = !!myLikes[pid];
+    /* Optimistic: the heart flips now, and flips back if the
+       shared list refuses the write */
+    if(liked){ delete myLikes[pid]; likeCounts[pid] = Math.max(0, (likeCounts[pid] || 1) - 1); }
+    else { myLikes[pid] = 1; likeCounts[pid] = (likeCounts[pid] || 0) + 1; }
+    /* Every row re-syncs, not just this one: a count change can
+       also move the Most loved badge off (or onto) another wine */
+    refreshAllLikes();
+    if(state.sort === 'likes') applySort();
+    if(likedOnlyOn()) apply();
+    var req = liked
+      ? sb('user_likes?user_id=eq.' + encodeURIComponent(authUser.id) + '&product_id=eq.' + encodeURIComponent(pid), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() })
+      : sb('user_likes', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', token: sbAuthToken(),
+          body: { user_id: authUser.id, product_id: pid, user_email: authUser.email || null, user_name: authDisplayName() } });
+    req.then(function(){ if(likesReady !== true){ likesReady = true; syncLikesSetupNote(); } }, function(err){
+      if(liked){ myLikes[pid] = 1; likeCounts[pid] = (likeCounts[pid] || 0) + 1; }
+      else { delete myLikes[pid]; likeCounts[pid] = Math.max(0, (likeCounts[pid] || 1) - 1); }
+      refreshAllLikes();
+      if(window.console) console.warn(err);
+      if(likesReady !== true){
+        likesReady = false; syncLikesSetupNote();
+        syncToast('Loves aren\u2019t set up yet \u2014 the user_likes table still needs to be created in the shared list. Everything else works as normal.', true);
+      } else {
+        syncToast('Couldn\u2019t save that love \u2014 check your connection and try again.', true);
+      }
+    });
+  }
+  function loadLikes(){
+    return sb('user_likes?select=product_id,user_id', { token: sbAuthToken() }).then(function(list){
+      likesReady = true;
+      likeCounts = {}; myLikes = {};
+      (list || []).forEach(function(l){
+        likeCounts[l.product_id] = (likeCounts[l.product_id] || 0) + 1;
+        if(authUser && l.user_id === authUser.id) myLikes[l.product_id] = 1;
+      });
+      refreshAllLikes();
+      syncLikesSetupNote();
+      if(state.sort === 'likes') applySort();
+      if(likedOnlyOn()) apply();
+    }, function(err){
+      /* Almost certainly the table does not exist yet: hearts
+         stay quiet, the note in Settings says so, and this runs
+         again on the 30-second tick so likes start working on
+         their own once the table is created */
+      likesReady = false;
+      if(window.console) console.warn('Likes not loaded (user_likes table may not exist yet):', err);
+      syncLikesSetupNote();
+    });
+  }
+  /* ---------- Wine comments ----------
+     The comment icon lives in the wine's EXPANDED NOTES (its
+     detail section), not on the product card: a "Comments"
+     toggle with a speech-bubble icon sits under the tasting
+     notes, built by ensureCommentsEntry() alongside the
+     "Loved by X merchants" line. The comment THREAD stays
+     HIDDEN by default — expanding a wine's notes shows the
+     icon only, never the comments. Pressing the icon opens
+     that wine's thread inline, right there in the notes:
+     its comments, newest first, each with the commenter's
+     name and time, and a text field + Send button. Pressing
+     the icon again hides the thread, and collapsing the
+     wine's notes hides it too (collapseProduct closes it).
+
+     SEARCH SPEED IS THE HARD RULE HERE. Comments are NEVER
+     loaded while the product list renders, and never while
+     searching or filtering: renderComments() runs only when a
+     wine's comment icon is pressed open, and its fetch names
+     that one wine's product_id, so opening one wine never
+     downloads another wine's comments. The only other
+     comments traffic is the count badges (below), which load
+     AFTER the list has rendered, in the background, and never
+     block anything.
+
+     COUNT BADGES: the icon carries a small count of that
+     wine's comments, shown only above zero. The counts come
+     from loadCommentCounts() — ONE query for the whole list
+     (it selects just product_id from every comment row and
+     counts them up on this screen, the same shape as
+     loadLikes), fired once the list is already on screen and
+     again on the 30-second tick — never one query per product,
+     and apply()/applySort() never call it, so searching and
+     filtering stay exactly as fast as before. When the counts
+     land, refreshCommentBadges() fills the badges in. Posting
+     a comment bumps that wine's count straight away and
+     deleting one drops it, with no refetch; editing changes
+     no count. While the table is missing, the counts fetch
+     fails quietly: no badges, no message in the list — the
+     setup message lives in the thread itself.
+
+     READING IS OPEN — anyone browsing can press the icon and
+     read a wine's comments, signed in or not. POSTING
+     requires signing in, exactly like loves and edits: Send
+     runs requireSignIn() first, so a signed-out user gets the
+     clear sign-in prompt and nothing is posted until they
+     sign in (banned accounts are blocked there too, as
+     everywhere). EDIT / DELETE: a signed-in user can edit or
+     delete their OWN comments — those options render only on
+     rows that pass isOwnComment(), and every edit/delete
+     request is scoped by BOTH the comment id and the user's
+     own user_id, so it cannot touch another user's comment
+     even if an id were guessed. Editing updates the saved
+     text in place; deleting removes the row.
+
+     Comments are stored in a shared table, same open-policy
+     pattern as the other new tables. While it is missing, an
+     opened thread says so clearly and nothing else is
+     affected. SQL (Supabase SQL Editor):
+       create table if not exists public.product_comments (
+         id bigint generated always as identity primary key,
+         product_id text not null,
+         user_id uuid, user_email text, user_name text,
+         comment text not null,
+         created_at timestamptz not null default now());
+       alter table public.product_comments enable row level security;
+       drop policy if exists "open" on public.product_comments;
+       create policy "open" on public.product_comments
+         for all using (true) with check (true); */
+  /* commentsReady, commentsPid, commentCounts and
+     commentsCountsReady are declared with the shared state at
+     the top of this script (beside likeCounts), because
+     ensureCommentsEntry / syncCommentBadge already read them
+     in the init pass — see the note there. */
+  function detailElOf(row){
+    var d = details[row.getAttribute('data-idx')];
+    return d ? d.querySelector('.detail') : null;
+  }
+  /* Build the notes' comment entry for a row: the toggle (icon
+     + "Comments" + count badge) and, under it, the thread
+     container — list, sign-in note, error line and the
+     add-a-comment form — created HIDDEN and empty. Building it
+     fetches nothing: the thread's comments load only when the
+     toggle is pressed open. The detail's children are not
+     rebuilt by writeRow (only the notes text is), so the entry
+     is built once and writeRow re-ensures it the same way it
+     re-derives the loved-by line; the init pass builds it for
+     every baked-in row. It sits above the Product ID line,
+     under the tasting notes and the loved-by line. */
+  function ensureCommentsEntry(row){
+    var detail = detailElOf(row);
+    if(!detail) return;
+    if(detail.querySelector('.comments-entry')){ syncCommentBadge(row); return; }
+    var entry = document.createElement('div');
+    entry.className = 'comments-entry';
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'comments-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', COMMENT_BUBBLE_PATH);
+    svg.appendChild(path);
+    toggle.appendChild(svg);
+    var lbl = document.createElement('span');
+    lbl.className = 'ct-label';
+    lbl.textContent = 'Comments';
+    toggle.appendChild(lbl);
+    /* The count badge rides the toggle — an empty, hidden span
+       until the background counts land; it is filled by
+       syncCommentBadge and never triggers a fetch itself */
+    var badge = document.createElement('span');
+    badge.className = 'comment-count';
+    badge.setAttribute('aria-hidden', 'true');
+    badge.hidden = true;
+    toggle.appendChild(badge);
+    var nameEl = row.querySelector('.pname');
+    toggle.setAttribute('aria-label', 'Comments on ' + (nameEl ? nameEl.textContent.trim() : 'this product'));
+    toggle.title = 'Show or hide the comments on this wine';
+    toggle.addEventListener('click', function(){ toggleCommentsThread(row); });
+    entry.appendChild(toggle);
+    var thread = document.createElement('div');
+    thread.className = 'wine-comments';
+    thread.hidden = true;
+    var list = document.createElement('div');
+    list.className = 'wc-list';
+    thread.appendChild(list);
+    var form = document.createElement('div');
+    form.className = 'wc-form';
+    var flabel = document.createElement('div');
+    flabel.className = 'wc-form-label';
+    flabel.textContent = 'Add a comment';
+    form.appendChild(flabel);
+    var ta = document.createElement('textarea');
+    ta.className = 'wc-new';
+    ta.rows = 3;
+    ta.maxLength = 2000;
+    ta.placeholder = 'How did it taste? What does it pair with?';
+    ta.setAttribute('aria-label', 'Add a comment on this wine');
+    form.appendChild(ta);
+    var note = document.createElement('p');
+    note.className = 'comments-signin-note';
+    note.hidden = true;
+    note.textContent = 'You\u2019re browsing without signing in \u2014 you can read every comment here, but posting one needs a sign-in, like loves and edits.';
+    form.appendChild(note);
+    var err = document.createElement('p');
+    err.className = 'store-err wc-err';
+    err.setAttribute('role', 'alert');
+    err.hidden = true;
+    form.appendChild(err);
+    var actions = document.createElement('div');
+    actions.className = 'wc-actions';
+    var send = document.createElement('button');
+    send.type = 'button';
+    send.className = 'btn-save-small wc-send';
+    send.textContent = 'Send';
+    send.addEventListener('click', function(){ submitComment(row); });
+    actions.appendChild(send);
+    form.appendChild(actions);
+    thread.appendChild(form);
+    entry.appendChild(thread);
+    var src = detail.querySelector('.src');
+    if(src) detail.insertBefore(entry, src);
+    else detail.appendChild(entry);
+    syncCommentBadge(row);
+  }
+  function threadEls(row){
+    var detail = detailElOf(row);
+    if(!detail) return null;
+    var entry = detail.querySelector('.comments-entry');
+    if(!entry) return null;
+    return {
+      entry: entry,
+      toggle: entry.querySelector('.comments-toggle'),
+      thread: entry.querySelector('.wine-comments'),
+      list: entry.querySelector('.wc-list'),
+      ta: entry.querySelector('.wc-new'),
+      err: entry.querySelector('.wc-err'),
+      note: entry.querySelector('.comments-signin-note'),
+      send: entry.querySelector('.wc-send')
+    };
+  }
+  /* The toggle: press to show this wine's thread, press again
+     to hide it. Opening is the one and only moment this wine's
+     comments are fetched. Closing the wine's notes closes the
+     thread too — collapseProduct() calls closeCommentsThread,
+     so a thread never reappears on its own when the notes are
+     expanded again later; it takes a fresh press. */
+  function toggleCommentsThread(row){
+    var els = threadEls(row);
+    if(!els || !els.thread) return;
+    if(els.thread.hidden) openCommentsThread(row);
+    else closeCommentsThread(row);
+  }
+  function openCommentsThread(row){
+    var els = threadEls(row);
+    if(!els) return;
+    els.thread.hidden = false;
+    if(els.toggle) els.toggle.setAttribute('aria-expanded', 'true');
+    if(els.note) els.note.hidden = !!authUser;
+    if(els.err) els.err.hidden = true;
+    renderComments(row);
+  }
+  function closeCommentsThread(row){
+    var els = threadEls(row);
+    if(!els || !els.thread) return;
+    els.thread.hidden = true;
+    if(els.toggle) els.toggle.setAttribute('aria-expanded', 'false');
+  }
+  function syncCommentBadge(row){
+    var detail = detailElOf(row);
+    if(!detail) return;
+    var badge = detail.querySelector('.comment-count');
+    if(!badge) return;
+    var pid = rowPidOf(row);
+    var n = pid ? (commentCounts[pid] || 0) : 0;
+    badge.textContent = n > 0 ? String(n) : '';
+    badge.hidden = n <= 0;
+    var toggle = detail.querySelector('.comments-toggle');
+    if(toggle){
+      var baseLabel = toggle.getAttribute('aria-label').replace(/ \u2014 \d+ comments?$/, '');
+      toggle.setAttribute('aria-label', n > 0 ? baseLabel + ' \u2014 ' + n + (n === 1 ? ' comment' : ' comments') : baseLabel);
+    }
+  }
+  function refreshCommentBadges(){ rows.forEach(syncCommentBadge); }
+  /* ONE background query for every wine's count at once: just
+     the product_id of each comment row, counted up here — the
+     same shape as loadLikes. Called after the list is already
+     rendered (at the bottom of this section) and on the
+     30-second tick; deliberately NOT called from apply(),
+     applySort() or writeRow(), so searching, filtering and
+     rendering never wait on it. */
+  function loadCommentCounts(){
+    return sb('product_comments?select=product_id', { token: sbAuthToken() }).then(function(list){
+      commentsCountsReady = true;
+      var fresh = {};
+      (list || []).forEach(function(c){
+        if(c && c.product_id) fresh[c.product_id] = (fresh[c.product_id] || 0) + 1;
+      });
+      commentCounts = fresh;
+      refreshCommentBadges();
+    }, function(err){
+      /* Almost certainly the table does not exist yet: no
+         badges, no noise — an opened thread carries the setup
+         message, and this runs again on the tick so badges
+         start working on their own once the table is created */
+      commentsCountsReady = false;
+      if(window.console) console.warn('Comment counts not loaded (product_comments table may not exist yet):', err);
+    });
+  }
+  function showCommentErr(row, text){
+    var els = threadEls(row);
+    if(els && els.err){ els.err.textContent = text; els.err.hidden = false; }
+  }
+  function renderComments(row){
+    var els = threadEls(row);
+    if(!els || !els.list) return;
+    var pid = rowPidOf(row);
+    commentsPid = pid;
+    if(!pid){
+      adminMsg(els.list, 'Still connecting to the shared list \u2014 hide this and press the comment icon again in a moment.');
+      return;
+    }
+    adminLoading(els.list);
+    sb('product_comments?select=*&product_id=eq.' + encodeURIComponent(pid) + '&order=created_at.desc&limit=200', { token: sbAuthToken() }).then(function(list){
+      commentsReady = true;
+      els.list.innerHTML = '';
+      if(!list || !list.length){
+        commentCounts[pid] = 0;
+        refreshCommentBadges();
+        adminMsg(els.list, 'No comments on this wine yet. Be the first to say how it tastes.');
+        return;
+      }
+      list.forEach(function(c){ els.list.appendChild(buildCommentItem(c, row)); });
+    }, function(err){
+      if(window.console) console.warn(err);
+      commentsReady = false;
+      adminMsg(els.list, 'Comments aren\u2019t set up yet \u2014 the product_comments table still needs to be created in the shared list. Once it exists, comments on each wine show up here, and the comment icons get their count badges.');
+    });
+  }
+  /* Ownership test for one comment row — the same rule as
+     suggestions: the row's user_id is the signed-in user's id,
+     falling back to an exact email match for rows written
+     before user ids were recorded. Anything else is not theirs
+     and gets no Edit / Delete. */
+  function isOwnComment(c){
+    if(!authUser || !c) return false;
+    if(c.user_id) return !!authUser.id && c.user_id === authUser.id;
+    return !!c.user_email && !!authUser.email && String(c.user_email).toLowerCase() === String(authUser.email).toLowerCase();
+  }
+  function buildCommentItem(c, row){
+    var item = document.createElement('div');
+    item.className = 'wine-comment';
+    var meta = document.createElement('div');
+    meta.className = 'wc-meta';
+    var who = document.createElement('span');
+    who.className = 'wc-who';
+    who.textContent = c.user_name || c.user_email || 'Signed-in user';
+    meta.appendChild(who);
+    if(c.created_at) meta.appendChild(document.createTextNode(' \u00B7 ' + fmtAdminTime(c.created_at)));
+    item.appendChild(meta);
+    var tx = document.createElement('p');
+    tx.className = 'wc-text';
+    tx.textContent = c.comment || '';
+    item.appendChild(tx);
+    /* Edit / Delete exist only on the signed-in user's OWN
+       comments (this builder checks ownership per row) and only
+       when the row has an id to act on */
+    if(isOwnComment(c) && c.id !== null && c.id !== undefined){
+      var actions = document.createElement('div');
+      actions.className = 'wc-actions';
+      var editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.className = 'btn-ghost-small';
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', function(){ startEditComment(item, c, tx, actions, row); });
+      actions.appendChild(editBtn);
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn-ban-small';
+      delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', function(){ startDeleteComment(c, actions, row); });
+      actions.appendChild(delBtn);
+      item.appendChild(actions);
+    }
+    return item;
+  }
+  /* Inline edit: the comment's text is swapped for a textarea
+     with Save / Cancel. Saving PATCHes the shared row, scoped
+     by the comment id AND the signed-in user's own user_id, so
+     the update can only ever land on their own comment. The
+     count does not change, so no badge moves. */
+  function startEditComment(item, c, tx, actions, row){
+    if(!authUser){ showSignInPrompt('edit your comment'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    if(item.querySelector('.wc-edit')) return;
+    tx.hidden = true;
+    actions.hidden = true;
+    var wrap = document.createElement('div');
+    wrap.className = 'wc-edit';
+    var ta = document.createElement('textarea');
+    ta.rows = 3;
+    ta.maxLength = 2000;
+    ta.value = c.comment || '';
+    ta.setAttribute('aria-label', 'Edit your comment');
+    wrap.appendChild(ta);
+    var errEl = document.createElement('p');
+    errEl.className = 'store-err';
+    errEl.setAttribute('role', 'alert');
+    errEl.hidden = true;
+    wrap.appendChild(errEl);
+    var arow = document.createElement('div');
+    arow.className = 'wc-actions';
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'btn-save-small';
+    saveBtn.textContent = 'Save changes';
+    saveBtn.addEventListener('click', function(){
+      if(!authUser){ showSignInPrompt('edit your comment'); return; }
+      if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+      var newText = ta.value.trim();
+      if(!newText){
+        errEl.textContent = 'Write your comment first \u2014 or Delete it instead.';
+        errEl.hidden = false;
+        ta.focus();
+        return;
+      }
+      errEl.hidden = true;
+      saveBtn.disabled = true;
+      sb('product_comments?id=eq.' + encodeURIComponent(c.id) + '&user_id=eq.' + encodeURIComponent(authUser.id), { method: 'PATCH', prefer: 'return=minimal', token: sbAuthToken(), body: { comment: newText } }).then(function(){
+        syncToast('Your comment was updated.', false);
+        renderComments(row);
+      }, function(err){
+        if(window.console) console.warn(err);
+        saveBtn.disabled = false;
+        errEl.textContent = 'Your change couldn\u2019t be saved \u2014 check your connection and try again.';
+        errEl.hidden = false;
+      });
+    });
+    arow.appendChild(saveBtn);
+    var cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'btn-ghost-small';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', function(){ renderComments(row); });
+    arow.appendChild(cancelBtn);
+    wrap.appendChild(arow);
+    item.appendChild(wrap);
+    ta.focus();
+  }
+  /* Delete is two taps, inline (no browser confirm dialog —
+     those do not work in this shell): the first tap asks, the
+     second deletes. The DELETE is scoped by the comment id AND
+     the signed-in user's own user_id, exactly like the edit
+     above, and the wine's count badge drops by one the moment
+     it lands — no refetch needed. */
+  function startDeleteComment(c, actions, row){
+    if(!authUser){ showSignInPrompt('delete your comment'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    actions.innerHTML = '';
+    var q = document.createElement('span');
+    q.className = 'wc-confirm';
+    q.textContent = 'Delete this comment?';
+    actions.appendChild(q);
+    var yesBtn = document.createElement('button');
+    yesBtn.type = 'button';
+    yesBtn.className = 'btn-ban-small';
+    yesBtn.textContent = 'Delete';
+    yesBtn.addEventListener('click', function(){
+      if(!authUser){ showSignInPrompt('delete your comment'); return; }
+      if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+      yesBtn.disabled = true;
+      sb('product_comments?id=eq.' + encodeURIComponent(c.id) + '&user_id=eq.' + encodeURIComponent(authUser.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+        var pid = rowPidOf(row);
+        if(pid) commentCounts[pid] = Math.max(0, (commentCounts[pid] || 1) - 1);
+        refreshCommentBadges();
+        syncToast('Your comment was deleted.', false);
+        renderComments(row);
+      }, function(err){
+        if(window.console) console.warn(err);
+        syncToast('That comment couldn\u2019t be deleted \u2014 check your connection and try again.', true);
+        renderComments(row);
+      });
+    });
+    actions.appendChild(yesBtn);
+    var noBtn = document.createElement('button');
+    noBtn.type = 'button';
+    noBtn.className = 'btn-ghost-small';
+    noBtn.textContent = 'Cancel';
+    noBtn.addEventListener('click', function(){ renderComments(row); });
+    actions.appendChild(noBtn);
+  }
+  function submitComment(row){
+    var els = threadEls(row);
+    if(!els) return;
+    /* Re-checked at the moment of sending, not just implied by
+       the thread being open: no signed-in (unbanned) user, no
+       comment — a signed-out user gets the sign-in prompt here
+       and nothing is posted */
+    if(!requireSignIn('comment on wines')) return;
+    var pid = rowPidOf(row);
+    if(!pid){
+      showCommentErr(row, 'Still connecting to the shared list \u2014 hide this and press the comment icon again in a moment.');
+      return;
+    }
+    var text = els.ta ? els.ta.value.trim() : '';
+    if(!text){
+      showCommentErr(row, 'Write your comment first.');
+      if(els.ta) els.ta.focus();
+      return;
+    }
+    if(els.err) els.err.hidden = true;
+    if(els.send) els.send.disabled = true;
+    sb('product_comments', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      product_id: pid, user_id: authUser.id, user_email: authUser.email || null,
+      user_name: authDisplayName(), comment: text
+    } }).then(function(){
+      commentsReady = true;
+      if(els.send) els.send.disabled = false;
+      if(els.ta) els.ta.value = '';
+      /* The badge bumps straight away — no refetch, and the
+         product list behind the notes is untouched */
+      commentCounts[pid] = (commentCounts[pid] || 0) + 1;
+      refreshCommentBadges();
+      renderComments(row);
+      syncToast('Thanks \u2014 your comment was posted.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      if(els.send) els.send.disabled = false;
+      if(commentsReady !== true){
+        commentsReady = false;
+        showCommentErr(row, 'Your comment couldn\u2019t be posted. If this keeps happening, comments may not be set up yet \u2014 the product_comments table still needs to be created in the shared list. Check your connection and try again.');
+      } else {
+        showCommentErr(row, 'Your comment couldn\u2019t be posted \u2014 check your connection and try again.');
+      }
+    });
+  }
+  /* Background counts, fired once here — the list above this
+     section has already rendered and been wired by the time
+     this runs, and nothing waits on the answer */
+  loadCommentCounts();
+  /* ----- Loved wines (Documents tab) -----
+     A section in the Documents tab listing ONLY wines with at
+     least one Love, most loved first (ties alphabetical), built
+     from the same shared likeCounts as the hearts and the notes
+     line, so it matches every other phone. Each entry shows the
+     wine and its "Loved by X merchants" count; tapping one
+     closes Settings and opens that wine exactly the way a
+     successful scan does (jumpToProduct: the single product,
+     fully expanded — or a clear note when the current store
+     doesn't carry it). Viewing the list needs no sign-in, like
+     everything else in Documents. The list re-renders every
+     time the section is opened, and once more when the fresh
+     loadLikes() it triggers lands. */
+  var lovedWinesBtn = document.getElementById('lovedWinesBtn');
+  var lovedWinesList = document.getElementById('lovedWinesList');
+  function renderLovedWines(){
+    if(!lovedWinesList) return;
+    lovedWinesList.innerHTML = '';
+    if(likesReady === false){
+      var setup = document.createElement('p');
+      setup.className = 'loved-empty';
+      setup.textContent = 'Loved wines aren\u2019t set up yet \u2014 the user_likes table still needs to be created in the shared list. Once it exists, every loved wine shows up here.';
+      lovedWinesList.appendChild(setup);
+      return;
+    }
+    var entries = [];
+    rows.forEach(function(row){
+      var pid = rowPidOf(row);
+      var n = pid ? (likeCounts[pid] || 0) : 0;
+      if(n > 0) entries.push({ row: row, n: n, label: detailLabel(row) || 'Wine' });
+    });
+    entries.sort(function(a, b){ return (b.n - a.n) || a.label.localeCompare(b.label); });
+    if(!entries.length){
+      var none = document.createElement('p');
+      none.className = 'loved-empty';
+      none.textContent = 'No wines have been loved yet. When someone signed in taps the heart on a wine, it shows up here, most loved first.';
+      lovedWinesList.appendChild(none);
+      return;
+    }
+    entries.forEach(function(e){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'loved-item';
+      var nm = document.createElement('span');
+      nm.className = 'lw-name';
+      nm.textContent = e.label;
+      btn.appendChild(nm);
+      var ct = document.createElement('span');
+      ct.className = 'lw-count';
+      ct.textContent = 'Loved by ' + e.n + (e.n === 1 ? ' merchant' : ' merchants');
+      btn.appendChild(ct);
+      btn.addEventListener('click', function(){
+        closeSettings();
+        jumpToProduct(e.row);
+      });
+      lovedWinesList.appendChild(btn);
+    });
+  }
+  if(lovedWinesBtn && lovedWinesList){
+    lovedWinesBtn.addEventListener('click', function(){
+      var opening = lovedWinesList.hidden;
+      lovedWinesList.hidden = !opening;
+      lovedWinesBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      if(opening){
+        renderLovedWines();
+        loadLikes().then(function(){
+          if(!lovedWinesList.hidden) renderLovedWines();
+        });
+      }
+    });
+  }
+  /* ----- change history ----- */
+  function fmtChangeVal(v){ v = (v === null || v === undefined) ? '' : String(v).trim(); return v === '' ? '\u2014' : v; }
+  function fmtChangePrice(v){
+    var n = parseFloat(v);
+    return isNaN(n) ? fmtChangeVal(v) : '$' + n.toFixed(2);
+  }
+  function fmtChangeRs(v){
+    var n = parseFloat(v);
+    return isNaN(n) ? fmtChangeVal(v) : n + ' g/L';
+  }
+  /* The "what changed" line for an editor save: each field whose
+     value actually moved, old \u2192 new, joined with \u00B7. Tasting
+     notes are named, not quoted (they can be long). Returns ''
+     when nothing changed, and the caller writes no entry then. */
+  function describeChanges(oldD, newD){
+    if(!oldD || !newD) return '';
+    var parts = [];
+    function fld(label, o, n, fmt){
+      fmt = fmt || fmtChangeVal;
+      if(fmt(o) !== fmt(n)) parts.push(label + ': ' + fmt(o) + ' \u2192 ' + fmt(n));
+    }
+    fld('Brand', oldD.brand, newD.brand);
+    fld('Product name', oldD.name, newD.name);
+    fld('Size', oldD.size, newD.size);
+    fld('Regular price', oldD.price, newD.price, fmtChangePrice);
+    fld('Sugar (RS)', oldD.rs, newD.rs, fmtChangeRs);
+    fld('Sweetness', oldD.sweet, newD.sweet);
+    fld('Richness', oldD.rich, newD.rich);
+    fld('Varietal', oldD.varietal, newD.varietal);
+    fld('Tannins', oldD.tannins, newD.tannins);
+    fld('Acidity', oldD.acidity, newD.acidity);
+    fld('List status', oldD.status, newD.status);
+    fld('VQA', oldD.vqa ? 'Yes' : 'No', newD.vqa ? 'Yes' : 'No');
+    fld('On sale', oldD.sale ? 'On' : 'Off', newD.sale ? 'On' : 'Off');
+    if(newD.sale || oldD.sale) fld('Sale price', oldD.salePrice, newD.salePrice, fmtChangePrice);
+    if(newD.sale || oldD.sale) fld('Sale price not working', oldD.saleBroken ? 'On' : 'Off', newD.saleBroken ? 'On' : 'Off');
+    fld('In cooler (Store ' + activeStore + ')', oldD.cooler, newD.cooler);
+    fld('Availability (Store ' + activeStore + ')', oldD.unavailable ? 'Unavailable' : 'Available', newD.unavailable ? 'Unavailable' : 'Available');
+    fld('Barcode', oldD.barcode, newD.barcode);
+    if(String(oldD.notes || '') !== String(newD.notes || '')) parts.push('Tasting notes updated');
+    return parts.join(' \u00B7 ');
+  }
+  function sbLogChange(row, changeText){
+    if(!authUser || !changeText) return;
+    if(isCurrentUserBanned()) return;
+    sb('product_changes', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      product_id: rowPidOf(row) || null,
+      product_label: row ? (detailLabel(row) || null) : null,
+      change: changeText,
+      user_id: authUser.id, user_email: authUser.email || null, user_name: authDisplayName()
+    } }).then(function(){
+      if(changesReady !== true){ changesReady = true; syncLikesSetupNote(); }
+    }, function(err){
+      /* Fire-and-forget on purpose: a missing product_changes
+         table must never take the edit itself down. The flag
+         just feeds the setup note in Settings and the message
+         in the Admin area's Change history view */
+      if(window.console) console.warn('Change not logged (product_changes table may not exist yet):', err);
+      if(changesReady !== false){ changesReady = false; syncLikesSetupNote(); }
+    });
+  }
+  /* Change history has no standalone view any more: it lives
+     ONLY inside the Admin area (see renderAdminLog in the Admin
+     section below), which is gated to appointed admins. There is
+     deliberately no opener, button or fetch for it anywhere else,
+     so signed-out users and non-appointed signed-in users never
+     see it and its rows are never fetched for them. Change LOGGING
+     itself is unchanged: sbLogChange() above still records every
+     add/edit, tagged with the signed-in user. */
+  /* ----- session wiring -----
+     getSession picks up both a persisted session (returning
+     user) and the tokens in the URL fragment on the way back
+     from Google; onAuthStateChange then keeps the UI, the
+     hearts and the token in step for sign-in, sign-out and the
+     automatic token refresh. A returned-from-Google error in the
+     fragment is surfaced once as a toast instead of failing
+     silently. */
+  function applyAuthSession(session, eventName){
+    var wasId = authUser ? authUser.id : null;
+    authSession = session || null;
+    authUser = (session && session.user) ? session.user : null;
+    updateAccountUI();
+    var nowId = authUser ? authUser.id : null;
+    if(wasId !== nowId){
+      myLikes = {};
+      if(!authUser && likedOnlyOn() && likedToggle) likedToggle.setAttribute('aria-pressed', 'false');
+      refreshAllLikes();
+      apply();
+      loadLikes();
+    }
+    if(authUser){
+      /* The blocklist is checked on every session first: if this
+         account is banned, it is signed out with the blocked
+         message and the session goes no further (no sign-in
+         record, no loves, no edits). loadBanned() itself runs
+         the enforcement once its fetch lands, and the check
+         below covers a blocklist already loaded in memory */
+      loadBanned();
+      if(isCurrentUserBanned()){
+        enforceBanIfNeeded();
+        return;
+      }
+      /* Every signed-in session is recorded for the Admin area's
+         Signed-in users list, and the appointed-admins list is
+         refreshed so an appointment (or removal) made since the
+         last visit takes effect on this one */
+      recordSignIn(eventName);
+      loadAdmins();
+    }
+    /* Browsing stays open either way: signing in or out never
+       hides or locks the app — it only changes what the
+       signed-in features (loves, edits, Admin) allow */
+  }
+  if(authClient){
+    if(window.location.hash && window.location.hash.indexOf('error=') !== -1){
+      syncToast('Sign-in didn\u2019t complete \u2014 please try again.', true);
+      try{ window.history.replaceState(null, '', window.location.pathname + window.location.search); }catch(e){}
+    }
+    authClient.auth.getSession().then(function(res){
+      applyAuthSession(res && res.data ? res.data.session : null, 'INITIAL_SESSION');
+    }, function(err){ if(window.console) console.warn(err); });
+    authClient.auth.onAuthStateChange(function(_event, session){
+      applyAuthSession(session, _event);
+    });
+  }
+  if(!authClient){
+    /* The auth library never loaded, so nobody can sign in:
+       browsing still works as normal, and signInWithGoogle()
+       says so clearly if anyone taps Sign in */
+    if(window.console) console.warn('Sign-in unavailable: the auth library did not load.');
+  }
+  updateAccountUI();
+  loadLikes();
+  /* No probe of the product_changes table here: change history is
+     read ONLY inside the Admin area, by appointed admins, so its
+     rows are never fetched for anyone else — not even a one-row
+     existence check on every open. changesReady is instead set by
+     sbLogChange() whenever a signed-in user's edit is logged (or
+     fails to log), and by the Admin area's Change history fetch,
+     which is all the setup note in Settings needs. */
+
+  /* ---------- Admin area (bottom of Settings) ----------
+     The Admin button sits at the very bottom of the Settings
+     tab, below the Version line, visible to everyone. What it
+     opens is restricted: the Signed-in users list, the Appointed
+     admins list and the Change history open ONLY for an
+     appointed admin. Anyone else who taps the button — signed
+     out, or signed in but not appointed — gets a clear message
+     and none of the lists; the data is never fetched for them.
+     Appointments live in the shared app_admins table and are
+     controlled by Michael: he is appointed BY DEFAULT (the
+     bootstrap email below is his account — the app treats it as
+     appointed whether or not a row exists yet, and records his
+     row on first use), and only a bootstrap admin sees the
+     appoint / remove controls inside the Admin area. Appointed
+     users can view everything but cannot change appointments.
+     Two more optional shared tables, same pattern as the rest —
+     while either is missing, its part of the Admin area shows a
+     setup message and everything else keeps working:
+       create table if not exists public.user_signins (
+         user_id uuid primary key, user_email text,
+         user_name text, last_seen_at timestamptz not null default now());
+       create table if not exists public.app_admins (
+         id bigint generated always as identity primary key,
+         user_id uuid, user_email text, user_name text,
+         appointed_by text, created_at timestamptz not null default now());
+     user_signins is written by recordSignIn() on every session
+     (one row per user, last_seen_at refreshed) because Supabase
+     Auth alone cannot list an app's users from the client.
+     Banning lives in a third optional table, same pattern —
+     while it is missing, banning degrades gracefully: the Admin
+     area's Banned users section shows a setup message, ban /
+     unban attempts say so, and NOBODY is treated as banned
+     (bannedReady stays false and isUserBanned() is never
+     consulted as a block on that basis alone — enforcement only
+     runs off a successfully loaded list). SQL (Supabase SQL
+     Editor, with the same open policy as the other tables):
+       create table if not exists public.banned_users (
+         id bigint generated always as identity primary key,
+         user_id uuid, user_email text, user_name text,
+         banned_by text, reason text,
+         created_at timestamptz not null default now());
+       alter table public.banned_users enable row level security;
+       drop policy if exists "open" on public.banned_users;
+       create policy "open" on public.banned_users
+         for all using (true) with check (true);
+     The blocklist is checked on sign-in / session (in
+     applyAuthSession, via loadBanned + enforceBanIfNeeded), at
+     the requireSignIn gate, and on the app's 30-second tick, so
+     a user who is banned while already signed in is signed out
+     with the blocked message on their next check; they can
+     still browse the public list, but signed-in features stay
+     closed to them. Any appointed admin (Michael
+     or an appointed user) can ban or unban — from a row in the
+     Signed-in users list, from the Banned users list (unban),
+     or by email. The bootstrap admin can NEVER be banned:
+     isUserBanned() always returns false for his email, and
+     banUser() refuses the attempt outright. Nobody can ban
+     themselves. Bans and unbans are written to the action log
+     via sbLogChange, like every other admin-visible action. */
+  var BOOTSTRAP_ADMIN_EMAILS = ['halroben8@gmail.com'];
+  var appointedAdmins = [], adminsReady = null, signinsReady = null;
+  var lastSigninRecordAt = 0, bootstrapAdminRecorded = false;
+  function isBootstrapAdmin(){
+    return !!authUser && !!authUser.email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(authUser.email).toLowerCase()) !== -1;
+  }
+  function adminEntryMatchesUser(a, userId, email){
+    if(!a) return false;
+    if(userId && a.user_id && a.user_id === userId) return true;
+    return !!email && !!a.user_email && String(a.user_email).toLowerCase() === String(email).toLowerCase();
+  }
+  function isAppointed(){
+    if(!authUser) return false;
+    if(isBootstrapAdmin()) return true;
+    for(var i = 0; i < appointedAdmins.length; i++){
+      if(adminEntryMatchesUser(appointedAdmins[i], authUser.id, authUser.email)) return true;
+    }
+    return false;
+  }
+  function isUserAppointed(userId, email){
+    if(email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(email).toLowerCase()) !== -1) return true;
+    for(var i = 0; i < appointedAdmins.length; i++){
+      if(adminEntryMatchesUser(appointedAdmins[i], userId, email)) return true;
+    }
+    return false;
+  }
+  function recordSignIn(eventName){
+    if(!authUser) return;
+    var now = Date.now();
+    /* On an actual sign-in, always; on session restores and
+       token refreshes, at most once every five minutes — enough
+       for an honest "last seen" without writing on every tick */
+    if(eventName !== 'SIGNED_IN' && now - lastSigninRecordAt < 5 * 60 * 1000) return;
+    lastSigninRecordAt = now;
+    sb('user_signins', { method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', token: sbAuthToken(), body: {
+      user_id: authUser.id, user_email: authUser.email || null, user_name: authDisplayName(),
+      last_seen_at: new Date(now).toISOString()
+    } }).then(function(){ signinsReady = true; }, function(err){
+      signinsReady = false;
+      if(window.console) console.warn('Sign-in not recorded (user_signins table may not exist yet):', err);
+    });
+  }
+  function loadAdmins(){
+    return sb('app_admins?select=*', { token: sbAuthToken() }).then(function(list){
+      adminsReady = true;
+      appointedAdmins = list || [];
+      /* Michael is appointed by default on first use: record
+         his row (once per session) so the appointment is visible
+         in the table alongside everyone he appoints later */
+      if(isBootstrapAdmin() && !bootstrapAdminRecorded){
+        bootstrapAdminRecorded = true;
+        var mine = false;
+        appointedAdmins.forEach(function(a){ if(adminEntryMatchesUser(a, authUser.id, authUser.email)) mine = true; });
+        if(!mine){
+          sb('app_admins', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+            user_id: authUser.id, user_email: authUser.email || null, user_name: authDisplayName(),
+            appointed_by: 'App owner \u2014 appointed by default'
+          } }).then(function(){ loadAdmins(); }, function(){});
+        }
+      }
+    }, function(err){
+      adminsReady = false;
+      appointedAdmins = [];
+      if(window.console) console.warn('Appointed admins not loaded (app_admins table may not exist yet):', err);
+    });
+  }
+  loadAdmins();
+  /* ---------- Banned users (blocklist) ----------
+     State mirrors the appointed-admins list: bannedUsers is the
+     last successfully loaded banned_users rows, bannedReady is
+     null until the first fetch settles, true when the table
+     answered and false when it did not (almost always: the
+     table has not been created yet). */
+  var bannedUsers = [], bannedReady = null, banEnforcedForId = null;
+  function isBootstrapEmail(email){
+    return !!email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(email).toLowerCase()) !== -1;
+  }
+  function banEntryMatchesUser(b, userId, email){
+    if(!b) return false;
+    if(userId && b.user_id && b.user_id === userId) return true;
+    return !!email && !!b.user_email && String(b.user_email).toLowerCase() === String(email).toLowerCase();
+  }
+  function findBanEntry(userId, email){
+    for(var i = 0; i < bannedUsers.length; i++){
+      if(banEntryMatchesUser(bannedUsers[i], userId, email)) return bannedUsers[i];
+    }
+    return null;
+  }
+  function isUserBanned(userId, email){
+    /* The bootstrap admin (Michael) can never be banned — not
+       by row, not by email, not by a stale row in the table */
+    if(isBootstrapEmail(email)) return false;
+    if(bannedReady !== true) return false;
+    return !!findBanEntry(userId, email);
+  }
+  function isCurrentUserBanned(){
+    if(!authUser) return false;
+    return isUserBanned(authUser.id, authUser.email);
+  }
+  function loadBanned(){
+    return sb('banned_users?select=*&order=created_at.desc', { token: sbAuthToken() }).then(function(list){
+      bannedReady = true;
+      bannedUsers = list || [];
+      /* A ban that landed while this session was already signed
+         in takes effect the moment the fresh list arrives */
+      enforceBanIfNeeded();
+    }, function(err){
+      bannedReady = false;
+      bannedUsers = [];
+      if(window.console) console.warn('Banned users not loaded (banned_users table may not exist yet):', err);
+    });
+  }
+  loadBanned();
+  /* Signs a banned signed-in user out and shows the blocked
+     notice. Runs at most once per banned user id per page load;
+     requireSignIn keeps blocking signed-in features for as long
+     as they somehow remain signed in. Browsing stays open: the
+     blocked account can still view the public list, it just
+     can't love wines or make changes. */
+  function enforceBanIfNeeded(){
+    if(!authUser || !isCurrentUserBanned()) return false;
+    if(banEnforcedForId !== authUser.id){
+      banEnforcedForId = authUser.id;
+      /* Close any restricted / signed-in surface they had open */
+      closeAdmin();
+      closeSuggest();
+      closeSettings();
+      myLikes = {};
+      refreshAllLikes();
+      if(likedOnlyOn() && likedToggle) likedToggle.setAttribute('aria-pressed', 'false');
+      apply();
+      showBannedPrompt();
+      if(authClient){
+        authClient.auth.signOut().then(function(){}, function(err){ if(window.console) console.warn(err); });
+      }
+    }
+    return true;
+  }
+  function banUser(entry){
+    if(!isAppointed()){ syncToast('Only appointed admins can ban users.', true); return; }
+    if(!entry || (!entry.user_id && !entry.user_email)){ syncToast('Nothing to ban \u2014 no user or email given.', true); return; }
+    if(isBootstrapEmail(entry.user_email)){
+      syncToast('Michael (halroben8@gmail.com) can\u2019t be banned \u2014 he\u2019s the app owner.', true);
+      return;
+    }
+    if(authUser && banEntryMatchesUser(entry, authUser.id, authUser.email)){
+      syncToast('You can\u2019t ban yourself.', true);
+      return;
+    }
+    if(bannedReady !== true){
+      syncToast('Banning isn\u2019t set up yet \u2014 the banned_users table still needs to be created in the shared list.', true);
+      return;
+    }
+    if(findBanEntry(entry.user_id, entry.user_email)){
+      syncToast((entry.user_name || entry.user_email) + ' is already banned.', true);
+      return;
+    }
+    sb('banned_users', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      user_id: entry.user_id || null, user_email: entry.user_email || null, user_name: entry.user_name || null,
+      banned_by: authDisplayName() + (authUser.email ? ' (' + authUser.email + ')' : '')
+    } }).then(function(){
+      sbLogChange(null, 'Banned user ' + (entry.user_name || entry.user_email || ''));
+      return loadBanned();
+    }).then(function(){
+      renderAdminUsers(); renderAdminBanned();
+      syncToast((entry.user_name || entry.user_email) + ' is now banned. They can\u2019t sign in or use signed-in features.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Couldn\u2019t ban that user \u2014 check your connection and try again.', true);
+    });
+  }
+  function unbanUser(entry){
+    if(!isAppointed()){ syncToast('Only appointed admins can unban users.', true); return; }
+    if(!entry){ return; }
+    if(bannedReady !== true){
+      syncToast('Unbanning isn\u2019t set up yet \u2014 the banned_users table still needs to be created in the shared list.', true);
+      return;
+    }
+    var q;
+    if(entry.id) q = 'id=eq.' + encodeURIComponent(entry.id);
+    else if(entry.user_id) q = 'user_id=eq.' + encodeURIComponent(entry.user_id);
+    else q = 'user_email=eq.' + encodeURIComponent(entry.user_email || '');
+    sb('banned_users?' + q, { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+      sbLogChange(null, 'Unbanned user ' + (entry.user_name || entry.user_email || ''));
+      return loadBanned();
+    }).then(function(){
+      renderAdminUsers(); renderAdminBanned();
+      syncToast((entry.user_name || entry.user_email || 'That user') + ' is unbanned \u2014 they can sign in again.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Couldn\u2019t unban that user \u2014 check your connection and try again.', true);
+    });
+  }
+  function fmtAdminTime(iso){
+    var d = iso ? new Date(iso) : null;
+    return (d && !isNaN(d.getTime())) ? d.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+  }
+  function adminLoading(box){
+    box.innerHTML = '';
+    var p = document.createElement('p');
+    p.className = 'hist-empty';
+    p.textContent = 'Loading\u2026';
+    box.appendChild(p);
+  }
+  function adminMsg(box, text){
+    box.innerHTML = '';
+    var p = document.createElement('p');
+    p.className = 'hist-empty';
+    p.textContent = text;
+    box.appendChild(p);
+  }
+  function renderAdminUsers(){
+    var box = document.getElementById('adminUsers');
+    if(!box) return;
+    adminLoading(box);
+    sb('user_signins?select=*&order=last_seen_at.desc', { token: sbAuthToken() }).then(function(list){
+      signinsReady = true;
+      box.innerHTML = '';
+      if(!list || !list.length){
+        adminMsg(box, 'No sign-ins recorded yet. When someone signs in with Google, they show up here with the time they were last seen.');
+        return;
+      }
+      var canManage = isBootstrapAdmin() && adminsReady === true;
+      var canBan = isAppointed() && bannedReady === true;
+      list.forEach(function(u){
+        var item = document.createElement('div');
+        item.className = 'be-user';
+        var nameLine = document.createElement('div');
+        var nm = document.createElement('span');
+        nm.className = 'be-name';
+        nm.textContent = u.user_name || u.user_email || 'Signed-in user';
+        nameLine.appendChild(nm);
+        var appointed = isUserAppointed(u.user_id, u.user_email);
+        var isBootstrap = !!u.user_email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(u.user_email).toLowerCase()) !== -1;
+        var banEntry = findBanEntry(u.user_id, u.user_email);
+        var banned = !!banEntry && !isBootstrap;
+        if(isBootstrap){
+          var tag = document.createElement('span');
+          tag.className = 'be-tag';
+          tag.textContent = 'Admin \u2014 default';
+          nameLine.appendChild(tag);
+        } else if(appointed){
+          var tag2 = document.createElement('span');
+          tag2.className = 'be-tag';
+          tag2.textContent = 'Admin';
+          nameLine.appendChild(tag2);
+        }
+        if(banned){
+          var btag = document.createElement('span');
+          btag.className = 'be-tag banned';
+          btag.textContent = 'Banned';
+          nameLine.appendChild(btag);
+        }
+        item.appendChild(nameLine);
+        var meta = document.createElement('div');
+        meta.className = 'be-meta';
+        meta.textContent = (u.user_email || '') + (u.last_seen_at ? ' \u00B7 Last seen ' + fmtAdminTime(u.last_seen_at) : '') + (banned && banEntry.banned_by ? ' \u00B7 Banned by ' + banEntry.banned_by : '') + (banned && banEntry.created_at ? ' \u00B7 ' + fmtAdminTime(banEntry.created_at) : '');
+        item.appendChild(meta);
+        /* Appoint / remove lives on the user's own row, and only
+           Michael (bootstrap) sees the buttons — never on his own
+           row, since the default appointment can't be removed.
+           Ban / unban sits on the same row for every appointed
+           admin — never on Michael's row (he can't be banned)
+           and never on the viewer's own row */
+        var isSelf = !!authUser && (u.user_id === authUser.id || (!!u.user_email && !!authUser.email && String(u.user_email).toLowerCase() === String(authUser.email).toLowerCase()));
+        if(!isBootstrap && ((canManage) || (canBan && !isSelf))){
+          var actions = document.createElement('div');
+          actions.className = 'be-actions';
+          if(canManage){
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = appointed ? 'btn-ghost-small' : 'btn-save-small';
+            btn.textContent = appointed ? 'Remove admin' : 'Appoint as admin';
+            btn.addEventListener('click', function(){
+              if(appointed) removeAdmin({ user_id: u.user_id, user_email: u.user_email, user_name: u.user_name });
+              else appointAdmin({ user_id: u.user_id, user_email: u.user_email, user_name: u.user_name });
+            });
+            actions.appendChild(btn);
+          }
+          if(canBan && !isSelf){
+            var bbtn = document.createElement('button');
+            bbtn.type = 'button';
+            bbtn.className = banned ? 'btn-save-small' : 'btn-ban-small';
+            bbtn.textContent = banned ? 'Unban' : 'Ban';
+            bbtn.addEventListener('click', function(){
+              if(banned) unbanUser(banEntry);
+              else banUser({ user_id: u.user_id, user_email: u.user_email, user_name: u.user_name });
+            });
+            actions.appendChild(bbtn);
+          }
+          item.appendChild(actions);
+        }
+        box.appendChild(item);
+      });
+      if(isAppointed() && bannedReady === false){
+        var bnote = document.createElement('p');
+        bnote.className = 'theme-note';
+        bnote.textContent = 'Banning is not set up yet: the banned_users table still needs to be created in the shared list. Once it exists, Ban and Unban buttons appear here and banned users are blocked from signing in.';
+        box.appendChild(bnote);
+      }
+      if(isBootstrapAdmin() && adminsReady === false){
+        var note = document.createElement('p');
+        note.className = 'theme-note';
+        note.textContent = 'Appointing admins is not set up yet: the app_admins table still needs to be created in the shared list. You can still open this area (you are appointed by default); appointing others starts working once the table exists.';
+        box.appendChild(note);
+      }
+    }, function(err){
+      if(window.console) console.warn(err);
+      signinsReady = false;
+      adminMsg(box, 'The signed-in users list is not set up yet \u2014 the user_signins table still needs to be created in the shared list. Once it exists, everyone who signs in is recorded here automatically.');
+    });
+  }
+  function renderAdminAdmins(){
+    var box = document.getElementById('adminAdmins');
+    var form = document.getElementById('adminAppointForm');
+    if(!box) return;
+    if(form) form.hidden = !(isBootstrapAdmin() && adminsReady === true);
+    if(adminsReady === false){
+      adminMsg(box, 'Appointments are not set up yet \u2014 the app_admins table still needs to be created in the shared list. Michael is appointed by default either way; appointing others starts working once the table exists.');
+      return;
+    }
+    if(adminsReady === null){ adminLoading(box); return; }
+    box.innerHTML = '';
+    /* The default appointment always leads the list */
+    var owner = document.createElement('div');
+    owner.className = 'be-user';
+    var on = document.createElement('div');
+    var os = document.createElement('span');
+    os.className = 'be-name';
+    os.textContent = 'Michael (app owner)';
+    on.appendChild(os);
+    var ot = document.createElement('span');
+    ot.className = 'be-tag';
+    ot.textContent = 'Admin \u2014 default';
+    on.appendChild(ot);
+    owner.appendChild(on);
+    var om = document.createElement('div');
+    om.className = 'be-meta';
+    om.textContent = BOOTSTRAP_ADMIN_EMAILS.join(', ') + ' \u00B7 Appointed by default \u2014 this one can\u2019t be removed';
+    owner.appendChild(om);
+    box.appendChild(owner);
+    var shown = 0;
+    appointedAdmins.forEach(function(a){
+      if(a.user_email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(a.user_email).toLowerCase()) !== -1) return;
+      shown++;
+      var item = document.createElement('div');
+      item.className = 'be-user';
+      var nl = document.createElement('div');
+      var ns = document.createElement('span');
+      ns.className = 'be-name';
+      ns.textContent = a.user_name || a.user_email || 'Appointed admin';
+      nl.appendChild(ns);
+      item.appendChild(nl);
+      var meta = document.createElement('div');
+      meta.className = 'be-meta';
+      meta.textContent = (a.user_email || '') + (a.appointed_by ? ' \u00B7 Appointed by ' + a.appointed_by : '') + (a.created_at ? ' \u00B7 ' + fmtAdminTime(a.created_at) : '');
+      item.appendChild(meta);
+      if(isBootstrapAdmin()){
+        var actions = document.createElement('div');
+        actions.className = 'be-actions';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-ghost-small';
+        btn.textContent = 'Remove admin';
+        btn.addEventListener('click', function(){ removeAdmin(a); });
+        actions.appendChild(btn);
+        item.appendChild(actions);
+      }
+      box.appendChild(item);
+    });
+    if(!shown){
+      var none = document.createElement('p');
+      none.className = 'hist-empty';
+      none.textContent = 'No one else is appointed yet. Appoint someone from the Signed-in users list, or by email below.';
+      box.appendChild(none);
+    }
+    if(!isBootstrapAdmin()){
+      var note = document.createElement('p');
+      note.className = 'theme-note';
+      note.textContent = 'Only Michael can add or remove appointed admins.';
+      box.appendChild(note);
+    }
+  }
+  function renderAdminBanned(){
+    var box = document.getElementById('adminBanned');
+    var form = document.getElementById('adminBanForm');
+    if(!box) return;
+    if(form) form.hidden = !(isAppointed() && bannedReady === true);
+    if(bannedReady === false){
+      adminMsg(box, 'Banning is not set up yet \u2014 the banned_users table still needs to be created in the shared list. Once it exists, banned users show up here and are blocked from signing in and from signed-in features.');
+      return;
+    }
+    if(bannedReady === null){ adminLoading(box); return; }
+    box.innerHTML = '';
+    var visible = bannedUsers.filter(function(b){ return !isBootstrapEmail(b.user_email); });
+    if(!visible.length){
+      adminMsg(box, 'No one is banned. Ban someone from the Signed-in users list above, or by email below.');
+      return;
+    }
+    visible.forEach(function(b){
+      var item = document.createElement('div');
+      item.className = 'be-user';
+      var nl = document.createElement('div');
+      var ns = document.createElement('span');
+      ns.className = 'be-name';
+      ns.textContent = b.user_name || b.user_email || 'Banned user';
+      nl.appendChild(ns);
+      var tg = document.createElement('span');
+      tg.className = 'be-tag banned';
+      tg.textContent = 'Banned';
+      nl.appendChild(tg);
+      item.appendChild(nl);
+      var meta = document.createElement('div');
+      meta.className = 'be-meta';
+      meta.textContent = (b.user_email || '') + (b.banned_by ? ' \u00B7 Banned by ' + b.banned_by : '') + (b.created_at ? ' \u00B7 ' + fmtAdminTime(b.created_at) : '');
+      item.appendChild(meta);
+      if(isAppointed()){
+        var actions = document.createElement('div');
+        actions.className = 'be-actions';
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-save-small';
+        btn.textContent = 'Unban';
+        btn.addEventListener('click', function(){ unbanUser(b); });
+        actions.appendChild(btn);
+        item.appendChild(actions);
+      }
+      box.appendChild(item);
+    });
+  }
+  document.getElementById('adminBanBtn').addEventListener('click', function(){
+    var input = document.getElementById('adminBanEmail');
+    var errEl = document.getElementById('adminBanErr');
+    var email = input ? input.value.trim() : '';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      if(errEl){ errEl.textContent = 'Enter a valid email address.'; errEl.hidden = false; }
+      if(input) input.focus();
+      return;
+    }
+    if(errEl) errEl.hidden = true;
+    if(isBootstrapEmail(email)){
+      if(errEl){ errEl.textContent = 'Michael (halroben8@gmail.com) can\u2019t be banned \u2014 he\u2019s the app owner.'; errEl.hidden = false; }
+      return;
+    }
+    if(authUser && authUser.email && String(authUser.email).toLowerCase() === email.toLowerCase()){
+      if(errEl){ errEl.textContent = 'You can\u2019t ban yourself.'; errEl.hidden = false; }
+      return;
+    }
+    if(findBanEntry(null, email)){
+      if(errEl){ errEl.textContent = 'That email is already banned.'; errEl.hidden = false; }
+      return;
+    }
+    if(input) input.value = '';
+    banUser({ user_email: email });
+  });
+  /* ----- Change history (Admin area ONLY) -----
+     This is the one and only place change history is read. It is
+     called only from openAdmin(), which is itself gated to
+     appointed admins, and it re-checks the appointment here
+     before fetching: for anyone else it renders nothing and the
+     product_changes rows are never fetched. Each entry shows, on
+     its own lines so it stays readable on a phone: the product,
+     what changed, who made the change, and when — newest first. */
+  function renderAdminLog(){
+    var box = document.getElementById('adminLog');
+    if(!box) return;
+    if(!isAppointed()){
+      adminMsg(box, 'Change history is restricted to appointed admins.');
+      return;
+    }
+    adminLoading(box);
+    sb('product_changes?select=*&order=created_at.desc&limit=200', { token: sbAuthToken() }).then(function(entries){
+      changesReady = true; syncLikesSetupNote();
+      box.innerHTML = '';
+      if(!entries || !entries.length){
+        adminMsg(box, 'No changes recorded yet. When someone signed in adds or edits a product, it shows up here with their name, newest first.');
+        return;
+      }
+      entries.forEach(function(e){
+        var item = document.createElement('div');
+        item.className = 'hist-item';
+        var prod = document.createElement('div');
+        prod.className = 'hist-prod';
+        prod.textContent = e.product_label || 'Product';
+        item.appendChild(prod);
+        var ch = document.createElement('p');
+        ch.className = 'hist-change';
+        ch.textContent = e.change || '';
+        item.appendChild(ch);
+        var meta = document.createElement('div');
+        meta.className = 'hist-meta';
+        var who = e.user_name || e.user_email || 'Someone';
+        if(e.user_name && e.user_email) who = e.user_name + ' (' + e.user_email + ')';
+        meta.textContent = 'by ' + who + (e.created_at ? ' \u00B7 ' + fmtAdminTime(e.created_at) : '');
+        item.appendChild(meta);
+        box.appendChild(item);
+      });
+    }, function(err){
+      if(window.console) console.warn(err);
+      changesReady = false; syncLikesSetupNote();
+      adminMsg(box, 'Change history isn\u2019t set up yet \u2014 the product_changes table still needs to be created in the shared list. Once it exists, adds and edits made while signed in will show up here, newest first.');
+    });
+  }
+  function appointAdmin(entry){
+    if(!isBootstrapAdmin()) return;
+    if(!entry || (!entry.user_id && !entry.user_email)){ syncToast('Nothing to appoint \u2014 no user or email given.', true); return; }
+    sb('app_admins', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      user_id: entry.user_id || null, user_email: entry.user_email || null, user_name: entry.user_name || null,
+      appointed_by: authDisplayName() + (authUser.email ? ' (' + authUser.email + ')' : '')
+    } }).then(function(){
+      return loadAdmins();
+    }).then(function(){
+      renderAdminUsers(); renderAdminAdmins();
+      syncToast((entry.user_name || entry.user_email) + ' is now an appointed admin.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Couldn\u2019t save that appointment \u2014 check your connection and try again.', true);
+    });
+  }
+  function removeAdmin(entry){
+    if(!isBootstrapAdmin() || !entry) return;
+    if(entry.user_email && BOOTSTRAP_ADMIN_EMAILS.indexOf(String(entry.user_email).toLowerCase()) !== -1){
+      syncToast('The app owner\u2019s default appointment can\u2019t be removed.', true);
+      return;
+    }
+    var q = entry.user_id
+      ? 'user_id=eq.' + encodeURIComponent(entry.user_id)
+      : 'user_email=eq.' + encodeURIComponent(entry.user_email || '');
+    sb('app_admins?' + q, { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+      return loadAdmins();
+    }).then(function(){
+      renderAdminUsers(); renderAdminAdmins();
+      syncToast((entry.user_name || entry.user_email || 'That user') + ' is no longer an appointed admin.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Couldn\u2019t remove that appointment \u2014 check your connection and try again.', true);
+    });
+  }
+  document.getElementById('adminAppointBtn').addEventListener('click', function(){
+    var input = document.getElementById('adminAppointEmail');
+    var errEl = document.getElementById('adminAppointErr');
+    var email = input ? input.value.trim() : '';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      if(errEl){ errEl.textContent = 'Enter a valid email address.'; errEl.hidden = false; }
+      if(input) input.focus();
+      return;
+    }
+    if(errEl) errEl.hidden = true;
+    if(isUserAppointed(null, email)){
+      if(errEl){ errEl.textContent = 'That email is already an appointed admin.'; errEl.hidden = false; }
+      return;
+    }
+    if(input) input.value = '';
+    appointAdmin({ user_email: email });
+  });
+  function openAdmin(){
+    /* The gate, checked again at the door: no appointment, no
+       entry — and none of the three lists is even fetched */
+    if(!isAppointed()){
+      syncToast('The Admin area is restricted to appointed users. Only Michael can appoint admins.', true);
+      return;
+    }
+    if(!adminOverlay) return;
+    adminOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('adminClose').focus();
+    renderAdminUsers();
+    renderAdminAdmins();
+    renderAdminBanned();
+    renderAdminSuggestions();
+    renderAdminLog();
+    /* Refresh the appointments in the background too, so the
+       Appointed admins list and the appoint buttons on the
+       Signed-in users list reflect any change made elsewhere
+       since this session started */
+    loadAdmins().then(function(){
+      if(adminOverlay && !adminOverlay.hidden){ renderAdminUsers(); renderAdminAdmins(); }
+    });
+    /* Same for the blocklist, so the Banned tags, the Ban /
+       Unban buttons and the Banned users list are current */
+    loadBanned().then(function(){
+      if(adminOverlay && !adminOverlay.hidden){ renderAdminUsers(); renderAdminBanned(); }
+    });
+  }
+  function closeAdmin(){
+    if(!adminOverlay || adminOverlay.hidden) return;
+    adminOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && suggestOverlay.hidden) document.body.style.overflow = '';
+  }
+  document.getElementById('adminBtn').addEventListener('click', function(){
+    if(!authUser){ requireSignIn('open the Admin area'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    if(isAppointed()){ closeSettings(); openAdmin(); return; }
+    if(adminsReady !== true){
+      /* The appointments list may simply not have arrived yet —
+         fetch it once before saying no */
+      loadAdmins().then(function(){
+        if(isAppointed()){ closeSettings(); openAdmin(); }
+        else syncToast('The Admin area is restricted to appointed users. Only Michael can appoint admins.', true);
+      });
+      return;
+    }
+    syncToast('The Admin area is restricted to appointed users. Only Michael can appoint admins.', true);
+  });
+  document.getElementById('adminClose').addEventListener('click', closeAdmin);
+  document.getElementById('adminDone').addEventListener('click', closeAdmin);
+  if(adminOverlay) adminOverlay.addEventListener('click', function(ev){ if(ev.target === adminOverlay) closeAdmin(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && adminOverlay && !adminOverlay.hidden) closeAdmin();
+  });
+  /* ---------- Suggestions box ----------
+     Settings → Suggestions (the first action in the Settings
+     tab, right under the Account block) opens a simple form: one
+     textarea, a Send button. Leaving a suggestion requires
+     signing in, exactly like loves and edits — a signed-out tap
+     gets the sign-in prompt via requireSignIn() (which also
+     blocks banned accounts), and the form never opens for them.
+     Browsing is untouched.
+     Submissions are stored in a shared table, same open-policy
+     pattern as the other new tables — while it is missing, the
+     form says so clearly and nothing is sent, and the Admin
+     area's Suggestions view shows the same setup message:
+       create table if not exists public.user_suggestions (
+         id bigint generated always as identity primary key,
+         user_id uuid, user_email text, user_name text,
+         suggestion text not null,
+         created_at timestamptz not null default now());
+       alter table public.user_suggestions enable row level security;
+       drop policy if exists "open" on public.user_suggestions;
+       create policy "open" on public.user_suggestions
+         for all using (true) with check (true);
+     Admin follow-up on a suggestion — marking it acted upon and
+     replying / asking a follow-up question from the Admin area —
+     needs two additions, same graceful pattern: until they
+     exist, the mark/reply attempts say so clearly and everything
+     else keeps working. The acted state rides on the suggestion
+     row itself; replies are their own table (one suggestion can
+     collect several). SQL (Supabase SQL Editor, same open
+     policy as the other tables):
+       alter table public.user_suggestions
+         add column if not exists acted_upon boolean not null default false,
+         add column if not exists acted_by text,
+         add column if not exists acted_at timestamptz;
+       create table if not exists public.suggestion_replies (
+         id bigint generated always as identity primary key,
+         suggestion_id bigint not null,
+         user_id uuid, user_email text, user_name text,
+         reply text not null,
+         created_at timestamptz not null default now());
+       alter table public.suggestion_replies enable row level security;
+       drop policy if exists "open" on public.suggestion_replies;
+       create policy "open" on public.suggestion_replies
+         for all using (true) with check (true);
+     Replies are read in exactly the same two places as the
+     suggestions themselves: all of them in the Admin area
+     (appointed admins only), and in Your suggestions only the
+     replies attached to the signed-in user's OWN suggestion ids
+     — the fetch names those ids explicitly, so another user's
+     replies are never fetched for them. Only appointed admins
+     can mark acted upon or send a reply: those controls exist
+     only in the Admin view and re-check isAppointed() when used.
+     Sending a suggestion shows a clear thank-you in the panel
+     (the panel stays open) and the new entry appears under
+     "Your suggestions" below the form.
+     Reading suggestions back happens in exactly two places:
+       · renderAdminSuggestions() below — EVERY suggestion, and
+         it runs only when an appointed admin opens the Admin
+         area, so no one else ever fetches or sees the full list.
+       · renderMySuggestions() below — the signed-in user's OWN
+         suggestions only. The fetch is filtered to their
+         user_id, the rows are filtered again on this screen
+         before rendering, and Edit / Delete are rendered only on
+         those own rows. Every edit/delete request is scoped by
+         BOTH the suggestion id and the user's own user_id, so
+         it cannot touch anyone else's suggestion even if an id
+         were guessed. */
+  var suggestionsReady = null;
+  function showSuggestErr(text){
+    var errEl = document.getElementById('suggestErr');
+    if(errEl){ errEl.textContent = text; errEl.hidden = false; }
+  }
+  function hideSuggestThanks(){
+    var th = document.getElementById('suggestThanks');
+    if(th){ th.hidden = true; th.textContent = ''; }
+  }
+  function openSuggest(){
+    if(!suggestOverlay) return;
+    var errEl = document.getElementById('suggestErr');
+    if(errEl) errEl.hidden = true;
+    hideSuggestThanks();
+    suggestOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    renderMySuggestions();
+    var ta = document.getElementById('suggestText');
+    if(ta) ta.focus();
+  }
+  function closeSuggest(){
+    if(!suggestOverlay || suggestOverlay.hidden) return;
+    suggestOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && adminOverlay.hidden) document.body.style.overflow = '';
+  }
+  function submitSuggestion(){
+    var ta = document.getElementById('suggestText');
+    var sendBtn = document.getElementById('suggestSend');
+    /* Re-checked at the moment of sending, not just when the
+       form opened: no signed-in (unbanned) user, no submission */
+    if(!authUser){ showSignInPrompt('leave a suggestion'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    var text = ta ? ta.value.trim() : '';
+    if(!text){
+      showSuggestErr('Write your comment or suggestion first.');
+      if(ta) ta.focus();
+      return;
+    }
+    var errEl = document.getElementById('suggestErr');
+    if(errEl) errEl.hidden = true;
+    hideSuggestThanks();
+    if(sendBtn) sendBtn.disabled = true;
+    sb('user_suggestions', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      user_id: authUser.id, user_email: authUser.email || null, user_name: authDisplayName(),
+      suggestion: text
+    } }).then(function(){
+      suggestionsReady = true;
+      if(sendBtn) sendBtn.disabled = false;
+      if(ta) ta.value = '';
+      /* A clear thank-you, in the panel itself: the panel stays
+         open, the thanks shows above the form, and the new entry
+         lands in Your suggestions below (refreshed underneath) */
+      var th = document.getElementById('suggestThanks');
+      if(th){
+        th.textContent = 'Thank you \u2014 your suggestion was sent to the moderator. It\u2019s listed under Your suggestions below, where you can edit or delete it.';
+        th.hidden = false;
+      }
+      renderMySuggestions();
+      syncToast('Thanks \u2014 your suggestion was sent to the moderator.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      suggestionsReady = false;
+      if(sendBtn) sendBtn.disabled = false;
+      showSuggestErr('Your suggestion couldn\u2019t be sent. If this keeps happening, suggestions may not be set up yet \u2014 the user_suggestions table still needs to be created in the shared list. Check your connection and try again.');
+    });
+  }
+  document.getElementById('suggestionsBtn').addEventListener('click', function(){
+    if(!requireSignIn('leave a suggestion')) return;
+    closeSettings();
+    openSuggest();
+  });
+  document.getElementById('suggestClose').addEventListener('click', closeSuggest);
+  document.getElementById('suggestCancel').addEventListener('click', closeSuggest);
+  document.getElementById('suggestSend').addEventListener('click', submitSuggestion);
+  if(suggestOverlay) suggestOverlay.addEventListener('click', function(ev){ if(ev.target === suggestOverlay) closeSuggest(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && suggestOverlay && !suggestOverlay.hidden) closeSuggest();
+  });
+  /* ----- Your suggestions: the signed-in user's own -----
+     Ownership test for one row: the row's user_id is the
+     signed-in user's id. Rows written before user ids were
+     recorded (no user_id) fall back to an exact email match.
+     Anything else is not theirs and is never rendered here. */
+  function isOwnSuggestion(s){
+    if(!authUser || !s) return false;
+    if(s.user_id) return !!authUser.id && s.user_id === authUser.id;
+    return !!s.user_email && !!authUser.email && String(s.user_email).toLowerCase() === String(authUser.email).toLowerCase();
+  }
+  /* ----- Admin follow-up on suggestions: acted upon + replies -----
+     Shared by the Admin Suggestions view and the submitter's own
+     Your suggestions list. loadSuggestionReplies() fetches replies
+     for an explicit list of suggestion ids ONLY — the Admin view
+     passes the ids of the suggestions it is showing (all of them,
+     for appointed admins), the Your suggestions view passes only
+     the signed-in user's own suggestion ids, so nobody else's
+     replies are ever fetched for them. While the
+     suggestion_replies table is missing, it resolves to an empty
+     map and suggestionRepliesReady goes false, which the Admin
+     view turns into a setup note; the lists themselves render
+     exactly as before. */
+  var suggestionRepliesReady = null;
+  function loadSuggestionReplies(ids){
+    var clean = (ids || []).filter(function(id){ return id !== null && id !== undefined; });
+    if(!clean.length) return Promise.resolve({});
+    var inList = clean.map(function(id){ return encodeURIComponent(id); }).join(',');
+    return sb('suggestion_replies?select=*&suggestion_id=in.(' + inList + ')&order=created_at.asc&limit=500', { token: sbAuthToken() }).then(function(list){
+      suggestionRepliesReady = true;
+      var map = {};
+      (list || []).forEach(function(r){
+        var k = String(r.suggestion_id);
+        if(!map[k]) map[k] = [];
+        map[k].push(r);
+      });
+      return map;
+    }, function(err){
+      if(window.console) console.warn('Suggestion replies not loaded (suggestion_replies table may not exist yet):', err);
+      suggestionRepliesReady = false;
+      return {};
+    });
+  }
+  function buildActedLine(s){
+    if(!s || !s.acted_upon) return null;
+    var line = document.createElement('div');
+    line.className = 'sug-acted-line';
+    var tag = document.createElement('span');
+    tag.className = 'sug-acted-tag';
+    tag.textContent = '\u2713 Acted upon';
+    line.appendChild(tag);
+    var detail = [];
+    if(s.acted_by) detail.push('by ' + s.acted_by);
+    if(s.acted_at) detail.push(fmtAdminTime(s.acted_at));
+    if(detail.length){
+      var m = document.createElement('span');
+      m.className = 'sug-acted-meta';
+      m.textContent = detail.join(' \u00B7 ');
+      line.appendChild(m);
+    }
+    return line;
+  }
+  function buildRepliesBlock(replies){
+    if(!replies || !replies.length) return null;
+    var wrap = document.createElement('div');
+    wrap.className = 'sug-replies';
+    var head = document.createElement('p');
+    head.className = 'sug-replies-head';
+    head.textContent = replies.length === 1 ? 'Reply from the moderator' : 'Replies from the moderator';
+    wrap.appendChild(head);
+    replies.forEach(function(r){
+      var item = document.createElement('div');
+      item.className = 'sug-reply';
+      var meta = document.createElement('div');
+      meta.className = 'sug-reply-meta';
+      var who = document.createElement('span');
+      who.className = 'sug-reply-who';
+      who.textContent = r.user_name || r.user_email || 'Moderator';
+      meta.appendChild(who);
+      if(r.created_at) meta.appendChild(document.createTextNode(' \u00B7 ' + fmtAdminTime(r.created_at)));
+      item.appendChild(meta);
+      var tx = document.createElement('p');
+      tx.className = 'sug-reply-text';
+      tx.textContent = r.reply || '';
+      item.appendChild(tx);
+      wrap.appendChild(item);
+    });
+    return wrap;
+  }
+  function renderMySuggestions(){
+    var box = document.getElementById('mySuggestions');
+    if(!box) return;
+    if(!authUser){
+      adminMsg(box, 'Sign in to see your suggestions.');
+      return;
+    }
+    adminLoading(box);
+    sb('user_suggestions?select=*&user_id=eq.' + encodeURIComponent(authUser.id) + '&order=created_at.desc&limit=100', { token: sbAuthToken() }).then(function(list){
+      suggestionsReady = true;
+      /* Filtered again on this screen: only rows that are
+         provably the signed-in user's own are ever rendered,
+         whatever the shared list answered */
+      var own = (list || []).filter(isOwnSuggestion);
+      if(!own.length){
+        box.innerHTML = '';
+        adminMsg(box, 'You haven\u2019t sent any suggestions yet. When you send one, it shows up here \u2014 and you can edit or delete it here too.');
+        return;
+      }
+      /* Replies are fetched for these own ids only, then each
+         entry is built with its acted-upon mark and its replies */
+      loadSuggestionReplies(own.map(function(s){ return s.id; })).then(function(replyMap){
+        box.innerHTML = '';
+        own.forEach(function(s){ box.appendChild(buildMySuggestionItem(s, replyMap[String(s.id)] || [])); });
+      });
+    }, function(err){
+      if(window.console) console.warn(err);
+      suggestionsReady = false;
+      adminMsg(box, 'Your suggestions aren\u2019t available yet \u2014 the user_suggestions table still needs to be created in the shared list. Once it exists, the suggestions you send show up here.');
+    });
+  }
+  function buildMySuggestionItem(s, replies){
+    var item = document.createElement('div');
+    item.className = 'my-sug';
+    var meta = document.createElement('div');
+    meta.className = 'my-sug-meta';
+    meta.textContent = s.created_at ? 'Sent ' + fmtAdminTime(s.created_at) : '';
+    item.appendChild(meta);
+    var tx = document.createElement('p');
+    tx.className = 'my-sug-text';
+    tx.textContent = s.suggestion || '';
+    item.appendChild(tx);
+    /* Acted upon: the admin's mark on this suggestion, with who
+       and when when the row carries them */
+    var actedLine = buildActedLine(s);
+    if(actedLine) item.appendChild(actedLine);
+    /* The moderator's replies / follow-up questions on this
+       suggestion, oldest first — read-only here */
+    var repliesBlock = buildRepliesBlock(replies);
+    if(repliesBlock) item.appendChild(repliesBlock);
+    /* Edit / Delete exist only on this user's own rows (this
+       builder is only ever called with own rows) and only when
+       the row has an id to act on */
+    if(s.id !== null && s.id !== undefined){
+      var actions = document.createElement('div');
+      actions.className = 'my-sug-actions';
+      var editBtn = document.createElement('button');
+      editBtn.type = 'button';
+      editBtn.className = 'btn-ghost-small';
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', function(){ startEditMySuggestion(item, s, tx, actions); });
+      actions.appendChild(editBtn);
+      var delBtn = document.createElement('button');
+      delBtn.type = 'button';
+      delBtn.className = 'btn-ban-small';
+      delBtn.textContent = 'Delete';
+      delBtn.addEventListener('click', function(){ startDeleteMySuggestion(s, actions); });
+      actions.appendChild(delBtn);
+      item.appendChild(actions);
+    }
+    return item;
+  }
+  /* Inline edit: the entry's text is swapped for a textarea with
+     Save / Cancel. Saving PATCHes the shared row, scoped by the
+     suggestion id AND the signed-in user's own user_id, so the
+     update can only ever land on their own suggestion */
+  function startEditMySuggestion(item, s, tx, actions){
+    if(!authUser){ showSignInPrompt('edit your suggestion'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    if(item.querySelector('.my-sug-edit')) return;
+    tx.hidden = true;
+    actions.hidden = true;
+    var wrap = document.createElement('div');
+    wrap.className = 'my-sug-edit';
+    var ta = document.createElement('textarea');
+    ta.rows = 4;
+    ta.maxLength = 2000;
+    ta.value = s.suggestion || '';
+    ta.setAttribute('aria-label', 'Edit your suggestion');
+    wrap.appendChild(ta);
+    var errEl = document.createElement('p');
+    errEl.className = 'store-err';
+    errEl.setAttribute('role', 'alert');
+    errEl.hidden = true;
+    wrap.appendChild(errEl);
+    var row = document.createElement('div');
+    row.className = 'my-sug-actions';
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'btn-save-small';
+    saveBtn.textContent = 'Save changes';
+    saveBtn.addEventListener('click', function(){
+      if(!authUser){ showSignInPrompt('edit your suggestion'); return; }
+      if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+      var newText = ta.value.trim();
+      if(!newText){
+        errEl.textContent = 'Write your comment or suggestion first \u2014 or Delete it instead.';
+        errEl.hidden = false;
+        ta.focus();
+        return;
+      }
+      errEl.hidden = true;
+      saveBtn.disabled = true;
+      sb('user_suggestions?id=eq.' + encodeURIComponent(s.id) + '&user_id=eq.' + encodeURIComponent(authUser.id), { method: 'PATCH', prefer: 'return=minimal', token: sbAuthToken(), body: { suggestion: newText } }).then(function(){
+        syncToast('Your suggestion was updated.', false);
+        renderMySuggestions();
+      }, function(err){
+        if(window.console) console.warn(err);
+        saveBtn.disabled = false;
+        errEl.textContent = 'Your change couldn\u2019t be saved \u2014 check your connection and try again.';
+        errEl.hidden = false;
+      });
+    });
+    row.appendChild(saveBtn);
+    var cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.className = 'btn-ghost-small';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', function(){ renderMySuggestions(); });
+    row.appendChild(cancelBtn);
+    wrap.appendChild(row);
+    item.appendChild(wrap);
+    ta.focus();
+  }
+  /* Delete is two taps, inline (no browser confirm dialog \u2014 those do
+     not work in this shell): the first tap asks, the second
+     deletes. The DELETE is scoped by the suggestion id AND the
+     signed-in user's own user_id, exactly like the edit above */
+  function startDeleteMySuggestion(s, actions){
+    if(!authUser){ showSignInPrompt('delete your suggestion'); return; }
+    if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+    actions.innerHTML = '';
+    var q = document.createElement('span');
+    q.className = 'my-sug-confirm';
+    q.textContent = 'Delete this suggestion?';
+    actions.appendChild(q);
+    var yesBtn = document.createElement('button');
+    yesBtn.type = 'button';
+    yesBtn.className = 'btn-ban-small';
+    yesBtn.textContent = 'Delete';
+    yesBtn.addEventListener('click', function(){
+      if(!authUser){ showSignInPrompt('delete your suggestion'); return; }
+      if(isCurrentUserBanned()){ enforceBanIfNeeded(); return; }
+      yesBtn.disabled = true;
+      sb('user_suggestions?id=eq.' + encodeURIComponent(s.id) + '&user_id=eq.' + encodeURIComponent(authUser.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+        syncToast('Your suggestion was deleted.', false);
+        renderMySuggestions();
+      }, function(err){
+        if(window.console) console.warn(err);
+        syncToast('That suggestion couldn\u2019t be deleted \u2014 check your connection and try again.', true);
+        renderMySuggestions();
+      });
+    });
+    actions.appendChild(yesBtn);
+    var noBtn = document.createElement('button');
+    noBtn.type = 'button';
+    noBtn.className = 'btn-ghost-small';
+    noBtn.textContent = 'Cancel';
+    noBtn.addEventListener('click', function(){ renderMySuggestions(); });
+    actions.appendChild(noBtn);
+  }
+  /* The Admin area's Suggestions view: every suggestion, newest
+     first, one block per entry — who sent it (name, then email),
+     the suggestion text with its line breaks kept, and when it
+     was sent. Each entry also carries the admin follow-up
+     controls: a Mark acted upon / Undo acted upon toggle and a
+     reply / follow-up form, plus the replies already sent.
+     Called only from openAdmin(), which is itself gated to
+     appointed admins, so no one else ever fetches or sees these;
+     the two actions re-check isAppointed() when used. */
+  function renderAdminSuggestions(){
+    var box = document.getElementById('adminSuggestions');
+    if(!box) return;
+    if(!isAppointed()){
+      adminMsg(box, 'Suggestions are restricted to appointed admins.');
+      return;
+    }
+    adminLoading(box);
+    sb('user_suggestions?select=*&order=created_at.desc&limit=200', { token: sbAuthToken() }).then(function(list){
+      suggestionsReady = true;
+      if(!list || !list.length){
+        box.innerHTML = '';
+        adminMsg(box, 'No suggestions yet. When a signed-in user leaves one from Settings \u2192 Suggestions, it shows up here, newest first.');
+        return;
+      }
+      loadSuggestionReplies(list.map(function(s){ return s.id; })).then(function(replyMap){
+        box.innerHTML = '';
+        list.forEach(function(s){ box.appendChild(buildAdminSuggestionItem(s, replyMap[String(s.id)] || [])); });
+        if(suggestionRepliesReady === false){
+          var note = document.createElement('p');
+          note.className = 'theme-note';
+          note.textContent = 'Replies are not set up yet: the suggestion_replies table still needs to be created in the shared list. Once it exists, replies and follow-up questions sent from here show up here and in the sender\u2019s own suggestions list.';
+          box.appendChild(note);
+        }
+      });
+    }, function(err){
+      if(window.console) console.warn(err);
+      suggestionsReady = false;
+      adminMsg(box, 'Suggestions are not set up yet \u2014 the user_suggestions table still needs to be created in the shared list. Once it exists, suggestions left from Settings show up here, newest first.');
+    });
+  }
+  function buildAdminSuggestionItem(s, replies){
+    var item = document.createElement('div');
+    item.className = 'be-sug';
+    var nl = document.createElement('div');
+    var ns = document.createElement('span');
+    ns.className = 'be-name';
+    ns.textContent = s.user_name || s.user_email || 'Signed-in user';
+    nl.appendChild(ns);
+    item.appendChild(nl);
+    var meta = document.createElement('div');
+    meta.className = 'be-sug-meta';
+    meta.textContent = (s.user_email || '') + (s.created_at ? (s.user_email ? ' \u00B7 Sent ' : 'Sent ') + fmtAdminTime(s.created_at) : '');
+    item.appendChild(meta);
+    var tx = document.createElement('p');
+    tx.className = 'be-sug-text';
+    tx.textContent = s.suggestion || '';
+    item.appendChild(tx);
+    var actedLine = buildActedLine(s);
+    if(actedLine) item.appendChild(actedLine);
+    var repliesBlock = buildRepliesBlock(replies);
+    if(repliesBlock) item.appendChild(repliesBlock);
+    if(s.id !== null && s.id !== undefined){
+      /* Acted upon toggle */
+      var actions = document.createElement('div');
+      actions.className = 'sug-actions';
+      var actedBtn = document.createElement('button');
+      actedBtn.type = 'button';
+      actedBtn.className = s.acted_upon ? 'btn-ghost-small' : 'btn-save-small';
+      actedBtn.textContent = s.acted_upon ? 'Undo acted upon' : 'Mark acted upon';
+      actedBtn.addEventListener('click', function(){ toggleSuggestionActed(s); });
+      actions.appendChild(actedBtn);
+      item.appendChild(actions);
+      /* Reply / follow-up form */
+      var form = document.createElement('div');
+      form.className = 'sug-reply-form';
+      var rta = document.createElement('textarea');
+      rta.rows = 2;
+      rta.maxLength = 2000;
+      rta.placeholder = 'Reply or ask a follow-up question\u2026';
+      rta.setAttribute('aria-label', 'Reply or follow-up question for this suggestion');
+      form.appendChild(rta);
+      var rerr = document.createElement('p');
+      rerr.className = 'store-err';
+      rerr.setAttribute('role', 'alert');
+      rerr.hidden = true;
+      form.appendChild(rerr);
+      var rrow = document.createElement('div');
+      rrow.className = 'sug-actions';
+      var sendBtn = document.createElement('button');
+      sendBtn.type = 'button';
+      sendBtn.className = 'btn-save-small';
+      sendBtn.textContent = 'Send reply';
+      sendBtn.addEventListener('click', function(){ sendSuggestionReply(s, rta, rerr, sendBtn); });
+      rrow.appendChild(sendBtn);
+      form.appendChild(rrow);
+      item.appendChild(form);
+    }
+    return item;
+  }
+  /* Mark / unmark a suggestion as acted upon. Appointed admins
+     only (re-checked here, not just by where the button lives).
+     The state rides on the suggestion row (acted_upon /
+     acted_by / acted_at); while those columns are missing the
+     PATCH is refused and the admin is told exactly that */
+  function toggleSuggestionActed(s){
+    if(!isAppointed()){ syncToast('Only appointed admins can mark suggestions as acted upon.', true); return; }
+    if(!s || s.id === null || s.id === undefined) return;
+    var next = !s.acted_upon;
+    var body = next
+      ? { acted_upon: true, acted_by: authDisplayName() + (authUser && authUser.email ? ' (' + authUser.email + ')' : ''), acted_at: new Date().toISOString() }
+      : { acted_upon: false, acted_by: null, acted_at: null };
+    sb('user_suggestions?id=eq.' + encodeURIComponent(s.id), { method: 'PATCH', prefer: 'return=minimal', token: sbAuthToken(), body: body }).then(function(){
+      syncToast(next ? 'Marked as acted upon \u2014 the sender can see it on their suggestion.' : 'Acted-upon mark removed.', false);
+      renderAdminSuggestions();
+    }, function(err){
+      if(window.console) console.warn(err);
+      syncToast('Couldn\u2019t update that suggestion. Acted-upon marking may not be set up yet \u2014 the acted_upon, acted_by and acted_at columns still need to be added to the user_suggestions table (SQL is in the Suggestions code comment).', true);
+    });
+  }
+  /* Send a reply / follow-up question on a suggestion. Appointed
+     admins only (re-checked here). The reply is its own row in
+     suggestion_replies, tagged with the replying admin, and the
+     sender sees it attached to their suggestion in their own
+     Your suggestions list */
+  function sendSuggestionReply(s, ta, errEl, sendBtn){
+    if(!isAppointed()){ syncToast('Only appointed admins can reply to suggestions.', true); return; }
+    if(!authUser){ showSignInPrompt('reply to a suggestion'); return; }
+    var text = ta ? ta.value.trim() : '';
+    if(!text){
+      if(errEl){ errEl.textContent = 'Write the reply or follow-up question first.'; errEl.hidden = false; }
+      if(ta) ta.focus();
+      return;
+    }
+    if(errEl) errEl.hidden = true;
+    if(sendBtn) sendBtn.disabled = true;
+    sb('suggestion_replies', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: {
+      suggestion_id: s.id, user_id: authUser.id, user_email: authUser.email || null, user_name: authDisplayName(),
+      reply: text
+    } }).then(function(){
+      suggestionRepliesReady = true;
+      syncToast('Reply sent \u2014 the sender can see it on their suggestion.', false);
+      renderAdminSuggestions();
+    }, function(err){
+      if(window.console) console.warn(err);
+      suggestionRepliesReady = false;
+      if(sendBtn) sendBtn.disabled = false;
+      if(errEl){
+        errEl.textContent = 'Your reply couldn\u2019t be sent. If this keeps happening, replies may not be set up yet \u2014 the suggestion_replies table still needs to be created in the shared list. Check your connection and try again.';
+        errEl.hidden = false;
+      }
+    });
+  }
   /* Sale syncs separately from the main product payload, on
      purpose: the shared products table does not have on_sale /
      sale_price columns yet, and sending an unknown column in the
@@ -9534,6 +12610,28 @@
       body: { on_sale: !!d.sale, sale_price: sbNum(d.salePrice) }
     }).then(function(){}, function(err){
       if(window.console) console.warn('Sale state not synced (shared list has no sale columns yet):', err);
+    });
+  }
+  /* The "Sale price not working" flag syncs separately too, in
+     its own PATCH carrying only sale_broken, for the same reason
+     as sale and barcode above: until a sale_broken (boolean)
+     column is added to the shared products table the PATCH is
+     refused and swallowed — the flag keeps working on this
+     screen — and once the column exists the same call syncs it
+     to every user with no further change here. It is called
+     only from explicit flag actions: the ⋮ menu's "Sale price
+     not working" item, an editor save (via sbSyncProduct / the
+     new-product chain), never from a routine refresh. */
+  function sbSyncSaleBroken(row){
+    if(!row) return Promise.resolve();
+    var pid = rowPid[row.getAttribute('data-idx')];
+    if(!pid) return Promise.resolve();
+    var d = readRow(row);
+    return sb('products?product_id=eq.' + encodeURIComponent(pid), {
+      method: 'PATCH', prefer: 'return=minimal',
+      body: { sale_broken: !!d.saleBroken }
+    }).then(function(){}, function(err){
+      if(window.console) console.warn('Sale-price-not-working flag not synced (shared list has no sale_broken column yet):', err);
     });
   }
   /* Barcode syncs separately from the main product payload, for
@@ -9598,7 +12696,7 @@
        "Link barcode" in the "Barcode not on file" prompt, and a
        changed Barcode saved in the product editor. */
     sb('products?product_id=eq.' + encodeURIComponent(pid), { method: 'PATCH', body: payload, prefer: 'return=minimal' })
-      .then(function(){ sbSaved(); sbSyncSale(row); }, sbFail('that product'));
+      .then(function(){ sbSaved(); sbSyncSale(row); sbSyncSaleBroken(row); }, sbFail('that product'));
   }
   function sbSyncUnavailable(row){
     if(!row) return;
@@ -9692,6 +12790,7 @@
         }
       })
       .then(function(){ return sbSyncSale(row); })
+      .then(function(){ return sbSyncSaleBroken(row); })
       /* The new product's In cooler value from the editor belongs
          to the store it was added from (targetStore) only — sync
          it per store, never as another store's value */
@@ -9861,13 +12960,13 @@
     var key = normKey(d.brand, d.name, d.size);
     var now = new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    var matched = false, active = null;
+    var matched = false, active = null, activePeriod = '';
     SALE_PERIODS.forEach(function(period){
       var running = today >= period.start && today <= period.end;
       period.items.forEach(function(item){
         if(!saleEntryMatches(item, pid, key)) return;
         matched = true;
-        if(running && !active) active = item;
+        if(running && !active){ active = item; activePeriod = period.name; }
       });
     });
     if(!matched) return null;
@@ -9875,9 +12974,9 @@
     if(active.off){
       var reg = parseFloat(row.getAttribute('data-price'));
       var p = (!isNaN(reg) && reg > active.off) ? (reg - active.off).toFixed(2) : '';
-      return { on: true, price: p };
+      return { on: true, price: p, period: activePeriod };
     }
-    return { on: true, price: active.price };
+    return { on: true, price: active.price, period: activePeriod };
   }
   function applyScheduledSales(){
     var changed = false;
@@ -10029,6 +13128,10 @@
          state is kept — a sync must never wipe a sale marked on
          this screen just because the shared list can't store it */
       if(!('on_sale' in p)){ want.sale = cur.sale; want.salePrice = cur.salePrice; }
+      /* Same protection for the pricing-error flag: a shared
+         record with no sale_broken field at all must never wipe
+         a flag set on this screen */
+      if(!('sale_broken' in p)){ want.saleBroken = cur.saleBroken; }
       /* Cooler: the shared record's in_cooler is the catalogue's
          original (Store 358) value — it updates globalCooler
          only. The row keeps the ACTIVE store's own cooler value:
@@ -10063,6 +13166,7 @@
          cur.tannins !== want.tannins || cur.acidity !== want.acidity ||
          (cur.cooler === 'Yes') !== (want.cooler === 'Yes') || cur.vqa !== want.vqa ||
          cur.sale !== want.sale || String(cur.salePrice) !== String(want.salePrice) ||
+         cur.saleBroken !== want.saleBroken ||
          String(cur.barcode || '') !== String(want.barcode || '') ||
          cur.status !== want.status || cur.notes !== want.notes){
         want.unavailable = isUnavail(row);
@@ -10215,7 +13319,12 @@
      while any dialog is open so an edit in progress is never
      overwritten mid-type */
   setInterval(function(){
-    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden || !supportOverlay.hidden || !scannerOverlay.hidden || !scanLinkOverlay.hidden) return;
+    /* The blocklist is re-checked on every tick, even while a
+       dialog is open, so a user banned while already signed in
+       is signed out with the blocked message within one tick,
+       not only after they close whatever they had open */
+    if(authUser) loadBanned();
+    if(!editorOverlay.hidden || !storeOverlay.hidden || !settingsOverlay.hidden || !welcomeOverlay.hidden || !knowledgeOverlay.hidden || !sampleOverlay.hidden || !cheatOverlay.hidden || !supportOverlay.hidden || !scannerOverlay.hidden || !scanLinkOverlay.hidden || !signinOverlay.hidden || !adminOverlay.hidden || (suggestOverlay && !suggestOverlay.hidden)) return;
     /* Re-derive the scheduled sales too (the day-switch check
        above is the midnight guarantee — it runs even while a
        panel is open; this tick additionally catches a flash-sale
@@ -10223,6 +13332,15 @@
        re-sorts and re-filters itself whenever a sale switches */
     applyScheduledSales();
     sbLoad();
+    /* Loves ride the same tick, so other users' likes (and the
+       signed-in user's own, from another device) land on the
+       hearts and the Most loved sort without a reload. Its
+       failure is its own — see loadLikes */
+    loadLikes();
+    /* Comment count badges ride the same tick, in the
+       background: one grouped query, badges filled in when it
+       lands, the list never waits on it — see loadCommentCounts */
+    loadCommentCounts();
   }, 30000);
 
   applySort();
