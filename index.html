@@ -746,6 +746,21 @@
     font-weight:800;letter-spacing:.05em}
   :root[data-theme="dark"] .badge.most-loved{background:#be123c;border-color:#fda4af}
   .detail .most-loved-note{margin:0 0 8px}
+  /* Badge row: every small badge a product carries (Sale, Flash
+     Sale, Sale price not working, VQA, Vegan-friendly,
+     Gluten-safe, Cooler, Not in plano, Check, Most loved) lives
+     in ONE horizontal row under the product name — a flex line
+     that wraps only when the badges genuinely cannot fit the
+     width on offer, never stacked one per line.
+     ensureBadgeRow() in the script owns the container: it
+     gathers the baked rows' loose badges into it, and every
+     badge sync adds through it. The UNAVAILABLE banner is not
+     part of the row — it stays a full-width banner of its own
+     directly under the name, above the row. The "Loved by X
+     merchants" line sits directly under this row (.loved-by) */
+  .badge-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:5px}
+  .badge-row .badge{margin:0}
+  .badge-row:empty{display:none}
   .chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;background:var(--violet-soft);color:var(--plum)}
   :root[data-theme="dark"] .chip{color:var(--plum2)}
   .chip.red{background:var(--chip-red-bg);color:var(--chip-red)}
@@ -1028,6 +1043,12 @@
     .like-btn svg{width:23px;height:23px}
     td[data-label="Price"]{right:88px}
     td[data-label="Product"]{padding-right:152px}
+    /* The badge row sits BELOW the name, clear of the price /
+       heart / ⋮ cluster that the cell's right padding makes
+       room for at the top, so it may use the card's full inner
+       width: without this the badges were squeezed into the
+       name's narrowed column and stacked one per line */
+    td[data-label="Product"] .badge-row{margin-right:-152px}
     /* Add product and Set store products live in the Settings panel
        (gear, top right), not in Filters, so no filter-panel sizing
        rules apply to them; .settings-action gives them full-width
@@ -1105,9 +1126,9 @@
      shows ONLY the signed-in user's own Love state — a hollow
      outline heart when they have not loved the wine, a filled
      RED heart when they have — and tapping toggles it. No count
-     rides on the button: the all-users total lives in the
-     expanded notes as "Loved by X merchants" (.loved-by below),
-     a separate thing entirely. */
+     rides on the button: the all-users total lives on the
+     card under the badge row as "Loved by X merchants"
+     (.loved-by below), a separate thing entirely. */
   .like-wrap{position:absolute;top:4px;right:40px;z-index:5;line-height:1}
   .like-btn{appearance:none;-webkit-appearance:none;background:transparent;border:none;
     width:32px;height:32px;border-radius:999px;padding:0;cursor:pointer;
@@ -1125,13 +1146,14 @@
      rules further down, beside the suggestions styles. The card
      itself carries only the heart and the ⋮, exactly as before
      comments existed. */
-  /* "Loved by X merchants" in the expanded notes, under the
-     tasting notes and above the Product ID line. Written only
-     when the count is above zero (the script removes the element
-     at zero), so a wine nobody has loved shows nothing extra. */
-  .detail .loved-by{margin:0 0 6px;font-weight:750;color:#be185d}
-  .detail .loved-by .lb-heart{color:#dc2626}
-  :root[data-theme="dark"] .detail .loved-by{color:#f9a8d4}
+  /* "Loved by X merchants" on the product card, directly under
+     the badge row (directly under the name itself when the
+     product carries no badges). Written only when the count is
+     above zero (the script removes the element at zero), so a
+     wine nobody has loved shows nothing extra. */
+  .loved-by{margin:5px 0 0;font-weight:750;color:#be185d}
+  .loved-by .lb-heart{color:#dc2626}
+  :root[data-theme="dark"] .loved-by{color:#f9a8d4}
   .toggle.liked-toggle[aria-pressed="true"]{background:#db2777;color:#fff;border-color:#be185d}
   /* Loved wines section in the Documents tab: only wines with at
      least one Love, most loved first; each entry is a big tap
@@ -4766,7 +4788,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.13</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.14</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4791,7 +4813,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.13</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.14</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5630,7 +5652,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.13</span>
+      <span class="manual-pill accent">Version 2026.11.03.14</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -5798,7 +5820,7 @@
         <ul>
           <li>The <strong>heart</strong> sits near the three-dots menu on each card.</li>
           <li><strong>Hollow heart</strong> = you haven&rsquo;t loved it. <strong>Filled red heart</strong> = you have. Tap to toggle.</li>
-          <li>A wine&rsquo;s Notes show <em>“Loved by X merchants”</em> — but only when X is above zero. No line at all means nobody has loved it yet.</li>
+          <li>A wine&rsquo;s card shows <em>“Loved by X merchants”</em> directly under its badge line — but only when X is above zero. No line at all means nobody has loved it yet.</li>
           <li>The most-loved wine in the list earns a <strong>Most loved</strong> badge.</li>
         </ul>
         <h3>Your Loved wines list</h3>
@@ -5966,6 +5988,7 @@
         <h3>Change history</h3>
         <ul>
           <li>Every add and edit is recorded with <strong>who made it</strong> (display name if set), what changed, and when.</li>
+          <li>Price edits are recorded with the old and new values — <strong>Regular price</strong> and <strong>Sale price</strong> alike, including a sale price typed on a wine that isn&rsquo;t on sale yet.</li>
           <li>History is <strong>Admin-only</strong> — it isn&rsquo;t shown to regular users.</li>
           <li>Admin also carries the action log for admin actions, and the suggestions queue (§12) for marking suggestions acted upon and replying.</li>
         </ul>
@@ -6017,7 +6040,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.13</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.14</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7518,8 +7541,7 @@
         badge.className = 'badge cooler';
         badge.textContent = 'Cooler';
         var anchor = pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
-        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
-        else pcell.appendChild(badge);
+        placeBadge(pcell, badge, anchor);
       } else if(v !== 'Yes' && badge){
         badge.parentNode.removeChild(badge);
       }
@@ -7640,8 +7662,7 @@
         fb.className = 'badge flash-sale';
         fb.textContent = '⚡ Flash Sale';
         var anchor = pcell.querySelector('.badge.sale-broken') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
-        if(anchor && anchor.nextSibling) pcell.insertBefore(fb, anchor.nextSibling);
-        else pcell.appendChild(fb);
+        placeBadge(pcell, fb, anchor);
       } else if(!flash && existing){
         existing.parentNode.removeChild(existing);
       }
@@ -7860,8 +7881,7 @@
         badge.className = 'badge vegan';
         badge.textContent = 'Vegan-friendly';
         var anchor = pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
-        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
-        else pcell.appendChild(badge);
+        placeBadge(pcell, badge, anchor);
       } else if(!on && badge){
         badge.parentNode.removeChild(badge);
       }
@@ -7978,8 +7998,7 @@
         badge.className = 'badge gluten';
         badge.textContent = 'Gluten-safe';
         var anchor = pcell.querySelector('.badge.vegan') || pcell.querySelector('.badge.vqa') || pcell.querySelector('.badge.sale') || pcell.querySelector('.pname');
-        if(anchor && anchor.nextSibling) pcell.insertBefore(badge, anchor.nextSibling);
-        else pcell.appendChild(badge);
+        placeBadge(pcell, badge, anchor);
       } else if(!on && badge){
         badge.parentNode.removeChild(badge);
       }
@@ -8176,6 +8195,38 @@
     var bc = normalizeBarcode(row.getAttribute('data-barcode') || '');
     src.textContent = 'Product ID ' + pid + (bc ? ' · Barcode ' + bc : '');
   }
+  /* ---------- Badge row ----------
+     All of a product's small badges live in ONE .badge-row
+     container in the Product cell, directly under the name (and
+     under the UNAVAILABLE banner when there is one): a single
+     horizontal line that wraps only when the badges genuinely
+     cannot fit. ensureBadgeRow() returns the row, creating it
+     in that position when missing and GATHERING the badges
+     already sitting loose in the cell (the baked rows carry
+     them as direct children) into it, in their current order.
+     placeBadge() adds a badge through the row, keeping the
+     caller's intended neighbour: after the given anchor when
+     the anchor is itself a badge in the row, otherwise at the
+     row's end. The UNAVAILABLE banner never joins the row —
+     it stays a full-width banner of its own. */
+  function ensureBadgeRow(pcell){
+    var brow = pcell.querySelector('.badge-row');
+    if(brow) return brow;
+    brow = document.createElement('div');
+    brow.className = 'badge-row';
+    Array.prototype.slice.call(pcell.querySelectorAll('.badge')).forEach(function(b){
+      if(!b.classList.contains('unavail')) brow.appendChild(b);
+    });
+    var hint = pcell.querySelector('.expand-hint');
+    if(hint) pcell.insertBefore(brow, hint);
+    else pcell.appendChild(brow);
+    return brow;
+  }
+  function placeBadge(pcell, badge, anchor){
+    var brow = ensureBadgeRow(pcell);
+    if(anchor && anchor.parentNode === brow) brow.insertBefore(badge, anchor.nextSibling);
+    else brow.appendChild(badge);
+  }
   function writeRow(row, data){
     /* Brand consolidation, placeholder cleaning and bracketed-
        reference stripping from tasting notes — enforced here, the
@@ -8208,35 +8259,39 @@
     var p = document.createElement('span');
     p.className = 'pname'; p.textContent = data.name;
     pcell.appendChild(p);
+    /* The badges all go into the one badge row under the name
+       (created only when this product carries at least one) */
+    var brow = (data.sale || data.vqa || data.cooler === 'Yes' || data.status === 'Not In Plano' || data.status === 'Check')
+      ? ensureBadgeRow(pcell) : null;
     if(data.sale){
       var sb2 = document.createElement('span');
       sb2.className = 'badge sale'; sb2.textContent = 'Sale';
-      pcell.appendChild(sb2);
+      brow.appendChild(sb2);
     }
     if(data.sale && data.saleBroken){
       var sbb = document.createElement('span');
       sbb.className = 'badge sale-broken'; sbb.textContent = '⚠ Sale price not working';
-      pcell.appendChild(sbb);
+      brow.appendChild(sbb);
     }
     if(data.vqa){
       var vb = document.createElement('span');
       vb.className = 'badge vqa'; vb.textContent = 'VQA';
-      pcell.appendChild(vb);
+      brow.appendChild(vb);
     }
     if(data.cooler === 'Yes'){
       var cb = document.createElement('span');
       cb.className = 'badge cooler'; cb.textContent = 'Cooler';
-      pcell.appendChild(cb);
+      brow.appendChild(cb);
     }
     if(data.status === 'Not In Plano'){
       var nb = document.createElement('span');
       nb.className = 'badge nip'; nb.textContent = 'Not in plano';
-      pcell.appendChild(nb);
+      brow.appendChild(nb);
     }
     if(data.status === 'Check'){
       var kb = document.createElement('span');
       kb.className = 'badge chk'; kb.textContent = 'Check';
-      pcell.appendChild(kb);
+      brow.appendChild(kb);
     }
     /* Availability banner goes on after the name/badges are rebuilt */
     setUnavailable(row, !!data.unavailable);
@@ -8670,6 +8725,14 @@
   rows.forEach(addLikeButton);
   rows.forEach(ensureCommentsEntry);
   rows.forEach(addExpandHint);
+  /* Every baked-in product that already carries badges gets
+     them gathered into the one badge row under its name, so
+     the first paint already shows the single badge line
+     instead of loose badges stacking down the card */
+  rows.forEach(function(r){
+    var pc = cellEl(r, 'Product');
+    if(pc && pc.querySelector('.badge')) ensureBadgeRow(pc);
+  });
   /* Products that arrived already marked Not In Plano get the
      "not in plano" search token too, matching ones toggled later */
   rows.forEach(syncPlanoSearch);
@@ -9267,7 +9330,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.03.13). Reference content only: nothing
+     the print PDF (2026.11.03.12). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
@@ -10915,6 +10978,7 @@
     if(opts.prefer) headers['Prefer'] = opts.prefer;
     return fetch(SB_URL + '/rest/v1/' + path, {
       method: opts.method || 'GET', headers: headers,
+      keepalive: !!opts.keepalive,
       body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined
     }).then(function(r){
       if(!r.ok) return r.text().then(function(t){ throw new Error('Supabase ' + r.status + ': ' + t.slice(0, 200)); });
@@ -11077,11 +11141,17 @@
      NOTE (flagged 2026-11-03): the product_changes table as
      actually created has NO user_name column, which made every
      change-history POST fail with PGRST204. sbLogChange()
-     tolerates either shape (full body, no-user_name retry on a
-     missing-column refusal — see postChange), so adding the
-     column is OPTIONAL, but it is what lets the full name be
-     recorded on each entry. Exact one line to add it:
-       alter table public.product_changes add column if not exists user_name text;
+     tolerates any shape: on a missing-column refusal it retries
+     with progressively barer bodies (dropping user_name, then
+     user_email, then product_label — see postChange), so an
+     entry is recorded even when both snapshot columns are
+     missing, which the earlier single retry could not survive.
+     Adding the columns is OPTIONAL, but it is what lets the
+     full name be recorded on each entry. Exact lines to add
+     them:
+       alter table public.product_changes
+         add column if not exists user_name text,
+         add column if not exists user_email text;
      Loves are one per user per product (the primary key), the
      heart shows the total across all users, "Loved only" shows
      the signed-in user's own loves, and "Most loved" sorts by
@@ -11517,9 +11587,7 @@
         badge = document.createElement('span');
         badge.className = 'badge most-loved';
         badge.textContent = '★ Most loved';
-        var hint = pcell.querySelector('.expand-hint');
-        if(hint) pcell.insertBefore(badge, hint);
-        else pcell.appendChild(badge);
+        placeBadge(pcell, badge, null);
       } else if(!isTop && badge){
         badge.parentNode.removeChild(badge);
       }
@@ -11543,22 +11611,22 @@
       note.parentNode.removeChild(note);
     }
   }
-  /* "Loved by X merchants" in the wine's expanded details: the
-     count is the shared user_likes total for this product (the
-     same likeCounts the heart shows), so it is identical on
-     every phone and updates whenever likes reload — on load, on
-     the 30-second tick, and the moment anyone loves or un-loves.
+  /* "Loved by X merchants" on the wine's card, directly under
+     the badge row (directly under the name / the UNAVAILABLE
+     banner when the product carries no badges): the count is
+     the shared user_likes total for this product (the same
+     likeCounts the heart shows), so it is identical on every
+     phone and updates whenever likes reload — on load, on the
+     30-second tick, and the moment anyone loves or un-loves.
      Shown ONLY above zero: a wine nobody has loved gets no line
      at all, and the element is removed again if the count falls
      back to zero. Singular "merchant" for exactly one. */
   function syncLovedBy(row){
-    var d = details[row.getAttribute('data-idx')];
-    if(!d) return;
-    var detail = d.querySelector('.detail');
-    if(!detail) return;
+    var pcell = cellEl(row, 'Product');
+    if(!pcell) return;
     var pid = rowPidOf(row);
     var n = pid ? (likeCounts[pid] || 0) : 0;
-    var el = detail.querySelector('.loved-by');
+    var el = pcell.querySelector('.loved-by');
     if(n <= 0){
       if(el) el.parentNode.removeChild(el);
       return;
@@ -11574,10 +11642,18 @@
       var txt = document.createElement('span');
       txt.className = 'lb-text';
       el.appendChild(txt);
-      /* Sits under the tasting notes, above the Product ID line */
-      var src = detail.querySelector('.src');
-      if(src) detail.insertBefore(el, src);
-      else detail.appendChild(el);
+      /* Directly under the badge row — under the UNAVAILABLE
+         banner, or the name itself, when there is no badge row.
+         The badge row / banner / name always sit before the
+         expand hint in the cell, so inserting after whichever
+         of them is present keeps the line above the hint */
+      var brow = pcell.querySelector('.badge-row');
+      var unavail = pcell.querySelector('.badge.unavail');
+      var pname = pcell.querySelector('.pname');
+      var anchor = brow || unavail || pname;
+      if(anchor && anchor.nextSibling) pcell.insertBefore(el, anchor.nextSibling);
+      else if(anchor) pcell.appendChild(el);
+      else pcell.appendChild(el);
     }
     var txtEl = el.querySelector('.lb-text');
     if(txtEl) txtEl.textContent = 'Loved by ' + n + (n === 1 ? ' merchant' : ' merchants');
@@ -11764,10 +11840,9 @@
      fetches nothing: the thread's comments load only when the
      toggle is pressed open. The detail's children are not
      rebuilt by writeRow (only the notes text is), so the entry
-     is built once and writeRow re-ensures it the same way it
-     re-derives the loved-by line; the init pass builds it for
-     every baked-in row. It sits above the Product ID line,
-     under the tasting notes and the loved-by line. */
+     is built once and writeRow re-ensures it; the init pass
+     builds it for every baked-in row. It sits above the
+     Product ID line, under the tasting notes. */
   function ensureCommentsEntry(row){
     var detail = detailElOf(row);
     if(!detail) return;
@@ -12268,62 +12343,86 @@
     fld('List status', oldD.status, newD.status);
     fld('VQA', oldD.vqa ? 'Yes' : 'No', newD.vqa ? 'Yes' : 'No');
     fld('On sale', oldD.sale ? 'On' : 'Off', newD.sale ? 'On' : 'Off');
-    if(newD.sale || oldD.sale) fld('Sale price', oldD.salePrice, newD.salePrice, fmtChangePrice);
-    if(newD.sale || oldD.sale) fld('Sale price not working', oldD.saleBroken ? 'On' : 'Off', newD.saleBroken ? 'On' : 'Off');
+    /* Sale price and its flag are compared UNCONDITIONALLY, not
+       only while the product is on sale: the editor's Sale price
+       field is always visible and editable, and the value typed
+       there is saved to the row and synced either way — so a
+       sale-price-only edit on a product that isn't on sale is a
+       real price change, and gating the comparison on the
+       on-sale flag made exactly that edit produce no entry at
+       all (nothing else differed, so the caller wrote none) */
+    fld('Sale price', oldD.salePrice, newD.salePrice, fmtChangePrice);
+    fld('Sale price not working', oldD.saleBroken ? 'On' : 'Off', newD.saleBroken ? 'On' : 'Off');
     fld('In cooler (Store ' + activeStore + ')', oldD.cooler, newD.cooler);
     fld('Availability (Store ' + activeStore + ')', oldD.unavailable ? 'Unavailable' : 'Available', newD.unavailable ? 'Unavailable' : 'Available');
     fld('Barcode', oldD.barcode, newD.barcode);
     if(String(oldD.notes || '') !== String(newD.notes || '')) parts.push('Tasting notes updated');
     return parts.join(' \u00B7 ');
   }
-  /* Change-history logging — resilient to a missing user_name
-     column, the same shape as the love save fix (saveLike).
-     The shared product_changes table as actually created has NO
-     user_name column, so a POST that includes user_name is
-     refused by PostgREST (PGRST204 "Could not find the
-     'user_name' column of 'product_changes' in the schema
-     cache") and EVERY change-history entry was being lost —
-     silently, because this logger is fire-and-forget and only
-     ever warned to the console, while the edit itself (saved
-     through the products path) kept succeeding.
-     To record the full name on each entry, run this exact
-     one line in the Supabase SQL Editor:
-       alter table public.product_changes add column if not exists user_name text;
-     Until that column exists, postChange() below sends the full
-     body first, and on a schema / missing-column refusal
-     retries ONCE with the same entry minus user_name — every
-     other field (product, label, change text, user_id,
-     user_email) is kept, so the entry is still recorded, just
-     without the name snapshot. changesNoUserName remembers
-     that for the rest of the session, so later entries this
-     session go straight to the no-name body. If the column is
-     ever added, the first attempt succeeds again and the full
-     name is recorded exactly as originally designed. Nothing
-     is lost either way: the Admin Change history resolves a
-     name from the entry's user_id / user_email when user_name
-     is absent. */
-  var changesNoUserName = false;
-  function postChange(row, changeText, bare){
+  /* Change-history logging — resilient to missing snapshot
+     columns, the same shape as the love save fix (saveLike),
+     but PROGRESSIVE. The shared product_changes table as
+     actually created is missing snapshot columns (verified
+     2026-11-03: it has NO user_name column — and a table
+     created without user_name can be missing user_email too,
+     exactly as user_likes was created with neither). PostgREST
+     refuses a POST that names a column the table doesn't have
+     (PGRST204 "Could not find the '…' column of
+     'product_changes' in the schema cache"), naming only the
+     FIRST missing column per refusal — so the old single retry
+     (full body, then the same body minus user_name) was still
+     refused whenever user_email was missing too, and EVERY
+     change-history entry was lost: silently, because this
+     logger is fire-and-forget and only ever warned to the
+     console, while the edit itself (saved through the products
+     path, which carries neither snapshot column) kept
+     succeeding. That is how a price change could save to the
+     product list yet never register in the Admin area.
+     postChange() below therefore walks DOWN body shapes —
+     full → minus user_name → minus user_name and user_email →
+     core only (product_id, change, user_id) — retrying after
+     each missing-column refusal, and changesBodyLevel
+     remembers the first shape the table accepted for the rest
+     of the session, so later entries this session go straight
+     to it. The product id, the change text and who made it
+     are on every shape — only the decorative snapshots (name,
+     email, product label) are ever dropped — and the Admin
+     Change history resolves a name from the entry's user_id /
+     user_email when the snapshots are absent. To record the
+     full snapshots on each entry, run in the Supabase SQL
+     Editor:
+       alter table public.product_changes
+         add column if not exists user_name text,
+         add column if not exists user_email text;
+     If those columns are ever added, the full first attempt
+     succeeds again and the snapshots are recorded exactly as
+     originally designed. The POST also rides with keepalive,
+     so an entry still lands when the user leaves or closes
+     the app straight after saving. */
+  var changesBodyLevel = 0;
+  function postChange(row, changeText, level){
     var body = {
       product_id: rowPidOf(row) || null,
-      product_label: row ? (detailLabel(row) || null) : null,
       change: changeText,
-      user_id: authUser.id, user_email: authUser.email || null
+      user_id: authUser.id
     };
-    if(!bare) body.user_name = authDisplayName();
-    return sb('product_changes', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: body });
+    if(level < 3) body.product_label = row ? (detailLabel(row) || null) : null;
+    if(level < 2) body.user_email = authUser.email || null;
+    if(level < 1) body.user_name = authDisplayName();
+    return sb('product_changes', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: body, keepalive: true });
   }
   function sbLogChange(row, changeText){
     if(!authUser || !changeText) return;
     if(isCurrentUserBanned()) return;
-    var req = changesNoUserName
-      ? postChange(row, changeText, true)
-      : postChange(row, changeText, false).then(null, function(err){
-          if(!isMissingColumnErr(err)) throw err;
-          changesNoUserName = true;
-          return postChange(row, changeText, true);
-        });
-    req.then(function(){
+    function attempt(level){
+      return postChange(row, changeText, level).then(function(){
+        changesBodyLevel = level;
+      }, function(err){
+        if(level < 3 && isMissingColumnErr(err)) return attempt(level + 1);
+        throw err;
+      });
+    }
+    attempt(changesBodyLevel).then(function(){
       if(changesReady !== true){ changesReady = true; syncLikesSetupNote(); }
     }, function(err){
       /* Fire-and-forget on purpose: a missing product_changes
