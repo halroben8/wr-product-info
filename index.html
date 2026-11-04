@@ -635,15 +635,14 @@
   .trivia-final-detail{margin:6px 0 16px;font-size:14.5px;line-height:1.55;color:var(--muted)}
   .trivia-end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   .trivia-end-actions .btn-save,.trivia-end-actions .btn-ghost{min-height:48px}
-  /* High Score board — the shared top 5 for the rapid fire trivia,
+  /* High Score board — the shared top 3 for the rapid fire trivia,
      stored in the Supabase trivia_high_scores table so every
-     player sees the same board. Shown two ways with the same
-     .hs-list rendering: the High Score pop-up opened by the
-     High Score button in Games & Contests, and inside the game's
-     end screen when a score makes the board. While the table
+     player sees the same board. It lives ONLY inside the game:
+     on the game's start page under the Start button, and inside
+     the game's end screen when a score makes the board — there
+     is no separate High Score button or pop-up. While the table
      does not exist yet the board shows an honest "coming soon"
      note instead of rows — the game itself never depends on it. */
-  .hs-intro{margin:0 0 12px;font-size:15px;line-height:1.6;color:var(--ink)}
   .hs-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
   .hs-row{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);
     border-radius:12px;padding:10px 14px;background:var(--panel)}
@@ -2018,8 +2017,8 @@
           <option>Dry</option>
           <option>Off-Dry</option>
           <option>Medium</option>
-          <option>Sweet</option>
           <option>Extra Sweet</option>
+          <option>Sweet</option>
         </select>
       </div>
       <div class="field">
@@ -5356,7 +5355,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.04</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.05</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5369,7 +5368,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.04</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.05</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5383,8 +5382,7 @@
     <div class="settings-tabpanel" id="settingsPanel-games" role="tabpanel" aria-labelledby="settingsTab-games" hidden>
       <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
         <button type="button" class="settings-action" id="wineTriviaGames"><span>Wine Trivia &mdash; 1-minute rapid fire<span class="sa-sub">60 seconds on the clock, general wine questions in a 2&times;2 grid &mdash; right answers ding and move on, wrong answers buzz and cost you 3 seconds. How many can you get right? No sign-in needed</span></span></button>
-        <button type="button" class="settings-action" id="highScoreGames"><span>High Score<span class="sa-sub">The top 5 rapid fire trivia players and their scores &mdash; one shared board for everyone who plays</span></span></button>
-        <button type="button" class="settings-action" id="reportContestResults" aria-describedby="contestReportSoonMsg"><span>Report results of Winerack Contests<span class="sa-sub">Report how a Winerack Contest went &mdash; not open yet</span></span><span class="sa-ext" aria-hidden="true">Coming soon</span></button>
+        <button type="button" class="settings-action" id="reportContestResults" aria-describedby="contestReportSoonMsg"><span>Winerack Contests<span class="sa-sub">Report how a Winerack Contest went &mdash; not open yet</span></span><span class="sa-ext" aria-hidden="true">Coming soon</span></button>
         <p class="contest-soon-msg" id="contestReportSoonMsg" role="status" hidden><strong>Coming soon</strong> &mdash; reporting results of Winerack Contests isn&rsquo;t available yet. There&rsquo;s nothing to submit for now.</p>
       </div>
       <p class="settings-note" style="margin-top:0">Games &amp; Contests is where Grapevine&rsquo;s games live &mdash; the rapid fire wine trivia is the first one here.</p>
@@ -5449,13 +5447,14 @@
     <div id="triviaStart">
       <p class="trivia-intro">How many can you get right in <strong>60 seconds</strong>? Right answers move straight on &mdash; wrong answers cost you 3 seconds.</p>
       <button type="button" class="btn-save trivia-start-btn" id="triviaStartBtn">Start &mdash; 60 seconds</button>
-      <!-- The High Score board lives on the game's main page too:
-           the shared top 5 shows right here under Start, loaded
-           fresh every time the game opens (same rendering as the
-           High Score pop-up). While the shared table does not
-           exist yet it shows a short "coming soon" note instead. -->
+      <!-- The High Score board lives on the game's main page:
+           the shared top 3 shows right here under Start, loaded
+           fresh every time the game opens. This is the board's
+           only home — there is no separate High Score button.
+           While the shared table does not exist yet it shows a
+           short "coming soon" note instead. -->
       <div class="hs-board-wrap" id="triviaStartHsWrap">
-        <p class="hs-board-head">High Score &mdash; top 5</p>
+        <p class="hs-board-head">High Score &mdash; top 3</p>
         <ol class="hs-list" id="triviaStartHsBoard" hidden></ol>
         <p class="hs-note" id="triviaStartHsNote" role="status">Loading the board&hellip;</p>
       </div>
@@ -5475,13 +5474,13 @@
         <p class="trivia-final-line" id="triviaFinalLine">correct in 60 seconds</p>
         <p class="trivia-final-detail" id="triviaFinalDetail"></p>
         <!-- High Score entry: shown only when this game's score
-             makes the shared top 5. The congratulation names the
+             makes the shared top 3. The congratulation names the
              place attained; the name field is prefilled with the
              signed-in display name when there is one, and anyone
              can type (or change) the name before saving. -->
         <div class="hs-congrats" id="triviaHsCongrats" hidden>
           <p class="hs-congrats-title" id="triviaHsCongratsTitle"></p>
-          <p class="hs-congrats-sub">Add your name to the shared High Score board &mdash; everyone who plays sees the same top 5.</p>
+          <p class="hs-congrats-sub">Add your name to the shared High Score board &mdash; everyone who plays sees the same top 3.</p>
           <form class="hs-form" id="triviaHsForm">
             <label class="sr-only" for="triviaHsName">Your name for the High Score board</label>
             <input id="triviaHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
@@ -5489,7 +5488,7 @@
           </form>
           <p class="hs-msg" id="triviaHsMsg" role="status" hidden></p>
           <div class="hs-board-wrap" id="triviaHsBoardWrap" hidden>
-            <p class="hs-board-head">High Score board &mdash; top 5</p>
+            <p class="hs-board-head">High Score board &mdash; top 3</p>
             <ol class="hs-list" id="triviaHsBoard"></ol>
           </div>
         </div>
@@ -5503,27 +5502,6 @@
 
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="triviaCancel">Close &mdash; back to the list</button>
-    </div>
-  </div>
-</div>
-
-<!-- High Score board — a pop-up on the trivia pattern, opened by
-     the High Score button in the Games & Contests tab. It reads
-     the shared top 5 from the Supabase trivia_high_scores table,
-     so every player sees the same board. While that table does
-     not exist yet, the board shows an honest "coming soon" note
-     instead of rows (see the high-score script below). -->
-<div class="editor-overlay" id="highScoreOverlay" hidden>
-  <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="highScoreTitle">
-    <div class="editor-head">
-      <h2 id="highScoreTitle">High Score &mdash; Wine Trivia</h2>
-      <button type="button" class="editor-x" id="highScoreClose" aria-label="Close high scores">&times;</button>
-    </div>
-    <p class="hs-intro">The <strong>top 5</strong> scores in the 1-minute rapid fire wine trivia &mdash; one shared board for everyone who plays, not just this phone.</p>
-    <ol class="hs-list" id="hsBoardList"></ol>
-    <p class="hs-note" id="hsBoardNote" role="status">Loading the board&hellip;</p>
-    <div class="editor-actions">
-      <button type="button" class="btn-ghost" id="highScoreCancel">Close</button>
     </div>
   </div>
 </div>
@@ -6352,7 +6330,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.04</span>
+      <span class="manual-pill accent">Version 2026.11.04.05</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6416,6 +6394,7 @@
         <p>Tap <span class="manual-ui purple">Filters ▾</span> to open the filter panel:</p>
         <ul>
           <li><strong>Brand</strong> — pick one brand from the pull-down list.</li>
+          <li><strong>Sweetness</strong> — pick one level. The levels are listed in this order: Extra Dry, Dry, Off-Dry, Medium, then Extra Sweet and Sweet (the sweet pair runs sweetest first). Sorting by Sweetness uses that same order, and wines at the same sweetness sit in product A–Z order.</li>
           <li><span class="manual-ui">On sale</span> — only wines with a sale price.</li>
           <li><span class="manual-ui">Vegan-friendly</span> — only wines confirmed vegan-friendly (§3).</li>
           <li><span class="manual-ui">Gluten-safe</span> — only gluten-safe wines.</li>
@@ -6729,9 +6708,9 @@
         <h3>An old tab is showing an old version</h3>
         <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
         <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
-        <p>This was a database fault, fixed in version 2026.11.04.04 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.05 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>A change didn&rsquo;t appear in Change history</h3>
-        <p>This was a database fault, fixed in version 2026.11.04.04 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.04.04 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.05 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.04.05 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
         <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
         <h3>The store popup keeps appearing</h3>
@@ -6768,21 +6747,21 @@
         </ul>
         <p>The questions are <strong>general wine knowledge</strong> — grapes, regions, styles, serving and wine terms from all over the wine world. They are not about any one store and not drawn from any store&rsquo;s list. The question bank is far bigger than anyone can finish in a minute, the questions are shuffled every run with no repeats, so the timer always ends the game — you can never run out of questions. Your score for a single game lives only in that session — the shared exception is the High Score board below.</p>
         <h3>High Score board</h3>
-        <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. In the same <span class="manual-ui">Games &amp; Contests</span> tab, tap <span class="manual-ui">High Score</span> to open the board: it shows the <strong>top 5 players and what they scored</strong>, best first. The same top 5 also shows directly on the game&rsquo;s own start page, under the Start button, so you can see who you have to beat before you play.</p>
+        <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. The board shows the <strong>top 3 players and what they scored</strong>, best first, and it lives <strong>only on the game&rsquo;s own start page</strong>, under the Start button — open Wine Trivia to see who you have to beat before you play. There is no separate High Score button.</p>
         <ul>
-          <li>When a game ends, if your score makes the <strong>top 5</strong>, the end screen congratulates you and tells you the <strong>place you attained</strong> — for example, &ldquo;Congratulations! You made #3 on the High Score board!&rdquo;</li>
+          <li>When a game ends, if your score makes the <strong>top 3</strong>, the end screen congratulates you and tells you the <strong>place you attained</strong> — for example, &ldquo;Congratulations! You made #3 on the High Score board!&rdquo;</li>
           <li>Enter your name and tap <span class="manual-ui">Save my score</span> to put it on the board. If you&rsquo;re signed in, the name field is <strong>prefilled with your display name</strong> — you can change it before saving; if you&rsquo;re not signed in, just type a name. No sign-in is needed to be on the board.</li>
-          <li>Tying the current #5 score isn&rsquo;t quite enough — the earlier #5 was set first, so a new score has to beat it to take the place.</li>
+          <li>Tying the current #3 score isn&rsquo;t quite enough — the earlier #3 was set first, so a new score has to beat it to take the place.</li>
           <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
         </ul>
-        <h3>Report results of Winerack Contests</h3>
-        <p>Below Wine Trivia in the same tab is <span class="manual-ui">Report results of Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
+        <h3>Winerack Contests</h3>
+        <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
       </div>
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.04</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.05</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7525,6 +7504,42 @@
     words.forEach(function(w){ sum += levels[w]; });
     return sum / words.length;
   }
+  /* Sweetness sorts in this exact order, not alphabetically:
+     Extra Dry, Dry, Off-Dry, Medium, Extra Sweet, Sweet.
+     Extra Dry to Medium runs driest to least dry; Sweet and
+     Extra Sweet then run the opposite way — sweetest first, so
+     Extra Sweet comes before Sweet. Products sharing a sweetness
+     order among themselves by product A–Z (see applySort). This
+     same order is used wherever sweetness levels are listed, e.g.
+     the Sweetness filter and the editor's Sweetness dropdown.
+     Exact labels map to their rank first; a free-text value that
+     still names a level ("Dry (D - Dry)", "D - Dry", an
+     "Off-dry (LCBO)…" value) takes that level's rank, checking
+     the "extra" levels before the plain ones they contain.
+     "Semi-sweet" sits between Medium and Extra Sweet, and a
+     "small amount of residual sweetness" reads as Off-Dry.
+     Anything naming no level ("—", blank, "Wine Rack lists
+     Sweetness as '-'") returns null and sorts last in both
+     directions, like a missing price, sugar or tannin value. */
+  function sweetRank(text){
+    var s = String(text || '').toLowerCase().trim();
+    if(!s || s === '—' || s === '-') return null;
+    if(s === 'extra dry') return 0;
+    if(s === 'dry' || s === 'd - dry' || s === 'dry (d - dry)') return 1;
+    if(s === 'off-dry' || s === 'off dry') return 2;
+    if(s === 'medium') return 3;
+    if(s === 'extra sweet') return 4;
+    if(s === 'sweet') return 5;
+    if(s.indexOf('extra sweet') !== -1) return 4;
+    if(s.indexOf('extra dry') !== -1) return 0;
+    if(s.indexOf('off-dry') !== -1 || s.indexOf('off dry') !== -1) return 2;
+    if(s.indexOf('semi-sweet') !== -1 || s.indexOf('semi sweet') !== -1) return 3.5;
+    if(s.indexOf('small amount') !== -1) return 2;
+    if(/\bmedium\b/.test(s)) return 3;
+    if(s.indexOf('sweet') !== -1 && s.indexOf('sweetness') === -1) return 5;
+    if(/\bdry\b/.test(s) || s.indexOf('d - dry') !== -1) return 1;
+    return null;
+  }
   /* Tannins filter: a product matches the chosen level when the
      range in its tannin text includes that level — "Low to Medium"
      matches Low and Medium, "None-Low" matches None and Low, and
@@ -7587,7 +7602,7 @@
     if(key === 'brand'){ return cellText(row,'Product'); }
     if(key === 'product'){ return cellText(row,'Product'); }
     if(key === 'size'){ return sizeMl(cellText(row,'Size')); }
-    if(key === 'sweet'){ return row.getAttribute('data-sweet').toLowerCase(); }
+    if(key === 'sweet'){ return sweetRank(row.getAttribute('data-sweet')); }
     if(key === 'rich'){ return row.getAttribute('data-rich').toLowerCase(); }
     if(key === 'varietal'){ return cellText(row,'Varietal'); }
     if(key === 'tannins'){ return tanninRank(cellText(row,'Tannins')); }
@@ -7616,19 +7631,24 @@
     var sorted = rows.slice().sort(function(a,b){
       var ka = sortKey(a,key), kb = sortKey(b,key);
       if(ka === null && kb === null){
-        /* Size sort only: products with no parseable size sit
-           last together, in Product A–Z order among themselves */
-        return key === 'size' ? cellText(a,'Product').localeCompare(cellText(b,'Product')) : 0;
+        /* Size and Sweetness sorts: products with no parseable
+           size / no sweetness level sit last together, in
+           Product A–Z order among themselves */
+        return (key === 'size' || key === 'sweet') ? cellText(a,'Product').localeCompare(cellText(b,'Product')) : 0;
       }
       if(ka === null) return 1;
       if(kb === null) return -1;
       var cmp;
       if(typeof ka === 'number' && typeof kb === 'number') cmp = (ka-kb)*dir;
       else cmp = String(ka).localeCompare(String(kb))*dir;
-      /* Size sort only: products sharing a size (e.g. all the
-         750mL wines) fall back to Product A–Z within that size,
-         in both directions, so each size group reads in order */
-      if(cmp === 0 && key === 'size') cmp = cellText(a,'Product').localeCompare(cellText(b,'Product'));
+      /* Size sort: products sharing a size (e.g. all the 750mL
+         wines) fall back to Product A–Z within that size, in both
+         directions, so each size group reads in order. Sweetness
+         sort: the same — products with the same sweetness always
+         read in Product A–Z order within that sweetness, in both
+         directions, even when the sweetness order itself is
+         reversed. */
+      if(cmp === 0 && (key === 'size' || key === 'sweet')) cmp = cellText(a,'Product').localeCompare(cellText(b,'Product'));
       return cmp;
     });
     sorted.forEach(function(row){
@@ -8076,7 +8096,7 @@
   var lists = {
     brand: union(selectValues(brand).map(function(v){ return canonicalBrand(v); }), []),
     rich: union(selectValues(rich), harvestAttr('data-rich')).sort(function(a,b){ return a.localeCompare(b); }),
-    sweet: union(['Extra Dry','Dry','Off-Dry','Medium','Sweet','Extra Sweet'], harvestAttr('data-sweet')),
+    sweet: union(['Extra Dry','Dry','Off-Dry','Medium','Extra Sweet','Sweet'], harvestAttr('data-sweet')),
     size: harvestCell('Size').sort(function(a,b){ return a.localeCompare(b); }),
     varietal: harvestCell('Varietal').filter(function(v){ return !isPlaceholderValue(v); }).sort(function(a,b){ return a.localeCompare(b); }),
     tannins: harvestCell('Tannins').filter(function(v){ return !isPlaceholderValue(v); }).sort(function(a,b){ return a.localeCompare(b); }),
@@ -10972,6 +10992,9 @@
      Support entry). Rules, exactly as specced:
        · 60-second countdown, one question at a time, four answers
          as buttons in a 2×2 grid.
+       · Start: tapping Start (or Play again) plays a distinct
+         STARTING SOUND first — the first question and the
+         countdown begin only once it has finished.
        · Correct: the button turns green, a DING sounds, and the
          next question comes straight away — no delay (just the
          brief flash that lets the green register).
@@ -10992,7 +11015,7 @@
      gesture), which is what mobile browsers require before any
      sound can play. No sign-in is needed to play, and the score
      and session best live in memory only — the one exception is
-     the shared High Score board: a score that makes the top 5
+     the shared High Score board: a score that makes the top 3
      can be saved to it under the player's name (see the High
      Score section right after this one). */
   var TRIVIA_BANK = [
@@ -11138,6 +11161,7 @@
   ];
 
   var TRIVIA_SECONDS = 60;
+  var TRIVIA_START_MS = 780; /* length of the starting sound — the first question and the countdown wait for it to finish */
   var TRIVIA_WRONG_MS = 3000;
   var TRIVIA_CORRECT_MS = 160; /* just long enough for the green to register — correct answers move straight on, there is no real delay */
   var triviaOverlay = document.getElementById('triviaOverlay');
@@ -11152,7 +11176,7 @@
   var triviaAnswersEl = document.getElementById('triviaAnswers');
   var triviaFeedbackEl = document.getElementById('triviaFeedback');
   var trivia = { playing:false, locked:false, deck:[], pos:0, current:null,
-    score:0, answered:0, wrong:0, endAt:0, timerId:null, advanceId:null,
+    score:0, answered:0, wrong:0, endAt:0, timerId:null, advanceId:null, startId:null,
     best:0, games:0, returnFocus:null };
 
   /* --- Sounds: synthesized with WebAudio, no audio files. The
@@ -11198,6 +11222,22 @@
     triviaTone(150, 'sawtooth', 0, 0.42, 0.20, 105);
     triviaTone(99, 'square', 0, 0.42, 0.09, 78);
   }
+  /* The starting sound — deliberately distinct from both the ding
+     and the buzzer: a rising four-note "ready, go" run (C-E-G-C)
+     with a bright harmonic on the final note. Returns true when
+     the sound was actually scheduled, so the caller knows to wait
+     for it before the first question and the countdown begin;
+     with no audio available it returns false and the game starts
+     straight away instead of pausing in silence. */
+  function triviaStartSound(){
+    if(!triviaAudio()) return false;
+    triviaTone(523.25, 'sine', 0, 0.14, 0.20, 0);
+    triviaTone(659.25, 'sine', 0.14, 0.14, 0.20, 0);
+    triviaTone(783.99, 'sine', 0.28, 0.14, 0.20, 0);
+    triviaTone(1046.5, 'sine', 0.42, 0.34, 0.24, 0);
+    triviaTone(1567.98, 'sine', 0.42, 0.30, 0.09, 0);
+    return true;
+  }
 
   function triviaShuffle(a){
     for(var i = a.length - 1; i > 0; i--){
@@ -11222,6 +11262,7 @@
   function triviaStopTimers(){
     if(trivia.timerId){ clearInterval(trivia.timerId); trivia.timerId = null; }
     if(trivia.advanceId){ clearTimeout(trivia.advanceId); trivia.advanceId = null; }
+    if(trivia.startId){ clearTimeout(trivia.startId); trivia.startId = null; }
   }
   function triviaShowScreen(which){
     triviaStartEl.hidden = which !== 'start';
@@ -11259,6 +11300,7 @@
     if(rem <= 0) triviaEnd();
   }
   function triviaStart(){
+    if(trivia.startId) return; /* starting sound already playing — ignore a second tap */
     triviaAudio(); /* unlock sound inside this tap */
     triviaStopTimers();
     trivia.deck = triviaBuildDeck();
@@ -11267,6 +11309,21 @@
     trivia.answered = 0;
     trivia.wrong = 0;
     trivia.locked = false;
+    trivia.playing = false;
+    triviaShowScore();
+    triviaShowTimer(TRIVIA_SECONDS);
+    /* Starting sound first: the first question and the countdown
+       begin only once it has finished (see triviaBegin below).
+       Closing the game meanwhile cancels the pending start, via
+       triviaStopTimers in closeTrivia / openTrivia. */
+    if(!triviaStartSound()){ triviaBegin(); return; }
+    trivia.startId = setTimeout(function(){
+      trivia.startId = null;
+      triviaBegin();
+    }, TRIVIA_START_MS);
+  }
+  function triviaBegin(){
+    if(!triviaOverlay || triviaOverlay.hidden) return;
     trivia.playing = true;
     trivia.endAt = Date.now() + TRIVIA_SECONDS * 1000;
     triviaShowScore();
@@ -11365,13 +11422,13 @@
     contestSoonMsg.hidden = false;
   });
 
-  /* ---------- Trivia High Score board — shared top 5 ----------
+  /* ---------- Trivia High Score board — shared top 3 ----------
      The rapid fire trivia is a social game, so its high scores
      are SHARED: they live in a Supabase table and every player
-     sees the same board, not a per-phone list. The High Score
-     button in Games & Contests opens the board pop-up (top 5
-     players + their scores); when a finished game's score makes
-     the top 5, the end screen congratulates the player, names
+     sees the same board, not a per-phone list. The board (top 3
+     players + their scores) shows only on the game's own start
+     page, under the Start button; when a finished game's score makes
+     the top 3, the end screen congratulates the player, names
      the place they attained, and offers a name field — prefilled
      with their signed-in display name when signed in — whose
      save writes the score to the shared table.
@@ -11390,11 +11447,7 @@
      of the shared list (the signed-in user's token when there is
      one, the publishable key otherwise). */
   var HS_TABLE = 'trivia_high_scores';
-  var hsReturnFocus = null;
   var hsSavedThisGame = false;
-  var highScoreOverlay = document.getElementById('highScoreOverlay');
-  var hsBoardListEl = document.getElementById('hsBoardList');
-  var hsBoardNoteEl = document.getElementById('hsBoardNote');
   var triviaHsCongratsEl = document.getElementById('triviaHsCongrats');
   var triviaHsTitleEl = document.getElementById('triviaHsCongratsTitle');
   var triviaHsFormEl = document.getElementById('triviaHsForm');
@@ -11405,13 +11458,13 @@
   var triviaHsBoardEl = document.getElementById('triviaHsBoard');
   var triviaHsNoteEl = document.getElementById('triviaHsNote');
 
-  /* Fetch the current top 5, best first (ties: earliest first).
+  /* Fetch the current top 3, best first (ties: earliest first).
      Resolves with the rows array on success, or null when the
      board could not be read — above all when the
      trivia_high_scores table does not exist yet. Never rejects,
      so callers can always render a graceful state. */
-  function hsFetchTop5(){
-    return sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc&limit=5').then(function(list){
+  function hsFetchTop3(){
+    return sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc&limit=3').then(function(list){
       return Array.isArray(list) ? list : [];
     }, function(err){
       if(window.console) console.warn('Trivia high scores not loaded (the trivia_high_scores table may not exist yet):', err);
@@ -11420,9 +11473,9 @@
   }
   /* The place a new score attains on a board shaped like rows
      (already sorted best first): 1 + how many scores on the
-     board beat it. A score makes the top 5 when the board is
-     not full yet, or when it beats the current #5 — tying #5 is
-     not enough, because the earlier #5 was set first. */
+     board beat it. A score makes the top 3 when the board is
+     not full yet, or when it beats the current #3 — tying #3 is
+     not enough, because the earlier #3 was set first. */
   function hsPlaceFor(score, rows){
     var place = 1;
     for(var i = 0; i < rows.length; i++){ if(rows[i].score > score) place++; }
@@ -11430,7 +11483,7 @@
   }
   function hsQualifies(score, rows){
     if(!(score > 0)) return false;
-    if(rows.length < 5) return true;
+    if(rows.length < 3) return true;
     return score > rows[rows.length - 1].score;
   }
   function hsDateText(iso){
@@ -11480,11 +11533,11 @@
     triviaHsMsgEl.hidden = !text;
   }
   /* The board on the game's own main (start) page: the shared
-     top 5 sits directly under the Start button, loaded fresh
+     top 3 sits directly under the Start button, loaded fresh
      each time the game opens, so a player sees who they have to
-     beat before they play. Same graceful states as the board
-     pop-up — table missing → a short "coming soon" note; table
-     there but empty → a "be the first" note. Rendering into the
+     beat before they play. Graceful states — table missing → a
+     short "coming soon" note; table there but empty → a "be the
+     first" note. Rendering into the
      (possibly hidden) start screen is harmless, so this is also
      called after a score is saved, keeping the start page's
      board current for the next open. */
@@ -11496,7 +11549,7 @@
     listEl.hidden = true;
     noteEl.hidden = false;
     noteEl.textContent = 'Loading the board…';
-    hsFetchTop5().then(function(rows){
+    hsFetchTop3().then(function(rows){
       if(rows === null){
         noteEl.textContent = 'High scores coming soon — the shared board isn\u2019t set up yet.';
         return;
@@ -11510,56 +11563,11 @@
       noteEl.hidden = true;
     });
   }
-  /* ----- The board pop-up (High Score button, Games & Contests) ----- */
-  function openHighScores(fromEl){
-    if(!highScoreOverlay) return;
-    hsReturnFocus = fromEl || null;
-    hsBoardListEl.innerHTML = '';
-    hsBoardListEl.hidden = true;
-    hsBoardNoteEl.hidden = false;
-    hsBoardNoteEl.textContent = 'Loading the board…';
-    highScoreOverlay.hidden = false;
-    document.body.style.overflow = 'hidden';
-    document.getElementById('highScoreClose').focus();
-    hsFetchTop5().then(function(rows){
-      if(highScoreOverlay.hidden) return;
-      if(rows === null){
-        hsBoardNoteEl.textContent = 'High scores are coming soon — the shared board isn\u2019t set up yet. Once it is, the top 5 players and their scores will show here.';
-        return;
-      }
-      if(!rows.length){
-        hsBoardNoteEl.textContent = 'No scores on the board yet — be the first! Play Wine Trivia in this tab, and a top-5 score puts your name here.';
-        return;
-      }
-      hsRenderList(hsBoardListEl, rows, null);
-      hsBoardListEl.hidden = false;
-      hsBoardNoteEl.hidden = true;
-    });
-  }
-  function closeHighScores(){
-    if(!highScoreOverlay || highScoreOverlay.hidden) return;
-    highScoreOverlay.hidden = true;
-    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && triviaOverlay.hidden) document.body.style.overflow = '';
-    var backTo = hsReturnFocus || document.getElementById('highScoreGames');
-    hsReturnFocus = null;
-    if(backTo) backTo.focus();
-  }
-  var highScoreGamesBtn = document.getElementById('highScoreGames');
-  if(highScoreGamesBtn) highScoreGamesBtn.addEventListener('click', function(){
-    closeSettings();
-    openHighScores(highScoreGamesBtn);
-  });
-  document.getElementById('highScoreClose').addEventListener('click', closeHighScores);
-  document.getElementById('highScoreCancel').addEventListener('click', closeHighScores);
-  highScoreOverlay.addEventListener('click', function(ev){ if(ev.target === highScoreOverlay) closeHighScores(); });
-  document.addEventListener('keydown', function(ev){
-    if(ev.key === 'Escape' && !highScoreOverlay.hidden) closeHighScores();
-  });
   /* ----- End of a game: does this score make the board? -----
      Called by triviaEnd() every time a game finishes. Resets the
      entry UI for the new game, then checks the shared board:
      table missing → an honest "coming soon" note and nothing
-     more; score makes the top 5 → the congratulation with the
+     more; score makes the top 3 → the congratulation with the
      place attained and the name field (prefilled with the
      signed-in display name, editable either way). A score that
      does not make the board shows nothing extra. */
@@ -11574,13 +11582,13 @@
     hsShowMsg('');
     if(!(trivia.score > 0)) return;
     var finalScore = trivia.score;
-    hsFetchTop5().then(function(rows){
+    hsFetchTop3().then(function(rows){
       /* The player may have closed the pop-up or started again
          while the board loaded — only touch the end screen if
          it is still the one showing this game's result. */
       if(trivia.playing || triviaEndEl.hidden || trivia.score !== finalScore) return;
       if(rows === null){
-        triviaHsNoteEl.textContent = 'The shared High Score board is coming soon — it isn\u2019t set up yet, so this score couldn\u2019t be entered on it. Once the board is live, top-5 scores will be entered here.';
+        triviaHsNoteEl.textContent = 'The shared High Score board is coming soon — it isn\u2019t set up yet, so this score couldn\u2019t be entered on it. Once the board is live, top-3 scores will be entered here.';
         triviaHsNoteEl.hidden = false;
         return;
       }
@@ -11616,7 +11624,7 @@
       var savedId = (created && created.length) ? created[0].id : null;
       triviaHsFormEl.hidden = true;
       hsShowMsg('Saved — you\u2019re on the board!');
-      return hsFetchTop5().then(function(rows){
+      return hsFetchTop3().then(function(rows){
         if(rows && rows.length){
           hsRenderList(triviaHsBoardEl, rows, savedId);
           triviaHsBoardWrapEl.hidden = false;
@@ -11660,7 +11668,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.04.04). Reference content only: nothing
+     the print PDF (2026.11.04.05). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
