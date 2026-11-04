@@ -1060,7 +1060,8 @@
     .controls:not(.open) .toggles .toggle:not(.filtersbtn),
     .controls:not(.open) .toggles .reset{display:none}
     .count{flex:1 1 100%;font-size:13px}
-    /* Dense product cards: name with the price at top-right, then the
+    /* Dense product cards: name at the top, the price under the
+       heart / ⋮ pair at the top-right, then the
        facts as compact inline label/value pairs that flow and wrap —
        roughly half the height of the old stacked-label cards */
     .tablecard{background:transparent;border:none;border-radius:0;box-shadow:none;overflow:visible}
@@ -1079,7 +1080,18 @@
     td[data-label="Product"]{flex:1 1 100%;display:block;padding-right:74px;width:auto;min-width:0}
     td[data-label="Product"]::before{display:none}
     td[data-label="Product"] .pname{font-size:17px;line-height:1.3}
-    td[data-label="Price"]{position:absolute;top:9px;right:12px;display:block;padding:0;font-size:16px}
+    /* The price sits UNDER the heart / ⋮ pair, not beside it: the
+       pair occupies the card's top-right corner (40px buttons from
+       top:2px, so their bottom edge is at 42px), and the price
+       block starts just below them at top:46px, right-aligned to
+       the card's content edge (right:12px). The "+tax & dep"
+       suffix and, on a sale, the Sale / Reg / Save lines ride
+       inside this same block, so they move with it. The Product
+       cell's min-height floors and bottom-pinned badge row (see
+       the ⋮ / heart block below) keep the badge row and the
+       facts clear of this block's band */
+    td[data-label="Price"]{position:absolute;top:46px;right:12px;display:block;padding:0;font-size:16px;text-align:right}
+    td[data-label="Price"] .sale-lines{font-size:14.5px}
     td[data-label="Price"]::before{display:none}
     td[data-label="Varietal"]{flex:1 1 55%}
     /* On a phone card the expand bar sits at the very bottom of
@@ -1225,24 +1237,47 @@
     padding:10px 18px;font:inherit;font-weight:600;cursor:pointer}
   @media (max-width:760px){
     /* On a phone card the ⋮ anchors to the card's top-right corner (the
-       Acidity cell goes back to static so the card is the anchor), and the
-       price shifts left to make room for it */
+       Acidity cell goes back to static so the card is the anchor) */
     td[data-label="Acidity"]{position:static;padding-right:56px}
     .kebab-wrap{top:2px;right:2px}
     .kebab-btn{width:40px;height:40px;font-size:22px}
     /* The Love heart joins the ⋮ in the card's top-right corner,
-       immediately to its left, so the price and the product name
-       both shift left to clear the pair */
+       immediately to its left. The price no longer shares their
+       row: it sits directly underneath the pair (see the Price
+       rule in the phone block above), so only the product name
+       still shifts left to clear the pair — and to clear the
+       price block on its second and later lines, since the price
+       now rides at that height on the right */
     .like-wrap{top:2px;right:44px}
     .like-btn{width:40px;height:40px}
     .like-btn svg{width:23px;height:23px}
-    td[data-label="Price"]{right:88px}
     td[data-label="Product"]{padding-right:152px}
-    /* The badge row sits BELOW the name, clear of the price /
-       heart / ⋮ cluster that the cell's right padding makes
-       room for at the top, so it may use the card's full inner
-       width: without this the badges were squeezed into the
-       name's narrowed column and stacked one per line. On a
+    /* Keeping the badge row and the facts out of the price's new
+       band: the price block hangs at the card's top right (from
+       46px down — about 21px for a plain price, about 59px for
+       the three Sale / Reg / Save lines), in the same band the
+       badge row (on a short name) and the first fact row would
+       otherwise flow into at that side. So the Product cell is a
+       flex column whose badge row is pinned to the cell's bottom
+       (margin-top:auto, its usual 6px gap kept as padding), and
+       the cell carries a minimum height tall enough that the
+       pinned badge row — and the facts that follow the cell —
+       always start below the price block: 85px when the cell
+       carries badges (56px otherwise, which still keeps the
+       facts below a plain price), and 121px on a sale card,
+       whose price block is three lines tall. On longer names the
+       cell is naturally taller than these floors, so the badges
+       sit directly under the name exactly as before */
+    td[data-label="Product"]{display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:56px}
+    td[data-label="Product"]:has(.badge-row:not(:empty)){min-height:85px}
+    tr.prow.is-sale td[data-label="Product"]{min-height:121px}
+    td[data-label="Product"] .badge-row{margin-top:auto;padding-top:6px}
+    /* The badge row sits BELOW the name — pinned to the bottom
+       of the Product cell (see above), so it starts clear of
+       the price block that now hangs under the heart / ⋮ pair —
+       and it may use the card's full inner width: without this
+       the badges were squeezed into the name's narrowed column
+       and stacked one per line. On a
        phone the row stays on ONE line like on desktop — Most
        loved included, never wrapped to a line of its own — so
        the badges wear a slightly tighter fit here (a touch
@@ -5055,7 +5090,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.24</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.25</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -5080,7 +5115,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.24</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.25</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5919,7 +5954,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.24</span>
+      <span class="manual-pill accent">Version 2026.11.03.25</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6313,7 +6348,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.24</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.25</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
