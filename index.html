@@ -833,17 +833,25 @@
   /* Badge row: every small badge a product carries (Sale, Flash
      Sale, Sale price not working, VQA, Vegan-friendly,
      Gluten-safe, Cooler, Not in plano, Check, Most loved) lives
-     in ONE horizontal row under the product name — a flex line
-     that wraps only when the badges genuinely cannot fit the
-     width on offer, never stacked one per line.
+     in ONE horizontal row under the product name — a single flex
+     line that NEVER wraps: all badges, Most loved included, sit
+     on the same line together, never with one badge dropped to
+     a second line of its own. Each badge's label stays on one
+     line too (nowrap), and a badge may shrink a touch — its
+     label ellipsising only in the tightest squeeze — rather
+     than the row ever breaking. The row rides above the
+     neighbouring cells' empty lower space (position + z-index),
+     so a full row is never clipped by the Product cell's edge.
      ensureBadgeRow() in the script owns the container: it
      gathers the baked rows' loose badges into it, and every
      badge sync adds through it. The UNAVAILABLE banner is not
      part of the row — it stays a full-width banner of its own
      directly under the name, above the row. The "Loved by X
      merchants" line sits directly under this row (.loved-by) */
-  .badge-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
-  .badge-row .badge{margin:0}
+  .badge-row{display:flex;flex-wrap:nowrap;gap:5px;align-items:center;margin-top:6px;
+    position:relative;z-index:1}
+  .badge-row .badge{margin:0;flex:0 1 auto;min-width:0;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis}
   .badge-row:empty{display:none}
   .chip{display:inline-flex;align-items:center;font-size:12px;font-weight:700;line-height:1.3;padding:3px 9px;border-radius:999px;background:var(--violet-soft);color:var(--plum)}
   :root[data-theme="dark"] .chip{color:var(--plum2)}
@@ -981,7 +989,8 @@
      Product cell (badges stacked, then wrapped) and pushed
      the last column's heart / ⋮ buttons past the card's right
      edge, where the card's overflow clipped them. The Product
-     share is sized for the full four-badge row on one line;
+     share is sized for the full badge row on one line — the
+     four regular badges plus Most loved together;
      the Acidity share covers its heart / ⋮ button zone plus
      its longest values; header labels may wrap to two lines
      rather than overflow. Sale lines in the price cell run a
@@ -990,15 +999,15 @@
   @media (min-width:761px){
     .tablecard table{table-layout:fixed}
     .tablecard thead th{white-space:normal}
-    .tablecard thead th:nth-child(1){width:28.5%}
+    .tablecard thead th:nth-child(1){width:31%}
     .tablecard thead th:nth-child(2){width:5.3%}
-    .tablecard thead th:nth-child(3){width:13.7%}
+    .tablecard thead th:nth-child(3){width:12.7%}
     .tablecard thead th:nth-child(4){width:4.8%}
     .tablecard thead th:nth-child(5){width:7.2%}
     .tablecard thead th:nth-child(6){width:9.1%}
     .tablecard thead th:nth-child(7){width:8.1%}
     .tablecard thead th:nth-child(8){width:8.4%}
-    .tablecard thead th:nth-child(9){width:14.9%}
+    .tablecard thead th:nth-child(9){width:13.4%}
     .tablecard td[data-label="Price"] .sale-lines{font-size:13.5px}
   }
   @media (max-width:760px){
@@ -1233,8 +1242,14 @@
        heart / ⋮ cluster that the cell's right padding makes
        room for at the top, so it may use the card's full inner
        width: without this the badges were squeezed into the
-       name's narrowed column and stacked one per line */
-    td[data-label="Product"] .badge-row{margin-right:-152px}
+       name's narrowed column and stacked one per line. On a
+       phone the row stays on ONE line like on desktop — Most
+       loved included, never wrapped to a line of its own — so
+       the badges wear a slightly tighter fit here (a touch
+       smaller text and padding, a narrower gap) to give the
+       full set room across the card's width */
+    td[data-label="Product"] .badge-row{margin-right:-152px;flex-wrap:nowrap;gap:4px}
+    td[data-label="Product"] .badge-row .badge{font-size:10px;padding:2px 6px}
     /* Add product and Set store products live in the Settings panel
        (gear, top right), not in Filters, so no filter-panel sizing
        rules apply to them; .settings-action gives them full-width
@@ -5040,7 +5055,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.23</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.24</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -5065,7 +5080,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.23</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.24</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5904,7 +5919,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.23</span>
+      <span class="manual-pill accent">Version 2026.11.03.24</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6298,7 +6313,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.23</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.24</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
