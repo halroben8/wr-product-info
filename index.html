@@ -212,11 +212,11 @@
   .btn-save[disabled]{opacity:.45;cursor:not-allowed}
   .settings-actions{display:grid;gap:10px;margin-top:6px}
   /* Settings panel tabs — a segmented control at the top of the
-     Settings panel with exactly three tabs: Settings, Documents
-     and Support. The selected tab is the solid plum pill; tapping
-     a tab shows only that tab's panel below (see the tab script).
-     Settings is the default tab. */
-  .settings-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
+     Settings panel with exactly four tabs: Settings, Documents,
+     Support and Games & Contests. The selected tab is the solid
+     plum pill; tapping a tab shows only that tab's panel below
+     (see the tab script). Settings is the default tab. */
+  .settings-tabs{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;
     background:var(--violet-soft);border:1.5px solid var(--line);border-radius:12px;
     padding:4px;margin:0 0 14px}
   :root[data-theme="dark"] .settings-tabs{background:var(--panel2)}
@@ -228,7 +228,7 @@
   .settings-tab[aria-selected="true"]{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
   .settings-tabpanel[hidden]{display:none !important}
   @media (max-width:520px){
-    .settings-tab{font-size:14px;min-height:44px}
+    .settings-tab{font-size:12.5px;min-height:44px;padding:8px 2px}
   }
   /* "Documents" group heading inside Settings — the manual, the two
      full impact PDFs and the date-aware cheat sheet sit under it. */
@@ -299,6 +299,14 @@
   .docs-note{margin:0;padding:12px 14px;border:1.5px dashed var(--line);border-radius:12px;
     font-size:14px;font-weight:600;line-height:1.55;color:var(--ink);background:var(--panel)}
   .docs-note[hidden]{display:none !important}
+  /* "Coming soon" note in Games & Contests — shown in place when
+     the Report results of Winerack Contests placeholder is tapped.
+     It submits nothing; it only tells the user it is coming soon. */
+  .contest-soon-msg{margin:0;padding:12px 14px;border:1.5px dashed var(--plum2);border-radius:12px;
+    font-size:14.5px;font-weight:650;line-height:1.55;color:var(--ink);background:var(--violet-soft)}
+  .contest-soon-msg[hidden]{display:none !important}
+  .contest-soon-msg strong{color:var(--plum)}
+  :root[data-theme="dark"] .contest-soon-msg strong{color:var(--lilac)}
   .settings-action .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
   /* Full-document links in Settings (Full P8 / P9 Impact PDFs and the
      Product Info Manual) are <a> elements wearing .settings-action.
@@ -560,6 +568,128 @@
   @media (max-width:520px){
     .pairing-form{flex-direction:column}
     .pairing-go{width:100%}
+  }
+  /* Wine trivia — 1-minute rapid fire, a pop-up window only (the
+     shared .editor-overlay / .editor-panel shell), opened by the
+     Wine Trivia entry in the Games & Contests tab of Settings —
+     that tab is the game's home; there is no trivia button in the
+     header and none in Support. The SCOREBOARD is the point of the game:
+     a big countdown timer and the live score sit in a sticky bar
+     at the top of the pop-up, always visible while the questions
+     change underneath. One question at a time, four answers as
+     buttons in a 2×2 grid. Correct turns green (with a ding) and
+     the next question comes straight away; wrong turns red (with
+     a buzzer) and the next question waits 3 seconds. General wine
+     questions only — nothing about one store's list. No sign-in
+     needed to play; a score that makes the shared High Score
+     board (below) is saved to the shared list for everyone. */
+  .trivia-panel{max-width:680px}
+  .trivia-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .trivia-panel .editor-head h2{color:#e9d5ff}
+  .trivia-scoreboard{position:sticky;top:6px;z-index:3;display:grid;
+    grid-template-columns:1fr 1fr;gap:10px;background:var(--panel);
+    padding:8px 0 10px;border-bottom:1.5px solid var(--line)}
+  .trivia-sb-cell{border:2px solid var(--plum2);border-radius:12px;
+    background:var(--violet-soft);padding:6px 10px 8px;text-align:center}
+  .trivia-sb-label{display:block;font-size:11.5px;font-weight:800;
+    letter-spacing:.07em;text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .trivia-sb-label{color:var(--lilac)}
+  .trivia-sb-num{display:block;font-size:44px;font-weight:900;line-height:1.05;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .trivia-sb-num.urgent{color:#dc2626}
+  :root[data-theme="dark"] .trivia-sb-num.urgent{color:#f87171}
+  .trivia-timebar{height:8px;border-radius:999px;background:var(--panel2);
+    overflow:hidden;margin:10px 0 12px}
+  .trivia-timebar-fill{height:100%;width:100%;background:var(--plum2);
+    border-radius:999px;transition:width .2s linear}
+  .trivia-intro{margin:0 0 10px;font-size:15.5px;line-height:1.6;color:var(--ink)}
+  .trivia-rules{margin:0 0 16px;padding-left:20px;font-size:15px;line-height:1.65;color:var(--ink)}
+  .trivia-rules li{margin-bottom:5px}
+  .trivia-start-btn{width:100%;min-height:54px;font-size:17px}
+  .trivia-qcount{margin:0 0 4px;font-size:12.5px;font-weight:800;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .trivia-qcount{color:var(--lilac)}
+  .trivia-question{margin:0 0 14px;font-size:21px;font-weight:800;line-height:1.35;min-height:56px}
+  .trivia-answers{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .trivia-answer{min-height:68px;padding:12px;border:2px solid var(--line);border-radius:12px;
+    background:var(--panel);color:var(--ink);font:inherit;font-size:16px;font-weight:700;
+    line-height:1.3;cursor:pointer;text-align:center}
+  .trivia-answer:hover:not(:disabled),.trivia-answer:focus-visible{border-color:var(--plum2);
+    background:var(--violet-soft);outline:none}
+  .trivia-answer:disabled{cursor:default;opacity:.5}
+  .trivia-answer.is-correct{background:#15803d;border-color:#166534;color:#fff;opacity:1}
+  .trivia-answer.is-wrong{background:#dc2626;border-color:#991b1b;color:#fff;opacity:1}
+  :root[data-theme="dark"] .trivia-answer.is-correct{background:#16a34a;border-color:#4ade80}
+  :root[data-theme="dark"] .trivia-answer.is-wrong{background:#b91c1c;border-color:#f87171}
+  .trivia-feedback{margin:12px 0 0;min-height:24px;font-size:15px;font-weight:700;text-align:center}
+  .trivia-feedback.good{color:#15803d}
+  .trivia-feedback.bad{color:#dc2626}
+  :root[data-theme="dark"] .trivia-feedback.good{color:#4ade80}
+  :root[data-theme="dark"] .trivia-feedback.bad{color:#fca5a5}
+  .trivia-end{text-align:center;padding:6px 0 2px}
+  .trivia-end-label{margin:0;font-size:15px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .trivia-end-label{color:var(--lilac)}
+  .trivia-final-num{display:block;font-size:84px;font-weight:900;line-height:1.05;color:var(--ink)}
+  .trivia-final-line{margin:4px 0 0;font-size:18px;font-weight:700;color:var(--ink)}
+  .trivia-final-detail{margin:6px 0 16px;font-size:14.5px;line-height:1.55;color:var(--muted)}
+  .trivia-end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .trivia-end-actions .btn-save,.trivia-end-actions .btn-ghost{min-height:48px}
+  /* High Score board — the shared top 5 for the rapid fire trivia,
+     stored in the Supabase trivia_high_scores table so every
+     player sees the same board. Shown two ways with the same
+     .hs-list rendering: the High Score pop-up opened by the
+     High Score button in Games & Contests, and inside the game's
+     end screen when a score makes the board. While the table
+     does not exist yet the board shows an honest "coming soon"
+     note instead of rows — the game itself never depends on it. */
+  .hs-intro{margin:0 0 12px;font-size:15px;line-height:1.6;color:var(--ink)}
+  .hs-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .hs-row{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);
+    border-radius:12px;padding:10px 14px;background:var(--panel)}
+  .hs-row.is-first{border-color:var(--plum2);background:var(--violet-soft)}
+  .hs-row.is-new{border-color:#15803d;box-shadow:0 0 0 1.5px #15803d inset}
+  :root[data-theme="dark"] .hs-row.is-new{border-color:#4ade80;box-shadow:0 0 0 1.5px #4ade80 inset}
+  .hs-rank{flex:none;width:38px;height:38px;border-radius:999px;background:var(--panel2);
+    color:var(--plum);display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:900;line-height:1}
+  :root[data-theme="dark"] .hs-rank{color:var(--lilac)}
+  .hs-row.is-first .hs-rank{background:var(--badge-bg);color:var(--badge-ink)}
+  .hs-name{flex:1;min-width:0;font-size:16px;font-weight:800;line-height:1.3;overflow-wrap:break-word}
+  .hs-date{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-top:1px}
+  .hs-score{flex:none;font-size:24px;font-weight:900;line-height:1;color:var(--ink)}
+  .hs-score small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--muted);text-align:right;margin-top:2px}
+  .hs-note{margin:0;padding:12px 14px;border:1.5px dashed var(--plum2);border-radius:12px;
+    font-size:14.5px;font-weight:600;line-height:1.55;color:var(--ink);background:var(--violet-soft)}
+  .hs-note[hidden]{display:none !important}
+  .hs-list[hidden]{display:none !important}
+  .hs-congrats{margin:16px 0;padding:14px;border:2px solid var(--plum2);border-radius:12px;
+    background:var(--violet-soft);text-align:left}
+  .hs-congrats[hidden]{display:none !important}
+  .hs-congrats-title{margin:0;font-size:18px;font-weight:900;line-height:1.35;color:var(--ink)}
+  .hs-congrats-sub{margin:6px 0 0;font-size:14.5px;line-height:1.55;color:var(--ink)}
+  .hs-form{display:flex;gap:8px;margin-top:12px}
+  .hs-form input{flex:1;min-width:0;min-height:48px;font-size:16px}
+  .hs-form .btn-save{flex:none;min-height:48px}
+  .hs-form[hidden]{display:none !important}
+  .hs-msg{margin:9px 0 0;font-size:13.5px;line-height:1.5;font-weight:650;color:var(--plum)}
+  :root[data-theme="dark"] .hs-msg{color:var(--lilac)}
+  .hs-msg[hidden]{display:none !important}
+  .hs-board-wrap{margin-top:14px;text-align:left}
+  .hs-board-wrap[hidden]{display:none !important}
+  .hs-board-head{margin:0 0 8px;font-size:12.5px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .hs-board-head{color:var(--lilac)}
+  @media (max-width:520px){
+    .hs-form{flex-direction:column}
+    .hs-form .btn-save{width:100%}
+  }
+  @media (max-width:520px){
+    .trivia-sb-num{font-size:36px}
+    .trivia-question{font-size:19px;min-height:50px}
+    .trivia-answer{min-height:64px;font-size:15px;padding:10px}
+    .trivia-final-num{font-size:68px}
   }
   /* Product Info Manual (web version) — the responsive manual as an
      in-app panel, opened from Documents. The prominent entry in
@@ -1368,23 +1498,33 @@
     td[data-label="Product"]{padding-right:152px}
     /* Keeping the badge row and the facts out of the price's new
        band: the price block hangs at the card's top right (from
-       46px down — about 21px for a plain price, about 59px for
-       the three Sale / Reg / Save lines), in the same band the
-       badge row (on a short name) and the first fact row would
-       otherwise flow into at that side. So the Product cell is a
-       flex column whose badge row is pinned to the cell's bottom
-       (margin-top:auto, its usual 6px gap kept as padding), and
-       the cell carries a minimum height tall enough that the
-       pinned badge row — and the facts that follow the cell —
-       always start below the price block: 85px when the cell
-       carries badges (56px otherwise, which still keeps the
-       facts below a plain price), and 121px on a sale card,
-       whose price block is three lines tall. On longer names the
-       cell is naturally taller than these floors, so the badges
-       sit directly under the name exactly as before */
+       46px down — about 21px for a plain price or a Sale line on
+       its own, about 59px only when the Reg and Save lines join
+       it), in the same band the badge row (on a short name) and
+       the first fact row would otherwise flow into at that side.
+       So the Product cell is a flex column whose badge row is
+       pinned to the cell's bottom (margin-top:auto, its usual
+       6px gap kept as padding), and the cell carries a minimum
+       height tall enough that the pinned badge row — and the
+       facts that follow the cell — always start below the price
+       block: 85px when the cell carries badges (56px otherwise,
+       which still keeps the facts below a plain price). A sale
+       card gets NO extra height of its own: most sales show the
+       Sale line alone (there is no Reg/Save pair whenever the
+       sale price is the only price recorded, e.g. BASK Reserve
+       Simply White), so those cards hug their content at the
+       same 85px / 56px floors as any other card instead of
+       standing tall with a large empty gap under the name. Only
+       a sale whose price block really is three lines tall —
+       Sale plus Reg plus Save, told by the .sl-reg line the
+       price script renders inside the price cell — keeps the
+       taller 121px floor, because its badge row genuinely has
+       to clear those extra two lines. On longer names the cell
+       is naturally taller than these floors, so the badges sit
+       directly under the name exactly as before */
     td[data-label="Product"]{display:flex;flex-direction:column;align-items:stretch;gap:0;min-height:56px}
     td[data-label="Product"]:has(.badge-row:not(:empty)){min-height:85px}
-    tr.prow.is-sale td[data-label="Product"]{min-height:121px}
+    tr.prow.is-sale:has(.sale-lines .sl-reg) td[data-label="Product"]{min-height:121px}
     td[data-label="Product"] .badge-row{margin-top:auto;padding-top:6px}
     /* The badge row sits BELOW the name — pinned to the bottom
        of the Product cell (see above), so it starts clear of
@@ -1806,7 +1946,7 @@
     <div class="row">
       <div class="field grow">
         <label for="q">Search</label>
-        <input id="q" type="search" placeholder="Brand, product, or varietal…" autocomplete="off" />
+        <input id="q" type="search" placeholder="brand, product, format, or varietal" autocomplete="off" />
       </div>
       <div class="field wide brand-field">
         <label for="brand">Brand</label>
@@ -5116,6 +5256,7 @@
       <button type="button" class="settings-tab" id="settingsTab-settings" role="tab" aria-selected="true" aria-controls="settingsPanel-settings" data-settings-tab="settings">Settings</button>
       <button type="button" class="settings-tab" id="settingsTab-documents" role="tab" aria-selected="false" aria-controls="settingsPanel-documents" data-settings-tab="documents">Documents</button>
       <button type="button" class="settings-tab" id="settingsTab-support" role="tab" aria-selected="false" aria-controls="settingsPanel-support" data-settings-tab="support">Support</button>
+      <button type="button" class="settings-tab" id="settingsTab-games" role="tab" aria-selected="false" aria-controls="settingsPanel-games" data-settings-tab="games">Games &amp; Contests</button>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-settings" role="tabpanel" aria-labelledby="settingsTab-settings">
     <div class="theme-setting account-setting" id="accountSection">
@@ -5215,7 +5356,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.27</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.04</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5228,7 +5369,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.27</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.04</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5238,6 +5379,15 @@
         <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
         <button type="button" class="settings-action" id="wineKnowledgeSupport"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
       </div>
+    </div>
+    <div class="settings-tabpanel" id="settingsPanel-games" role="tabpanel" aria-labelledby="settingsTab-games" hidden>
+      <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
+        <button type="button" class="settings-action" id="wineTriviaGames"><span>Wine Trivia &mdash; 1-minute rapid fire<span class="sa-sub">60 seconds on the clock, general wine questions in a 2&times;2 grid &mdash; right answers ding and move on, wrong answers buzz and cost you 3 seconds. How many can you get right? No sign-in needed</span></span></button>
+        <button type="button" class="settings-action" id="highScoreGames"><span>High Score<span class="sa-sub">The top 5 rapid fire trivia players and their scores &mdash; one shared board for everyone who plays</span></span></button>
+        <button type="button" class="settings-action" id="reportContestResults" aria-describedby="contestReportSoonMsg"><span>Report results of Winerack Contests<span class="sa-sub">Report how a Winerack Contest went &mdash; not open yet</span></span><span class="sa-ext" aria-hidden="true">Coming soon</span></button>
+        <p class="contest-soon-msg" id="contestReportSoonMsg" role="status" hidden><strong>Coming soon</strong> &mdash; reporting results of Winerack Contests isn&rsquo;t available yet. There&rsquo;s nothing to submit for now.</p>
+      </div>
+      <p class="settings-note" style="margin-top:0">Games &amp; Contests is where Grapevine&rsquo;s games live &mdash; the rapid fire wine trivia is the first one here.</p>
     </div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
@@ -5271,6 +5421,109 @@
     </div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="pairingCancel">Close &mdash; back to the list</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="triviaOverlay" hidden>
+  <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="triviaTitle">
+    <div class="editor-head">
+      <h2 id="triviaTitle">Wine trivia &mdash; rapid fire</h2>
+      <button type="button" class="editor-x" id="triviaClose" aria-label="Close wine trivia">&times;</button>
+    </div>
+    <!-- The scoreboard: big countdown timer + live score, pinned at
+         the top of the pop-up (sticky) so both stay in view while
+         the questions change underneath. -->
+    <div class="trivia-scoreboard" aria-label="Scoreboard">
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Time left</span>
+        <span class="trivia-sb-num" id="triviaTimer">60</span>
+      </div>
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Score &mdash; right so far</span>
+        <span class="trivia-sb-num" id="triviaScore">0</span>
+      </div>
+    </div>
+    <div class="trivia-timebar" aria-hidden="true"><div class="trivia-timebar-fill" id="triviaTimebarFill"></div></div>
+
+    <div id="triviaStart">
+      <p class="trivia-intro">How many can you get right in <strong>60 seconds</strong>? Right answers move straight on &mdash; wrong answers cost you 3 seconds.</p>
+      <button type="button" class="btn-save trivia-start-btn" id="triviaStartBtn">Start &mdash; 60 seconds</button>
+      <!-- The High Score board lives on the game's main page too:
+           the shared top 5 shows right here under Start, loaded
+           fresh every time the game opens (same rendering as the
+           High Score pop-up). While the shared table does not
+           exist yet it shows a short "coming soon" note instead. -->
+      <div class="hs-board-wrap" id="triviaStartHsWrap">
+        <p class="hs-board-head">High Score &mdash; top 5</p>
+        <ol class="hs-list" id="triviaStartHsBoard" hidden></ol>
+        <p class="hs-note" id="triviaStartHsNote" role="status">Loading the board&hellip;</p>
+      </div>
+    </div>
+
+    <div id="triviaPlay" hidden>
+      <p class="trivia-qcount" id="triviaQCount">Question 1</p>
+      <p class="trivia-question" id="triviaQuestion"></p>
+      <div class="trivia-answers" id="triviaAnswers"></div>
+      <p class="trivia-feedback" id="triviaFeedback" aria-live="polite"></p>
+    </div>
+
+    <div id="triviaEnd" hidden>
+      <div class="trivia-end">
+        <p class="trivia-end-label">Time&rsquo;s up!</p>
+        <span class="trivia-final-num" id="triviaFinalScore">0</span>
+        <p class="trivia-final-line" id="triviaFinalLine">correct in 60 seconds</p>
+        <p class="trivia-final-detail" id="triviaFinalDetail"></p>
+        <!-- High Score entry: shown only when this game's score
+             makes the shared top 5. The congratulation names the
+             place attained; the name field is prefilled with the
+             signed-in display name when there is one, and anyone
+             can type (or change) the name before saving. -->
+        <div class="hs-congrats" id="triviaHsCongrats" hidden>
+          <p class="hs-congrats-title" id="triviaHsCongratsTitle"></p>
+          <p class="hs-congrats-sub">Add your name to the shared High Score board &mdash; everyone who plays sees the same top 5.</p>
+          <form class="hs-form" id="triviaHsForm">
+            <label class="sr-only" for="triviaHsName">Your name for the High Score board</label>
+            <input id="triviaHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
+            <button type="submit" class="btn-save" id="triviaHsSave">Save my score</button>
+          </form>
+          <p class="hs-msg" id="triviaHsMsg" role="status" hidden></p>
+          <div class="hs-board-wrap" id="triviaHsBoardWrap" hidden>
+            <p class="hs-board-head">High Score board &mdash; top 5</p>
+            <ol class="hs-list" id="triviaHsBoard"></ol>
+          </div>
+        </div>
+        <p class="hs-note" id="triviaHsNote" role="status" hidden style="margin:16px 0;text-align:left"></p>
+        <div class="trivia-end-actions">
+          <button type="button" class="btn-save" id="triviaAgainBtn">Play again</button>
+          <button type="button" class="btn-ghost" id="triviaDoneBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="triviaCancel">Close &mdash; back to the list</button>
+    </div>
+  </div>
+</div>
+
+<!-- High Score board — a pop-up on the trivia pattern, opened by
+     the High Score button in the Games & Contests tab. It reads
+     the shared top 5 from the Supabase trivia_high_scores table,
+     so every player sees the same board. While that table does
+     not exist yet, the board shows an honest "coming soon" note
+     instead of rows (see the high-score script below). -->
+<div class="editor-overlay" id="highScoreOverlay" hidden>
+  <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="highScoreTitle">
+    <div class="editor-head">
+      <h2 id="highScoreTitle">High Score &mdash; Wine Trivia</h2>
+      <button type="button" class="editor-x" id="highScoreClose" aria-label="Close high scores">&times;</button>
+    </div>
+    <p class="hs-intro">The <strong>top 5</strong> scores in the 1-minute rapid fire wine trivia &mdash; one shared board for everyone who plays, not just this phone.</p>
+    <ol class="hs-list" id="hsBoardList"></ol>
+    <p class="hs-note" id="hsBoardNote" role="status">Loading the board&hellip;</p>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="highScoreCancel">Close</button>
     </div>
   </div>
 </div>
@@ -6099,7 +6352,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.27</span>
+      <span class="manual-pill accent">Version 2026.11.04.04</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6397,6 +6650,7 @@
         <ul>
           <li><strong>Store settings</strong> — collapsible section with your store type, Set store products, and Add store (§5).</li>
           <li><strong>Support Center</strong> — Wine Rack Store Support Centre contacts (§14).</li>
+          <li><strong>Games &amp; Contests</strong> — its own tab at the top of Settings, beside Support; it is the home of the Wine Trivia rapid fire game (§16).</li>
           <li><strong>Admin</strong> — a button at the very bottom of Settings, visible to Michael and appointed admins (§13).</li>
           <li>The footer line reads <em>“Created and maintained by Michael Benia WR 358.”</em></li>
         </ul>
@@ -6475,9 +6729,9 @@
         <h3>An old tab is showing an old version</h3>
         <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
         <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
-        <p>This was a database fault, fixed in version 2026.11.03.27 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.04 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>A change didn&rsquo;t appear in Change history</h3>
-        <p>This was a database fault, fixed in version 2026.11.03.27 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.03.27 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.04 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.04.04 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
         <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
         <h3>The store popup keeps appearing</h3>
@@ -6495,9 +6749,40 @@
       </div>
     </details>
 
-  
+    <!-- 16 -->
+    <details class="manual-sec" id="manual-games" data-title="Games and Contests — Wine Trivia rapid fire">
+      <summary><span class="manual-sec-num">16</span><span class="manual-sec-title"><strong>Games &amp; Contests — Wine Trivia</strong><small>The 1-minute rapid fire game, in its own Settings tab</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <div class="manual-sec-body">
+        <p>Settings has a fourth tab, <span class="manual-ui">Games &amp; Contests</span>, beside Settings, Documents and Support. It is the home for Grapevine&rsquo;s games — the first one there is <strong>Wine Trivia — 1-minute rapid fire</strong>. There is no trivia button in the header and none in Support; the game lives in Games &amp; Contests only. No sign-in is needed to play.</p>
+        <h3>How to play</h3>
+        <ol>
+          <li>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Wine Trivia — 1-minute rapid fire</span>. The game opens as a pop-up.</li>
+          <li>Tap <span class="manual-ui purple">Start — 60 seconds</span>. The big timer at the top starts counting down from 60, and the first question appears.</li>
+          <li>Each question has <strong>four answers in a 2&times;2 grid</strong> — tap one. The timer and your live score stay pinned at the top while the questions change underneath.</li>
+        </ol>
+        <h3>Scoring</h3>
+        <ul>
+          <li><strong>Correct:</strong> the button turns <strong>green</strong>, a <strong>ding</strong> sounds, your score goes up by one, and the next question comes <strong>straight away</strong> — no delay.</li>
+          <li><strong>Wrong:</strong> the button turns <strong>red</strong>, a <strong>buzzer</strong> sounds (and the phone vibrates on Android, where supported), the right answer is shown in green — and the next question waits <strong>3 seconds</strong>. The clock keeps running, so a wrong guess costs you real time.</li>
+          <li>When the timer hits zero, the <strong>final scoreboard</strong> shows how many you got right in that minute, how many you answered in total, and your best score this session. Tap <span class="manual-ui">Play again</span> for a fresh run.</li>
+        </ul>
+        <p>The questions are <strong>general wine knowledge</strong> — grapes, regions, styles, serving and wine terms from all over the wine world. They are not about any one store and not drawn from any store&rsquo;s list. The question bank is far bigger than anyone can finish in a minute, the questions are shuffled every run with no repeats, so the timer always ends the game — you can never run out of questions. Your score for a single game lives only in that session — the shared exception is the High Score board below.</p>
+        <h3>High Score board</h3>
+        <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. In the same <span class="manual-ui">Games &amp; Contests</span> tab, tap <span class="manual-ui">High Score</span> to open the board: it shows the <strong>top 5 players and what they scored</strong>, best first. The same top 5 also shows directly on the game&rsquo;s own start page, under the Start button, so you can see who you have to beat before you play.</p>
+        <ul>
+          <li>When a game ends, if your score makes the <strong>top 5</strong>, the end screen congratulates you and tells you the <strong>place you attained</strong> — for example, &ldquo;Congratulations! You made #3 on the High Score board!&rdquo;</li>
+          <li>Enter your name and tap <span class="manual-ui">Save my score</span> to put it on the board. If you&rsquo;re signed in, the name field is <strong>prefilled with your display name</strong> — you can change it before saving; if you&rsquo;re not signed in, just type a name. No sign-in is needed to be on the board.</li>
+          <li>Tying the current #5 score isn&rsquo;t quite enough — the earlier #5 was set first, so a new score has to beat it to take the place.</li>
+          <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
+        </ul>
+        <h3>Report results of Winerack Contests</h3>
+        <p>Below Wine Trivia in the same tab is <span class="manual-ui">Report results of Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
+        <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
+      </div>
+    </details>
+
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.27</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.04</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -9390,18 +9675,19 @@
      (their own listeners, registered above/below, open the editor or
      the store dialog on top). */
   var settingsOverlay = document.getElementById('settingsOverlay');
-  /* Settings panel tabs: exactly three — Settings, Documents and
-     Support. Tapping a tab shows only that tab's panel and marks
-     that tab selected; the panel always opens on the Settings tab
-     (the default). Display state only — every button inside the
-     panels keeps its own existing behaviour. */
+  /* Settings panel tabs: exactly four — Settings, Documents,
+     Support and Games & Contests. Tapping a tab shows only that
+     tab's panel and marks that tab selected; the panel always
+     opens on the Settings tab (the default). Display state only —
+     every button inside the panels keeps its own existing
+     behaviour. */
   var settingsTabBtns = document.querySelectorAll('[data-settings-tab]');
   function switchSettingsTab(name){
-    if(name !== 'documents' && name !== 'support') name = 'settings';
+    if(name !== 'documents' && name !== 'support' && name !== 'games') name = 'settings';
     for(var ti = 0; ti < settingsTabBtns.length; ti++){
       settingsTabBtns[ti].setAttribute('aria-selected', settingsTabBtns[ti].getAttribute('data-settings-tab') === name ? 'true' : 'false');
     }
-    var names = ['settings','documents','support'];
+    var names = ['settings','documents','support','games'];
     for(var pi = 0; pi < names.length; pi++){
       var panel = document.getElementById('settingsPanel-' + names[pi]);
       if(panel) panel.hidden = names[pi] !== name;
@@ -10679,6 +10965,693 @@
     });
   }
 
+  /* ---------- Wine trivia — 1-minute rapid fire (pop-up game) ----------
+     A pop-up game on the Food pairing finder pattern, opened by
+     the Wine Trivia entry in the Games & Contests tab of Settings
+     — that tab is the game's only home (no header button, no
+     Support entry). Rules, exactly as specced:
+       · 60-second countdown, one question at a time, four answers
+         as buttons in a 2×2 grid.
+       · Correct: the button turns green, a DING sounds, and the
+         next question comes straight away — no delay (just the
+         brief flash that lets the green register).
+       · Wrong: the button turns red, a BUZZER sounds (and the
+         phone vibrates on Android where supported), and the next
+         question waits a full 3 seconds — the clock keeps running,
+         so a wrong guess costs time.
+       · The scoreboard (big timer + live score) is pinned at the
+         top of the pop-up; the final scoreboard shows the total
+         correct in that minute, with Play again.
+     Questions are GENERAL wine knowledge — not focused on any one
+     store and not drawn from any store's product list. The bank
+     below holds far more questions than anyone could answer in a
+     minute; each run shuffles the bank and deals without repeats,
+     so the timer always ends the game, never an empty bank.
+     Sounds are synthesized with WebAudio (no audio files): the
+     context is created / resumed inside the Start tap (a user
+     gesture), which is what mobile browsers require before any
+     sound can play. No sign-in is needed to play, and the score
+     and session best live in memory only — the one exception is
+     the shared High Score board: a score that makes the top 5
+     can be saved to it under the player's name (see the High
+     Score section right after this one). */
+  var TRIVIA_BANK = [
+    ["Which grape is used to make Barolo?", "Nebbiolo", "Sangiovese", "Barbera", "Pinot Noir"],
+    ["What does “brut” mean on a Champagne label?", "Very dry", "Very sweet", "Sparkling", "Vintage"],
+    ["The Rioja wine region is in which country?", "Spain", "Italy", "Portugal", "France"],
+    ["A wine described as “oaked” spent time in what?", "Oak barrels", "Steel tanks", "Clay pots", "Glass carboys"],
+    ["Which grape is the main variety in Chianti?", "Sangiovese", "Nebbiolo", "Montepulciano", "Tempranillo"],
+    ["Sauternes is made from grapes affected by what?", "Noble rot (botrytis)", "Frost", "Smoke taint", "Hail damage"],
+    ["Which of these is a white grape?", "Riesling", "Syrah", "Merlot", "Malbec"],
+    ["Port wine comes from which country?", "Portugal", "Spain", "Italy", "Greece"],
+    ["How should a light, crisp white wine be served?", "Well chilled", "At room temperature", "Slightly warm", "Over ice, always"],
+    ["Which French region is most famous for Pinot Noir and Chardonnay?", "Burgundy", "Bordeaux", "Provence", "Languedoc"],
+    ["A “vintage” wine is made from grapes harvested in…?", "A single year", "Many years, blended", "Winter only", "One single barrel"],
+    ["Most white Burgundy is made from which grape?", "Chardonnay", "Sauvignon Blanc", "Pinot Grigio", "Viognier"],
+    ["Malbec is most closely associated with which country today?", "Argentina", "Chile", "Australia", "South Africa"],
+    ["Tannin is mostly responsible for which sensation in red wine?", "The drying, grippy feel", "The bubbles", "The sweetness", "The fruity aroma"],
+    ["Which wine style is pink in colour?", "Rosé", "Port", "Sherry", "Madeira"],
+    ["Icewine is made from grapes that are…?", "Frozen on the vine", "Dried in the sun", "Picked unripe", "Steamed before pressing"],
+    ["Only sparkling wine from one region of France may be called…?", "Champagne", "Prosecco", "Cava", "Crémant"],
+    ["Prosecco comes from which country?", "Italy", "France", "Spain", "Portugal"],
+    ["Cava is a sparkling wine from which country?", "Spain", "Italy", "France", "Argentina"],
+    ["What does a sommelier do?", "Advises on and serves wine", "Grows grapes", "Makes oak barrels", "Designs wine labels"],
+    ["Which grape anchors most Bordeaux left-bank blends?", "Cabernet Sauvignon", "Grenache", "Gamay", "Zinfandel"],
+    ["A “dry” wine is a wine with…?", "Little or no residual sugar", "No alcohol", "No colour", "No acidity"],
+    ["Which of these is a red grape?", "Merlot", "Chardonnay", "Riesling", "Pinot Grigio"],
+    ["“Terroir” refers to what?", "The natural environment where grapes grow", "A type of cork", "A wine fault", "A serving ritual"],
+    ["The Barossa Valley is in which country?", "Australia", "New Zealand", "Chile", "United States"],
+    ["Napa Valley is in which US state?", "California", "Oregon", "New York", "Washington"],
+    ["New Zealand is especially famous for which grape?", "Sauvignon Blanc", "Riesling", "Gewürztraminer", "Viognier"],
+    ["The bubbles in sparkling wine are made of which gas?", "Carbon dioxide", "Oxygen", "Nitrogen", "Hydrogen"],
+    ["A decanter is mainly used to…?", "Aerate wine and pour off sediment", "Chill wine quickly", "Store wine for years", "Measure alcohol"],
+    ["Sherry is a fortified wine from which country?", "Spain", "Portugal", "France", "Italy"],
+    ["Madeira comes from islands belonging to which country?", "Portugal", "Spain", "France", "Italy"],
+    ["A “fortified” wine has had what added to it?", "Spirit (extra alcohol)", "Sugar", "Water", "Carbon dioxide"],
+    ["Alsace is a wine region in which country?", "France", "Germany", "Austria", "Switzerland"],
+    ["The Rhône Valley is best known for which red grape?", "Syrah", "Pinot Noir", "Gamay", "Nebbiolo"],
+    ["Gamay is the grape of which French wine?", "Beaujolais", "Bordeaux", "Champagne", "Sancerre"],
+    ["Pinot Grigio is the Italian name for which grape?", "Pinot Gris", "Pinot Blanc", "Pinot Noir", "Pinot Meunier"],
+    ["“Blanc de Blancs” Champagne is made entirely from which grape?", "Chardonnay", "Pinot Noir", "Pinot Meunier", "Riesling"],
+    ["How much wine does a magnum bottle hold?", "1.5 litres", "750 mL", "3 litres", "500 mL"],
+    ["A standard wine bottle holds how much?", "750 mL", "500 mL", "1 litre", "1.5 litres"],
+    ["The “legs” that run down a swirled glass mainly hint at…?", "Higher alcohol", "Great age", "Top quality", "High price"],
+    ["Cork taint most often makes a wine smell like…?", "Wet cardboard", "Fresh strawberries", "Vanilla", "Toasted bread"],
+    ["Fermentation turns grape sugar into alcohol and which gas?", "Carbon dioxide", "Oxygen", "Nitrogen", "Methane"],
+    ["Red wine gets its colour mainly from…?", "The grape skins", "The grape pulp", "Oak barrels", "Added colouring"],
+    ["Rosé gets its pink colour from…?", "Brief contact with red grape skins", "Mixing red and white wine", "Strawberries", "Food colouring"],
+    ["Grüner Veltliner is the signature white grape of which country?", "Austria", "Germany", "Hungary", "France"],
+    ["Tempranillo is the main grape of which Spanish region?", "Rioja", "Penedès", "Rueda", "Rías Baixas"],
+    ["Prosecco is produced in which Italian region?", "Veneto", "Piedmont", "Tuscany", "Sicily"],
+    ["Barolo and Barbaresco come from which Italian region?", "Piedmont", "Tuscany", "Veneto", "Campania"],
+    ["Chianti comes from which Italian region?", "Tuscany", "Piedmont", "Umbria", "Lombardy"],
+    ["Bordeaux blends often pair Cabernet Sauvignon with which grape?", "Merlot", "Syrah", "Grenache", "Mourvèdre"],
+    ["Syrah is known by which name in Australia?", "Shiraz", "Hermitage", "Côte Rôtie", "Crozes"],
+    ["Zinfandel is closely related to which Italian grape?", "Primitivo", "Sangiovese", "Nebbiolo", "Dolcetto"],
+    ["Which grape is called “the heartbreak grape” because it is so hard to grow?", "Pinot Noir", "Merlot", "Chardonnay", "Syrah"],
+    ["Chablis is made from which grape?", "Chardonnay", "Sauvignon Blanc", "Aligoté", "Melon de Bourgogne"],
+    ["Sancerre is famous for which grape?", "Sauvignon Blanc", "Chardonnay", "Chenin Blanc", "Riesling"],
+    ["Chenin Blanc is a specialty of which French valley?", "The Loire", "The Rhône", "Bordeaux", "Languedoc"],
+    ["Muscadet is made from which grape?", "Melon de Bourgogne", "Chardonnay", "Sauvignon Blanc", "Chenin Blanc"],
+    ["The German term “Spätlese” means what?", "Late harvest", "Dry", "Sparkling", "Estate bottled"],
+    ["“Trocken” on a German wine label means what?", "Dry", "Sweet", "Sparkling", "Red"],
+    ["“Sekt” is sparkling wine from which country?", "Germany", "France", "Italy", "Spain"],
+    ["Port is best described as a…?", "Sweet fortified wine", "Dry white wine", "Sparkling rosé", "Light table wine"],
+    ["Tawny Port gets its colour from…?", "Long ageing in wooden casks", "Extra skin contact", "Blending with white wine", "Caramel colouring"],
+    ["Vintage Port matures for most of its life in what?", "The bottle", "Steel tanks", "Oak barrels", "Amphorae"],
+    ["Provence is most famous for which wine style?", "Dry rosé", "Sweet white", "Sparkling red", "Fortified wine"],
+    ["Tavel, in France, is an appellation devoted to which style?", "Rosé", "Red", "White", "Sparkling"],
+    ["Which wine is the classic match for oysters?", "Muscadet", "Barolo", "Port", "Zinfandel"],
+    ["What does “ABV” stand for?", "Alcohol by volume", "Average bottle volume", "Alcohol before vintage", "Acid by volume"],
+    ["Most table wines are around what alcohol level?", "12–14%", "About 5%", "About 20%", "About 40%"],
+    ["Fortified wines like Port are usually around what alcohol level?", "19–20%", "About 8%", "About 12%", "About 35%"],
+    ["A wine’s “finish” refers to…?", "How long the flavour lingers after swallowing", "The last glass in the bottle", "The cork being pulled", "The bottling date"],
+    ["The “nose” of a wine refers to its…?", "Aroma", "Colour", "Tannin level", "Bottle shape"],
+    ["A wine’s “body” describes its…?", "Weight and fullness in the mouth", "Colour depth", "Bottle weight", "Label design"],
+    ["Acidity in wine makes it taste…?", "Tart and refreshing", "Sweet", "Warm and soft", "Bitter"],
+    ["Why do you hold a wine glass by the stem?", "So your hand doesn’t warm the wine", "To see the colour better", "To swirl faster", "Because the bowl is fragile"],
+    ["Swirling wine in the glass helps to…?", "Release its aromas", "Remove alcohol", "Add bubbles", "Deepen its colour"],
+    ["Sediment is most often found in which wines?", "Older red wines", "Young white wines", "Sparkling wines", "Rosé wines"],
+    ["Cork-sealed wine is stored on its side to…?", "Keep the cork from drying out", "Save shelf space", "Age it faster", "Settle the sediment"],
+    ["Viticulture is the science of…?", "Growing grapes", "Making wine", "Tasting wine", "Selling wine"],
+    ["In the southern hemisphere, the grape harvest falls around which month?", "March", "September", "December", "July"],
+    ["In the northern hemisphere, harvest typically falls in…?", "September–October", "February–March", "May–June", "December–January"],
+    ["Beaujolais Nouveau is released each year in which month?", "November", "January", "June", "September"],
+    ["An “appellation” is a legally defined…?", "Wine-growing area", "Bottle size", "Retail price", "Cork type"],
+    ["DOCG is a top quality designation from which country?", "Italy", "France", "Spain", "Portugal"],
+    ["AOC (now AOP) is a wine designation from which country?", "France", "Italy", "Germany", "Spain"],
+    ["In Canada, “VQA” stands for…?", "Vintners Quality Alliance", "Vintage Quality Award", "Verified Quebec Appellation", "Vineyard Quality Association"],
+    ["Ontario’s best-known wine region is…?", "The Niagara Peninsula", "The Okanagan Valley", "The Annapolis Valley", "Prince Edward Island"],
+    ["The Okanagan Valley is in which province?", "British Columbia", "Ontario", "Nova Scotia", "Quebec"],
+    ["Ontario icewine is most often made from which grape?", "Vidal", "Chardonnay", "Merlot", "Gamay"],
+    ["Under VQA rules, icewine grapes must be picked at what temperature?", "−8 °C or colder", "0 °C or colder", "−2 °C or colder", "Any night with frost"],
+    ["“Off-dry” describes a wine that is…?", "Slightly sweet", "Bone dry", "Very sweet", "Lightly sparkling"],
+    ["Moscato wines are usually…?", "Sweet, fruity and low in alcohol", "Dry and very tannic", "High in alcohol", "Oaked and bitter"],
+    ["Gewürztraminer is famous for aromas of…?", "Lychee and roses", "Lemon and lime", "Dark chocolate", "Black coffee"],
+    ["Viognier is known for which aromas?", "Peach and blossom", "Blackcurrant and cedar", "Smoke and leather", "Mint and eucalyptus"],
+    ["Albariño comes from which country?", "Spain", "Italy", "France", "Greece"],
+    ["Assyrtiko is a white grape from which country?", "Greece", "Italy", "Spain", "Turkey"],
+    ["Torrontés is an aromatic white grape from which country?", "Argentina", "Chile", "Uruguay", "Peru"],
+    ["Carménère is most associated with which country?", "Chile", "Argentina", "Spain", "France"],
+    ["Pinotage is a signature grape of which country?", "South Africa", "Australia", "New Zealand", "Chile"],
+    ["Pinotage is a cross of Pinot Noir and which other grape?", "Cinsault", "Syrah", "Grenache", "Carignan"],
+    ["Malbec originally comes from which country?", "France", "Argentina", "Spain", "Italy"],
+    ["Amarone is made primarily from which grape?", "Corvina", "Sangiovese", "Nebbiolo", "Barbera"],
+    ["Amarone’s grapes are dried before fermenting — a method called…?", "Appassimento", "Carbonic maceration", "Malolactic fermentation", "Chaptalisation"],
+    ["Brunello di Montalcino is made from which grape?", "Sangiovese", "Nebbiolo", "Montepulciano", "Aglianico"],
+    ["Rioja wines are traditionally aged in oak from which country?", "America (American oak)", "France only", "Russia", "Japan"],
+    ["Fino is a style of which wine?", "Sherry — dry and pale", "Port — sweet and red", "Cava — sparkling", "Rioja — oaked red"],
+    ["Vinho Verde comes from which country?", "Portugal", "Spain", "Brazil", "Italy"],
+    ["“Claret” is an old British nickname for red wine from…?", "Bordeaux", "Burgundy", "Rioja", "Barolo"],
+    ["Saint-Émilion blends are based mainly on which grape?", "Merlot", "Cabernet Sauvignon", "Syrah", "Grenache"],
+    ["The classic Champagne grapes are Chardonnay, Pinot Noir and…?", "Pinot Meunier", "Riesling", "Gamay", "Semillon"],
+    ["“Blanc de Noirs” Champagne is a white wine made from…?", "Red (black) grapes", "White grapes", "A red–white blend", "Unripe grapes"],
+    ["Dom Pérignon, the name on the famous Champagne, was a…?", "Benedictine monk", "Grape variety", "Wine region", "Bottle shape"],
+    ["Prosecco is usually made using which method?", "The tank (Charmat) method", "The traditional bottle method", "Direct carbonation only", "Freezing the wine"],
+    ["In the Charmat method, the second fermentation happens in…?", "A sealed pressurised tank", "The bottle", "Oak barrels", "Clay amphorae"],
+    ["A standard 750 mL bottle pours about how many 150 mL glasses?", "5", "3", "8", "12"],
+    ["A half bottle of wine holds how much?", "375 mL", "250 mL", "500 mL", "187 mL"],
+    ["Malolactic fermentation converts sharp malic acid into which softer acid?", "Lactic acid", "Acetic acid", "Citric acid", "Tartaric acid"],
+    ["Malolactic fermentation often gives Chardonnay which note?", "Buttery", "Minty", "Smoky", "Peppery"],
+    ["The “lees” in a wine are…?", "Dead yeast cells left after fermentation", "Grape stems", "Oak chips", "Pieces of cork"],
+    ["“Sur lie” ageing means ageing the wine on its…?", "Lees", "Skins", "Stems", "Corks"],
+    ["Chaptalisation is the practice of adding what before fermentation?", "Sugar", "Water", "Acid", "Yeast nutrient"],
+    ["Freshly crushed grape juice, skins and all, is called…?", "Must", "Lees", "Pomace", "Marc"],
+    ["A “cuvée” is best described as…?", "A specific blend or lot of wine", "A single grape variety", "A vintage year", "A bottle size"],
+    ["The “angel’s share” is wine lost from barrels through…?", "Evaporation", "Spillage", "Freezing", "Filtering"],
+    ["A “brett” character in wine is caused by…?", "Brettanomyces yeast", "Cork pieces", "Sunlight", "Freezing"],
+    ["Brett character in wine often smells like…?", "Barnyard and leather", "Citrus fruit", "Honey", "Vanilla pods"],
+    ["A vinegar smell in wine is a sign of…?", "Volatile acidity", "Malolactic fermentation", "Oak ageing", "Bottle age"],
+    ["A rotten-egg smell in a young wine usually points to…?", "Hydrogen sulfide (a reductive fault)", "Cork taint", "Too much oak", "High sugar"],
+    ["Which aroma is classic for Sauvignon Blanc?", "Grapefruit and cut grass", "Banana and bubblegum", "Coffee and cocoa", "Rose petals"],
+    ["Blackcurrant is a classic aroma of which grape?", "Cabernet Sauvignon", "Pinot Grigio", "Viognier", "Gamay"],
+    ["Black pepper is a classic note of which grape?", "Syrah", "Merlot", "Chardonnay", "Tempranillo"],
+    ["Red cherry and forest floor are classic notes of which grape?", "Pinot Noir", "Malbec", "Zinfandel", "Nebbiolo"],
+    ["Aged Riesling famously develops an aroma of…?", "Petrol", "Vanilla", "Chocolate", "Coconut"],
+    ["Well-aged red wines often develop aromas of…?", "Leather and tobacco", "Fresh citrus", "Banana", "Bubblegum"],
+    ["Serving a red wine at “room temperature” traditionally means about…?", "16–18 °C — a cool room", "21–23 °C", "10–12 °C", "25 °C or more"],
+    ["Sparkling wine is best served at about…?", "6–10 °C, well chilled", "16–18 °C", "Room temperature", "Just above freezing, always"],
+    ["Which sweetness term is the DRIEST on a typical wine label scale?", "Extra Dry", "Dry", "Medium", "Sweet"],
+    ["Sauternes comes from which French region?", "Bordeaux", "Burgundy", "Alsace", "The Loire"],
+    ["Pouilly-Fuissé is a Chardonnay appellation in which French region?", "Burgundy (the Mâconnais)", "Bordeaux", "The Rhône", "Provence"],
+    ["Which grape makes the red wines of Spain’s Ribera del Duero?", "Tempranillo", "Garnacha", "Monastrell", "Bobal"]
+  ];
+
+  var TRIVIA_SECONDS = 60;
+  var TRIVIA_WRONG_MS = 3000;
+  var TRIVIA_CORRECT_MS = 160; /* just long enough for the green to register — correct answers move straight on, there is no real delay */
+  var triviaOverlay = document.getElementById('triviaOverlay');
+  var triviaTimerEl = document.getElementById('triviaTimer');
+  var triviaScoreEl = document.getElementById('triviaScore');
+  var triviaBarEl = document.getElementById('triviaTimebarFill');
+  var triviaStartEl = document.getElementById('triviaStart');
+  var triviaPlayEl = document.getElementById('triviaPlay');
+  var triviaEndEl = document.getElementById('triviaEnd');
+  var triviaQCountEl = document.getElementById('triviaQCount');
+  var triviaQuestionEl = document.getElementById('triviaQuestion');
+  var triviaAnswersEl = document.getElementById('triviaAnswers');
+  var triviaFeedbackEl = document.getElementById('triviaFeedback');
+  var trivia = { playing:false, locked:false, deck:[], pos:0, current:null,
+    score:0, answered:0, wrong:0, endAt:0, timerId:null, advanceId:null,
+    best:0, games:0, returnFocus:null };
+
+  /* --- Sounds: synthesized with WebAudio, no audio files. The
+     context is created / resumed inside the Start (and Play again)
+     tap — a user gesture — which is what mobile browsers require
+     before any sound may play. --- */
+  var triviaCtx = null;
+  function triviaAudio(){
+    if(!triviaCtx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if(!AC) return null;
+      try{ triviaCtx = new AC(); }catch(e){ return null; }
+    }
+    if(triviaCtx.state === 'suspended'){
+      var p = triviaCtx.resume();
+      if(p && p.catch) p.catch(function(){});
+    }
+    return triviaCtx;
+  }
+  function triviaTone(freq, type, delay, dur, vol, slideTo){
+    if(!triviaCtx) return;
+    var t0 = triviaCtx.currentTime + delay;
+    var osc = triviaCtx.createOscillator();
+    var gain = triviaCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    if(slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    osc.connect(gain);
+    gain.connect(triviaCtx.destination);
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.05);
+  }
+  function triviaDing(){
+    if(!triviaAudio()) return;
+    triviaTone(1318.5, 'sine', 0, 0.25, 0.22, 0);
+    triviaTone(1760, 'sine', 0.07, 0.34, 0.16, 0);
+  }
+  function triviaBuzz(){
+    if(!triviaAudio()) return;
+    triviaTone(150, 'sawtooth', 0, 0.42, 0.20, 105);
+    triviaTone(99, 'square', 0, 0.42, 0.09, 78);
+  }
+
+  function triviaShuffle(a){
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function triviaBuildDeck(){
+    var idx = [];
+    for(var i = 0; i < TRIVIA_BANK.length; i++) idx.push(i);
+    return triviaShuffle(idx);
+  }
+  function triviaShowTimer(rem){
+    triviaTimerEl.textContent = String(rem);
+    triviaTimerEl.classList.toggle('urgent', trivia.playing && rem <= 10);
+    triviaBarEl.style.width = (rem / TRIVIA_SECONDS * 100) + '%';
+  }
+  function triviaShowScore(){
+    triviaScoreEl.textContent = String(trivia.score);
+  }
+  function triviaStopTimers(){
+    if(trivia.timerId){ clearInterval(trivia.timerId); trivia.timerId = null; }
+    if(trivia.advanceId){ clearTimeout(trivia.advanceId); trivia.advanceId = null; }
+  }
+  function triviaShowScreen(which){
+    triviaStartEl.hidden = which !== 'start';
+    triviaPlayEl.hidden = which !== 'play';
+    triviaEndEl.hidden = which !== 'end';
+  }
+  function openTrivia(fromEl){
+    if(!triviaOverlay) return;
+    trivia.returnFocus = fromEl || null;
+    triviaStopTimers();
+    trivia.playing = false;
+    trivia.locked = false;
+    trivia.score = 0;
+    triviaShowScore();
+    triviaShowTimer(TRIVIA_SECONDS);
+    triviaShowScreen('start');
+    hsRenderStartBoard();
+    triviaOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('triviaStartBtn').focus();
+  }
+  function closeTrivia(){
+    if(!triviaOverlay || triviaOverlay.hidden) return;
+    triviaStopTimers();
+    trivia.playing = false;
+    triviaOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden) document.body.style.overflow = '';
+    var backTo = trivia.returnFocus || document.getElementById('wineTriviaGames');
+    trivia.returnFocus = null;
+    if(backTo) backTo.focus();
+  }
+  function triviaTick(){
+    var rem = Math.max(0, Math.ceil((trivia.endAt - Date.now()) / 1000));
+    triviaShowTimer(rem);
+    if(rem <= 0) triviaEnd();
+  }
+  function triviaStart(){
+    triviaAudio(); /* unlock sound inside this tap */
+    triviaStopTimers();
+    trivia.deck = triviaBuildDeck();
+    trivia.pos = 0;
+    trivia.score = 0;
+    trivia.answered = 0;
+    trivia.wrong = 0;
+    trivia.locked = false;
+    trivia.playing = true;
+    trivia.endAt = Date.now() + TRIVIA_SECONDS * 1000;
+    triviaShowScore();
+    triviaShowTimer(TRIVIA_SECONDS);
+    triviaShowScreen('play');
+    triviaNext();
+    trivia.timerId = setInterval(triviaTick, 100);
+  }
+  function triviaNext(){
+    if(!trivia.playing) return;
+    if(trivia.pos >= trivia.deck.length){ trivia.deck = triviaBuildDeck(); trivia.pos = 0; }
+    var item = TRIVIA_BANK[trivia.deck[trivia.pos]];
+    trivia.pos++;
+    trivia.current = item;
+    trivia.locked = false;
+    triviaQCountEl.textContent = 'Question ' + (trivia.answered + 1);
+    triviaQuestionEl.textContent = item[0];
+    triviaFeedbackEl.textContent = '';
+    triviaFeedbackEl.className = 'trivia-feedback';
+    triviaAnswersEl.innerHTML = '';
+    var opts = triviaShuffle([
+      { t:item[1], ok:true }, { t:item[2], ok:false },
+      { t:item[3], ok:false }, { t:item[4], ok:false }
+    ]);
+    opts.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'trivia-answer';
+      btn.textContent = opt.t;
+      if(opt.ok) btn.setAttribute('data-correct', '1');
+      btn.addEventListener('click', function(){ triviaAnswer(btn, opt.ok); });
+      triviaAnswersEl.appendChild(btn);
+    });
+  }
+  function triviaAnswer(btn, ok){
+    if(!trivia.playing || trivia.locked) return;
+    trivia.locked = true;
+    trivia.answered++;
+    var buttons = triviaAnswersEl.querySelectorAll('.trivia-answer');
+    for(var i = 0; i < buttons.length; i++) buttons[i].disabled = true;
+    if(ok){
+      trivia.score++;
+      triviaShowScore();
+      btn.classList.add('is-correct');
+      triviaDing();
+      triviaFeedbackEl.textContent = 'Correct!';
+      triviaFeedbackEl.className = 'trivia-feedback good';
+      trivia.advanceId = setTimeout(function(){
+        trivia.advanceId = null;
+        if(trivia.playing) triviaNext();
+      }, TRIVIA_CORRECT_MS);
+    } else {
+      trivia.wrong++;
+      btn.classList.add('is-wrong');
+      var right = triviaAnswersEl.querySelector('[data-correct="1"]');
+      if(right) right.classList.add('is-correct');
+      triviaBuzz();
+      if(navigator.vibrate){ try{ navigator.vibrate(200); }catch(e){} }
+      triviaFeedbackEl.textContent = 'Not quite — the answer was “' + trivia.current[1] + '”. Next question in 3 seconds…';
+      triviaFeedbackEl.className = 'trivia-feedback bad';
+      trivia.advanceId = setTimeout(function(){
+        trivia.advanceId = null;
+        if(trivia.playing) triviaNext();
+      }, TRIVIA_WRONG_MS);
+    }
+  }
+  function triviaEnd(){
+    if(!trivia.playing) return;
+    trivia.playing = false;
+    triviaStopTimers();
+    triviaShowTimer(0);
+    trivia.games++;
+    if(trivia.score > trivia.best) trivia.best = trivia.score;
+    document.getElementById('triviaFinalScore').textContent = String(trivia.score);
+    document.getElementById('triviaFinalLine').textContent =
+      trivia.score === 1 ? 'correct answer in 60 seconds' : 'correct answers in 60 seconds';
+    var detail = 'You answered ' + trivia.answered + ' question' + (trivia.answered === 1 ? '' : 's') +
+      ' — ' + trivia.score + ' right, ' + trivia.wrong + ' wrong.';
+    if(trivia.games > 1) detail += ' Best this session: ' + trivia.best + '.';
+    document.getElementById('triviaFinalDetail').textContent = detail;
+    triviaShowScreen('end');
+    hsOnGameEnd();
+    document.getElementById('triviaAgainBtn').focus();
+  }
+  var wineTriviaGamesBtn = document.getElementById('wineTriviaGames');
+  if(wineTriviaGamesBtn) wineTriviaGamesBtn.addEventListener('click', function(){
+    closeSettings();
+    openTrivia(wineTriviaGamesBtn);
+  });
+  /* Report results of Winerack Contests — placeholder only.
+     Tapping it just reveals the "Coming soon" note in the
+     Games & Contests tab; it submits nothing and syncs nothing. */
+  var reportContestBtn = document.getElementById('reportContestResults');
+  var contestSoonMsg = document.getElementById('contestReportSoonMsg');
+  if(reportContestBtn && contestSoonMsg) reportContestBtn.addEventListener('click', function(){
+    contestSoonMsg.hidden = false;
+  });
+
+  /* ---------- Trivia High Score board — shared top 5 ----------
+     The rapid fire trivia is a social game, so its high scores
+     are SHARED: they live in a Supabase table and every player
+     sees the same board, not a per-phone list. The High Score
+     button in Games & Contests opens the board pop-up (top 5
+     players + their scores); when a finished game's score makes
+     the top 5, the end screen congratulates the player, names
+     the place they attained, and offers a name field — prefilled
+     with their signed-in display name when signed in — whose
+     save writes the score to the shared table.
+     The table is OPTIONAL, like user_likes / product_changes:
+     while it does not exist yet, every call here fails soft —
+     the board shows an empty / "coming soon" state and the game
+     plays exactly as before; nothing in the game depends on it.
+     SQL (Supabase SQL Editor, with the same open policies as the
+     other shared tables):
+       create table if not exists public.trivia_high_scores (
+         id bigint generated always as identity primary key,
+         player_name text not null,
+         score integer not null,
+         created_at timestamptz not null default now());
+     Reads and writes go through the same sb() helper as the rest
+     of the shared list (the signed-in user's token when there is
+     one, the publishable key otherwise). */
+  var HS_TABLE = 'trivia_high_scores';
+  var hsReturnFocus = null;
+  var hsSavedThisGame = false;
+  var highScoreOverlay = document.getElementById('highScoreOverlay');
+  var hsBoardListEl = document.getElementById('hsBoardList');
+  var hsBoardNoteEl = document.getElementById('hsBoardNote');
+  var triviaHsCongratsEl = document.getElementById('triviaHsCongrats');
+  var triviaHsTitleEl = document.getElementById('triviaHsCongratsTitle');
+  var triviaHsFormEl = document.getElementById('triviaHsForm');
+  var triviaHsNameEl = document.getElementById('triviaHsName');
+  var triviaHsSaveEl = document.getElementById('triviaHsSave');
+  var triviaHsMsgEl = document.getElementById('triviaHsMsg');
+  var triviaHsBoardWrapEl = document.getElementById('triviaHsBoardWrap');
+  var triviaHsBoardEl = document.getElementById('triviaHsBoard');
+  var triviaHsNoteEl = document.getElementById('triviaHsNote');
+
+  /* Fetch the current top 5, best first (ties: earliest first).
+     Resolves with the rows array on success, or null when the
+     board could not be read — above all when the
+     trivia_high_scores table does not exist yet. Never rejects,
+     so callers can always render a graceful state. */
+  function hsFetchTop5(){
+    return sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc&limit=5').then(function(list){
+      return Array.isArray(list) ? list : [];
+    }, function(err){
+      if(window.console) console.warn('Trivia high scores not loaded (the trivia_high_scores table may not exist yet):', err);
+      return null;
+    });
+  }
+  /* The place a new score attains on a board shaped like rows
+     (already sorted best first): 1 + how many scores on the
+     board beat it. A score makes the top 5 when the board is
+     not full yet, or when it beats the current #5 — tying #5 is
+     not enough, because the earlier #5 was set first. */
+  function hsPlaceFor(score, rows){
+    var place = 1;
+    for(var i = 0; i < rows.length; i++){ if(rows[i].score > score) place++; }
+    return place;
+  }
+  function hsQualifies(score, rows){
+    if(!(score > 0)) return false;
+    if(rows.length < 5) return true;
+    return score > rows[rows.length - 1].score;
+  }
+  function hsDateText(iso){
+    if(!iso) return '';
+    var d = new Date(iso);
+    if(isNaN(d.getTime())) return '';
+    try{ return d.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }); }
+    catch(e){ return ''; }
+  }
+  /* Render board rows into a list element (shared by the board
+     pop-up and the game's end screen). highlightId marks the
+     just-saved row, when its id is known. */
+  function hsRenderList(listEl, rows, highlightId){
+    listEl.innerHTML = '';
+    rows.forEach(function(r, i){
+      var li = document.createElement('li');
+      li.className = 'hs-row' + (i === 0 ? ' is-first' : '') +
+        (highlightId != null && String(r.id) === String(highlightId) ? ' is-new' : '');
+      var rank = document.createElement('span');
+      rank.className = 'hs-rank';
+      rank.textContent = '#' + (i + 1);
+      li.appendChild(rank);
+      var name = document.createElement('span');
+      name.className = 'hs-name';
+      name.textContent = r.player_name || 'Player';
+      var date = hsDateText(r.created_at);
+      if(date){
+        var dEl = document.createElement('span');
+        dEl.className = 'hs-date';
+        dEl.textContent = date;
+        name.appendChild(dEl);
+      }
+      li.appendChild(name);
+      var sc = document.createElement('span');
+      sc.className = 'hs-score';
+      sc.textContent = String(r.score);
+      var scSmall = document.createElement('small');
+      scSmall.textContent = 'correct';
+      sc.appendChild(scSmall);
+      li.appendChild(sc);
+      listEl.appendChild(li);
+    });
+  }
+  function hsShowMsg(text){
+    if(!triviaHsMsgEl) return;
+    triviaHsMsgEl.textContent = text || '';
+    triviaHsMsgEl.hidden = !text;
+  }
+  /* The board on the game's own main (start) page: the shared
+     top 5 sits directly under the Start button, loaded fresh
+     each time the game opens, so a player sees who they have to
+     beat before they play. Same graceful states as the board
+     pop-up — table missing → a short "coming soon" note; table
+     there but empty → a "be the first" note. Rendering into the
+     (possibly hidden) start screen is harmless, so this is also
+     called after a score is saved, keeping the start page's
+     board current for the next open. */
+  function hsRenderStartBoard(){
+    var listEl = document.getElementById('triviaStartHsBoard');
+    var noteEl = document.getElementById('triviaStartHsNote');
+    if(!listEl || !noteEl) return;
+    listEl.innerHTML = '';
+    listEl.hidden = true;
+    noteEl.hidden = false;
+    noteEl.textContent = 'Loading the board…';
+    hsFetchTop5().then(function(rows){
+      if(rows === null){
+        noteEl.textContent = 'High scores coming soon — the shared board isn\u2019t set up yet.';
+        return;
+      }
+      if(!rows.length){
+        noteEl.textContent = 'No scores on the board yet — be the first!';
+        return;
+      }
+      hsRenderList(listEl, rows, null);
+      listEl.hidden = false;
+      noteEl.hidden = true;
+    });
+  }
+  /* ----- The board pop-up (High Score button, Games & Contests) ----- */
+  function openHighScores(fromEl){
+    if(!highScoreOverlay) return;
+    hsReturnFocus = fromEl || null;
+    hsBoardListEl.innerHTML = '';
+    hsBoardListEl.hidden = true;
+    hsBoardNoteEl.hidden = false;
+    hsBoardNoteEl.textContent = 'Loading the board…';
+    highScoreOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('highScoreClose').focus();
+    hsFetchTop5().then(function(rows){
+      if(highScoreOverlay.hidden) return;
+      if(rows === null){
+        hsBoardNoteEl.textContent = 'High scores are coming soon — the shared board isn\u2019t set up yet. Once it is, the top 5 players and their scores will show here.';
+        return;
+      }
+      if(!rows.length){
+        hsBoardNoteEl.textContent = 'No scores on the board yet — be the first! Play Wine Trivia in this tab, and a top-5 score puts your name here.';
+        return;
+      }
+      hsRenderList(hsBoardListEl, rows, null);
+      hsBoardListEl.hidden = false;
+      hsBoardNoteEl.hidden = true;
+    });
+  }
+  function closeHighScores(){
+    if(!highScoreOverlay || highScoreOverlay.hidden) return;
+    highScoreOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && triviaOverlay.hidden) document.body.style.overflow = '';
+    var backTo = hsReturnFocus || document.getElementById('highScoreGames');
+    hsReturnFocus = null;
+    if(backTo) backTo.focus();
+  }
+  var highScoreGamesBtn = document.getElementById('highScoreGames');
+  if(highScoreGamesBtn) highScoreGamesBtn.addEventListener('click', function(){
+    closeSettings();
+    openHighScores(highScoreGamesBtn);
+  });
+  document.getElementById('highScoreClose').addEventListener('click', closeHighScores);
+  document.getElementById('highScoreCancel').addEventListener('click', closeHighScores);
+  highScoreOverlay.addEventListener('click', function(ev){ if(ev.target === highScoreOverlay) closeHighScores(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !highScoreOverlay.hidden) closeHighScores();
+  });
+  /* ----- End of a game: does this score make the board? -----
+     Called by triviaEnd() every time a game finishes. Resets the
+     entry UI for the new game, then checks the shared board:
+     table missing → an honest "coming soon" note and nothing
+     more; score makes the top 5 → the congratulation with the
+     place attained and the name field (prefilled with the
+     signed-in display name, editable either way). A score that
+     does not make the board shows nothing extra. */
+  function hsOnGameEnd(){
+    hsSavedThisGame = false;
+    triviaHsCongratsEl.hidden = true;
+    triviaHsNoteEl.hidden = true;
+    triviaHsBoardWrapEl.hidden = true;
+    triviaHsFormEl.hidden = false;
+    triviaHsSaveEl.disabled = false;
+    triviaHsNameEl.disabled = false;
+    hsShowMsg('');
+    if(!(trivia.score > 0)) return;
+    var finalScore = trivia.score;
+    hsFetchTop5().then(function(rows){
+      /* The player may have closed the pop-up or started again
+         while the board loaded — only touch the end screen if
+         it is still the one showing this game's result. */
+      if(trivia.playing || triviaEndEl.hidden || trivia.score !== finalScore) return;
+      if(rows === null){
+        triviaHsNoteEl.textContent = 'The shared High Score board is coming soon — it isn\u2019t set up yet, so this score couldn\u2019t be entered on it. Once the board is live, top-5 scores will be entered here.';
+        triviaHsNoteEl.hidden = false;
+        return;
+      }
+      if(!hsQualifies(finalScore, rows)) return;
+      var place = hsPlaceFor(finalScore, rows);
+      triviaHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
+      triviaHsNameEl.value = authUser ? authDisplayName() : '';
+      triviaHsCongratsEl.hidden = false;
+      triviaHsNameEl.focus();
+    });
+  }
+  /* Save the finished game's score under the entered name, then
+     show the updated board with the new entry highlighted and
+     the congratulation corrected to the place the score
+     actually holds (another player could have scored in the
+     meantime). A failed save is reported in place and changes
+     nothing else — the game result above still stands. */
+  function hsSaveScore(){
+    if(hsSavedThisGame) return;
+    var name = cleanDisplayName(triviaHsNameEl.value);
+    if(!name){
+      hsShowMsg('Please enter your name for the board first.');
+      triviaHsNameEl.focus();
+      return;
+    }
+    triviaHsNameEl.value = name;
+    triviaHsSaveEl.disabled = true;
+    triviaHsNameEl.disabled = true;
+    hsShowMsg('Saving your score…');
+    sb(HS_TABLE, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(),
+      body: { player_name: name, score: trivia.score } }).then(function(created){
+      hsSavedThisGame = true;
+      var savedId = (created && created.length) ? created[0].id : null;
+      triviaHsFormEl.hidden = true;
+      hsShowMsg('Saved — you\u2019re on the board!');
+      return hsFetchTop5().then(function(rows){
+        if(rows && rows.length){
+          hsRenderList(triviaHsBoardEl, rows, savedId);
+          triviaHsBoardWrapEl.hidden = false;
+          if(savedId != null){
+            for(var i = 0; i < rows.length; i++){
+              if(String(rows[i].id) === String(savedId)){
+                triviaHsTitleEl.textContent = 'Congratulations! You made #' + (i + 1) + ' on the High Score board!';
+                break;
+              }
+            }
+          }
+        }
+        hsRenderStartBoard();
+      });
+    }, function(err){
+      if(window.console) console.warn('Trivia high score not saved (the trivia_high_scores table may not exist yet):', err);
+      triviaHsSaveEl.disabled = false;
+      triviaHsNameEl.disabled = false;
+      hsShowMsg('Couldn\u2019t save your score to the board — it may not be set up yet, or the connection dropped. Your game score above still stands.');
+    });
+  }
+  if(triviaHsFormEl) triviaHsFormEl.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    hsSaveScore();
+  });
+  document.getElementById('triviaStartBtn').addEventListener('click', triviaStart);
+  document.getElementById('triviaAgainBtn').addEventListener('click', triviaStart);
+  document.getElementById('triviaClose').addEventListener('click', closeTrivia);
+  document.getElementById('triviaCancel').addEventListener('click', closeTrivia);
+  document.getElementById('triviaDoneBtn').addEventListener('click', closeTrivia);
+  triviaOverlay.addEventListener('click', function(ev){ if(ev.target === triviaOverlay) closeTrivia(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !triviaOverlay.hidden) closeTrivia();
+  });
+
   /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
      The responsive web manual, baked into this page as a panel on
      the Wine Knowledge / Support pattern: the prominent solid
@@ -10687,7 +11660,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.03.27). Reference content only: nothing
+     the print PDF (2026.11.04.04). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
