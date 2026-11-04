@@ -1199,14 +1199,50 @@
   .btn-google svg{flex:none}
   /* Centre the Sign in with Google button in the Account card */
   #accountSignedOut .btn-google{display:flex;width:fit-content;margin-left:auto;margin-right:auto}
-  /* Change history entries (rendered only in the Admin area) */
+  /* Change history entries (rendered only in the dedicated
+     Change history view, opened from the Admin area) */
   .hist-item{border-top:1px solid var(--line);padding:10px 0}
   .hist-item:first-child{border-top:none;padding-top:2px}
   .hist-prod{font-weight:750;color:var(--plum)}
   :root[data-theme="dark"] .hist-prod{color:var(--lilac)}
-  .hist-change{margin:2px 0;line-height:1.45}
+  .hist-action{display:inline-block;margin:3px 0 1px;font-size:11px;font-weight:800;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--plum);
+    background:var(--violet-soft);border:1.5px solid var(--plum2);border-radius:999px;padding:1px 8px}
+  :root[data-theme="dark"] .hist-action{color:var(--lilac)}
+  .hist-change{margin:2px 0;line-height:1.45;overflow-wrap:break-word}
   .hist-meta{color:var(--muted);font-size:12.5px}
   .hist-empty{color:var(--muted);line-height:1.5}
+  /* The Admin area no longer carries the history as a long inline
+     list: it carries one obvious opener button (plus a one-line
+     summary under it), and the history itself lives in the
+     dedicated view below */
+  .history-open-btn{display:flex;align-items:center;gap:10px;width:100%;min-height:54px;
+    background:var(--violet-soft);color:var(--ink);border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 16px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;text-align:left;margin-top:6px}
+  .history-open-btn:hover,.history-open-btn:focus-visible{background:var(--panel2);border-color:var(--plum2);outline:none}
+  .history-open-btn .sa-sub{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-top:1px}
+  .history-open-btn .sa-arrow{margin-left:auto;flex:none;font-size:20px;font-weight:800;color:var(--plum)}
+  :root[data-theme="dark"] .history-open-btn .sa-arrow{color:var(--lilac)}
+  .hist-summary{margin:8px 2px 0}
+  /* Dedicated Change history view: a large overlay above the
+     Admin panel (z-index above .editor-overlay's 60), near
+     full-screen on a phone. The panel is a flex column capped to
+     the viewport height and ONLY the entry list scrolls inside
+     it, so the view stays usable however long the history grows;
+     the newest entry is always rendered first (see
+     renderChangeHistory). Closing it returns to Admin, which
+     stays open underneath */
+  .history-overlay{z-index:72;padding:10px 8px calc(10px + env(safe-area-inset-bottom))}
+  .history-panel{max-width:720px;max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px);
+    display:flex;flex-direction:column}
+  .history-panel .editor-head{flex:none}
+  .history-back{width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;
+    background:var(--panel2);color:var(--ink);border:1.5px solid var(--line);
+    border-radius:999px;padding:0;font:inherit;font-size:23px;font-weight:800;line-height:1;cursor:pointer}
+  .history-back:hover,.history-back:focus-visible{background:var(--violet-soft);outline:2px solid var(--plum2);outline-offset:1px}
+  .history-sub{flex:none;margin:0 0 6px;font-size:13.5px;line-height:1.5;color:var(--muted)}
+  .history-list{overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;padding-right:2px}
+  .history-panel .editor-actions{flex:none}
   .signin-panel{max-width:440px}
   .signin-panel p{line-height:1.55;margin:0 0 6px}
   /* Backend (admin only): signed-in users + the change history,
@@ -4788,7 +4824,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.14</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.15</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4813,7 +4849,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.14</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.15</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5652,7 +5688,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.14</span>
+      <span class="manual-pill accent">Version 2026.11.03.15</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -5989,8 +6025,9 @@
         <ul>
           <li>Every add and edit is recorded with <strong>who made it</strong> (display name if set), what changed, and when.</li>
           <li>Price edits are recorded with the old and new values — <strong>Regular price</strong> and <strong>Sale price</strong> alike, including a sale price typed on a wine that isn&rsquo;t on sale yet.</li>
+          <li>Tap <span class="manual-ui">Open Change history</span> in Admin and the history opens in <strong>its own full-screen view</strong> — it is no longer a long list inside the Admin panel. The <strong>newest change is always on top</strong>, the list scrolls inside that view, and <span class="manual-ui">Refresh</span> reloads it. The back arrow, <span class="manual-ui">Back to Admin</span> or the &times; closes it and returns you to Admin.</li>
           <li>History is <strong>Admin-only</strong> — it isn&rsquo;t shown to regular users.</li>
-          <li>Admin also carries the action log for admin actions, and the suggestions queue (§12) for marking suggestions acted upon and replying.</li>
+          <li>Admin also carries the action log for admin actions, and the suggestions queue (Section 12) for marking suggestions acted upon and replying.</li>
         </ul>
       </div>
     </details>
@@ -6021,6 +6058,8 @@
         <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
         <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
         <p>This was a database fault, fixed in version 2026.11.03.9 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <h3>A change didn&rsquo;t appear in Change history</h3>
+        <p>This was a database fault, fixed in version 2026.11.03.15 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.03.15 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
         <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
         <h3>The store popup keeps appearing</h3>
@@ -6040,7 +6079,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.14</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.15</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -6421,9 +6460,36 @@
     <h3 class="be-head">Suggestions</h3>
     <div id="adminSuggestions"><p class="hist-empty">Loading…</p></div>
     <h3 class="be-head">Change history</h3>
-    <div id="adminLog"><p class="hist-empty">Loading…</p></div>
+    <button type="button" class="history-open-btn" id="openHistoryBtn"><span>Open Change history<span class="sa-sub">Every add and edit, newest change on top &mdash; opens in its own view</span></span><span class="sa-arrow" aria-hidden="true">&rsaquo;</span></button>
+    <div id="adminLog" class="hist-summary"><p class="hist-empty">Change history opens in its own view, so this panel stays short however long the history grows.</p></div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="adminDone">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Change history (appointed admins only): a dedicated,
+     near-full-screen view opened from the Admin area — NOT a
+     long inline list inside the Admin panel, so it stays usable
+     as the history grows very long over time. The newest change
+     is always on top and the entry list scrolls inside this view
+     alone. Closing it (back arrow, ×, Back to Admin, Escape or a
+     tap outside) returns to the Admin panel, which stays open
+     underneath. The overlay markup alone reveals nothing: the
+     rows are fetched only when an appointed admin opens it (see
+     openChangeHistory / renderChangeHistory in the script). -->
+<div class="editor-overlay history-overlay" id="historyOverlay" hidden>
+  <div class="editor-panel history-panel" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
+    <div class="editor-head">
+      <button type="button" class="history-back" id="historyBack" aria-label="Back to Admin">&larr;</button>
+      <h2 id="historyTitle">Change history</h2>
+      <button type="button" class="editor-x" id="historyClose" aria-label="Close change history">&times;</button>
+    </div>
+    <p class="history-sub">Every add and edit made while signed in, newest change first.</p>
+    <div class="history-list" id="historyLog"><p class="hist-empty">Loading&hellip;</p></div>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="historyRefresh">Refresh</button>
+      <button type="button" class="btn-save" id="historyDone">Back to Admin</button>
     </div>
   </div>
 </div>
@@ -6527,7 +6593,7 @@
        · commentCounts — product_id -> total comments, filled
          in the background by loadCommentCounts for the badges. */
   var commentsReady = null, commentsPid = '', commentCounts = {}, commentsCountsReady = null;
-  var signinOverlay = null, adminOverlay = null, bannedOverlay = null, suggestOverlay = null;
+  var signinOverlay = null, adminOverlay = null, bannedOverlay = null, suggestOverlay = null, historyOverlay = null;
   /* Icon paths for the Love heart and the comment bubble,
      declared HERE — before the init pass at the editor section
      adds those buttons to every baked-in row — because a var
@@ -11135,36 +11201,42 @@
          add column if not exists user_name text;
        create table if not exists public.product_changes (
          id bigint generated always as identity primary key,
-         product_id text, product_label text, change text,
+         product_id text, action text, details text,
          user_id uuid, user_email text, user_name text,
          created_at timestamptz not null default now());
-     NOTE (flagged 2026-11-03): the product_changes table as
-     actually created has NO user_name column, which made every
-     change-history POST fail with PGRST204. sbLogChange()
-     tolerates any shape: on a missing-column refusal it retries
-     with progressively barer bodies (dropping user_name, then
-     user_email, then product_label — see postChange), so an
-     entry is recorded even when both snapshot columns are
-     missing, which the earlier single retry could not survive.
-     Adding the columns is OPTIONAL, but it is what lets the
-     full name be recorded on each entry. Exact lines to add
-     them:
-       alter table public.product_changes
-         add column if not exists user_name text,
-         add column if not exists user_email text;
+     NOTE (verified live 2026-11-03, .15): the product_changes
+     table as actually created carries action / details — it has
+     NO change column and NO product_label column at all. Every
+     logger shape the app used to send named change (and, except
+     at the barest level, product_label), so PostgREST refused
+     EVERY change-history POST with PGRST204 ("Could not find the
+     'change' column of 'product_changes' in the schema cache")
+     and the .14 retry — which only ever dropped the user_name /
+     user_email snapshot columns — could never succeed: the edit
+     itself saved through the products path, but no history entry
+     ever landed and the Admin fetch honestly read an empty
+     table. Verified against the live table: a POST carrying
+     action / details returns 201 (with the publishable key as
+     well as with a signed-in token, so the auth token was never
+     the blocker), while a POST carrying change returns that
+     PGRST204. sbLogChange() now writes the live shape first
+     (action + details) and falls back progressively — barer
+     snapshot sets, then the legacy change / product_label shape
+     — on missing-column refusals only (see postChange below).
      Loves are one per user per product (the primary key), the
      heart shows the total across all users, "Loved only" shows
      the signed-in user's own loves, and "Most loved" sorts by
      that total. Change entries are written by sbLogChange() from
      the editor save (with the fields that changed), the ⋮-menu
      toggles and the barcode link, always with the signed-in
-     user's name/email; the Change history view lives ONLY in
-     the Admin area (see renderAdminLog) and reads them back
-     newest first for appointed admins only. */
+     user's name/email; the Change history view is a dedicated
+     view opened from the Admin area (see renderChangeHistory)
+     and reads them back newest first for appointed admins only. */
   signinOverlay = document.getElementById('signinOverlay');
   adminOverlay = document.getElementById('adminOverlay');
   bannedOverlay = document.getElementById('bannedOverlay');
   suggestOverlay = document.getElementById('suggestOverlay');
+  historyOverlay = document.getElementById('historyOverlay');
   try{
     if(window.supabase && typeof window.supabase.createClient === 'function'){
       authClient = window.supabase.createClient(SB_URL, SB_KEY);
@@ -12359,88 +12431,126 @@
     if(String(oldD.notes || '') !== String(newD.notes || '')) parts.push('Tasting notes updated');
     return parts.join(' \u00B7 ');
   }
-  /* Change-history logging — resilient to missing snapshot
-     columns, the same shape as the love save fix (saveLike),
-     but PROGRESSIVE. The shared product_changes table as
-     actually created is missing snapshot columns (verified
-     2026-11-03: it has NO user_name column — and a table
-     created without user_name can be missing user_email too,
-     exactly as user_likes was created with neither). PostgREST
-     refuses a POST that names a column the table doesn't have
-     (PGRST204 "Could not find the '…' column of
-     'product_changes' in the schema cache"), naming only the
-     FIRST missing column per refusal — so the old single retry
-     (full body, then the same body minus user_name) was still
-     refused whenever user_email was missing too, and EVERY
-     change-history entry was lost: silently, because this
-     logger is fire-and-forget and only ever warned to the
-     console, while the edit itself (saved through the products
-     path, which carries neither snapshot column) kept
-     succeeding. That is how a price change could save to the
-     product list yet never register in the Admin area.
-     postChange() below therefore walks DOWN body shapes —
-     full → minus user_name → minus user_name and user_email →
-     core only (product_id, change, user_id) — retrying after
-     each missing-column refusal, and changesBodyLevel
-     remembers the first shape the table accepted for the rest
-     of the session, so later entries this session go straight
-     to it. The product id, the change text and who made it
-     are on every shape — only the decorative snapshots (name,
-     email, product label) are ever dropped — and the Admin
-     Change history resolves a name from the entry's user_id /
-     user_email when the snapshots are absent. To record the
-     full snapshots on each entry, run in the Supabase SQL
-     Editor:
-       alter table public.product_changes
-         add column if not exists user_name text,
-         add column if not exists user_email text;
-     If those columns are ever added, the full first attempt
-     succeeds again and the snapshots are recorded exactly as
-     originally designed. The POST also rides with keepalive,
-     so an entry still lands when the user leaves or closes
-     the app straight after saving. */
+  /* Change-history logging — written for the table as it
+     ACTUALLY exists, verified live 2026-11-03 (.15).
+     ROOT CAUSE of the entries that never landed, including the
+     one made after the .14 fix: the shared product_changes
+     table's columns are id / product_id / action / details /
+     user_id / user_email / user_name / created_at. There is NO
+     change column and NO product_label column. Every body the
+     old logger sent named change — and all but the barest also
+     named product_label — so PostgREST refused every single
+     POST with PGRST204 ("Could not find the 'change' column of
+     'product_changes' in the schema cache"). The .14 retry only
+     ever dropped the user_name / user_email snapshot columns,
+     which were never the problem (both columns exist), so it
+     walked full → barer → core and was refused at every level
+     for the same reason; being fire-and-forget, it only warned
+     to the console while the edit itself (saved through the
+     products path, which names neither column) kept succeeding.
+     That is exactly how a price change could save yet never
+     register, and why the Admin fetch then honestly showed an
+     empty table — there was no Admin-side filtering hiding
+     entries, and the auth token was not the blocker either: the
+     same action / details POST succeeds with the publishable
+     key as well as with a signed-in user's token.
+     postChange() therefore sends the LIVE shape first:
+     action (a short kind, derived from the change text by
+     changeActionFor) + details (the full change text, so no
+     information is lost), with the user snapshots. On a
+     missing-column refusal ONLY, it walks down progressively —
+     live shape minus user_name, minus user_name + user_email,
+     live core (product_id, action, details, user_id), then the
+     same four steps in the LEGACY shape (change /
+     product_label) in case the table is ever recreated from the
+     older documented SQL — and changesBodyLevel remembers the
+     first shape the table accepted for the rest of the session,
+     so later entries go straight to it. The product id, the
+     change text and who made it are on every shape; only the
+     decorative snapshots (name, email, product label) are ever
+     dropped, and the Change history view resolves the product
+     label and the name at render time when a snapshot is
+     absent. The POST rides with keepalive, so an entry still
+     lands when the user leaves or closes the app straight
+     after saving. sbLogChange returns its promise (callers may
+     ignore it — every existing caller does, staying
+     fire-and-forget so a logging failure can never take the
+     edit itself down). */
+  function changeActionFor(changeText){
+    var t = String(changeText || '');
+    if(/^Added product/i.test(t)) return 'Added product';
+    if(/^Made admin/i.test(t)) return 'Made admin';
+    if(/^Removed admin/i.test(t)) return 'Removed admin';
+    if(/^Banned user/i.test(t)) return 'Banned user';
+    if(/^Unbanned user/i.test(t)) return 'Unbanned user';
+    if(/^Barcode /i.test(t)) return 'Barcode linked';
+    if(/^Marked (un)?available/i.test(t)) return 'Availability changed';
+    if(/^Not in plano/i.test(t)) return 'Not in plano changed';
+    if(/^Cooler /i.test(t)) return 'Cooler changed';
+    if(/^On sale /i.test(t)) return 'Sale changed';
+    if(/^Sale price not working/i.test(t)) return 'Sale changed';
+    return 'Edited product';
+  }
   var changesBodyLevel = 0;
   function postChange(row, changeText, level){
-    var body = {
-      product_id: rowPidOf(row) || null,
-      change: changeText,
-      user_id: authUser.id
-    };
-    if(level < 3) body.product_label = row ? (detailLabel(row) || null) : null;
-    if(level < 2) body.user_email = authUser.email || null;
-    if(level < 1) body.user_name = authDisplayName();
+    var body;
+    if(level < 4){
+      /* Live shape (levels 0–3): action / details, snapshots
+         dropped progressively as the level rises */
+      body = {
+        product_id: rowPidOf(row) || null,
+        action: changeActionFor(changeText),
+        details: changeText,
+        user_id: authUser.id
+      };
+      if(level < 2) body.user_email = authUser.email || null;
+      if(level < 1) body.user_name = authDisplayName();
+    } else {
+      /* Legacy shape (levels 4–7): change / product_label, for a
+         table recreated from the older documented SQL */
+      var l = level - 4;
+      body = {
+        product_id: rowPidOf(row) || null,
+        change: changeText,
+        user_id: authUser.id
+      };
+      if(l < 3) body.product_label = row ? (detailLabel(row) || null) : null;
+      if(l < 2) body.user_email = authUser.email || null;
+      if(l < 1) body.user_name = authDisplayName();
+    }
     return sb('product_changes', { method: 'POST', prefer: 'return=minimal', token: sbAuthToken(), body: body, keepalive: true });
   }
   function sbLogChange(row, changeText){
-    if(!authUser || !changeText) return;
-    if(isCurrentUserBanned()) return;
+    if(!authUser || !changeText) return Promise.resolve();
+    if(isCurrentUserBanned()) return Promise.resolve();
     function attempt(level){
       return postChange(row, changeText, level).then(function(){
         changesBodyLevel = level;
       }, function(err){
-        if(level < 3 && isMissingColumnErr(err)) return attempt(level + 1);
+        if(level < 7 && isMissingColumnErr(err)) return attempt(level + 1);
         throw err;
       });
     }
-    attempt(changesBodyLevel).then(function(){
+    return attempt(changesBodyLevel).then(function(){
       if(changesReady !== true){ changesReady = true; syncLikesSetupNote(); }
     }, function(err){
       /* Fire-and-forget on purpose: a missing product_changes
          table must never take the edit itself down. The flag
          just feeds the setup note in Settings and the message
-         in the Admin area's Change history view */
+         in the dedicated Change history view */
       if(window.console) console.warn('Change not logged (product_changes table may not exist yet):', err);
       if(changesReady !== false){ changesReady = false; syncLikesSetupNote(); }
     });
   }
-  /* Change history has no standalone view any more: it lives
-     ONLY inside the Admin area (see renderAdminLog in the Admin
-     section below), which is gated to appointed admins. There is
-     deliberately no opener, button or fetch for it anywhere else,
-     so signed-out users and non-appointed signed-in users never
-     see it and its rows are never fetched for them. Change LOGGING
-     itself is unchanged: sbLogChange() above still records every
-     add/edit, tagged with the signed-in user. */
+  /* Change history is READ only in its dedicated view, opened
+     from inside the Admin area (see renderChangeHistory in the
+     Admin section below), which is gated to appointed admins.
+     There is deliberately no opener, button or fetch for it
+     anywhere else, so signed-out users and non-appointed
+     signed-in users never see it and its rows are never fetched
+     for them. Change LOGGING itself is unchanged in scope:
+     sbLogChange() above still records every add/edit, tagged
+     with the signed-in user. */
   /* ----- session wiring -----
      getSession picks up both a persisted session (returning
      user) and the tokens in the URL fragment on the way back
@@ -13118,54 +13228,161 @@
       box.appendChild(item);
     });
   }
-  /* ----- Change history (Admin area ONLY) -----
-     This is the one and only place change history is read. It is
-     called only from openAdmin(), which is itself gated to
-     appointed admins, and it re-checks the appointment here
+  /* ----- Change history (dedicated view, from Admin ONLY) -----
+     This is the one and only place change history is read, and
+     it is a SEPARATE VIEW, not a list inside the Admin panel:
+     tapping "Open Change history" in the Admin area opens the
+     full-screen #historyOverlay above Admin, and closing it
+     returns to Admin (which stays open underneath). The Admin
+     panel itself now carries only the opener button and a
+     one-line summary (#adminLog), so Admin stays short however
+     long the history grows. The view re-checks the appointment
      before fetching: for anyone else it renders nothing and the
-     product_changes rows are never fetched. Each entry shows, on
-     its own lines so it stays readable on a phone: the product,
-     what changed, who made the change, and when — newest first. */
-  function renderAdminLog(){
+     product_changes rows are never fetched.
+     Rows are read generically across BOTH table shapes: the
+     live table carries action / details (no product_label, no
+     change — see sbLogChange), a legacy-shaped table carries
+     change / product_label. The product line resolves, in
+     order: the row's product_label snapshot, the catalogue
+     label for its product_id, the product_id itself, and
+     finally "Admin action" for product-less entries (admin
+     appointments, bans). The change line is details, else
+     change, else action; a distinct action is also shown as a
+     small tag above it. Ordering is newest first TWICE over:
+     the fetch asks for created_at descending AND the rows are
+     re-sorted on this screen by created_at (then id) descending
+     before rendering, so the newest change is on top even if a
+     fetch ever came back unordered. The fetch takes the newest
+     500 entries; the list scrolls inside the view alone. */
+  function historyProductLabel(e){
+    if(!e) return 'Admin action';
+    if(e.product_label) return e.product_label;
+    if(e.product_id){
+      var row = (typeof pidRow !== 'undefined' && pidRow) ? pidRow[e.product_id] : null;
+      if(row){
+        var lbl = detailLabel(row);
+        if(lbl) return lbl;
+      }
+      return e.product_id;
+    }
+    return 'Admin action';
+  }
+  function historyChangeText(e){
+    if(!e) return '';
+    return e.details || e.change || e.action || '';
+  }
+  function buildHistoryItem(e){
+    var item = document.createElement('div');
+    item.className = 'hist-item';
+    var prod = document.createElement('div');
+    prod.className = 'hist-prod';
+    prod.textContent = historyProductLabel(e);
+    item.appendChild(prod);
+    var text = historyChangeText(e);
+    if(e.action && text && e.action !== text){
+      var act = document.createElement('div');
+      var actTag = document.createElement('span');
+      actTag.className = 'hist-action';
+      actTag.textContent = e.action;
+      act.appendChild(actTag);
+      item.appendChild(act);
+    }
+    var ch = document.createElement('p');
+    ch.className = 'hist-change';
+    ch.textContent = text;
+    item.appendChild(ch);
+    var meta = document.createElement('div');
+    meta.className = 'hist-meta';
+    var whoName = resolvedNameFor(e);
+    var who = whoName || e.user_email || 'Someone';
+    if(whoName && e.user_email) who = whoName + ' (' + e.user_email + ')';
+    meta.textContent = 'by ' + who + (e.created_at ? ' \u00B7 ' + fmtAdminTime(e.created_at) : '');
+    item.appendChild(meta);
+    return item;
+  }
+  /* The one-line summary under the Admin opener button: filled
+     from the dedicated view's fetch (count + newest entry), so
+     Admin itself never has to fetch or render the list */
+  function syncAdminLogSummary(entries){
     var box = document.getElementById('adminLog');
+    if(!box) return;
+    box.innerHTML = '';
+    var p = document.createElement('p');
+    p.className = 'hist-empty';
+    if(!entries || !entries.length){
+      p.textContent = 'No changes recorded yet. When someone signed in adds or edits a product, it shows up in Change history with their name, newest first.';
+    } else {
+      var newest = entries[0];
+      p.textContent = entries.length + (entries.length === 1 ? ' change' : ' changes') + ' recorded \u00B7 Latest: ' + historyChangeText(newest) + (newest.created_at ? ' \u00B7 ' + fmtAdminTime(newest.created_at) : '');
+    }
+    box.appendChild(p);
+  }
+  function renderChangeHistory(){
+    var box = document.getElementById('historyLog');
     if(!box) return;
     if(!isAppointed()){
       adminMsg(box, 'Change history is restricted to appointed admins.');
       return;
     }
     adminLoading(box);
-    sb('product_changes?select=*&order=created_at.desc&limit=200', { token: sbAuthToken() }).then(function(entries){
+    sb('product_changes?select=*&order=created_at.desc&limit=500', { token: sbAuthToken() }).then(function(entries){
       changesReady = true; syncLikesSetupNote();
+      var list = (entries || []).slice();
+      list.sort(function(a, b){
+        var ta = a && a.created_at ? Date.parse(a.created_at) : 0;
+        var tb = b && b.created_at ? Date.parse(b.created_at) : 0;
+        if(tb !== ta) return tb - ta;
+        return ((b && b.id) || 0) - ((a && a.id) || 0);
+      });
+      syncAdminLogSummary(list);
       box.innerHTML = '';
-      if(!entries || !entries.length){
+      /* Back to the very top, so the newest change is what the
+         admin sees first even on a re-open / Refresh */
+      box.scrollTop = 0;
+      if(!list.length){
         adminMsg(box, 'No changes recorded yet. When someone signed in adds or edits a product, it shows up here with their name, newest first.');
         return;
       }
-      entries.forEach(function(e){
-        var item = document.createElement('div');
-        item.className = 'hist-item';
-        var prod = document.createElement('div');
-        prod.className = 'hist-prod';
-        prod.textContent = e.product_label || 'Product';
-        item.appendChild(prod);
-        var ch = document.createElement('p');
-        ch.className = 'hist-change';
-        ch.textContent = e.change || '';
-        item.appendChild(ch);
-        var meta = document.createElement('div');
-        meta.className = 'hist-meta';
-        var whoName = resolvedNameFor(e);
-        var who = whoName || e.user_email || 'Someone';
-        if(whoName && e.user_email) who = whoName + ' (' + e.user_email + ')';
-        meta.textContent = 'by ' + who + (e.created_at ? ' \u00B7 ' + fmtAdminTime(e.created_at) : '');
-        item.appendChild(meta);
-        box.appendChild(item);
-      });
+      list.forEach(function(e){ box.appendChild(buildHistoryItem(e)); });
     }, function(err){
       if(window.console) console.warn(err);
-      changesReady = false; syncLikesSetupNote();
-      adminMsg(box, 'Change history isn\u2019t set up yet \u2014 the product_changes table still needs to be created in the shared list. Once it exists, adds and edits made while signed in will show up here, newest first.');
+      var msg = String((err && err.message) || err || '');
+      if(/404|PGRST205|does not exist|relation|schema cache/i.test(msg)){
+        changesReady = false; syncLikesSetupNote();
+        adminMsg(box, 'Change history isn\u2019t set up yet \u2014 the product_changes table still needs to be created in the shared list. Once it exists, adds and edits made while signed in will show up here, newest first.');
+      } else {
+        adminMsg(box, 'Change history couldn\u2019t load \u2014 check your connection and tap Refresh to try again.');
+      }
     });
+  }
+  function openChangeHistory(){
+    /* The gate, re-checked at this door too: no appointment, no
+       view — and the rows are never fetched */
+    if(!isAppointed()){
+      syncToast('Change history is restricted to appointed admins.', true);
+      return;
+    }
+    if(!historyOverlay) return;
+    historyOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    renderChangeHistory();
+    var back = document.getElementById('historyBack');
+    if(back) back.focus();
+  }
+  function closeChangeHistory(){
+    if(!historyOverlay || historyOverlay.hidden) return;
+    historyOverlay.hidden = true;
+    /* Admin stays open underneath, so the page stays locked;
+       only if Admin was closed first does closing the history
+       hand scrolling back (the same check every other panel
+       close makes) */
+    if(adminOverlay && !adminOverlay.hidden){
+      document.body.style.overflow = 'hidden';
+    } else if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && suggestOverlay.hidden && bannedOverlay.hidden){
+      document.body.style.overflow = '';
+    }
+    var opener = document.getElementById('openHistoryBtn');
+    if(opener && adminOverlay && !adminOverlay.hidden) opener.focus();
   }
   function appointAdmin(entry){
     if(!isBootstrapAdmin()) return;
@@ -13219,7 +13436,10 @@
     renderAdminAdmins();
     renderAdminBanned();
     renderAdminSuggestions();
-    renderAdminLog();
+    /* Change history is NOT rendered here any more: it opens in
+       its own dedicated view from the button in this panel (see
+       openChangeHistory), so opening Admin never fetches or
+       renders the — potentially very long — history list */
     /* Refresh the appointments in the background too, so the
        Appointed admins list and the appoint buttons on the
        Signed-in users list reflect any change made elsewhere
@@ -13235,6 +13455,9 @@
   }
   function closeAdmin(){
     if(!adminOverlay || adminOverlay.hidden) return;
+    /* The dedicated Change history view sits above Admin and
+       returns to it — it never outlives Admin itself */
+    if(historyOverlay && !historyOverlay.hidden) historyOverlay.hidden = true;
     adminOverlay.hidden = true;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && suggestOverlay.hidden) document.body.style.overflow = '';
   }
@@ -13257,7 +13480,19 @@
   document.getElementById('adminDone').addEventListener('click', closeAdmin);
   if(adminOverlay) adminOverlay.addEventListener('click', function(ev){ if(ev.target === adminOverlay) closeAdmin(); });
   document.addEventListener('keydown', function(ev){
-    if(ev.key === 'Escape' && adminOverlay && !adminOverlay.hidden) closeAdmin();
+    /* Escape belongs to the Change history view while it is
+       open (its own handler below closes it back to Admin) */
+    if(ev.key === 'Escape' && adminOverlay && !adminOverlay.hidden && !(historyOverlay && !historyOverlay.hidden)) closeAdmin();
+  });
+  /* ----- Change history view open / close (from Admin) ----- */
+  document.getElementById('openHistoryBtn').addEventListener('click', openChangeHistory);
+  document.getElementById('historyBack').addEventListener('click', closeChangeHistory);
+  document.getElementById('historyClose').addEventListener('click', closeChangeHistory);
+  document.getElementById('historyDone').addEventListener('click', closeChangeHistory);
+  document.getElementById('historyRefresh').addEventListener('click', renderChangeHistory);
+  if(historyOverlay) historyOverlay.addEventListener('click', function(ev){ if(ev.target === historyOverlay) closeChangeHistory(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && historyOverlay && !historyOverlay.hidden) closeChangeHistory();
   });
   /* ---------- Suggestions box ----------
      Settings → Suggestions (the first action in the Settings
