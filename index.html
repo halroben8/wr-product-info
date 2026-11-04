@@ -21,6 +21,15 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Grapevine" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<!-- Brand wordmark font: Marcellus — a refined, wine-label style
+     display serif (openly licensed, Google Fonts), used ONLY for
+     the "Grapevine" heading at the top of the app so it reads as
+     a proper brand name. Every other text in the app keeps the
+     default sans-serif. If the font cannot load, the heading
+     falls back to Georgia / serif, still a serif wordmark. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap" rel="stylesheet" />
 <title>Grapevine</title>
 <script>
 /* Theme — Light is the default look. Before first paint, apply the
@@ -73,7 +82,14 @@
   .wrap{max-width:1200px;margin:0 auto;padding:0 16px 48px}
   header.hero{position:relative;background:var(--header-grad);color:#fff;border-radius:0 0 22px 22px;
     padding:22px 76px 18px 22px;margin:0 -16px 18px;box-shadow:var(--shadow)}
-  header.hero h1{margin:0 0 6px;font-size:clamp(24px,4.5vw,36px);font-weight:800;letter-spacing:-.01em}
+  /* The "Grapevine" wordmark: Marcellus, an elegant display
+     serif in the wine-brand style, larger and more widely
+     tracked than the old sans-serif heading, so the name reads
+     as a brand at the top of the app. Heading ONLY — no other
+     text, colour or layout changes with it. Marcellus ships in
+     a single weight (400); its letterforms carry the presence. */
+  header.hero h1{margin:0 0 6px;font-family:"Marcellus","Cormorant Garamond",Georgia,"Times New Roman",serif;
+    font-size:clamp(34px,5.5vw,46px);font-weight:400;letter-spacing:.055em;line-height:1.15}
   /* Wine Rack grape mark at the top of the banner, above the heading.
      The artwork is just the grape clusters (plum and red) on a
      transparent background, shown directly on the banner — no plate
@@ -477,6 +493,77 @@
   .sc-afterhours{margin:14px 0 2px;font-size:12px;font-weight:800;letter-spacing:.06em;
     text-transform:uppercase;color:#b91c1c}
   :root[data-theme="dark"] .sc-afterhours{color:#fca5a5}
+  /* Food pairing finder — a pop-up window only, never an
+     inline embed: opened by the Food pairing finder button
+     under the store pill in the header, and by the Food
+     pairing finder button in the Support tab in Settings
+     (last in the tab, below the Support Center entry at the
+     very top, "What's on sample today?" and Wine Knowledge).
+     The user types a dish; the finder
+     ranks only the wines the CURRENT store carries and has
+     available (closest
+     match first, with backups) using each wine's existing
+     sweetness, acidity, tannins, richness, varietal and tasting
+     notes, following classic pairing logic (see the pairing
+     script below). Tapping a recommendation opens that wine
+     exactly like a scan / a Loved wines tap (jumpToProduct).
+     Display + ranking only: nothing here writes product data
+     or syncs anywhere. */
+  .pairing-tool{border:1.5px solid var(--line);border-radius:14px;background:var(--panel);
+    padding:14px;margin:0 0 14px;box-shadow:var(--card-shadow)}
+  .pairing-title{margin:0 0 4px;font-size:19px;font-weight:800;line-height:1.25;color:#4c1d95}
+  :root[data-theme="dark"] .pairing-title{color:#e9d5ff}
+  .pairing-sub{margin:0 0 12px;font-size:14px;line-height:1.55;color:var(--muted)}
+  .pairing-form{display:flex;gap:8px}
+  .pairing-form input{flex:1;min-width:0;min-height:48px;font-size:16px}
+  .pairing-go{flex:none;min-height:48px;background:var(--badge-bg);color:var(--badge-ink);
+    border:1.5px solid var(--badge-bg);border-radius:10px;padding:10px 16px;
+    font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+  .pairing-go:hover,.pairing-go:focus-visible{background:var(--plum2);border-color:var(--plum2);outline:none}
+  .pairing-examples{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .pairing-chip{border:1.5px solid var(--line);background:var(--violet-soft);color:var(--plum);
+    border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+  :root[data-theme="dark"] .pairing-chip{color:var(--lilac)}
+  .pairing-chip:hover,.pairing-chip:focus-visible{border-color:var(--plum2);outline:none}
+  .pairing-results{margin-top:12px;display:grid;gap:8px}
+  .pairing-results:empty{display:none}
+  .pairing-hint{margin:0;padding:10px 12px;border:1.5px dashed var(--line);border-radius:10px;
+    font-size:14px;line-height:1.55;color:var(--muted)}
+  .pairing-head{margin:2px 0 0;font-size:12.5px;font-weight:800;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--plum)}
+  :root[data-theme="dark"] .pairing-head{color:var(--lilac)}
+  .pairing-note{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted)}
+  /* Food pairing pop-up — the finder itself: a modal overlay
+     (the shared .editor-overlay / .editor-panel shell) over
+     the main list, opened by the header button and by the
+     Support tab's Food pairing finder button — the same
+     pop-up either way. Inside the pop-up the tool sheds its
+     card border / shadow / padding, because the panel itself
+     is already the card. */
+  .pairing-panel{max-width:680px}
+  .pairing-panel .editor-head h2{font-size:22px;font-weight:800;color:#4c1d95}
+  :root[data-theme="dark"] .pairing-panel .editor-head h2{color:#e9d5ff}
+  .pairing-tool-popup{border:none;box-shadow:none;padding:0;margin:0;background:transparent;border-radius:0}
+  .pairing-item{display:block;width:100%;text-align:left;background:var(--panel);
+    border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;
+    font:inherit;color:var(--ink);cursor:pointer;line-height:1.4}
+  .pairing-item:hover,.pairing-item:focus-visible{border-color:var(--plum2);background:var(--violet-soft);outline:none}
+  .pairing-item.is-best{border-color:var(--plum2);background:var(--violet-soft)}
+  .pairing-item-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .pairing-rank{flex:none;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    background:var(--panel2);color:var(--plum);border:1.5px solid var(--line);
+    border-radius:999px;padding:3px 9px;line-height:1.3}
+  :root[data-theme="dark"] .pairing-rank{color:var(--lilac)}
+  .pairing-item.is-best .pairing-rank{background:var(--badge-bg);color:var(--badge-ink);border-color:var(--badge-bg)}
+  .pairing-name{flex:1;min-width:0;font-size:15.5px;font-weight:800}
+  .pairing-price{flex:none;font-size:15px;font-weight:800;color:var(--plum)}
+  :root[data-theme="dark"] .pairing-price{color:var(--lilac)}
+  .pairing-meta{display:block;margin-top:3px;font-size:13px;font-weight:600;color:var(--muted)}
+  .pairing-why{display:block;margin-top:5px;font-size:14px;line-height:1.55;color:var(--ink)}
+  @media (max-width:520px){
+    .pairing-form{flex-direction:column}
+    .pairing-go{width:100%}
+  }
   /* Product Info Manual (web version) — the responsive manual as an
      in-app panel, opened from Documents. The prominent entry in
      Documents is a solid plum button; the panel itself reuses the
@@ -626,6 +713,30 @@
   .hero-store select:hover{background-color:rgba(255,255,255,.24)}
   .hero-store select:focus{outline:2px solid #fff;outline-offset:2px;border-color:#fff}
   .hero-store select option{color:#241536;background:#fff;font-weight:600}
+  /* Food pairing button — directly UNDER the store number pill
+     in the header: same right edge as the pill (right:66px,
+     matching .hero-store), one gap below the pill (pill: top
+     27px + 30px tall, so the button starts at top:65px). It
+     wears the EXACT same colours, pill style and text style
+     as the store selector pill (.hero-store select) above it
+     — translucent white fill rgba(255,255,255,.14), white
+     text, 1px translucent white border rgba(255,255,255,.42),
+     999px pill radius, 30px height, 12.5px / 700 text with
+     .01em letter-spacing — so the two read as a matching pair
+     on the purple banner. Tapping it opens the Food pairing
+     finder pop-up (see the pairing script). It sits left of
+     the scan button (right:20px, top:68px) with no overlap:
+     this button's right edge is 66px from the header's right
+     edge, the scan button's left edge is 56px from it, and
+     the two are side by side in the same band. */
+  .hero-pairing-btn{position:absolute;top:65px;right:66px;z-index:2;display:inline-flex;align-items:center;justify-content:center;
+    height:30px;min-height:30px;padding:0 14px;border-radius:999px;cursor:pointer;
+    background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.42);
+    font:inherit;font-size:12.5px;font-weight:700;line-height:1;letter-spacing:.01em;
+    box-shadow:none;white-space:nowrap}
+  .hero-pairing-btn:hover{background-color:rgba(255,255,255,.24)}
+  .hero-pairing-btn:focus-visible{background-color:rgba(255,255,255,.24);
+    outline:2px solid #fff;outline-offset:2px;border-color:#fff}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
     clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .controls{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
@@ -1015,7 +1126,7 @@
     /* Slim header on phones: heading and store field only, so the
        first wines are on the first screen */
     header.hero{margin:0 -8px 10px;padding:12px 14px 11px 14px;border-radius:0 0 14px 14px}
-    header.hero h1{font-size:18px;margin:0;white-space:nowrap}
+    header.hero h1{font-size:27px;margin:0;white-space:nowrap}
     /* Logo stays clear of the store pill and settings gear in the
        top-right corner */
     .hero-logo{width:180px;max-width:calc(100% - 8px);margin-bottom:9px}
@@ -1039,6 +1150,12 @@
        "Store" word) and the same compact 30px height as desktop */
     .hero-store{top:17px;right:54px}
     .hero-store select{height:30px;min-height:30px;font-size:12.5px;width:92px}
+    /* Food pairing button on phones: stays directly under the
+       store pill — same right edge as the pill (right:54px),
+       one 8px gap below it (pill: top 17px + 30px tall) — and
+       left of the scan button (top:57px, right:12px) with a
+       clear gap, in the same band */
+    .hero-pairing-btn{top:55px;right:54px;height:30px;min-height:30px;font-size:12.5px;padding:0 11px}
     /* Sticky finder bar: search and the result count stay on screen
        while scrolling; brand / style / sweetness / tannins / price /
        sort and the reset live inside the Filters panel, behind the Filters button
@@ -1135,8 +1252,8 @@
   }
   @media (max-width:380px){
     tbody td{font-size:12.5px}
-    /* Narrowest phones: shrink the heading a touch */
-    header.hero h1{font-size:16.5px}
+    /* Narrowest phones: shrink the wordmark a touch */
+    header.hero h1{font-size:23px}
     .hero-store select{width:84px}
   }
   /* Per-product ⋮ menu, Add product, and the in-page data editor.
@@ -1675,6 +1792,7 @@
         <option value="__add__">＋ Add store…</option>
       </select>
     </div>
+    <button type="button" class="hero-pairing-btn" id="heroPairingBtn" aria-haspopup="dialog">Food pairing finder</button>
     <button type="button" class="settings-btn" id="settingsBtn" aria-label="Settings" aria-haspopup="dialog">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
     </button>
@@ -5090,7 +5208,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.25</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.26</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -5115,17 +5233,50 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.25</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.26</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-support" role="tabpanel" aria-labelledby="settingsTab-support" hidden>
-      <div class="settings-actions" style="margin-top:0">
+      <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
         <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
+        <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
+        <button type="button" class="settings-action" id="wineKnowledgeSupport"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
+        <button type="button" class="settings-action" id="pairingSupportBtn"><span>Food pairing finder<span class="sa-sub">&ldquo;What are you eating?&rdquo; &mdash; opens the finder as a pop-up: type a dish and get wines this store carries and has available, closest match first, each with a reason tailored to your dish</span></span></button>
       </div>
     </div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="pairingOverlay" hidden>
+  <div class="editor-panel pairing-panel" role="dialog" aria-modal="true" aria-labelledby="pairingPopupTitle">
+    <div class="editor-head">
+      <h2 id="pairingPopupTitle">Food pairing finder</h2>
+      <button type="button" class="editor-x" id="pairingClose" aria-label="Close food pairing finder">×</button>
+    </div>
+    <div class="pairing-tool pairing-tool-popup" id="pairingToolPopup">
+      <p class="pairing-sub">What are you eating? Type a dish and get wines Store <span id="pairingPopupStoreNum">358</span> actually carries and has available, closest match first, with a few backups &mdash; each with a reason tailored to the dish you typed.</p>
+      <form class="pairing-form" id="pairingPopupForm">
+        <label class="sr-only" for="pairingPopupInput">Food pairing finder &mdash; what are you eating?</label>
+        <input id="pairingPopupInput" type="text" autocomplete="off" placeholder="e.g. spicy Thai curry, steak, salmon&hellip;" />
+        <button type="submit" class="pairing-go" id="pairingPopupGo">Find a pairing</button>
+      </form>
+      <div class="pairing-examples" aria-label="Example dishes">
+        <button type="button" class="pairing-chip pairing-chip-popup" data-dish="Spicy Thai curry">Spicy Thai curry</button>
+        <button type="button" class="pairing-chip pairing-chip-popup" data-dish="Roast chicken">Roast chicken</button>
+        <button type="button" class="pairing-chip pairing-chip-popup" data-dish="Steak">Steak</button>
+        <button type="button" class="pairing-chip pairing-chip-popup" data-dish="Salmon">Salmon</button>
+        <button type="button" class="pairing-chip pairing-chip-popup" data-dish="Chocolate dessert">Chocolate dessert</button>
+      </div>
+      <div class="pairing-results" id="pairingPopupResults" aria-live="polite">
+        <p class="pairing-hint">Type a dish above &mdash; or tap an example &mdash; and the best matches from this store&rsquo;s list will show here. Tap any wine to open it.</p>
+      </div>
+    </div>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="pairingCancel">Close &mdash; back to the list</button>
     </div>
   </div>
 </div>
@@ -5954,7 +6105,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.25</span>
+      <span class="manual-pill accent">Version 2026.11.03.26</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -5999,6 +6150,7 @@
         <h3>Header, at a glance</h3>
         <ul>
           <li>The <strong>store pill</strong> (just the number, e.g. <span class="manual-ui">358</span>) sits beside the heading — tap it to switch stores.</li>
+          <li>The <strong>Food pairing finder</strong> button sits directly under the store pill — tap it and the Food pairing finder opens as a pop-up over the list (see §14); close it to return to the list.</li>
           <li>The <strong>gear</strong> at top right opens Settings.</li>
           <li>The <strong>scan icon</strong> sits directly under the gear — tap it to scan a barcode (§4).</li>
         </ul>
@@ -6302,9 +6454,13 @@
     </details>
 
     <!-- 14 -->
-    <details class="manual-sec" id="manual-support" data-title="Support Center contacts">
-      <summary><span class="manual-sec-num">14</span><span class="manual-sec-title"><strong>Support Center</strong><small>Who to call at Wine Rack Store Support</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+    <details class="manual-sec" id="manual-support" data-title="Food pairing finder and Support Center contacts">
+      <summary><span class="manual-sec-num">14</span><span class="manual-sec-title"><strong>Support — Food pairing finder &amp; Support Center</strong><small>“What are you eating?”, and who to call at Wine Rack Store Support</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
+        <p><strong>Support Center</strong> is at the very top of <span class="manual-ui">Settings → Support</span> — the Wine Rack Store Support Centre contacts, described below.</p>
+        <p><strong>What&rsquo;s on sample today?</strong> is in <span class="manual-ui">Settings → Support</span>, under the Support Center and above Wine Knowledge — it opens the same panel as its entry in Documents, which is still there too.</p>
+        <p><strong>Wine Knowledge</strong> is also in <span class="manual-ui">Settings → Support</span>, under What&rsquo;s on sample today and above the Food pairing finder — it opens the same panel as its entry in Documents, which is still there too. The impact documents and this manual stay in Documents.</p>
+        <p><strong>Food pairing finder — “What are you eating?”</strong> The finder is a <strong>pop-up window</strong>, never an inline form. Two buttons open the same pop-up: the <span class="manual-ui">Food pairing finder</span> button under the store pill in the header (the pop-up opens over the list), and the <span class="manual-ui">Food pairing finder</span> button at the bottom of <span class="manual-ui">Settings → Support</span>, under Wine Knowledge (the pop-up opens over Settings, and closing it returns you to Support). Close the pop-up (× or <span class="manual-ui">Close — back to the list</span>) to return to where you were. Type a dish (spicy Thai curry, roast chicken, steak, salmon, chocolate dessert…) and the finder ranks the wines <strong>the store you&rsquo;re viewing actually carries and has available</strong>, closest match first with a few backups. Each recommendation gives a <strong>reason tailored to the dish you typed</strong>, naming the actual element in it: how the wine&rsquo;s sweetness handles the spice you mentioned, how its acidity cuts the creamy or rich part, how its acidity meets tomato, how its tannins grip grilled meat, how it suits the named fish, or why it stays sweeter than the named dessert — drawn from the wine&rsquo;s sweetness, acidity, tannins, richness, varietal and tasting notes. It follows the classic rules: sweetness for spicy food, acidity for rich or tomato-based dishes, tannin for red meat, light high-acid whites for fish, and a wine sweeter than the dessert. Wines the store does not carry, and wines marked unavailable at your store, are never recommended. <strong>Tap any recommendation to open that wine in the list.</strong></p>
         <p>The app carries the <strong>Wine Rack Store Support Centre</strong> contact sheet (last updated April 21, 2026) in <span class="manual-ui">Settings → Support Center</span>, so it&rsquo;s in your pocket on the floor — no hunting for the sheet.</p>
         <p>Contacts are grouped the same way as the sheet:</p>
         <ul>
@@ -6348,7 +6504,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.25</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.26</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -9803,6 +9959,767 @@
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !supportOverlay.hidden) closeSupport();
   });
+
+  /* ---------- Food pairing finder (pop-up) ----------
+     The Food pairing finder is a pop-up window, opened by
+     the header button under the store pill and by the Food
+     pairing finder button in the Support tab (last in the
+     tab — below the Support Center at the top, then
+     "What's on sample today?", then Wine Knowledge); there
+     is no inline finder embedded in the Support tab. The
+     user types a dish; the
+     finder classifies the dish
+     (spicy / fatty-rich / red meat-grilled / fish-seafood /
+     tomato-acidic / dessert, plus poultry, pork, cheese, salad
+     and sweet-sauce signals) and scores EVERY product the
+     CURRENT store carries against classic pairing logic, using
+     only the wine's existing data — sweetness (label and RS),
+     acidity, tannins, richness, varietal and tasting notes:
+       · spicy food      → off-dry / sweeter, low-tannin whites
+       · fatty / rich    → high acidity to cut through it
+       · red meat/grilled→ tannic reds
+       · fish / seafood  → light, high-acid whites
+       · tomato / acidic → high-acid wines
+       · dessert         → a wine sweeter than the dish
+     A wine whose own tasting notes say "Pairs well with …" a
+     matching food gets a strong bonus, quoted in its reason.
+     Results are de-duplicated by brand + name (the 750mL is
+     preferred over other sizes of the same wine), sorted
+     closest match first, and shown as the best match plus up
+     to four backups, each with a reason built from the
+     factors that actually scored AND tailored to the dish
+     as typed: pairingDishProfile records which words in
+     the typed dish matched (p._hits), and every reason
+     names that actual element — how the wine's sweetness
+     handles the curry / chilli heat typed, how its acidity
+     cuts the cream or richness typed, how its acidity
+     meets the tomato typed, how its tannins grip the
+     grilled steak typed, how its light body and acidity
+     suit the named fish typed, or why it stays sweeter
+     than the named dessert typed — never one generic
+     reason repeated for every dish. Wines marked unavailable at
+     this store, non-wines (ciders, hard sparkling waters,
+     seltzers) and wines this store does not carry are never
+     recommended. Tapping a recommendation opens that wine
+     exactly like a Loved wines tap: the pop-up (and
+     Settings, if open underneath) closes, then
+     jumpToProduct(). Ranking/display only — nothing is saved
+     or synced. */
+  var pairingForm = document.getElementById('pairingForm');
+  var pairingInput = document.getElementById('pairingInput');
+  var pairingResults = document.getElementById('pairingResults');
+  var pairingStoreNum = document.getElementById('pairingStoreNum');
+  if(pairingStoreNum) pairingStoreNum.textContent = activeStore;
+
+  /* A 0–4 level out of a free-text level field ("Medium-High",
+     "Medium to High", "High to Very High", …): the average of
+     the levels named, or null when the field names none */
+  function pairingLevelRank(text){
+    var levels = { 'low':1, 'medium':2, 'moderate':2, 'high':3, 'very high':4 };
+    var words = String(text || '').toLowerCase().match(/very high|high|medium|moderate|low/g);
+    if(!words) return null;
+    var sum = 0;
+    words.forEach(function(w){ sum += levels[w]; });
+    return sum / words.length;
+  }
+  /* Sweetness on a 0–5 scale (Extra Dry 0 … Extra Sweet 5)
+     from the wine's sweetness label, falling back to its RS
+     number when the label is blank or unrecognised */
+  function pairingSweetRank(data){
+    var s = String(data.sweet || '').toLowerCase();
+    if(s.indexOf('extra sweet') !== -1) return 5;
+    if(s.indexOf('semi-sweet') !== -1 || s.indexOf('semi sweet') !== -1) return 3.5;
+    if(s.indexOf('med-sweet') !== -1 || s.indexOf('medium-sweet') !== -1 || s.indexOf('medium sweet') !== -1) return 4;
+    if(s.indexOf('off-dry') !== -1 || s.indexOf('off dry') !== -1) return 2;
+    if(s.indexOf('lightly sweet') !== -1) return 3;
+    if(s.indexOf('small amount') !== -1) return 2;
+    if(s === 'medium' || s.indexOf('med-dry') !== -1 || s.indexOf('medium-dry') !== -1 || s.indexOf('medium dry') !== -1) return 3;
+    if(s.indexOf('sweet') !== -1) return 4;
+    if(s.indexOf('extra dry') !== -1) return 0;
+    if(s.indexOf('dry') !== -1) return 1;
+    var rs = parseFloat(data.rs);
+    if(!isNaN(rs)){
+      if(rs > 100) return 5;
+      if(rs > 35) return 4;
+      if(rs > 18) return 3;
+      if(rs > 9) return 2;
+      if(rs > 4) return 1;
+      return 0;
+    }
+    return null;
+  }
+  /* The wine's family for pairing: white / red / rose /
+     sparkling from its richness and varietal; 'other' for the
+     non-wines on the list (cider, hard sparkling water,
+     seltzer), which are never recommended; 'unknown' when the
+     record does not say — those stay eligible, just with no
+     family bonus either way */
+  function pairingWineType(data){
+    var rich = String(data.rich || '').toLowerCase();
+    var hay = (String(data.name || '') + ' ' + String(data.varietal || '') + ' ' + rich).toLowerCase();
+    if(rich.indexOf('cider') !== -1 || hay.indexOf('hard sparkling water') !== -1 ||
+       hay.indexOf('hard seltzer') !== -1 || hay.indexOf('sparkling water') !== -1) return 'other';
+    if(hay.indexOf('sparkling') !== -1 || hay.indexOf('secco') !== -1 || hay.indexOf('fracette') !== -1) return 'sparkling';
+    if(rich.indexOf('ros') !== -1 || hay.indexOf('rosé') !== -1) return 'rose';
+    if(rich.indexOf('white') !== -1) return 'white';
+    if(rich.indexOf('red') !== -1) return 'red';
+    if(/riesling|chardonnay|sauvignon blanc|pinot grigio|pinot gris|vidal|gewürz|gewurz|moscato|chenin blanc/.test(hay)) return 'white';
+    if(/cabernet|merlot|shiraz|syrah|pinot noir|baco noir|gamay|malbec|sangiovese|tempranillo/.test(hay)) return 'red';
+    return 'unknown';
+  }
+  /* Classify the typed dish. Matching runs on the folded
+     (accent-free, lower-case) text so "rosé" / "jalapeño"
+     spellings land the same either way */
+  function pairingDishProfile(text){
+    var t = ' ' + foldAccents(text) + ' ';
+    var hits = {};
+    function has(){
+      for(var i = 0; i < arguments.length; i++){
+        if(t.indexOf(arguments[i]) !== -1) return true;
+      }
+      return false;
+    }
+    /* Like has(), but also records WHICH words in the typed
+       dish matched, under a category name in p._hits. The
+       scoring reasons are built from those recorded words,
+       so each explanation can name the actual element the
+       user typed (the curry, the cream, the tomato, the
+       grill char, the salmon, the chocolate…) instead of
+       repeating one generic line for every dish. */
+    function hasCat(cat, terms){
+      var found = [];
+      terms.forEach(function(term){
+        if(t.indexOf(term) !== -1) found.push(term.trim());
+      });
+      if(found.length){ hits[cat] = (hits[cat] || []).concat(found); return true; }
+      return false;
+    }
+    var p = {};
+    p._hits = hits;
+    p.rawDish = String(text || '').trim();
+    p.spicy = hasCat('spicy', ['spicy','thai','curry','chili','chilli','jalapeno','sriracha','cajun','vindaloo','jerk','sichuan','szechuan','hot sauce','buffalo','kimchi','taco','burrito','enchilada','fajita','mexican','arrabbiata','fra diavolo']);
+    p.redMeat = hasCat('redMeat', ['steak','beef','lamb','venison','prime rib','roast beef','short rib','brisket','meatloaf','meatball','bolognese','sausage','salami','pepperoni','prosciutto-wrapped beef']);
+    if(has('burger') && !has('chicken burger','veggie burger','salmon burger','turkey burger')){ p.redMeat = true; hits.redMeat = (hits.redMeat || []).concat(['burger']); }
+    if(hasCat('redMeat', ['lasagna','lasagne'])) p.redMeat = true;
+    p.grilled = hasCat('grilled', ['grill','barbecue','bbq','charred','smoked','char-grill']);
+    p.bbq = hasCat('bbq', ['barbecue','bbq']);
+    p.seafood = hasCat('seafood', ['salmon','fish','seafood','shrimp','prawn','scallop','oyster','mussel','clam','lobster','crab','tuna','cod','halibut','haddock','trout','sole','sushi','ceviche','calamari','anchov','sea bass','tilapia','mahi']);
+    p.salmon = has('salmon');
+    p.poultry = hasCat('poultry', ['chicken','turkey','cornish hen']);
+    if(hasCat('rich', ['duck'])) { p.fatty = true; }
+    p.pork = hasCat('pork', ['pork','ham','bacon','prosciutto','pulled pork','schnitzel']);
+    p.creamy = hasCat('creamy', ['cream','creamy','alfredo','carbonara','butter','bisque',' chowder']);
+    p.cheese = hasCat('cheese', ['cheese','cheddar','brie','parmesan','fondue','mac and cheese','macaroni and cheese','poutine','quesadilla']);
+    p.fatty = !!p.fatty || p.creamy || p.cheese || hasCat('rich', ['fatty','rich','fried','duck','ribs','pork belly','gravy','foie gras']);
+    p.tomato = hasCat('tomato', ['tomato','marinara','bolognese','arrabbiata','salsa','bruschetta','pizza','spaghetti']);
+    p.acidicDish = p.tomato || hasCat('acidic', ['salad','vinaigrette','ceviche','lemon','citrus','goat cheese','pickled','sauerkraut']);
+    p.salad = hasCat('salad', ['salad']);
+    p.goatCheese = has('goat cheese','goat\u2019s cheese');
+    if(p.goatCheese) hits.cheese = (hits.cheese || []).concat(['goat cheese']);
+    /* Savory pies are NOT dessert: shepherd's / shepherds /
+       sheppard's pie, cottage pie, meat pie, chicken pot pie,
+       steak pie, tourtière and any pie in a savory context
+       (meat / poultry / pork / seafood / creamy / cheese /
+       rich signals already found above) is a savory, hearty
+       dish — a meat pie with a potato topping — never a
+       sweet one. The guard runs BEFORE the dessert test, so
+       the bare word "pie" can never route a savory pie to
+       dessert wines, and "pie" alone does not default to
+       dessert when the dish context is savory. A savory pie
+       is classified with red meat and richness instead, so
+       the scorer below recommends medium-tannin / rich reds
+       that stand up to the meat and potato, with savory
+       reasoning — never sweetness reasoning. */
+    p.savoryPie = hasCat('savoryPie', ['shepherd','sheppard','cottage pie','meat pie','chicken pot','pot pie','steak pie','tourtiere','savoury','savory','fish pie','seafood pie','pork pie']);
+    if(!p.savoryPie && t.indexOf(' pie') !== -1 && (p.redMeat || p.poultry || p.pork || p.seafood || p.creamy || p.cheese || p.fatty)){
+      p.savoryPie = true;
+      hits.savoryPie = (hits.savoryPie || []).concat(['pie']);
+    }
+    p.dessert = !p.savoryPie && hasCat('dessert', ['dessert','chocolate','cake','brownie','cheesecake','ice cream',' pie','pudding','caramel','tiramisu','crumble','custard','fruitcake','shortcake']);
+    if(p.savoryPie){
+      p.dessert = false;
+      p.redMeat = true;
+      p.fatty = true;
+    }
+    p.chocolate = has('chocolate');
+    p.sweetDish = hasCat('sweetDish', ['sweet and sour','sweet chili','sweet chilli','honey garlic','honey-glazed','honey glazed','teriyaki','glazed ham']);
+    return p;
+  }
+  /* Score one wine (a readRow() record) against the dish
+     profile. Every positive factor also records WHY, so the
+     recommendation can explain itself from the wine's real
+     attributes; the reasons are returned strongest first */
+  function pairingScoreWine(data, p, rawDish){
+    var score = 0, reasons = [];
+    function add(n, why){ score += n; if(n > 0 && why) reasons.push({ n:n, why:why }); }
+    function sub(n){ score -= n; }
+    var sweet = pairingSweetRank(data);
+    var rs = parseFloat(data.rs);
+    var acid = pairingLevelRank(data.acidity);
+    var tann = tanninRank(String(data.tannins || '').toLowerCase());
+    var type = pairingWineType(data);
+    var rich = String(data.rich || '');
+    var richLow = rich.toLowerCase();
+    var varietal = String(data.varietal || '').toLowerCase();
+    var nameLow = String(data.name || '').toLowerCase();
+    var notes = String(data.notes || '');
+
+    /* Tailored-reason phrases, built ONLY from the words the
+       user actually typed (recorded in p._hits by
+       pairingDishProfile). Every reason below names one of
+       these phrases, so the same wine explains itself
+       differently for "spicy Thai curry" than for "creamy
+       pasta" or "grilled salmon" — never one generic line
+       for every dish. */
+    var hits = p._hits || {};
+    function hitHas(cat, words){
+      var list = hits[cat] || [];
+      for(var i = 0; i < words.length; i++){ if(list.indexOf(words[i]) !== -1) return true; }
+      return false;
+    }
+    function hitFirst(cat, fallback){
+      var list = hits[cat] || [];
+      return list.length ? list[0] : fallback;
+    }
+    var dishQuoted = p.rawDish ? '\u201C' + p.rawDish + '\u201D' : 'your dish';
+    var spicyHeat = hitHas('spicy', ['curry']) ? 'curry heat' :
+      hitHas('spicy', ['jalapeno']) ? 'jalape\u00F1o heat' :
+      hitHas('spicy', ['chili','chilli']) ? 'chilli heat' :
+      hitHas('spicy', ['thai']) ? 'Thai spice' :
+      hitHas('spicy', ['sriracha']) ? 'sriracha heat' :
+      hitHas('spicy', ['cajun']) ? 'Cajun spice' :
+      hitHas('spicy', ['vindaloo']) ? 'vindaloo heat' :
+      hitHas('spicy', ['hot sauce']) ? 'hot-sauce heat' :
+      hitHas('spicy', ['buffalo']) ? 'Buffalo-sauce heat' :
+      'spice in ' + dishQuoted;
+    var creamyThing = hitHas('creamy', ['alfredo']) ? 'creamy Alfredo sauce' :
+      hitHas('creamy', ['carbonara']) ? 'rich Carbonara sauce' :
+      hitHas('creamy', ['bisque']) ? 'creamy bisque' :
+      hitHas('creamy', ['chowder']) ? 'creamy chowder' :
+      hitHas('creamy', ['butter']) ? 'buttery richness' :
+      hitHas('creamy', ['cream','creamy']) ? 'creamy richness' : null;
+    var richThing = creamyThing ||
+      (hitHas('cheese', ['cheese','cheddar','brie','parmesan','fondue','mac and cheese','macaroni and cheese','poutine','quesadilla']) ? 'cheese richness in ' + dishQuoted :
+      hitHas('rich', ['fried']) ? 'fried richness in ' + dishQuoted :
+      hitHas('rich', ['duck']) ? 'rich, fatty duck' :
+      hitHas('rich', ['ribs','pork belly']) ? 'fatty meat in ' + dishQuoted :
+      hitHas('rich', ['gravy']) ? 'rich gravy in ' + dishQuoted :
+      'richness in ' + dishQuoted);
+    var meatThing = hitFirst('redMeat', 'red meat');
+    if(meatThing === 'burger') meatThing = 'beef burger';
+    var grilledThing = hitHas('grilled', ['smoked']) ? 'smoke and char' :
+      hitHas('grilled', ['charred','char-grill']) ? 'char from the grill' :
+      hitHas('grilled', ['barbecue','bbq']) ? 'smoky BBQ char' :
+      'grilled char';
+    var seafoodThing = hitFirst('seafood', 'fish');
+    if(seafoodThing === 'anchov') seafoodThing = 'anchovy';
+    if(seafoodThing === 'mahi') seafoodThing = 'mahi-mahi';
+    var tomatoThing = hitHas('tomato', ['tomato']) ? 'tomato' :
+      hitHas('tomato', ['marinara']) ? 'marinara tomato sauce' :
+      hitHas('tomato', ['pizza']) ? 'tomato sauce on your pizza' :
+      hitHas('tomato', ['salsa']) ? 'salsa' :
+      hitHas('tomato', ['bruschetta']) ? 'tomato bruschetta' :
+      hitHas('tomato', ['spaghetti','bolognese']) ? 'tomato sauce' :
+      hitHas('tomato', ['arrabbiata']) ? 'tomato arrabbiata sauce' : 'tomato';
+    var acidicThing = p.tomato ? tomatoThing :
+      hitHas('acidic', ['vinaigrette']) ? 'vinaigrette' :
+      hitHas('acidic', ['lemon','citrus']) ? 'lemon / citrus brightness' :
+      hitHas('acidic', ['goat cheese']) ? 'tangy goat cheese' :
+      hitHas('acidic', ['ceviche']) ? 'ceviche citrus' :
+      hitHas('acidic', ['salad']) ? 'salad dressing' : 'acidity in ' + dishQuoted;
+    var dessertThing = hitHas('dessert', ['chocolate']) ? 'chocolate' :
+      hitFirst('dessert', 'dessert');
+    if(dessertThing === 'pie') dessertThing = 'pie';
+    var poultryThing = hitFirst('poultry', 'poultry');
+    var porkThing = hitFirst('pork', 'pork');
+    if(porkThing === 'ham' && hitHas('pork', ['pulled pork'])) porkThing = 'pulled pork';
+    var cheeseThing = hitHas('cheese', ['goat cheese']) ? 'goat cheese' :
+      hitFirst('cheese', 'cheese');
+    var sweetSauceThing = hitFirst('sweetDish', 'sweet sauce');
+
+    /* The wine's own tasting notes naming a matching food is
+       the strongest single signal on the list: lift the food
+       phrase out of "Pairs well with …" and check the dish
+       against it word by word */
+    var pairMatch = notes.match(/pairs?\s+well\s+with\s+([^.;]+)/i);
+    if(pairMatch){
+      var phrase = pairMatch[1].trim();
+      var dishWords = foldAccents(rawDish).split(/[^a-z]+/).filter(function(w){ return w.length > 3; });
+      var phraseFold = ' ' + foldAccents(phrase) + ' ';
+      var hit = dishWords.some(function(w){ return phraseFold.indexOf(' ' + w) !== -1 || phraseFold.indexOf(w + ' ') !== -1 || phraseFold.indexOf(w) !== -1; });
+      if(hit) add(42, 'for ' + dishQuoted + ', its own tasting notes say it pairs well with ' + phrase.charAt(0).toLowerCase() + phrase.slice(1) + ' — a direct match for what you typed');
+    } else if(notes){
+      var dl = foldAccents(rawDish).split(/[^a-z]+/).filter(function(w){ return w.length > 4; });
+      var notesFold = foldAccents(notes);
+      var anyHit = dl.some(function(w){ return notesFold.indexOf(w) !== -1; });
+      if(anyHit) add(10, 'its tasting notes echo flavours in ' + dishQuoted + ', so the flavours line up with your dish');
+    }
+
+    if(p.spicy){
+      /* Spicy → off-dry / sweeter, low-tannin whites: sweetness
+         cools the heat, tannin turns harsh against it */
+      if(sweet === 2) add(34, 'for the ' + spicyHeat + ' in ' + dishQuoted + ', its off-dry sweetness cools the heat — a touch of sugar tames spice instead of letting it burn hotter');
+      else if(sweet === 3) add(28, 'for the ' + spicyHeat + ' in ' + dishQuoted + ', its gentle sweetness softens the spice with every sip');
+      else if(sweet === 3.5) add(26, 'a little sweetness takes the edge off the ' + spicyHeat + ' in ' + dishQuoted);
+      else if(sweet === 4) add(16, 'noticeably sweet, which tames the ' + spicyHeat + ' in ' + dishQuoted);
+      else if(sweet === 5) add(8, 'very sweet — it will stand up to the ' + spicyHeat + ' in ' + dishQuoted);
+      else if(sweet === 1) add(6, 'dry, but its fruit keeps it friendly with the ' + spicyHeat + ' in ' + dishQuoted);
+      else if(sweet === 0) sub(4);
+      if(tann !== null){
+        if(tann <= 0.5) add(18, 'very low tannin, which matters for ' + dishQuoted + ' because tannin turns bitter and harsh against chilli heat');
+        else if(tann <= 1.5) add(12, 'low tannin, so nothing clashes with the ' + spicyHeat + ' in ' + dishQuoted);
+        else if(tann >= 2.5) sub(22);
+        else sub(8);
+      }
+      if(type === 'white') add(14, 'a white is the classic direction for the ' + spicyHeat + ' in ' + dishQuoted);
+      else if(type === 'rose') add(12, 'rosé, served cold, refreshes the palate between bites of ' + dishQuoted);
+      else if(type === 'sparkling') add(8, 'sparkling — the fizz refreshes a palate heated by ' + dishQuoted);
+      else if(type === 'red') sub(12);
+      if(acid !== null && acid >= 2.5) add(8, 'bright acidity refreshes your palate between bites of ' + dishQuoted);
+      if(/riesling|gewürz|gewurz|vidal/.test(varietal)) add(8, 'this grape is a proven partner for the spiced flavours in ' + dishQuoted);
+    }
+    if(p.fatty){
+      /* Fatty / rich → high acidity cuts through the fat.
+         richThing names the actual creamy / rich / cheese /
+         fried element the user typed */
+      if(acid !== null){
+        if(acid >= 3) add(30, 'for the ' + richThing + ' in ' + dishQuoted + ', its high acidity cuts straight through that richness and refreshes your palate instead of adding more weight');
+        else if(acid >= 2.5) add(24, 'its high acidity slices through the ' + richThing + ' in ' + dishQuoted + ', so each bite tastes fresh again');
+        else if(acid >= 2) add(12, 'enough acidity to cut the ' + richThing + ' in ' + dishQuoted + ' and keep it from feeling heavy');
+        else if(acid <= 1) sub(10);
+      }
+      if(type === 'sparkling') add(14, 'sparkling — its bubbles and acidity scrub the ' + richThing + ' in ' + dishQuoted + ' clean off the palate');
+      if(sweet !== null && sweet <= 1) add(6, 'dry, so it adds no extra weight alongside the ' + richThing + ' in ' + dishQuoted);
+      if(sweet !== null && sweet >= 3) sub(8);
+    }
+    if(p.redMeat){
+      /* Red meat / grilled → tannic reds: fat and protein
+         soften the tannin, and the tannin grips back.
+         meatThing / grilledThing name the actual meat and
+         cooking words the user typed */
+      var meatRef = (p.grilled ? 'grilled ' : '') + meatThing;
+      if(tann !== null){
+        if(tann >= 3) add(30, 'for the ' + meatRef + ' in ' + dishQuoted + ', its firm tannins grip the meat\u2019s fat — the fat and protein soften the tannins while the tannins cut the richness');
+        else if(tann >= 2.5) add(22, 'solid tannins give it the grip the ' + meatThing + ' in ' + dishQuoted + ' wants');
+        else if(tann >= 2) add(12, 'medium tannins suit the ' + meatRef + ' in ' + dishQuoted);
+        else if(tann <= 1) sub(14);
+      }
+      if(type === 'red') add(24, 'a red for the ' + meatThing + ' in ' + dishQuoted + ' — the classic red-meat match');
+      else if(type === 'white') sub(22);
+      else if(type === 'rose') sub(6);
+      else if(type === 'sparkling') sub(10);
+      if(richLow.indexOf('rich red') !== -1) add(16, 'a rich, full red — enough weight to stand up to the ' + meatThing + ' in ' + dishQuoted);
+      else if(richLow.indexOf('medium red') !== -1) add(10, 'medium-bodied red, in step with the ' + meatThing + ' in ' + dishQuoted);
+      else if(richLow.indexOf('light red') !== -1) sub(4);
+      if(/cabernet sauvignon|shiraz|syrah|meritage|baco noir|cabernet franc|malbec/.test(varietal)) add(8, 'a classic grape for ' + meatThing);
+      if(sweet !== null && sweet <= 1) add(5, 'dry — the ' + meatThing + ' in ' + dishQuoted + ' wants a dry red, not a sweet one');
+    }
+    if(p.grilled && !p.redMeat){
+      if(richLow.indexOf('rich red') !== -1 || richLow.indexOf('medium red') !== -1) add(10, 'a fuller red stands up to the ' + grilledThing + ' in ' + dishQuoted);
+      if(type === 'red') add(8, 'for the ' + grilledThing + ' in ' + dishQuoted + ', a red\u2019s fruit and tannin love char and smoke');
+    }
+    if(p.bbq){
+      if(tann !== null && tann <= 2 && type === 'red') add(8, 'juicy and not too tannic, so the sweet BBQ sauce in ' + dishQuoted + ' stays friendly instead of turning the wine bitter');
+      if(/baco noir|gamay/.test(varietal)) add(8, 'juicy dark fruit is a favourite with the smoky, sweet BBQ flavours in ' + dishQuoted);
+    }
+    if(p.seafood){
+      /* Fish / seafood → light, high-acid whites.
+         seafoodThing names the actual fish / seafood typed */
+      if(type === 'white') add(22, 'a white is the classic direction for the ' + seafoodThing + ' in ' + dishQuoted);
+      else if(type === 'sparkling') add(16, 'sparkling is a natural with the ' + seafoodThing + ' in ' + dishQuoted);
+      else if(type === 'rose') add(10, 'a dry rosé works well with the ' + seafoodThing + ' in ' + dishQuoted);
+      else if(type === 'red') sub(24);
+      if(richLow.indexOf('light white') !== -1) add(18, 'light-bodied, so it won\u2019t swamp the delicate ' + seafoodThing + ' in ' + dishQuoted);
+      else if(richLow.indexOf('medium white') !== -1) add(10, 'medium-bodied white — enough presence for the ' + seafoodThing + ' without overwhelming it');
+      else if(richLow.indexOf('rich white') !== -1 || richLow.indexOf('extra rich white') !== -1) sub(4);
+      if(acid !== null){
+        if(acid >= 2.5) add(16, 'for the ' + seafoodThing + ' in ' + dishQuoted + ', its high acidity acts like a squeeze of lemon over the fish, lifting it and keeping it tasting clean');
+        else if(acid >= 2) add(8, 'fresh acidity keeps the ' + seafoodThing + ' in ' + dishQuoted + ' tasting clean');
+      }
+      if(sweet !== null){
+        if(sweet === 0) add(10, 'extra dry — the ' + seafoodThing + ' in ' + dishQuoted + ' wants a dry wine, not a sweet one');
+        else if(sweet === 1) add(8, 'dry, the way the ' + seafoodThing + ' in ' + dishQuoted + ' likes it');
+        else if(sweet === 2) add(2, '');
+        else if(!p.spicy) sub(12);
+      }
+      if(tann !== null){
+        if(tann <= 1) add(10, 'low tannin, which matters with ' + seafoodThing + ' because tannin turns metallic against fish');
+        else if(tann >= 2.5) sub(16);
+      }
+      if(p.salmon){
+        /* Salmon is the exception that proves the rule: a
+           light red (Pinot Noir) or a fuller white also works */
+        if(type === 'red' && varietal.indexOf('pinot noir') !== -1){ score += 40; reasons.push({ n:40, why:'for the salmon in ' + dishQuoted + ', Pinot Noir is the classic red — light tannin and bright red fruit match salmon\u2019s richer, oily flesh without the metallic clash a heavier red would cause' }); }
+        if(type === 'rose') add(8, 'rosé and the salmon in ' + dishQuoted + ' are a proven pair — fresh, dry and in step with the fish\u2019s richness');
+        if(varietal.indexOf('chardonnay') !== -1) add(8, 'Chardonnay is a proven match for the salmon in ' + dishQuoted + ' — enough body for the fish\u2019s richness');
+      }
+    }
+    if(p.acidicDish){
+      /* Tomato / acidic dishes → the wine needs acidity at
+         least equal to the food's, or it tastes flat.
+         acidicThing / tomatoThing name the actual acidic
+         element typed (tomato, marinara, pizza, lemon…) */
+      if(acid !== null){
+        if(acid >= 3) add(26, 'for the ' + acidicThing + ' in ' + dishQuoted + ', its high acidity matches that acidity head-on, so the wine stays bright instead of tasting flat against it');
+        else if(acid >= 2.5) add(20, 'high acidity stands up to the ' + acidicThing + ' in ' + dishQuoted + ', where a softer wine would taste dull');
+        else if(acid >= 2) add(8, 'decent acidity for the ' + acidicThing + ' in ' + dishQuoted);
+        else if(acid <= 1) sub(12);
+      }
+      if(tann !== null && tann >= 3) sub(10);
+      if(/sauvignon blanc|cabernet franc|riesling/.test(varietal)) add(6, 'a grape known for the acidity the ' + acidicThing + ' in ' + dishQuoted + ' needs');
+    }
+    if(p.savoryPie){
+      /* Savory pie (shepherd's, meat, chicken pot…) → a
+         savory, hearty meat dish with a potato topping, NOT
+         a sweet dessert: medium-tannin / rich reds that stand
+         up to the rich meat, gravy and potato. Sweet and
+         dessert wines are actively wrong here — their
+         sweetness reasoning must never appear for this dish */
+      if(type === 'red') add(28, 'for the savory, hearty meat-and-potato pie in ' + dishQuoted + ', a red is the right direction — this is a savory meat dish, not a sweet one, and it wants a red that can stand up to the rich meat and potato topping');
+      else if(type === 'white') sub(16);
+      else if(type === 'rose') sub(8);
+      else if(type === 'sparkling') sub(8);
+      if(tann !== null){
+        if(tann >= 2.5) add(24, 'its firm, medium-to-high tannins grip the rich, savory meat in ' + dishQuoted + ' — the meat and potato soften the tannins while the tannins cut the hearty richness');
+        else if(tann >= 2) add(18, 'medium tannins give it the grip the savory, hearty meat-and-potato filling in ' + dishQuoted + ' wants');
+        else if(tann <= 1) sub(10);
+      }
+      if(richLow.indexOf('rich red') !== -1) add(16, 'a rich, full red — enough weight to stand up to the hearty, savory meat and potato in ' + dishQuoted);
+      else if(richLow.indexOf('medium red') !== -1) add(12, 'a medium red, in step with the hearty, savory meat-and-potato pie in ' + dishQuoted);
+      if(sweet !== null && sweet >= 3) sub(32);
+      else if(sweet !== null && sweet >= 2) sub(12);
+    }
+    if(p.dessert){
+      /* Dessert → the wine must be sweeter than the dish, or
+         it comes across sour and thin. dessertThing names
+         the actual dessert typed (chocolate, cheesecake…) */
+      if(sweet !== null){
+        if(sweet === 5) add(36, 'for the ' + dessertThing + ' in ' + dishQuoted + ', it is very sweet — sweeter than the dessert itself, which is the golden rule, so the dessert won\u2019t make it taste sour');
+        else if(sweet === 4) add(32, 'sweet enough to stay ahead of the ' + dessertThing + ' in ' + dishQuoted + ' — the golden rule of dessert pairing, so the wine doesn\u2019t turn thin or sour');
+        else if(sweet === 3.5) add(22, 'sweet enough to hold its own against the ' + dessertThing + ' in ' + dishQuoted);
+        else if(sweet === 3) add(16, 'some sweetness to meet the ' + dessertThing + ' in ' + dishQuoted + ' part-way');
+        else if(sweet === 2) sub(6);
+        else sub(30);
+      }
+      if(!isNaN(rs)){
+        if(rs >= 100) add(14, 'dessert-wine sugar levels (' + Math.round(rs) + ' g/L), so it can stand up to the sweetness of the ' + dessertThing + ' in ' + dishQuoted);
+        else if(rs >= 50) add(10, 'proper dessert-level sweetness (' + Math.round(rs) + ' g/L) for the ' + dessertThing + ' in ' + dishQuoted);
+        else if(rs >= 18) add(4, '');
+      }
+      if(nameLow.indexOf('icewine') !== -1 || varietal.indexOf('icewine') !== -1 || nameLow.indexOf('late harvest') !== -1) add(16, 'made for dessert — the ' + dessertThing + ' in ' + dishQuoted + ' is its home turf');
+      if(p.chocolate && type === 'red' && sweet !== null && sweet >= 3) add(14, 'for the chocolate in ' + dishQuoted + ', its sweet red fruit stands up to the cocoa without turning bitter');
+      if(p.chocolate && richLow.indexOf('rich red') !== -1) add(6, 'a rich red has the weight the chocolate in ' + dishQuoted + ' needs');
+    }
+    if(p.poultry){
+      if(richLow.indexOf('medium white') !== -1) add(14, 'a medium-bodied white matches the weight of the ' + poultryThing + ' in ' + dishQuoted);
+      else if(richLow.indexOf('light white') !== -1) add(6, 'a light white keeps the ' + poultryThing + ' in ' + dishQuoted + ' tasting fresh');
+      if(type === 'white') add(10, 'white is the usual direction for the ' + poultryThing + ' in ' + dishQuoted);
+      if(richLow.indexOf('light red') !== -1) add(10, 'a light red is the classic red option for the ' + poultryThing + ' in ' + dishQuoted);
+      if(richLow.indexOf('rich red') !== -1) sub(6);
+      if(varietal.indexOf('chardonnay') !== -1) add(8, 'Chardonnay and the ' + poultryThing + ' in ' + dishQuoted + ' are a textbook pair');
+      if(varietal.indexOf('pinot noir') !== -1) add(6, 'Pinot Noir is the red that suits the ' + poultryThing + ' in ' + dishQuoted + ' without overwhelming it');
+      if(acid !== null && acid >= 2) add(6, 'enough acidity to cut any richness in the skin and juices of the ' + poultryThing + ' in ' + dishQuoted);
+    }
+    if(p.pork){
+      if(sweet === 2) add(12, 'off-dry is a classic match for the ' + porkThing + ' in ' + dishQuoted + ' — think Riesling with roast pork');
+      if(type === 'white') add(8, 'white suits the lighter meat of the ' + porkThing + ' in ' + dishQuoted);
+      if(richLow.indexOf('medium red') !== -1) add(6, 'a medium red also works with the ' + porkThing + ' in ' + dishQuoted);
+      if(acid !== null && acid >= 2.5) add(8, 'bright acidity cuts the fat in the ' + porkThing + ' in ' + dishQuoted);
+    }
+    if(p.cheese){
+      if(acid !== null && acid >= 2.5) add(12, 'high acidity cuts the richness of the ' + cheeseThing + ' in ' + dishQuoted);
+      if(p.goatCheese && varietal.indexOf('sauvignon blanc') !== -1) add(16, 'Sauvignon Blanc and the goat cheese in ' + dishQuoted + ' are the classic pair — its acidity matches the cheese\u2019s tang');
+      if(type === 'sparkling') add(8, 'sparkling scrubs the ' + cheeseThing + ' richness in ' + dishQuoted + ' clean off the palate');
+    }
+    if(p.salad){
+      if(richLow.indexOf('light white') !== -1) add(12, 'light and fresh, like the salad in ' + dishQuoted + ' itself');
+      if(varietal.indexOf('sauvignon blanc') !== -1) add(10, 'Sauvignon Blanc\u2019s herbal freshness loves the greens in ' + dishQuoted);
+    }
+    if(p.sweetDish){
+      if(sweet === 2) add(16, 'off-dry — a touch of sweetness mirrors the ' + sweetSauceThing + ' glaze / sauce in ' + dishQuoted);
+      else if(sweet === 3) add(12, 'a little sweetness matches the ' + sweetSauceThing + ' sauce in ' + dishQuoted);
+      else if(sweet !== null && sweet <= 1) add(4, '');
+    }
+    if(!p.spicy && !p.fatty && !p.redMeat && !p.seafood && !p.acidicDish && !p.dessert && !p.poultry && !p.pork && !p.cheese && !p.salad && !p.sweetDish && !p.grilled){
+      /* Nothing specific recognised: fall back to balance —
+         versatile, medium-acid, medium-weight wines first.
+         The fallback still names the typed dish, it does
+         not pretend a specific mechanism was recognised */
+      if(acid !== null && acid >= 2 && acid <= 2.5) add(8, 'for ' + dishQuoted + ', its balanced acidity makes it a versatile table wine that won\u2019t fight the dish');
+      if(richLow.indexOf('medium') !== -1) add(6, 'medium-bodied, so it sits in step with ' + dishQuoted + ' without overwhelming it');
+      if(sweet !== null && sweet >= 1 && sweet <= 2) add(4, 'dry to off-dry, the most food-friendly range for ' + dishQuoted);
+    }
+    /* A dinner bottle: the standard 750mL is preferred over
+       the same wine in a large format or a single-serve size */
+    var ml = sizeMl(data.size);
+    if(ml === 750) score += 6;
+    else if(ml !== null && ml >= 1500) score -= 6;
+    else if(ml !== null && ml < 750) score -= 4;
+
+    reasons.sort(function(a, b){ return b.n - a.n; });
+    return { score: score, reasons: reasons, type: type };
+  }
+  function pairingMetaLine(data){
+    var bits = [];
+    if(data.rich) bits.push(data.rich);
+    if(data.sweet) bits.push(data.sweet);
+    if(data.acidity) bits.push(data.acidity + ' acidity');
+    if(data.tannins) bits.push(data.tannins + ' tannins');
+    if(data.varietal) bits.push(data.varietal);
+    var rs = parseFloat(data.rs);
+    if(!isNaN(rs) && rs > 0) bits.push(Math.round(rs) + ' g/L sugar');
+    return bits.join(' · ');
+  }
+  function pairingWhyText(scored, data, dishText){
+    var whys = [];
+    scored.reasons.forEach(function(r){
+      if(whys.length < 3 && r.why) whys.push(r.why);
+    });
+    if(!whys.length){
+      var bits = [];
+      if(data.rich) bits.push(data.rich.toLowerCase());
+      if(data.sweet) bits.push(data.sweet.toLowerCase());
+      if(data.acidity) bits.push(data.acidity.toLowerCase() + ' acidity');
+      var dishBit = dishText ? ' \u201C' + dishText + '\u201D' : ' the dish';
+      whys.push('a balanced pour' + (bits.length ? ' — ' + bits.join(', ') : '') + ' that sits comfortably alongside' + dishBit + ' without overwhelming it');
+    }
+    var text = whys.join('; ');
+    return text.charAt(0).toUpperCase() + text.slice(1) + '.';
+  }
+  function renderPairingInto(dishText, resultsEl, storeNumEl, closeForPick){
+    if(!resultsEl) return;
+    if(storeNumEl) storeNumEl.textContent = activeStore;
+    resultsEl.innerHTML = '';
+    var dish = String(dishText || '').trim();
+    if(!dish){
+      var hint = document.createElement('p');
+      hint.className = 'pairing-hint';
+      hint.textContent = 'Type a dish first — anything from “steak” to “spicy Thai curry” — and the best matches from this store\u2019s list will show here.';
+      resultsEl.appendChild(hint);
+      return;
+    }
+    var profile = pairingDishProfile(dish);
+    var storeSet = storeSets[activeStore];
+    var scored = [];
+    /* In-store AND available ONLY — a hard rule, checked
+       before any scoring: a wine is scored only when the
+       CURRENT store carries it (its idx is in
+       storeSets[activeStore]; a missing store set fails
+       closed and recommends nothing) AND it is not marked
+       unavailable at this store (isUnavail() reads
+       storeUnavailable[activeStore], so availability is
+       per-store). A wine that fails either check is never
+       scored, never picked and never shown, however well
+       it would otherwise match the dish. */
+    rows.forEach(function(row){
+      if(!storeSet || !storeSet.has(row.getAttribute('data-idx'))) return;
+      if(isUnavail(row)) return;
+      var data = readRow(row);
+      var s = pairingScoreWine(data, profile, dish);
+      if(s.type === 'other') return;
+      scored.push({ row: row, data: data, score: s.score, reasons: s.reasons, key: (data.brand + '|' + data.name).toLowerCase() });
+    });
+    if(!scored.length){
+      var none = document.createElement('p');
+      none.className = 'pairing-hint';
+      none.textContent = 'Store ' + activeStore + ' has no available wines to recommend yet — it carries no wines, or every wine it carries is marked unavailable.';
+      resultsEl.appendChild(none);
+      return;
+    }
+    scored.sort(function(a, b){ return (b.score - a.score) || detailLabel(a.row).localeCompare(detailLabel(b.row)); });
+    /* One entry per wine: where a wine comes in several sizes,
+       keep only its best-scoring size (the 750mL, all else
+       equal) so the backups are different wines */
+    var seenKeys = {}, picks = [];
+    scored.forEach(function(item){
+      if(seenKeys[item.key]) return;
+      seenKeys[item.key] = 1;
+      picks.push(item);
+    });
+    picks = picks.slice(0, 5);
+    var head = document.createElement('p');
+    head.className = 'pairing-head';
+    head.textContent = 'For \u201C' + dish + '\u201D — Store ' + activeStore;
+    resultsEl.appendChild(head);
+    if(picks[0].score < 15){
+      var note = document.createElement('p');
+      note.className = 'pairing-note';
+      note.textContent = 'No textbook match for this one in this store — these are the closest fits on the shelf:';
+      resultsEl.appendChild(note);
+    }
+    picks.forEach(function(item, i){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pairing-item' + (i === 0 ? ' is-best' : '');
+      var top = document.createElement('span');
+      top.className = 'pairing-item-top';
+      var rank = document.createElement('span');
+      rank.className = 'pairing-rank';
+      rank.textContent = i === 0 ? '★ Best match' : 'Backup ' + i;
+      top.appendChild(rank);
+      var nm = document.createElement('span');
+      nm.className = 'pairing-name';
+      nm.textContent = detailLabel(item.row);
+      top.appendChild(nm);
+      var price = effectivePrice(item.row);
+      if(price !== null){
+        var pr = document.createElement('span');
+        pr.className = 'pairing-price';
+        pr.textContent = '$' + price.toFixed(2);
+        top.appendChild(pr);
+      }
+      btn.appendChild(top);
+      var meta = pairingMetaLine(item.data);
+      if(meta){
+        var mt = document.createElement('span');
+        mt.className = 'pairing-meta';
+        mt.textContent = meta;
+        btn.appendChild(mt);
+      }
+      var why = document.createElement('span');
+      why.className = 'pairing-why';
+      why.textContent = pairingWhyText(item, item.data, dish);
+      btn.appendChild(why);
+      btn.addEventListener('click', function(){
+        closeForPick();
+        jumpToProduct(item.row);
+      });
+      resultsEl.appendChild(btn);
+    });
+    var foot = document.createElement('p');
+    foot.className = 'pairing-note';
+    foot.textContent = 'Tap a wine to open it in the list.';
+    resultsEl.appendChild(foot);
+  }
+  function renderPairing(dishText){
+    /* Legacy Support-inline entry point: the Support tab no
+       longer embeds an inline finder (it carries a Food
+       pairing finder BUTTON that opens the pop-up), so
+       pairingResults / pairingStoreNum are null and
+       renderPairingInto safely no-ops. Kept so nothing that
+       still calls renderPairing can break. */
+    renderPairingInto(dishText, pairingResults, pairingStoreNum, function(){ closeSettings(); });
+  }
+  function renderPairingPopup(dishText){
+    /* A pick in the pop-up closes the pop-up AND Settings
+       (Settings is underneath when the pop-up was opened
+       from the Support tab; closeSettings() no-ops when it
+       is already hidden, e.g. when opened from the header),
+       then opens the wine in the list */
+    renderPairingInto(dishText, pairingPopupResults, pairingPopupStoreNum, function(){ closePairingPopup(); closeSettings(); });
+  }
+  if(pairingForm && pairingInput){
+    pairingForm.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      renderPairing(pairingInput.value);
+    });
+    var pairingChips = pairingForm.parentNode ? pairingForm.parentNode.querySelectorAll('.pairing-chip') : [];
+    Array.prototype.forEach.call(pairingChips, function(chip){
+      chip.addEventListener('click', function(){
+        pairingInput.value = chip.getAttribute('data-dish') || '';
+        renderPairing(pairingInput.value);
+      });
+    });
+  }
+
+  /* ---------- Food pairing pop-up (header + Support buttons) ----------
+     The finder lives ONLY as a POP-UP — a modal overlay
+     (pairingOverlay) — never embedded inline. Two buttons
+     open the SAME pop-up:
+       · the Food pairing finder button under the store pill
+         in the header — the pop-up opens over the main list,
+         NOT as a navigation to Settings / the Support tab;
+       · the Food pairing finder button in the Support tab
+         (last in the tab, under Wine Knowledge) — the pop-up
+         opens over Settings, and closing it returns to the
+         Support tab underneath.
+     The pop-up holds the tool (its own form / input /
+     results IDs) rendered by the shared engine
+     (renderPairingInto), so it follows the same rules:
+     closest match first with backups, tailored reasons, and
+     only wines the current store carries AND has not marked
+     unavailable. Closing the pop-up (×, "Close — back to the
+     list", tapping the backdrop, or Escape) returns to
+     whatever opened it; tapping a recommendation closes the
+     pop-up (and Settings, if it was open underneath) and
+     opens that wine in the list (closeForPick in
+     renderPairingPopup). */
+  var pairingOverlay = document.getElementById('pairingOverlay');
+  var pairingPopupForm = document.getElementById('pairingPopupForm');
+  var pairingPopupInput = document.getElementById('pairingPopupInput');
+  var pairingPopupResults = document.getElementById('pairingPopupResults');
+  var pairingPopupStoreNum = document.getElementById('pairingPopupStoreNum');
+  if(pairingPopupStoreNum) pairingPopupStoreNum.textContent = activeStore;
+  var pairingReturnFocus = null;
+  function openPairingPopup(fromEl){
+    if(!pairingOverlay) return;
+    pairingReturnFocus = fromEl || null;
+    if(pairingPopupStoreNum) pairingPopupStoreNum.textContent = activeStore;
+    pairingOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    if(pairingPopupInput) pairingPopupInput.focus();
+  }
+  function closePairingPopup(){
+    if(!pairingOverlay || pairingOverlay.hidden) return;
+    pairingOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden) document.body.style.overflow = '';
+    var backTo = pairingReturnFocus || document.getElementById('heroPairingBtn');
+    pairingReturnFocus = null;
+    if(backTo) backTo.focus();
+  }
+  var heroPairingBtn = document.getElementById('heroPairingBtn');
+  if(heroPairingBtn) heroPairingBtn.addEventListener('click', function(){ openPairingPopup(heroPairingBtn); });
+  var pairingSupportBtn = document.getElementById('pairingSupportBtn');
+  if(pairingSupportBtn) pairingSupportBtn.addEventListener('click', function(){ openPairingPopup(pairingSupportBtn); });
+  var pairingCloseBtn = document.getElementById('pairingClose');
+  if(pairingCloseBtn) pairingCloseBtn.addEventListener('click', closePairingPopup);
+  var pairingCancelBtn = document.getElementById('pairingCancel');
+  if(pairingCancelBtn) pairingCancelBtn.addEventListener('click', closePairingPopup);
+  if(pairingOverlay) pairingOverlay.addEventListener('click', function(ev){ if(ev.target === pairingOverlay) closePairingPopup(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && pairingOverlay && !pairingOverlay.hidden) closePairingPopup();
+  });
+  if(pairingPopupForm && pairingPopupInput){
+    pairingPopupForm.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      renderPairingPopup(pairingPopupInput.value);
+    });
+    var pairingPopupChips = document.querySelectorAll('.pairing-chip-popup');
+    Array.prototype.forEach.call(pairingPopupChips, function(chip){
+      chip.addEventListener('click', function(){
+        pairingPopupInput.value = chip.getAttribute('data-dish') || '';
+        renderPairingPopup(pairingPopupInput.value);
+      });
+    });
+  }
+
+  /* ---------- Also in Support: What's on sample today + Wine Knowledge ----------
+     Support tab order, top to bottom: the Support Center
+     contacts first, then "What's on sample today?", then
+     Wine Knowledge, then the Food pairing finder last. The
+     Support tab carries its own entries for "What's on
+     sample today?" and Wine Knowledge, between the Support
+     Center contacts and the Food pairing finder. They
+     open the SAME panels as the Documents entries of the same
+     names (openSample / openKnowledge, wired in their own
+     sections) — the Documents tab keeps its own entries too,
+     and the Impacts and the Manual stay in Documents only.
+     These are second buttons for the same panels, nothing is
+     moved or duplicated in content. */
+  var sampleTodaySupportBtn = document.getElementById('sampleTodaySupport');
+  if(sampleTodaySupportBtn){
+    sampleTodaySupportBtn.addEventListener('click', function(){
+      closeSettings();
+      openSample();
+    });
+  }
+  var wineKnowledgeSupportBtn = document.getElementById('wineKnowledgeSupport');
+  if(wineKnowledgeSupportBtn){
+    wineKnowledgeSupportBtn.addEventListener('click', function(){
+      closeSettings();
+      openKnowledge();
+    });
+  }
 
   /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
      The responsive web manual, baked into this page as a panel on
