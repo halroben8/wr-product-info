@@ -1677,7 +1677,9 @@
   .display-name-setting label{display:block;margin-bottom:5px}
   .display-name-note{margin:0 0 9px;font-size:13px;line-height:1.5;color:var(--muted)}
   .display-name-note strong{color:var(--ink)}
-  .display-name-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .display-name-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;justify-content:center}
+  /* Centre the Sign out button in the Account panel, like the display-name actions above */
+  #signOutBtn{display:flex;width:fit-content;margin-left:auto;margin-right:auto;justify-content:center;align-items:center}
   .display-name-msg{margin:9px 0 0;font-size:13px;line-height:1.5;color:var(--plum);font-weight:650}
   :root[data-theme="dark"] .display-name-msg{color:var(--lilac)}
   .display-name-msg[hidden]{display:none !important}
@@ -5355,7 +5357,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.05</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.06</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5368,7 +5370,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.05</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.06</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6330,7 +6332,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.05</span>
+      <span class="manual-pill accent">Version 2026.11.04.06</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6708,9 +6710,9 @@
         <h3>An old tab is showing an old version</h3>
         <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
         <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
-        <p>This was a database fault, fixed in version 2026.11.04.05 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.06 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>A change didn&rsquo;t appear in Change history</h3>
-        <p>This was a database fault, fixed in version 2026.11.04.05 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.04.05 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.04.06 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.04.06 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
         <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
         <h3>The store popup keeps appearing</h3>
@@ -6761,7 +6763,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.05</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.06</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -11668,7 +11670,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.04.05). Reference content only: nothing
+     the print PDF (2026.11.04.06). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
