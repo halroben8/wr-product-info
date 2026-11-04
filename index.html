@@ -32,12 +32,18 @@
     color-scheme: light;
     --bg:#f3eefc; --panel:#ffffff; --panel2:#ece4fb; --ink:#241536; --muted:#5c4a78;
     --line:#d9cbf5; --plum:#5b21b6; --plum2:#7c3aed; --grape:#9333ea; --lilac:#c4b5fd;
+    --alt-tint:color-mix(in srgb, #ede9fe 45%, #ffffff);
+    --notes-bg:var(--alt-tint); --notes-ink:#241536; --notes-muted:#5c4a78; --notes-line:#d9cbf5;
+    --notes-accent:#5b21b6; --notes-soft:#ede9fe; --notes-sale:#be185d; --notes-warn:#b45309; --notes-danger:#b91c1c;
     --violet-soft:#ede9fe; --chip-red:#7e1d4f; --chip-red-bg:#fbe3ef; --chip-white:#1e40af; --chip-white-bg:#dbeafe;
     --chip-rose:#be185d; --chip-rose-bg:#fbcfe8; --chip-cider:#166534; --chip-cider-bg:#dcfce7;
     --badge-bg:#5b21b6; --badge-ink:#fff; --shadow:0 10px 30px rgba(76,29,149,.16);
     --header-grad:linear-gradient(120deg,#3b0764 0%,#6d28d9 55%,#9333ea 100%);
   }
   :root[data-theme="dark"]{color-scheme:dark; --bg:#170b2e; --panel:#241243; --panel2:#2d1854; --ink:#f1eafd; --muted:#c3b2e8;
+      --alt-tint:color-mix(in srgb, #311a63 45%, #241243);
+      --notes-bg:var(--alt-tint); --notes-ink:#f1eafd; --notes-muted:#c3b2e8; --notes-line:#452a75;
+      --notes-accent:#c4b5fd; --notes-soft:#2d1854; --notes-sale:#f9a8d4; --notes-warn:#fbbf24; --notes-danger:#fca5a5;
       --line:#452a75; --plum:#a78bfa; --plum2:#c4b5fd; --grape:#d8b4fe; --lilac:#7c5cd6;
       --violet-soft:#311a63; --chip-red:#f9a8d4; --chip-red-bg:#4a1030; --chip-white:#93c5fd; --chip-white-bg:#1e3a5f;
       --chip-rose:#f9a8d4; --chip-rose-bg:#831843; --chip-cider:#86efac; --chip-cider-bg:#0f3520;
@@ -815,16 +821,32 @@
   tr.prow:hover .expand-hint .eh-label,tr.prow:focus-visible .expand-hint .eh-label,
   tr.prow:hover .expand-hint .eh-chev,tr.prow:focus-visible .expand-hint .eh-chev{color:var(--plum2)}
   tr.prow[aria-expanded="true"] .expand-hint .eh-chev{transform:rotate(180deg)}
-  /* Open product + its notes read as one joined panel: the product row
-     and the notes row below it share a plum outline and tint, with no
-     break between them, and the notes open with the product's name */
-  tr.prow[aria-expanded="true"]{background:var(--violet-soft)}
+  /* Open product + its notes: expanding must NOT recolour the
+     product row — it keeps exactly its collapsed background
+     (plain panel, zebra tint, sale pink or unavailable red, and
+     the same hover tint as a collapsed row); the expanded state
+     adds only the shared plum outline. ONLY the notes row below
+     changes, and only to the OTHER alternating row shade from
+     its own card: the list alternates white (var(--panel)) with
+     a pale lavender tint (var(--alt-tint), the solid equivalent
+     of the zebra tint on tr.prow:nth-child(4n+3) above), so a
+     white card gets pale-lavender notes and a pale-lavender
+     card gets white notes. Both shades are light in the Light
+     theme, so the notes text stays the normal dark theme text
+     (--notes-* now mirrors the ordinary palette). The two still
+     share the plum outline with no break between them, and the
+     notes open with the product's name. The flip is keyed to the
+     same nth-child pattern as the zebra itself: prow/drow pairs
+     occupy (4n+1, 4n+2) for a white card and (4n+3, 4n+4) for a
+     tinted card, so each drow takes the shade its prow does not */
   tr.prow[aria-expanded="true"] td{border-top:2px solid var(--plum2);border-bottom:none}
   tr.prow[aria-expanded="true"] td:first-child{border-left:2px solid var(--plum2)}
   tr.prow[aria-expanded="true"] td:last-child{border-right:2px solid var(--plum2)}
-  tr.drow td{background:var(--panel2);padding:14px 16px;
+  tr.drow td{background:var(--notes-bg);color:var(--notes-ink);padding:14px 16px;
     border-left:2px solid var(--plum2);border-right:2px solid var(--plum2);
     border-bottom:2px solid var(--plum2)}
+  tr.drow:nth-child(4n+2) td{--notes-bg:var(--alt-tint)}
+  tr.drow:nth-child(4n) td{--notes-bg:var(--panel)}
   .detail-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 8px;
     margin:0 0 10px;padding:0 0 8px;border-bottom:1px dashed var(--lilac)}
   .detail-head .dh-label{flex:none;font-size:11px;font-weight:800;letter-spacing:.06em;
@@ -836,6 +858,54 @@
   .detail .notes.none{color:var(--muted);font-style:italic}
   .detail .src{margin:2px 0;color:var(--muted);font-size:13px;word-break:break-word}
   .detail a{color:var(--plum2)}
+  /* Everything inside the expanded notes sits on --notes-bg
+     (set per-row on tr.drow td above and in the phone block
+     below: the other alternating light shade from its own
+     card), so every colour inside .detail is re-pointed at the
+     --notes-* palette, which mirrors the ordinary palette:
+     body text, muted lines, accents, sale and warning colours,
+     and the comments thread all stay readable with dark text
+     on the light notes shade in the Light theme (and light
+     text on the alternating dark shades in the Dark theme).
+     The higher tr.drow prefix keeps these ahead of the plainer
+     .detail rules elsewhere (notably the comments styles at
+     the end of this stylesheet) */
+  tr.drow .detail{color:var(--notes-ink)}
+  tr.drow .detail .notes{color:var(--notes-ink)}
+  tr.drow .detail .notes.none{color:var(--notes-muted)}
+  tr.drow .detail .src{color:var(--notes-muted)}
+  tr.drow .detail a{color:var(--notes-accent)}
+  tr.drow .detail-head{border-bottom:1px dashed var(--notes-line)}
+  tr.drow .detail-head .dh-label{background:var(--notes-ink);color:var(--notes-bg)}
+  tr.drow .detail-head .dh-name{color:var(--notes-accent)}
+  tr.drow .detail-head .dh-arrow{color:var(--notes-accent)}
+  tr.drow .detail .vegan-note{color:var(--notes-muted)}
+  tr.drow .detail .vegan-note strong{color:var(--notes-accent)}
+  tr.drow .detail .price-total{color:var(--notes-ink)}
+  tr.drow .detail .price-total .pt-k{color:var(--notes-accent)}
+  tr.drow .detail .price-total .pt-note{color:var(--notes-muted)}
+  tr.drow .detail .sale-detail{color:var(--notes-ink)}
+  tr.drow .detail .sale-lines .sl-sale,tr.drow .detail .sale-lines .sl-save{color:var(--notes-sale)}
+  tr.drow .detail .sale-lines .sl-reg{color:var(--notes-muted)}
+  tr.drow .detail .sale-lines .tax-suffix{color:var(--notes-muted)}
+  tr.drow .detail .flash-sale-note{color:var(--notes-ink)}
+  tr.drow .detail .sale-broken-note{color:var(--notes-warn)}
+  tr.drow .detail .flag{color:var(--notes-warn)}
+  tr.drow .detail .comments-toggle{background:var(--notes-soft);color:var(--notes-ink);border-color:var(--notes-line)}
+  tr.drow .detail .comments-toggle svg{stroke:var(--notes-accent)}
+  tr.drow .detail .comments-toggle:hover,tr.drow .detail .comments-toggle:focus-visible{background:var(--notes-line);border-color:var(--notes-accent)}
+  tr.drow .detail .comment-count{background:var(--notes-accent);color:var(--notes-bg)}
+  tr.drow .detail .wine-comments{border-top-color:var(--notes-line)}
+  tr.drow .detail .wine-comment{border-top-color:var(--notes-line)}
+  tr.drow .detail .wine-comment .wc-meta{color:var(--notes-muted)}
+  tr.drow .detail .wine-comment .wc-meta .wc-who{color:var(--notes-accent)}
+  tr.drow .detail .wine-comment .wc-text{color:var(--notes-ink)}
+  tr.drow .detail .wc-form{border-top-color:var(--notes-line)}
+  tr.drow .detail .wc-form-label{color:var(--notes-accent)}
+  tr.drow .detail .wc-form textarea,tr.drow .detail .wc-edit textarea{background:var(--notes-soft);color:var(--notes-ink);border-color:var(--notes-line)}
+  tr.drow .detail .wc-confirm{color:var(--notes-danger)}
+  tr.drow .detail .comments-signin-note{color:var(--notes-muted)}
+  tr.drow .detail .btn-ghost-small{background:var(--notes-soft);color:var(--notes-ink);border-color:var(--notes-line)}
   .empty{display:none;padding:34px 20px;text-align:center;color:var(--muted)}
   footer{color:var(--muted);font-size:13px;margin-top:16px}
   @media (max-width:760px){
@@ -924,10 +994,15 @@
     td[data-label="Product"] .expand-hint .eh-chev{font-size:15px}
     /* Joined card: when notes are open the product card loses its bottom
        edge and the notes sit flush against it — no gap, no separate card —
-       so the two read as one tall card for that one wine */
+       so the two read as one tall card for that one wine. The card
+       itself keeps exactly its collapsed background (panel, sale
+       pink or unavailable red) — no background is set here, so
+       expanding never recolours it; only the notes below flip to
+       the other alternating shade (white <-> pale lavender tint,
+       via the per-row --notes-bg set in the desktop block above) */
     tbody tr.prow[aria-expanded="true"]{border:1.5px solid var(--plum2);
       border-bottom:none;border-radius:12px 12px 0 0;margin-bottom:0;
-      background:var(--violet-soft);box-shadow:0 2px 8px rgba(76,29,149,.07)}
+      box-shadow:0 2px 8px rgba(76,29,149,.07)}
     /* The desktop outline is drawn per-cell; on a phone card the outline
        belongs on the card itself, not on the facts inside it */
     tbody tr.prow[aria-expanded="true"] td,
@@ -935,10 +1010,11 @@
     tbody tr.prow[aria-expanded="true"] td:last-child{border:none}
     tr.drow{margin-top:6px}
     tbody tr.prow[aria-expanded="true"] + tr.drow{margin-top:0}
-    tr.drow td{display:block;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px}
+    tr.drow td{display:block;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:12px;
+      background:var(--notes-bg);color:var(--notes-ink)}
     tbody tr.prow[aria-expanded="true"] + tr.drow td{border:1.5px solid var(--plum2);
-      border-top:1px dashed var(--lilac);border-radius:0 0 12px 12px;
-      background:var(--panel2);box-shadow:0 4px 10px rgba(76,29,149,.10)}
+      border-top:1px dashed var(--notes-line);border-radius:0 0 12px 12px;
+      background:var(--notes-bg);color:var(--notes-ink);box-shadow:0 4px 10px rgba(76,29,149,.10)}
     tr.drow td::before{content:none}
     .detail-head{margin-bottom:8px;padding-bottom:7px}
     .detail-head .dh-name{font-size:13.5px;line-height:1.3}
@@ -4876,7 +4952,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.17</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.18</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4901,7 +4977,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.17</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.18</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5740,7 +5816,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.17</span>
+      <span class="manual-pill accent">Version 2026.11.03.18</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6134,7 +6210,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.17</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.18</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
