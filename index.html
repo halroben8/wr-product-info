@@ -691,6 +691,28 @@
   .price .sale-now{color:#be185d;font-weight:800}
   .price .was{color:var(--muted);font-weight:600;font-size:.82em;
     text-decoration:line-through;margin-left:6px;white-space:nowrap}
+  /* "+tax & dep" — a small muted suffix on the same line as the
+     price (on the card, and on the Sale line wherever the
+     Sale / Reg / Save lines show): every price in the app is the
+     shelf-tag price, before 13% HST and the container deposit.
+     Plain smaller text, deliberately NOT a badge, so the card
+     stays clean. The full register total lives in the expanded
+     details only (see .price-total below) */
+  .price .tax-suffix,.sale-lines .tax-suffix{font-size:.72em;font-weight:600;
+    color:var(--muted);margin-left:4px;white-space:nowrap;letter-spacing:.01em}
+  /* Tag price / At the register — the two labelled price lines in
+     the expanded details only: the shelf-tag price exactly as
+     printed, and the total the customer actually pays (13% HST
+     on the tag price — the deposit is not taxed — plus the
+     Ontario container deposit for the product's size and
+     container; see syncTotalDetail in the script). Quiet lines,
+     no box, no badge */
+  .detail .price-total{margin:0 0 10px;font-size:14.5px;line-height:1.45}
+  .detail .price-total .pt-line{display:block}
+  .detail .price-total .pt-k{font-weight:800;color:var(--plum);margin-right:5px}
+  :root[data-theme="dark"] .detail .price-total .pt-k{color:var(--lilac)}
+  .detail .price-total .pt-reg{font-weight:750}
+  .detail .price-total .pt-note{color:var(--muted);font-size:.88em;font-weight:600}
   /* Sale / Reg / Save — the three price lines shown together on
      every product on sale, in the price cell and again in the
      expanded details: the sale price leads in pink, the regular
@@ -1243,6 +1265,36 @@
   .history-sub{flex:none;margin:0 0 6px;font-size:13.5px;line-height:1.5;color:var(--muted)}
   .history-list{overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;padding-right:2px}
   .history-panel .editor-actions{flex:none}
+  /* Clear history (in the dedicated Change history view only):
+     a solid red danger button in the view's footer, an inline
+     confirm box that appears above the footer on the first tap
+     (no browser confirm dialogs — they do not work in this
+     shell, same rule as the suggestion / comment deletes), and
+     a success banner shown in the view once the clear lands.
+     The confirm box and the banner are flex:none, so they stay
+     visible above the scrolling entry list */
+  .btn-danger{background:#b91c1c;color:#fff;border:1.5px solid #b91c1c;border-radius:999px;
+    padding:10px 20px;font:inherit;font-weight:700;cursor:pointer}
+  .btn-danger:hover,.btn-danger:focus-visible{background:#991b1b;outline:none}
+  .btn-danger[disabled]{opacity:.45;cursor:not-allowed}
+  :root[data-theme="dark"] .btn-danger{background:#dc2626;border-color:#dc2626}
+  .btn-danger-small{background:#b91c1c;color:#fff;border:1.5px solid #b91c1c;border-radius:999px;
+    padding:8px 16px;font:inherit;font-size:14px;font-weight:700;cursor:pointer;min-height:40px}
+  .btn-danger-small:hover,.btn-danger-small:focus-visible{background:#991b1b;outline:none}
+  .btn-danger-small[disabled]{opacity:.45;cursor:not-allowed}
+  :root[data-theme="dark"] .btn-danger-small{background:#dc2626;border-color:#dc2626}
+  @media (max-width:760px){
+    .history-panel .editor-actions .btn-danger{flex:1 1 auto;min-height:48px}
+  }
+  .history-clear-confirm{flex:none;margin:10px 0 0;padding:12px 13px;border:1.5px solid #b91c1c;
+    border-radius:10px;background:#fef2f2}
+  :root[data-theme="dark"] .history-clear-confirm{border-color:#fca5a5;background:#3d0f1a}
+  .history-clear-confirm[hidden]{display:none !important}
+  .history-clear-confirm p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
+  .history-clear-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .history-clear-msg{flex:none;margin:10px 0 0;padding:11px 13px;border:1.5px solid var(--plum2);
+    border-radius:10px;background:var(--violet-soft);font-size:14.5px;font-weight:650;line-height:1.5;color:var(--ink)}
+  .history-clear-msg[hidden]{display:none !important}
   .signin-panel{max-width:440px}
   .signin-panel p{line-height:1.55;margin:0 0 6px}
   /* Backend (admin only): signed-in users + the change history,
@@ -4824,7 +4876,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.15</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.17</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4849,7 +4901,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.15</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.17</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5688,7 +5740,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.15</span>
+      <span class="manual-pill accent">Version 2026.11.03.17</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -5919,7 +5971,7 @@
 
     <!-- 9 -->
     <details class="manual-sec" id="manual-prices" data-title="Prices and sales">
-      <summary><span class="manual-sec-num">9</span><span class="manual-sec-title"><strong>Prices &amp; sales</strong><small>Sale / Reg / Save, and the broken-sale flag</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+      <summary><span class="manual-sec-num">9</span><span class="manual-sec-title"><strong>Prices &amp; sales</strong><small>Sale / Reg / Save, plus tax &amp; deposit, and the broken-sale flag</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
         <h3>How a sale shows on a card</h3>
         <ul>
@@ -5928,6 +5980,8 @@
           <li><strong>Save</strong> — the difference between the two.</li>
         </ul>
         <p>Not every wine has a price yet — a wine with no price simply shows no price. That&rsquo;s expected for part of the list, not an error.</p>
+        <h3>Prices are plus tax &amp; deposit</h3>
+        <p>Every price in the app is the <strong>shelf-tag price</strong> — 13% HST and the container deposit are added at the register. On the card, the small muted <strong>+tax &amp; dep</strong> beside the price says exactly that. Open a product&rsquo;s details to see both prices, clearly labelled: <strong>Tag price</strong> (the price as printed on the tag — for a wine on sale, the sale price) and <strong>At the register</strong> (the total the customer actually pays: tag price + 13% HST + deposit). The HST is charged on the tag price only, never on the deposit. The deposit is 10&cent; for glass, PET, Tetra Pak and bag-in-box containers up to 630mL and 20&cent; above that; cans are 10&cent; up to 1L and 20&cent; above that; containers of 100mL or less carry no deposit. So a standard 750mL bottle has a 20&cent; deposit, a 355mL can 10&cent;, and a 375mL bottle 10&cent;.</p>
         <h3>Fixing a price</h3>
         <ul>
           <li>Open the product editor (§8) and set the <strong>Regular price</strong>. Prices are shared — one correction fixes it for every store.</li>
@@ -6026,6 +6080,7 @@
           <li>Every add and edit is recorded with <strong>who made it</strong> (display name if set), what changed, and when.</li>
           <li>Price edits are recorded with the old and new values — <strong>Regular price</strong> and <strong>Sale price</strong> alike, including a sale price typed on a wine that isn&rsquo;t on sale yet.</li>
           <li>Tap <span class="manual-ui">Open Change history</span> in Admin and the history opens in <strong>its own full-screen view</strong> — it is no longer a long list inside the Admin panel. The <strong>newest change is always on top</strong>, the list scrolls inside that view, and <span class="manual-ui">Refresh</span> reloads it. The back arrow, <span class="manual-ui">Back to Admin</span> or the &times; closes it and returns you to Admin.</li>
+          <li><span class="manual-ui">Clear history</span>, at the bottom of that view, deletes <strong>every</strong> Change history entry for everyone. It always asks first — tap <span class="manual-ui">Clear history</span>, then confirm with <span class="manual-ui">Yes, clear history</span> (or <span class="manual-ui">Cancel</span> to back out); nothing is deleted on the first tap. After clearing, a confirmation message shows and the view is empty; changes made afterwards are recorded as usual. Clearing can&rsquo;t be undone.</li>
           <li>History is <strong>Admin-only</strong> — it isn&rsquo;t shown to regular users.</li>
           <li>Admin also carries the action log for admin actions, and the suggestions queue (Section 12) for marking suggestions acted upon and replying.</li>
         </ul>
@@ -6079,7 +6134,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.15</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.17</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -6477,7 +6532,12 @@
      tap outside) returns to the Admin panel, which stays open
      underneath. The overlay markup alone reveals nothing: the
      rows are fetched only when an appointed admin opens it (see
-     openChangeHistory / renderChangeHistory in the script). -->
+     openChangeHistory / renderChangeHistory in the script).
+     The view's footer also carries Clear history (appointed
+     admins only, like the view itself): a two-step inline
+     confirm, then every product_changes row is deleted, a
+     success message shows, and the view re-renders empty (see
+     clearChangeHistory in the script). -->
 <div class="editor-overlay history-overlay" id="historyOverlay" hidden>
   <div class="editor-panel history-panel" role="dialog" aria-modal="true" aria-labelledby="historyTitle">
     <div class="editor-head">
@@ -6487,8 +6547,17 @@
     </div>
     <p class="history-sub">Every add and edit made while signed in, newest change first.</p>
     <div class="history-list" id="historyLog"><p class="hist-empty">Loading&hellip;</p></div>
+    <div class="history-clear-confirm" id="historyClearConfirm" hidden>
+      <p><strong>Clear all Change history?</strong> This deletes every entry &mdash; for everyone, on every phone &mdash; and it can&rsquo;t be undone. Changes made after clearing will be recorded as usual.</p>
+      <div class="history-clear-actions">
+        <button type="button" class="btn-danger-small" id="historyClearYes">Yes, clear history</button>
+        <button type="button" class="btn-ghost-small" id="historyClearCancel">Cancel</button>
+      </div>
+    </div>
+    <p class="history-clear-msg" id="historyClearMsg" hidden role="status"></p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="historyRefresh">Refresh</button>
+      <button type="button" class="btn-danger" id="historyClear" disabled>Clear history</button>
       <button type="button" class="btn-save" id="historyDone">Back to Admin</button>
     </div>
   </div>
@@ -7695,13 +7764,140 @@
       l.appendChild(k);
       l.appendChild(document.createTextNode(text));
       wrap.appendChild(l);
+      return l;
     }
-    line('sl-sale', 'Sale', fmtSaleMoney(fig.sale));
+    /* The Sale line is the price the customer pays, so it carries
+       the same small muted "+tax & dep" suffix as a plain price */
+    var saleLineEl = line('sl-sale', 'Sale', fmtSaleMoney(fig.sale));
+    saleLineEl.appendChild(taxSuffixEl());
     if(fig.reg !== null){
       line('sl-reg', 'Reg', fmtSaleMoney(fig.reg));
       line('sl-save', 'Save', fmtSaveMoney(fig.save));
     }
     return wrap;
+  }
+  /* ---------- Plus tax & deposit — tag price and register total ----------
+     Every price in the app is the SHELF-TAG price: 13% HST and
+     the Ontario container deposit are added at the register. On
+     the card that is said with one small muted "+tax & dep"
+     suffix on the price's own line (plain text, not a badge, so
+     the card stays clean — taxSuffixEl, used by saleLinesEl and
+     renderPriceCell). The expanded details carry BOTH prices as
+     two labelled lines (syncTotalDetail, details only):
+       Tag price $15.99
+       At the register $18.27 (incl. 13% HST + $0.20 deposit)
+     For a product on sale the Tag price is the sale price and the
+     register total is worked out from it. The register total is
+     the tag price plus 13% HST on the tag price ONLY (the
+     deposit is never taxed) plus the deposit, rounded to the
+     cent. Ontario deposit, per container:
+       · glass / PET / Tetra Pak / bag-in-box: 10¢ at or under
+         630mL, 20¢ above 630mL
+       · aluminum / steel cans: 10¢ at or under 1L, 20¢ above 1L
+       · containers of 100mL or less: no deposit
+     So a standard 750mL bottle is a 20¢ deposit, a 355mL can is
+     10¢ and a 375mL bottle is 10¢ (not 20¢). A product whose
+     size cannot be read keeps the suffix but gets no register
+     line — a deposit is never guessed. Display only: sorting
+     and the Max price filter keep using the tag price, exactly
+     as before. */
+  function taxSuffixEl(){
+    var s = document.createElement('span');
+    s.className = 'tax-suffix';
+    s.textContent = '+tax & dep';
+    return s;
+  }
+  function sizeMlFor(row){
+    var td = cellEl(row, 'Size');
+    var m = /(\d+(?:\.\d+)?)\s*(ml|l)\b/i.exec(td ? td.textContent : '');
+    if(!m) return null;
+    var n = parseFloat(m[1]);
+    if(isNaN(n)) return null;
+    return m[2].toLowerCase() === 'l' ? n * 1000 : n;
+  }
+  function containerCountFor(row){
+    var td = cellEl(row, 'Size');
+    var m = /^\s*(\d+)\s*[x×]/i.exec(td ? td.textContent : '');
+    return m ? parseInt(m[1], 10) : 1;
+  }
+  function isCanFor(row){
+    var nameEl = row.querySelector('.pname');
+    var hay = ((row.getAttribute('data-brand') || '') + ' ' +
+      (nameEl ? nameEl.textContent : '') + ' ' +
+      (row.getAttribute('data-search') || '')).toLowerCase();
+    return /\bcans?\b|\bcanned\b/.test(hay);
+  }
+  function depositFor(row){
+    var ml = sizeMlFor(row);
+    if(ml === null) return null;
+    var per;
+    if(ml <= 100) per = 0;
+    else if(isCanFor(row)) per = ml <= 1000 ? 0.10 : 0.20;
+    else per = ml <= 630 ? 0.10 : 0.20;
+    return Math.round(per * containerCountFor(row) * 100) / 100;
+  }
+  function registerCalc(price, row){
+    var dep = depositFor(row);
+    if(dep === null) return null;
+    return { deposit: dep, total: Math.round((price * 1.13 + dep) * 100) / 100 };
+  }
+  /* The expanded details' Tag price / At the register block. It
+     sits directly under the detail head (or under the
+     Sale / Reg / Save block when the product is on sale) and
+     above the tasting notes, exists only while the product has
+     a price and a readable size, and is rebuilt on every render
+     through syncSaleDetail below, so editor saves, ⋮-menu sale
+     toggles and scheduled sales all keep it current */
+  function syncTotalDetail(row){
+    var d = details[row.getAttribute('data-idx')];
+    if(!d) return;
+    var detail = d.querySelector('.detail');
+    if(!detail) return;
+    var fig = saleFigures(isSale(row), row.getAttribute('data-price'), row.getAttribute('data-sale-price'));
+    var payable = null;
+    if(fig) payable = fig.sale;
+    else {
+      var pn = parseFloat(row.getAttribute('data-price'));
+      if(!isNaN(pn)) payable = pn;
+    }
+    var calc = (payable === null) ? null : registerCalc(payable, row);
+    var el = detail.querySelector('.price-total');
+    if(payable === null || !calc){
+      if(el) el.parentNode.removeChild(el);
+      return;
+    }
+    if(!el){
+      el = document.createElement('div');
+      el.className = 'price-total';
+      var anchor = detail.querySelector('.sale-detail') || detail.querySelector('.detail-head');
+      if(anchor && anchor.nextSibling) detail.insertBefore(el, anchor.nextSibling);
+      else if(detail.firstChild) detail.insertBefore(el, detail.firstChild);
+      else detail.appendChild(el);
+    }
+    el.innerHTML = '';
+    function ptLine(label, amountText, amountCls, noteText){
+      var l = document.createElement('span');
+      l.className = 'pt-line';
+      var k = document.createElement('span');
+      k.className = 'pt-k'; k.textContent = label;
+      l.appendChild(k);
+      var a = document.createElement('span');
+      if(amountCls) a.className = amountCls;
+      a.textContent = amountText;
+      l.appendChild(a);
+      if(noteText){
+        var nt = document.createElement('span');
+        nt.className = 'pt-note';
+        nt.textContent = ' ' + noteText;
+        l.appendChild(nt);
+      }
+      el.appendChild(l);
+    }
+    ptLine('Tag price', fmtSaleMoney(payable), '', '');
+    ptLine('At the register', fmtSaleMoney(calc.total), 'pt-reg',
+      calc.deposit > 0
+        ? '(incl. 13% HST + ' + fmtSaleMoney(calc.deposit) + ' deposit)'
+        : '(incl. 13% HST, no deposit)');
   }
   /* ---------- Flash sale badge ----------
      A product in an ACTIVE flash sale period (a SALE_PERIODS entry
@@ -7753,6 +7949,7 @@
     var el = detail.querySelector('.sale-detail');
     if(!fig || fig.sale === null){
       if(el) el.parentNode.removeChild(el);
+      syncTotalDetail(row);
       return;
     }
     if(!el){
@@ -7782,6 +7979,7 @@
       warn.textContent = '⚠ Sale price not working — this item is meant to be on sale, but the sale price isn’t going through (pricing error).';
       el.appendChild(warn);
     }
+    syncTotalDetail(row);
   }
   /* Re-render one row's price cell from its data attributes:
      the Sale / Reg / Save lines for a product on sale, the
@@ -7797,7 +7995,11 @@
         else priceTd.appendChild(saleLinesEl(fig));
       } else {
         var pn = parseFloat(row.getAttribute('data-price'));
-        priceTd.textContent = isNaN(pn) ? '—' : fmtSaleMoney(pn);
+        if(isNaN(pn)) priceTd.textContent = '—';
+        else {
+          priceTd.appendChild(document.createTextNode(fmtSaleMoney(pn)));
+          priceTd.appendChild(taxSuffixEl());
+        }
       }
     }
     syncSaleDetail(row);
@@ -13253,7 +13455,12 @@
      re-sorted on this screen by created_at (then id) descending
      before rendering, so the newest change is on top even if a
      fetch ever came back unordered. The fetch takes the newest
-     500 entries; the list scrolls inside the view alone. */
+     500 entries; the list scrolls inside the view alone.
+     The view's footer also carries Clear history (see
+     clearChangeHistory below): appointed admins only, exactly
+     like the view itself — the button lives only in this view,
+     is enabled only while the last fetch found entries to
+     clear, and the delete itself re-checks the appointment. */
   function historyProductLabel(e){
     if(!e) return 'Admin action';
     if(e.product_label) return e.product_label;
@@ -13317,13 +13524,111 @@
     }
     box.appendChild(p);
   }
+  /* ----- Clear history (dedicated view, appointed admins only) -----
+     The Clear history button sits in the dedicated view's
+     footer, next to Refresh — nowhere else, so only an admin
+     who can open this view ever sees it. Tapping it deletes
+     NOTHING: it opens the inline confirm box above the footer
+     ("Clear all Change history? … it can't be undone", with
+     "Yes, clear history" and "Cancel") — no browser confirm
+     dialogs, which do not work in this shell, same rule as the
+     suggestion / comment deletes. Only the confirm tap runs
+     the DELETE, which is filtered id=not.is.null so EVERY
+     product_changes row goes, whoever wrote it. On success the
+     view is refreshed to empty in place (the empty-state line,
+     the Admin one-line summary reset to "No changes recorded
+     yet", the button disabled), a success banner shows in the
+     view and a toast confirms it. The clear is deliberately NOT
+     written back through sbLogChange — that would immediately
+     recreate an entry and the cleared history would not be
+     empty. historyEntryCount mirrors the last fetch (null
+     until one settles, and while one is in flight) and gates
+     the button: nothing loaded / nothing recorded / not an
+     admin leaves it disabled, and clearChangeHistory re-checks
+     both the appointment and the count at the moment of the
+     confirming tap, not just when the button was rendered. */
+  var historyEntryCount = null;
+  function syncHistoryClearBtn(){
+    var btn = document.getElementById('historyClear');
+    if(!btn) return;
+    btn.disabled = !(isAppointed() && historyEntryCount > 0);
+  }
+  function hideHistoryClearConfirm(){
+    var zone = document.getElementById('historyClearConfirm');
+    if(zone) zone.hidden = true;
+    var yes = document.getElementById('historyClearYes');
+    if(yes){ yes.disabled = false; yes.textContent = 'Yes, clear history'; }
+  }
+  function hideHistoryClearMsg(){
+    var msg = document.getElementById('historyClearMsg');
+    if(msg){ msg.hidden = true; msg.textContent = ''; }
+  }
+  function showHistoryClearConfirm(){
+    if(!isAppointed()){
+      syncToast('Change history is restricted to appointed admins.', true);
+      return;
+    }
+    if(!(historyEntryCount > 0)){
+      syncToast('There is no Change history to clear.', true);
+      return;
+    }
+    hideHistoryClearMsg();
+    var zone = document.getElementById('historyClearConfirm');
+    if(!zone) return;
+    zone.hidden = false;
+    var yes = document.getElementById('historyClearYes');
+    if(yes) yes.focus();
+  }
+  function clearChangeHistory(){
+    if(!isAppointed()){
+      syncToast('Change history is restricted to appointed admins.', true);
+      hideHistoryClearConfirm();
+      return;
+    }
+    if(!(historyEntryCount > 0)){
+      syncToast('There is no Change history to clear.', true);
+      hideHistoryClearConfirm();
+      return;
+    }
+    var yes = document.getElementById('historyClearYes');
+    if(yes){ yes.disabled = true; yes.textContent = 'Clearing\u2026'; }
+    sb('product_changes?id=not.is.null', { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }).then(function(){
+      historyEntryCount = 0;
+      syncHistoryClearBtn();
+      hideHistoryClearConfirm();
+      syncAdminLogSummary([]);
+      var box = document.getElementById('historyLog');
+      if(box){
+        adminMsg(box, 'No changes recorded yet. When someone signed in adds or edits a product, it shows up here with their name, newest first.');
+        box.scrollTop = 0;
+      }
+      var msg = document.getElementById('historyClearMsg');
+      if(msg){
+        msg.textContent = 'Change history cleared \u2014 every entry has been deleted. New changes will be recorded as usual.';
+        msg.hidden = false;
+      }
+      syncToast('Change history cleared.', false);
+    }, function(err){
+      if(window.console) console.warn(err);
+      if(yes){ yes.disabled = false; yes.textContent = 'Yes, clear history'; }
+      var notSetup = /404|PGRST205|does not exist|relation|schema cache/i.test(String((err && err.message) || err || ''));
+      syncToast(notSetup
+        ? 'Change history isn\u2019t set up yet \u2014 the product_changes table still needs to be created in the shared list, so there is nothing to clear.'
+        : 'Change history couldn\u2019t be cleared \u2014 check your connection and try again.', true);
+    });
+  }
   function renderChangeHistory(){
     var box = document.getElementById('historyLog');
     if(!box) return;
+    hideHistoryClearConfirm();
     if(!isAppointed()){
+      historyEntryCount = null;
+      syncHistoryClearBtn();
       adminMsg(box, 'Change history is restricted to appointed admins.');
       return;
     }
+    historyEntryCount = null;
+    syncHistoryClearBtn();
     adminLoading(box);
     sb('product_changes?select=*&order=created_at.desc&limit=500', { token: sbAuthToken() }).then(function(entries){
       changesReady = true; syncLikesSetupNote();
@@ -13334,6 +13639,8 @@
         if(tb !== ta) return tb - ta;
         return ((b && b.id) || 0) - ((a && a.id) || 0);
       });
+      historyEntryCount = list.length;
+      syncHistoryClearBtn();
       syncAdminLogSummary(list);
       box.innerHTML = '';
       /* Back to the very top, so the newest change is what the
@@ -13346,6 +13653,8 @@
       list.forEach(function(e){ box.appendChild(buildHistoryItem(e)); });
     }, function(err){
       if(window.console) console.warn(err);
+      historyEntryCount = null;
+      syncHistoryClearBtn();
       var msg = String((err && err.message) || err || '');
       if(/404|PGRST205|does not exist|relation|schema cache/i.test(msg)){
         changesReady = false; syncLikesSetupNote();
@@ -13363,6 +13672,8 @@
       return;
     }
     if(!historyOverlay) return;
+    hideHistoryClearConfirm();
+    hideHistoryClearMsg();
     historyOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     renderChangeHistory();
@@ -13371,6 +13682,7 @@
   }
   function closeChangeHistory(){
     if(!historyOverlay || historyOverlay.hidden) return;
+    hideHistoryClearConfirm();
     historyOverlay.hidden = true;
     /* Admin stays open underneath, so the page stays locked;
        only if Admin was closed first does closing the history
@@ -13489,7 +13801,10 @@
   document.getElementById('historyBack').addEventListener('click', closeChangeHistory);
   document.getElementById('historyClose').addEventListener('click', closeChangeHistory);
   document.getElementById('historyDone').addEventListener('click', closeChangeHistory);
-  document.getElementById('historyRefresh').addEventListener('click', renderChangeHistory);
+  document.getElementById('historyRefresh').addEventListener('click', function(){ hideHistoryClearMsg(); renderChangeHistory(); });
+  document.getElementById('historyClear').addEventListener('click', showHistoryClearConfirm);
+  document.getElementById('historyClearYes').addEventListener('click', clearChangeHistory);
+  document.getElementById('historyClearCancel').addEventListener('click', hideHistoryClearConfirm);
   if(historyOverlay) historyOverlay.addEventListener('click', function(ev){ if(ev.target === historyOverlay) closeChangeHistory(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && historyOverlay && !historyOverlay.hidden) closeChangeHistory();
