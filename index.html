@@ -889,6 +889,23 @@
   :root[data-theme="dark"] .toggle{color:var(--plum2)}
   .toggle[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
   .toggle:hover{filter:brightness(1.06)}
+  /* Sweetness multi-select: the filter button looks like the other
+     filter dropdowns; tapping it opens a panel that stays open while
+     options are toggled, so several sweetness levels can be picked
+     at once. Selected options are plum with a checkmark, matching
+     the other toggles. With nothing selected the filter is off. */
+  .sweet-multi-btn{font:inherit;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;
+    background:var(--panel);color:var(--ink);width:100%;text-align:left;cursor:pointer}
+  .sweet-multi-btn:focus-visible{outline:2px solid var(--plum2);outline-offset:1px;border-color:var(--plum2)}
+  .sweet-multi-panel{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .sweet-multi-panel[hidden]{display:none}
+  .sweet-opt{border:1.5px solid var(--plum2);color:var(--plum);background:var(--violet-soft);
+    border-radius:999px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer}
+  :root[data-theme="dark"] .sweet-opt{color:var(--plum2)}
+  .sweet-opt[aria-pressed="true"]{background:var(--plum);color:#fff;border-color:var(--plum)}
+  .sweet-opt[aria-pressed="true"]::before{content:"\2713 "}
+  .sweet-clear{border:1.5px solid var(--line);background:var(--panel2);color:var(--ink);
+    border-radius:999px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer}
   button.reset{border:2px solid var(--plum2);background:var(--panel2);color:var(--ink);
     border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}
   .count{font-weight:700;color:var(--muted)}
@@ -2016,16 +2033,17 @@
         </select>
       </div>
       <div class="field">
-        <label for="sweet">Sweetness</label>
-        <select id="sweet">
-          <option value="">Any sweetness</option>
-          <option>Extra Dry</option>
-          <option>Dry</option>
-          <option>Off-Dry</option>
-          <option>Medium</option>
-          <option>Extra Sweet</option>
-          <option>Sweet</option>
-        </select>
+        <label id="sweetLabel">Sweetness</label>
+        <button type="button" class="sweet-multi-btn" id="sweetBtn" aria-haspopup="true" aria-expanded="false" aria-labelledby="sweetLabel sweetBtn">Any sweetness</button>
+        <div class="sweet-multi-panel" id="sweetPanel" hidden>
+          <button type="button" class="sweet-opt" data-sweet="Extra Dry" aria-pressed="false">Extra Dry</button>
+          <button type="button" class="sweet-opt" data-sweet="Dry" aria-pressed="false">Dry</button>
+          <button type="button" class="sweet-opt" data-sweet="Off-Dry" aria-pressed="false">Off-Dry</button>
+          <button type="button" class="sweet-opt" data-sweet="Medium" aria-pressed="false">Medium</button>
+          <button type="button" class="sweet-opt" data-sweet="Extra Sweet" aria-pressed="false">Extra Sweet</button>
+          <button type="button" class="sweet-opt" data-sweet="Sweet" aria-pressed="false">Sweet</button>
+          <button type="button" class="sweet-clear" id="sweetClear">Clear</button>
+        </div>
       </div>
       <div class="field">
         <label for="tannins">Tannins</label>
@@ -5487,7 +5505,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.08</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.09</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5500,7 +5518,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.08</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.09</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6462,7 +6480,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.08</span>
+      <span class="manual-pill accent">Version 2026.11.04.09</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6893,7 +6911,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.08</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.09</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7348,10 +7366,42 @@
     details[d.getAttribute('data-detail-for')] = d;
   });
   var q = document.getElementById('q'), brand = document.getElementById('brand'),
-      rich = document.getElementById('rich'), sweet = document.getElementById('sweet'),
+      rich = document.getElementById('rich'),
       tannins = document.getElementById('tannins'),
       maxprice = document.getElementById('maxprice'), sortsel = document.getElementById('sortsel'),
       count = document.getElementById('count'), empty = document.getElementById('empty');
+  /* Sweetness multi-select state: the selected levels, in the same
+     order and labels as the old single dropdown. Empty = filter off.
+     syncSweetUI() refreshes the button label and the option states;
+     it is called after every toggle, on Reset and when a scan clears
+     the filters. The panel itself opens/closes on the button tap. */
+  var sweetSel = [];
+  var sweetBtn = document.getElementById('sweetBtn');
+  var sweetPanel = document.getElementById('sweetPanel');
+  function syncSweetUI(){
+    if(!sweetBtn || !sweetPanel) return;
+    Array.prototype.forEach.call(sweetPanel.querySelectorAll('.sweet-opt'), function(btn){
+      btn.setAttribute('aria-pressed', sweetSel.indexOf(btn.getAttribute('data-sweet')) !== -1 ? 'true' : 'false');
+    });
+    sweetBtn.textContent = sweetSel.length ? sweetSel.join(', ') : 'Any sweetness';
+  }
+  if(sweetBtn && sweetPanel){
+    sweetBtn.addEventListener('click', function(){
+      var open = sweetPanel.hasAttribute('hidden');
+      if(open) sweetPanel.removeAttribute('hidden'); else sweetPanel.setAttribute('hidden', '');
+      sweetBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    Array.prototype.forEach.call(sweetPanel.querySelectorAll('.sweet-opt'), function(btn){
+      btn.addEventListener('click', function(){
+        var level = btn.getAttribute('data-sweet');
+        var at = sweetSel.indexOf(level);
+        if(at === -1) sweetSel.push(level); else sweetSel.splice(at, 1);
+        syncSweetUI(); apply();
+      });
+    });
+    var sweetClearBtn = document.getElementById('sweetClear');
+    if(sweetClearBtn) sweetClearBtn.addEventListener('click', function(){ sweetSel = []; syncSweetUI(); apply(); });
+  }
   var controlsEl = document.querySelector('.controls');
   var filtersBtn = document.getElementById('filtersBtn');
   var saleToggle = document.getElementById('saleToggle');
@@ -7603,7 +7653,7 @@
     var n = 0;
     if(brand.value) n++;
     if(rich.value) n++;
-    if(sweet.value) n++;
+    if(sweetSel.length) n++;
     if(tannins.value) n++;
     if(maxprice.value) n++;
     if(saleOnlyOn()) n++;
@@ -7817,7 +7867,7 @@
       scanOnlyIdx = null;
       scanOnlyQuery = '';
     }
-    var b = brand.value, r = rich.value, s = sweet.value, t = tannins.value;
+    var b = brand.value, r = rich.value, t = tannins.value;
     var mp = parseFloat(maxprice.value);
     var shown = 0;
     rows.forEach(function(row){
@@ -7828,7 +7878,7 @@
         if(query && foldAccents(row.getAttribute('data-search')).indexOf(query) === -1) ok = false;
         if(b && row.getAttribute('data-brand') !== b) ok = false;
         if(r && row.getAttribute('data-rich') !== r) ok = false;
-        if(s && row.getAttribute('data-sweet').indexOf(s) !== 0) ok = false;
+        if(sweetSel.length && !sweetSel.some(function(l){ return row.getAttribute('data-sweet').indexOf(l) === 0; })) ok = false;
         if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
         if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
         if(veganOnlyOn() && row.getAttribute('data-vegan') !== 'Yes') ok = false;
@@ -7854,7 +7904,7 @@
     }
     empty.style.display = shown === 0 ? 'block' : 'none';
   }
-  [q, brand, rich, sweet, tannins, maxprice].forEach(function(el){
+  [q, brand, rich, tannins, maxprice].forEach(function(el){
     el.addEventListener('input', apply);
     el.addEventListener('change', apply);
   });
@@ -7984,7 +8034,7 @@
   }
   document.getElementById('reset').addEventListener('click', function(){
     scanOnlyIdx = null; scanOnlyQuery = '';
-    q.value=''; brand.value=''; rich.value=''; sweet.value=''; tannins.value=''; maxprice.value='';
+    q.value=''; brand.value=''; rich.value=''; sweetSel = []; syncSweetUI(); tannins.value=''; maxprice.value='';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     if(veganToggle) veganToggle.setAttribute('aria-pressed', 'false');
     if(glutenToggle) glutenToggle.setAttribute('aria-pressed', 'false');
@@ -12864,7 +12914,7 @@
        deferred pass re-asserts both the scan filter and the
        expansion before scrolling, so the product cannot be left
        collapsed, hidden among the full list, or off-screen. */
-    brand.value = ''; rich.value = ''; sweet.value = '';
+    brand.value = ''; rich.value = ''; sweetSel = []; syncSweetUI();
     tannins.value = ''; maxprice.value = '';
     if(saleToggle) saleToggle.setAttribute('aria-pressed', 'false');
     var inStore = !!(storeSets[activeStore] && storeSets[activeStore].has(row.getAttribute('data-idx')));
