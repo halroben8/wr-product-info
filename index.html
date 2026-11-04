@@ -576,11 +576,15 @@
     font-size:12.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
     padding:4px 11px;border-radius:6px;margin-top:6px;box-shadow:0 1px 4px rgba(185,28,28,.45)}
   tr.prow.is-unavailable{background:#fef2f2}
-  tr.prow.is-unavailable:hover{background:#fee2e2}
+  @media (hover:hover){
+    tr.prow.is-unavailable:not([aria-expanded="true"]):hover{background:#fee2e2}
+  }
   tr.prow.is-unavailable td[data-label="Price"]{text-decoration:line-through;text-decoration-thickness:2px;color:#b91c1c}
   tr.prow.is-unavailable .pname,tr.prow.is-unavailable .brand{color:#7f1d1d}
   :root[data-theme="dark"] tr.prow.is-unavailable{background:#3d0f1a}
-:root[data-theme="dark"] tr.prow.is-unavailable:hover{background:#4c1220}
+@media (hover:hover){
+  :root[data-theme="dark"] tr.prow.is-unavailable:not([aria-expanded="true"]):hover{background:#4c1220}
+}
 :root[data-theme="dark"] tr.prow.is-unavailable td[data-label="Price"]{color:#fca5a5}
 :root[data-theme="dark"] tr.prow.is-unavailable .pname, :root[data-theme="dark"] tr.prow.is-unavailable .brand{color:#fecaca}
 :root[data-theme="dark"] .badge.unavail{background:#dc2626}
@@ -648,9 +652,34 @@
   @media (max-width:760px){
     tr.prow{scroll-margin-top:172px}
   }
-  tr.prow:hover,tr.prow:focus-visible{background:var(--violet-soft);outline:none}
+  tr.prow:not([aria-expanded="true"]):focus-visible{background:var(--violet-soft);outline:none}
+  /* An OPEN row under keyboard focus keeps its collapsed shade
+     too (no violet-soft wash, same rule as hover above); the
+     focus shows as an inset plum outline instead, on top of the
+     plum border the open row already carries */
+  tr.prow[aria-expanded="true"]:focus-visible{outline:2px solid var(--plum2);outline-offset:-2px}
+  /* Hover tint on a product row exists ONLY on devices with a
+     real hovering pointer (@media (hover:hover)) and NEVER on a
+     row whose notes are open. On a phone a tap leaves :hover
+     stuck on the tapped row, which painted it solid
+     var(--violet-soft) — darker than BOTH alternating shades —
+     for as long as the hover stuck: a white card visibly turned
+     dark on tap instead of keeping its colour, and its notes
+     (the pale tint, lighter than solid violet-soft) then read as
+     the LIGHTER shade, so the card/notes pair looked inverted,
+     intermittently, depending on whether the browser kept the
+     tap's hover stuck. With hover gated to hover-capable
+     pointers and switched off for open rows, pressing a card
+     can never recolour it: it keeps exactly its collapsed shade
+     and only the notes below flip, per the sibling rules at the
+     expanded-row block below. Every tr.prow :hover background
+     in this stylesheet (plain, zebra, sale, unavailable, both
+     themes) is gated and open-row-exempt the same way */
+  @media (hover:hover){
+    tr.prow:not([aria-expanded="true"]):hover{background:var(--violet-soft)}
+    tr.prow:nth-child(4n+3):not([aria-expanded="true"]):hover{background:var(--violet-soft)}
+  }
   tr.prow:nth-child(4n+3){background:color-mix(in srgb, var(--violet-soft) 45%, transparent)}
-  tr.prow:nth-child(4n+3):hover{background:var(--violet-soft)}
   .brand{display:block;font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--grape)}
   .pname{display:block;font-weight:650}
   .price{font-weight:800;color:var(--plum);white-space:nowrap}
@@ -692,7 +721,9 @@
   .badge.sale{background:#f472b6;color:#241536;border:1.5px solid #241536;
     font-weight:800;letter-spacing:.08em;text-transform:uppercase}
   tr.prow.is-sale:not(.is-unavailable){background:#fce7f3}
-  tr.prow.is-sale:not(.is-unavailable):hover{background:#fbcfe8}
+  @media (hover:hover){
+    tr.prow.is-sale:not(.is-unavailable):not([aria-expanded="true"]):hover{background:#fbcfe8}
+  }
   .toggle.sale-toggle[aria-pressed="true"]{background:#f472b6;color:#241536;border-color:#be185d}
   .price .sale-now{color:#be185d;font-weight:800}
   .price .was{color:var(--muted);font-weight:600;font-size:.82em;
@@ -754,7 +785,9 @@
   .sale-impact-note{margin:0;padding:10px 12px;border:1.5px solid var(--plum2);border-radius:10px;
     background:var(--violet-soft);color:var(--ink);font-size:14px;font-weight:600;line-height:1.5}
   :root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable){background:#4a1030}
-:root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable):hover{background:#5f143d}
+@media (hover:hover){
+  :root[data-theme="dark"] tr.prow.is-sale:not(.is-unavailable):not([aria-expanded="true"]):hover{background:#5f143d}
+}
 :root[data-theme="dark"] .price .sale-now{color:#f9a8d4}
 :root[data-theme="dark"] .badge.sale{border-color:#f9a8d4}
   /* VQA designation: a gold seal-style badge beside the other badges
@@ -818,14 +851,18 @@
   .expand-hint .eh-chev{display:flex;align-items:center;justify-content:center;flex:none;
     color:var(--muted);font-size:14px;font-weight:700;line-height:1.3;
     transition:transform .2s ease}
-  tr.prow:hover .expand-hint .eh-label,tr.prow:focus-visible .expand-hint .eh-label,
-  tr.prow:hover .expand-hint .eh-chev,tr.prow:focus-visible .expand-hint .eh-chev{color:var(--plum2)}
+  tr.prow:focus-visible .expand-hint .eh-label,
+  tr.prow:focus-visible .expand-hint .eh-chev{color:var(--plum2)}
+  @media (hover:hover){
+    tr.prow:not([aria-expanded="true"]):hover .expand-hint .eh-label,
+    tr.prow:not([aria-expanded="true"]):hover .expand-hint .eh-chev{color:var(--plum2)}
+  }
   tr.prow[aria-expanded="true"] .expand-hint .eh-chev{transform:rotate(180deg)}
   /* Open product + its notes: expanding must NOT recolour the
      product row — it keeps exactly its collapsed background
-     (plain panel, zebra tint, sale pink or unavailable red, and
-     the same hover tint as a collapsed row); the expanded state
-     adds only the shared plum outline. ONLY the notes row below
+     (plain panel, zebra tint, sale pink or unavailable red); the
+     expanded state adds only the shared plum outline. ONLY the
+     notes row below
      changes, and only to the OTHER alternating row shade from
      its own card: the list alternates white (var(--panel)) with
      a pale lavender tint (var(--alt-tint), the solid equivalent
@@ -4957,7 +4994,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.19</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.20</span></p>
     <!-- Admin sits at the very bottom of Settings, below the
          Version line and everything else. The button itself is
          visible to everyone, but what it opens — the signed-in
@@ -4982,7 +5019,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.19</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.20</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5821,7 +5858,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.19</span>
+      <span class="manual-pill accent">Version 2026.11.03.20</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6215,7 +6252,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.19</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.20</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
