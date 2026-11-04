@@ -494,11 +494,9 @@
     text-transform:uppercase;color:#b91c1c}
   :root[data-theme="dark"] .sc-afterhours{color:#fca5a5}
   /* Food pairing finder — a pop-up window only, never an
-     inline embed: opened by the Food pairing finder button
-     under the store pill in the header, and by the Food
-     pairing finder button in the Support tab in Settings
-     (last in the tab, below the Support Center entry at the
-     very top, "What's on sample today?" and Wine Knowledge).
+     inline embed: opened only by the Food pairing finder
+     button under the store pill in the header. There is no
+     Food pairing entry in the Support tab.
      The user types a dish; the finder
      ranks only the wines the CURRENT store carries and has
      available (closest
@@ -535,9 +533,8 @@
   .pairing-note{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted)}
   /* Food pairing pop-up — the finder itself: a modal overlay
      (the shared .editor-overlay / .editor-panel shell) over
-     the main list, opened by the header button and by the
-     Support tab's Food pairing finder button — the same
-     pop-up either way. Inside the pop-up the tool sheds its
+     the main list, opened by the header button only. Inside
+     the pop-up the tool sheds its
      card border / shadow / padding, because the panel itself
      is already the card. */
   .pairing-panel{max-width:680px}
@@ -5204,36 +5201,34 @@
       </div>
       </div>
     </div>
-    <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
-    <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
-    <!-- VERSION CODE: bump this on every new build / push (see the
-         .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.26</span></p>
-    <!-- Admin sits at the very bottom of Settings, below the
-         Version line and everything else. The button itself is
+    <!-- Admin sits directly below Store settings, above the
+         "Shared list connected" line. The button itself is
          visible to everyone, but what it opens — the signed-in
          users list and the full action log — only opens for an
          appointed admin (see isAppointed in the script); anyone
          else who taps it gets a clear restricted message and
          none of the lists. -->
     <div class="settings-actions" style="margin-top:14px">
-      <button type="button" class="settings-action" id="adminBtn"><span>Admin<span class="sa-sub">Signed-in users, suggestions, banned users and change history — appointed users only</span></span></button>
+      <button type="button" class="settings-action" id="adminBtn"><span>Admin<span class="sa-sub">Admin functions and tools — appointed users only</span></span></button>
     </div>
+    <p class="settings-note" id="syncStatus" role="status">Connecting to the shared list…</p>
+    <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
+    <!-- VERSION CODE: bump this on every new build / push (see the
+         .settings-version note in the CSS above). -->
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.03.27</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
-        <button type="button" class="settings-action" id="sampleToday"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
         <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
         <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
-        <button type="button" class="settings-action" id="wineKnowledge"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
         <div class="loved-group">
           <button type="button" class="settings-action loved-head" id="lovedWinesBtn" aria-expanded="false" aria-controls="lovedWinesList"><span>Loved wines<span class="sa-sub">Every wine someone has loved, most loved first — tap one to open it</span></span></button>
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.26</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.03.27</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5242,7 +5237,6 @@
         <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
         <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
         <button type="button" class="settings-action" id="wineKnowledgeSupport"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
-        <button type="button" class="settings-action" id="pairingSupportBtn"><span>Food pairing finder<span class="sa-sub">&ldquo;What are you eating?&rdquo; &mdash; opens the finder as a pop-up: type a dish and get wines this store carries and has available, closest match first, each with a reason tailored to your dish</span></span></button>
       </div>
     </div>
     <div class="editor-actions">
@@ -6105,7 +6099,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.03.26</span>
+      <span class="manual-pill accent">Version 2026.11.03.27</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6458,9 +6452,8 @@
       <summary><span class="manual-sec-num">14</span><span class="manual-sec-title"><strong>Support — Food pairing finder &amp; Support Center</strong><small>“What are you eating?”, and who to call at Wine Rack Store Support</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
         <p><strong>Support Center</strong> is at the very top of <span class="manual-ui">Settings → Support</span> — the Wine Rack Store Support Centre contacts, described below.</p>
-        <p><strong>What&rsquo;s on sample today?</strong> is in <span class="manual-ui">Settings → Support</span>, under the Support Center and above Wine Knowledge — it opens the same panel as its entry in Documents, which is still there too.</p>
-        <p><strong>Wine Knowledge</strong> is also in <span class="manual-ui">Settings → Support</span>, under What&rsquo;s on sample today and above the Food pairing finder — it opens the same panel as its entry in Documents, which is still there too. The impact documents and this manual stay in Documents.</p>
-        <p><strong>Food pairing finder — “What are you eating?”</strong> The finder is a <strong>pop-up window</strong>, never an inline form. Two buttons open the same pop-up: the <span class="manual-ui">Food pairing finder</span> button under the store pill in the header (the pop-up opens over the list), and the <span class="manual-ui">Food pairing finder</span> button at the bottom of <span class="manual-ui">Settings → Support</span>, under Wine Knowledge (the pop-up opens over Settings, and closing it returns you to Support). Close the pop-up (× or <span class="manual-ui">Close — back to the list</span>) to return to where you were. Type a dish (spicy Thai curry, roast chicken, steak, salmon, chocolate dessert…) and the finder ranks the wines <strong>the store you&rsquo;re viewing actually carries and has available</strong>, closest match first with a few backups. Each recommendation gives a <strong>reason tailored to the dish you typed</strong>, naming the actual element in it: how the wine&rsquo;s sweetness handles the spice you mentioned, how its acidity cuts the creamy or rich part, how its acidity meets tomato, how its tannins grip grilled meat, how it suits the named fish, or why it stays sweeter than the named dessert — drawn from the wine&rsquo;s sweetness, acidity, tannins, richness, varietal and tasting notes. It follows the classic rules: sweetness for spicy food, acidity for rich or tomato-based dishes, tannin for red meat, light high-acid whites for fish, and a wine sweeter than the dessert. Wines the store does not carry, and wines marked unavailable at your store, are never recommended. <strong>Tap any recommendation to open that wine in the list.</strong></p>
+        <p><strong>What&rsquo;s on sample today?</strong> and <strong>Wine Knowledge</strong> live in <span class="manual-ui">Settings → Support</span> only — they are not in Documents. The Support tab holds just three entries: Support Center, What&rsquo;s on sample today? and Wine Knowledge. The impact documents and this manual stay in Documents.</p>
+        <p><strong>Food pairing finder — “What are you eating?”</strong> The finder is a <strong>pop-up window</strong>, never an inline form. One button opens it: the <span class="manual-ui">Food pairing finder</span> button under the store pill in the header, and the pop-up opens over the list. There is no Food pairing entry in the Support tab. Close the pop-up (× or <span class="manual-ui">Close — back to the list</span>) to return to the list. Type a dish (spicy Thai curry, roast chicken, steak, salmon, chocolate dessert…) and the finder ranks the wines <strong>the store you&rsquo;re viewing actually carries and has available</strong>, closest match first with a few backups. Each recommendation gives a <strong>reason tailored to the dish you typed</strong>, naming the actual element in it: how the wine&rsquo;s sweetness handles the spice you mentioned, how its acidity cuts the creamy or rich part, how its acidity meets tomato, how its tannins grip grilled meat, how it suits the named fish, or why it stays sweeter than the named dessert — drawn from the wine&rsquo;s sweetness, acidity, tannins, richness, varietal and tasting notes. It follows the classic rules: sweetness for spicy food, acidity for rich or tomato-based dishes, tannin for red meat, light high-acid whites for fish, and a wine sweeter than the dessert. Wines the store does not carry, and wines marked unavailable at your store, are never recommended. <strong>Tap any recommendation to open that wine in the list.</strong></p>
         <p>The app carries the <strong>Wine Rack Store Support Centre</strong> contact sheet (last updated April 21, 2026) in <span class="manual-ui">Settings → Support Center</span>, so it&rsquo;s in your pocket on the floor — no hunting for the sheet.</p>
         <p>Contacts are grouped the same way as the sheet:</p>
         <ul>
@@ -6482,9 +6475,9 @@
         <h3>An old tab is showing an old version</h3>
         <p>The app updates often. If something looks out of date or behaves oddly, <strong>close the tab and open a fresh one</strong> — a tab that&rsquo;s been open a long while can be running an old version of the app.</p>
         <h3>Love won&rsquo;t stick — “Couldn&rsquo;t save that love”</h3>
-        <p>This was a database fault, fixed in version 2026.11.03.9 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.03.27 — hearts displayed fine but no love would save, on any wine. If you see it now: try once in a fresh tab, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>A change didn&rsquo;t appear in Change history</h3>
-        <p>This was a database fault, fixed in version 2026.11.03.15 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.03.15 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
+        <p>This was a database fault, fixed in version 2026.11.03.27 — edits saved fine but no history entry was recorded, on any wine, so Change history showed “No changes recorded yet”. Changes made from version 2026.11.03.27 on are recorded again. If a new change still doesn&rsquo;t appear: open Change history from Admin, tap <span class="manual-ui">Refresh</span> in that view, and if it persists, tell Michael which wine and when. It is not your connection.</p>
         <h3>Sign-in doesn&rsquo;t bring me back to the app</h3>
         <p>Sign-in returns you to wherever the app is served from, and the live app address must be allowed in the sign-in settings. If Google sign-in strands you elsewhere, open the live app in a <strong>fresh tab</strong> and sign in there.</p>
         <h3>The store popup keeps appearing</h3>
@@ -6504,7 +6497,7 @@
 
   
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.26</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.03.27</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -9522,7 +9515,7 @@
     knowledgeOverlay.hidden = true;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden) document.body.style.overflow = '';
   }
-  document.getElementById('wineKnowledge').addEventListener('click', function(){
+  document.getElementById('wineKnowledgeSupport').addEventListener('click', function(){
     closeSettings();
     openKnowledge();
   });
@@ -9649,7 +9642,7 @@
     sampleOverlay.hidden = true;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && cheatOverlay.hidden) document.body.style.overflow = '';
   }
-  document.getElementById('sampleToday').addEventListener('click', function(){
+  document.getElementById('sampleTodaySupport').addEventListener('click', function(){
     closeSettings();
     openSample();
   });
@@ -9903,14 +9896,16 @@
   /* ---------- Documents (Settings panel, Documents tab) ----------
      The documents now live on their own Documents tab in the
      Settings panel (see the tab wiring where the Settings panel
-     opens): What's on sample today? first, then the two full
-     impact PDFs, the Current Impact Cheat Sheet, Wine Knowledge,
+     opens): the two full
+     impact PDFs, the Current Impact Cheat Sheet,
      Loved wines, and — last, under a Manual heading — the Product
      Info Manual twice: the prominent mobile-friendly WEB version
      first (it opens the in-app manual panel; the reading version,
      and the default on phones), then the PDF manual labelled for
      printing only. The document links and the date-aware cheat
-     sheet and sample buttons work exactly as before. */
+     sheet button work exactly as before. ("What's on sample
+     today?" and Wine Knowledge live on the Support tab only,
+     not here.) */
 
   /* ---------- Store settings (Settings) ----------
      Store settings is a collapsible section with the same
@@ -9961,12 +9956,10 @@
   });
 
   /* ---------- Food pairing finder (pop-up) ----------
-     The Food pairing finder is a pop-up window, opened by
-     the header button under the store pill and by the Food
-     pairing finder button in the Support tab (last in the
-     tab — below the Support Center at the top, then
-     "What's on sample today?", then Wine Knowledge); there
-     is no inline finder embedded in the Support tab. The
+     The Food pairing finder is a pop-up window, opened only
+     by the header button under the store pill; there is no
+     Food pairing entry in the Support tab and no inline
+     finder embedded anywhere. The
      user types a dish; the
      finder classifies the dish
      (spicy / fatty-rich / red meat-grilled / fish-seafood /
@@ -10592,9 +10585,9 @@
     resultsEl.appendChild(foot);
   }
   function renderPairing(dishText){
-    /* Legacy Support-inline entry point: the Support tab no
-       longer embeds an inline finder (it carries a Food
-       pairing finder BUTTON that opens the pop-up), so
+    /* Legacy inline entry point: no inline finder is
+       embedded anywhere (the pop-up opens from the header
+       button only), so
        pairingResults / pairingStoreNum are null and
        renderPairingInto safely no-ops. Kept so nothing that
        still calls renderPairing can break. */
@@ -10602,10 +10595,9 @@
   }
   function renderPairingPopup(dishText){
     /* A pick in the pop-up closes the pop-up AND Settings
-       (Settings is underneath when the pop-up was opened
-       from the Support tab; closeSettings() no-ops when it
-       is already hidden, e.g. when opened from the header),
-       then opens the wine in the list */
+       (closeSettings() no-ops when Settings is already
+       hidden, as it is when the pop-up was opened from the
+       header button), then opens the wine in the list */
     renderPairingInto(dishText, pairingPopupResults, pairingPopupStoreNum, function(){ closePairingPopup(); closeSettings(); });
   }
   if(pairingForm && pairingInput){
@@ -10622,17 +10614,14 @@
     });
   }
 
-  /* ---------- Food pairing pop-up (header + Support buttons) ----------
+  /* ---------- Food pairing pop-up (header button) ----------
      The finder lives ONLY as a POP-UP — a modal overlay
-     (pairingOverlay) — never embedded inline. Two buttons
-     open the SAME pop-up:
+     (pairingOverlay) — never embedded inline. One button
+     opens it:
        · the Food pairing finder button under the store pill
          in the header — the pop-up opens over the main list,
-         NOT as a navigation to Settings / the Support tab;
-       · the Food pairing finder button in the Support tab
-         (last in the tab, under Wine Knowledge) — the pop-up
-         opens over Settings, and closing it returns to the
-         Support tab underneath.
+         NOT as a navigation to Settings / the Support tab.
+         There is no Food pairing entry in the Support tab.
      The pop-up holds the tool (its own form / input /
      results IDs) rendered by the shared engine
      (renderPairingInto), so it follows the same rules:
@@ -10641,8 +10630,7 @@
      unavailable. Closing the pop-up (×, "Close — back to the
      list", tapping the backdrop, or Escape) returns to
      whatever opened it; tapping a recommendation closes the
-     pop-up (and Settings, if it was open underneath) and
-     opens that wine in the list (closeForPick in
+     pop-up and opens that wine in the list (closeForPick in
      renderPairingPopup). */
   var pairingOverlay = document.getElementById('pairingOverlay');
   var pairingPopupForm = document.getElementById('pairingPopupForm');
@@ -10669,8 +10657,6 @@
   }
   var heroPairingBtn = document.getElementById('heroPairingBtn');
   if(heroPairingBtn) heroPairingBtn.addEventListener('click', function(){ openPairingPopup(heroPairingBtn); });
-  var pairingSupportBtn = document.getElementById('pairingSupportBtn');
-  if(pairingSupportBtn) pairingSupportBtn.addEventListener('click', function(){ openPairingPopup(pairingSupportBtn); });
   var pairingCloseBtn = document.getElementById('pairingClose');
   if(pairingCloseBtn) pairingCloseBtn.addEventListener('click', closePairingPopup);
   var pairingCancelBtn = document.getElementById('pairingCancel');
@@ -10693,34 +10679,6 @@
     });
   }
 
-  /* ---------- Also in Support: What's on sample today + Wine Knowledge ----------
-     Support tab order, top to bottom: the Support Center
-     contacts first, then "What's on sample today?", then
-     Wine Knowledge, then the Food pairing finder last. The
-     Support tab carries its own entries for "What's on
-     sample today?" and Wine Knowledge, between the Support
-     Center contacts and the Food pairing finder. They
-     open the SAME panels as the Documents entries of the same
-     names (openSample / openKnowledge, wired in their own
-     sections) — the Documents tab keeps its own entries too,
-     and the Impacts and the Manual stay in Documents only.
-     These are second buttons for the same panels, nothing is
-     moved or duplicated in content. */
-  var sampleTodaySupportBtn = document.getElementById('sampleTodaySupport');
-  if(sampleTodaySupportBtn){
-    sampleTodaySupportBtn.addEventListener('click', function(){
-      closeSettings();
-      openSample();
-    });
-  }
-  var wineKnowledgeSupportBtn = document.getElementById('wineKnowledgeSupport');
-  if(wineKnowledgeSupportBtn){
-    wineKnowledgeSupportBtn.addEventListener('click', function(){
-      closeSettings();
-      openKnowledge();
-    });
-  }
-
   /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
      The responsive web manual, baked into this page as a panel on
      the Wine Knowledge / Support pattern: the prominent solid
@@ -10729,7 +10687,7 @@
      reflows to the screen width — scroll instead of zoom — every
      section taps open, and the search filters the sections,
      auto-opening matches. Same content and version as the app and
-     the print PDF (2026.11.03.12). Reference content only: nothing
+     the print PDF (2026.11.03.27). Reference content only: nothing
      here reads or writes product data. */
   var manualOverlay = document.getElementById('manualOverlay');
   function openManual(){
@@ -11094,7 +11052,7 @@
     var p8 = document.getElementById('impactP8Link');
     var p9 = document.getElementById('impactP9Link');
     var cheat = document.getElementById('currentCheatSheet');
-    var sample = document.getElementById('sampleToday');
+    var sample = document.getElementById('sampleTodaySupport');
     /* Impact expiry, applied together with the Loblaws rule so
        neither can resurrect the other: a Full Impact PDF shows
        only for a Loblaws store AND only until its period ends
