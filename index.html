@@ -1793,11 +1793,11 @@
   @media (max-width:760px){
     .history-panel .editor-actions .btn-danger{flex:1 1 auto;min-height:48px}
   }
-  .history-clear-confirm{flex:none;margin:10px 0 0;padding:12px 13px;border:1.5px solid #b91c1c;
+  .history-clear-confirm,.pallet-confirm{flex:none;margin:10px 0 0;padding:12px 13px;border:1.5px solid #b91c1c;
     border-radius:10px;background:#fef2f2}
-  :root[data-theme="dark"] .history-clear-confirm{border-color:#fca5a5;background:#3d0f1a}
-  .history-clear-confirm[hidden]{display:none !important}
-  .history-clear-confirm p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
+  :root[data-theme="dark"] .history-clear-confirm,:root[data-theme="dark"] .pallet-confirm{border-color:#fca5a5;background:#3d0f1a}
+  .history-clear-confirm[hidden],.pallet-confirm[hidden]{display:none !important}
+  .history-clear-confirm p,.pallet-confirm p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
   .history-clear-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .history-clear-msg{flex:none;margin:10px 0 0;padding:11px 13px;border:1.5px solid var(--plum2);
     border-radius:10px;background:var(--violet-soft);font-size:14.5px;font-weight:650;line-height:1.5;color:var(--ink)}
@@ -5493,6 +5493,13 @@
       </select>
       <label class="guess-opt" for="settingsPalletStore" style="margin-top:12px"><input type="checkbox" id="settingsPalletStore" /> Pallet Store</label>
       <p class="theme-note" id="palletStoreNote">Tick this if this store is a pallet store. A pallet store follows the pallet impact; an unticked store follows the fully built impact. Unchecked — fully built — is the default.</p>
+      <div class="pallet-confirm" id="palletUncheckConfirm" hidden>
+        <p><strong>Switch <span id="palletUncheckStore">this store</span> back to the fully built impact?</strong> The pallet impact, its cheat sheet and its sampling will be replaced by the fully built impact for this store.</p>
+        <div class="history-clear-actions">
+          <button type="button" class="btn-danger-small" id="palletUncheckYes">Remove pallet store status</button>
+          <button type="button" class="btn-ghost-small" id="palletUncheckCancel">Cancel</button>
+        </div>
+      </div>
       <p class="store-settings-sub" style="margin-top:12px">Available store types</p>
       <ul class="store-type-list" id="storeTypeList" aria-label="Available store types"></ul>
       <button type="button" class="btn-add-type" id="settingsAddTypeBtn">＋ Add new store type</button>
@@ -5526,12 +5533,11 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.17</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.18</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
-        <a class="settings-action" id="impactP8Link" href="P8-Impact.pdf" target="_blank" rel="noopener"><span>Full P8 Impact PDF<span class="sa-sub">The full P8 impact document &mdash; 29 pages &middot; Oct 12&ndash;Nov 8, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
-        <a class="settings-action" id="impactP9Link" href="P9-Impact.pdf" target="_blank" rel="noopener"><span>Full P9 Impact PDF<span class="sa-sub">The full P9 impact document &mdash; 30 pages &middot; Nov 9&ndash;29, 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>
+        <div id="impactPdfLinks"></div>
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
         <div class="loved-group">
@@ -5539,7 +5545,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.17</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.18</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6553,7 +6559,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.17</span>
+      <span class="manual-pill accent">Version 2026.11.04.18</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6710,10 +6716,13 @@
         <h3>Store types and impact documents</h3>
         <ul>
           <li><strong>Loblaws, fully built</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws fully built store.</li>
-          <li><strong>Pallet Store</strong> — in Store settings there is a <span class="manual-ui">Pallet Store</span> checkbox for the store being viewed. Tick it if the store is a pallet store; leave it unticked for a fully built store (unticked is the default). A pallet store follows the pallet impact for its type, not the fully built one, and the store&rsquo;s subtitle in Store settings reads “Pallet” while it is ticked. The choice syncs to the shared list, so every device sees it.</li>
-          <li><strong>Two impacts per type</strong> — every store type has a fully built impact and a pallet impact. Some impacts cover more than one type: Sobeys and Foodland share one impact, so a Sobeys store and a Foodland store of the same build see the same documents.</li>
+          <li><strong>Sobeys and Foodland</strong> share one impact per build: a fully built Sobeys or Foodland store sees the Sobeys/Foodland fully built impact (P8/P9 PDFs, cheat sheet, sampling); a pallet Sobeys or Foodland store sees the Sobeys/Foodland pallet impact instead. The pours differ — the pallet sampling often pours only “Premium Red / Premium White” where the fully built sampling names the wines.</li>
+          <li><strong>Non-boutique</strong> stores see the Non-Boutique impact (P8/P9 PDFs, cheat sheet, sampling) — one impact for all Non-boutique stores, the same whether the store is a pallet store or fully built.</li>
+          <li><strong>Pallet Store</strong> — in Store settings there is a <span class="manual-ui">Pallet Store</span> checkbox for the store being viewed. Tick it if the store is a pallet store; leave it unticked for a fully built store (unticked is the default). A pallet store follows the pallet impact for its type, not the fully built one, and the store&rsquo;s subtitle in Store settings reads “Pallet” while it is ticked. The choice syncs to the shared list, so every device sees it. Unticking it asks first — confirm with <span class="manual-ui">Remove pallet store status</span> (or <span class="manual-ui">Cancel</span> to keep the pallet impact); the impact, its cheat sheet and its sampling only change once you confirm.</li>
+          <li><strong>Two impacts per type</strong> — every store type has a fully built impact and a pallet impact, except Non-boutique, which has one impact covering both builds. Some impacts cover more than one type: Sobeys and Foodland share one, so a Sobeys store and a Foodland store of the same build see the same documents.</li>
           <li><strong>Other types and builds</strong> see a note that their impact isn&rsquo;t loaded yet, until that impact document is added.</li>
           <li><strong>Cheat sheet</strong> — Documents shows a cheat sheet only for the impact that is running right now for this store&rsquo;s type and build: one one-page sheet per impact, fully built and pallet each having their own. An impact that hasn&rsquo;t started yet or has already ended has no cheat sheet showing.</li>
+          <li><strong>Sampling</strong> — “What&rsquo;s on sample today?” follows the same impact: each impact has its own pours for each window, so the wines shown are always the ones for this store&rsquo;s type and build.</li>
           <li><strong>Store settings</strong> in Settings is a collapsible section — tap its heading to expand it. It shows your current store&rsquo;s type, the Pallet Store box, the list of types, and an <span class="manual-ui">Add new store type</span> button if Michael adds more.</li>
         </ul>
       </div>
@@ -6819,7 +6828,7 @@
         <ul>
           <li><strong>Loved wines</strong> — your loved wines, most loved first (§6).</li>
           <li><strong>This manual</strong> — the web version you&rsquo;re reading now, plus the <strong>Manual.pdf</strong> for printing. Same content, same version number as the app.</li>
-          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods, and “What&rsquo;s on sample today.” A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); a pallet store sees the pallet impact; Sobeys and Foodland share one impact. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
+          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods, and “What&rsquo;s on sample today.” A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); Sobeys and Foodland share one impact per build (fully built or pallet); a Non-boutique store sees the Non-Boutique impact either way. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
         </ul>
         <div class="manual-callout tip"><strong>Which manual should you open?</strong>On your phone, the web manual — text fits your screen and search works. The PDF is for the printer: fixed pages, made for paper.</div>
       </div>
@@ -6994,7 +7003,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.17</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.18</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -10201,30 +10210,18 @@
 
   /* ---------- What's on sample today + Current Impact Cheat Sheet (Settings) ----------
      Two more static reference panels, same pattern as Wine Knowledge.
-     The sampling schedule below is the P8 and P9 in-store impact
-     sampling schedule, baked into this page as data. "What's on
-     sample today?" compares the device's local date against these
-     windows; Cartier pours Friday/Saturday only inside the windows
-     flagged cartier:true. Schedule/reference content only — nothing
-     here reads or writes product data, and it never syncs to the
-     shared list. */
+     Each impact sheet in IMPACT_SHEETS carries its own sampling
+     windows (samples), because the pours differ by type and build:
+     a Sobeys pallet store never sees the Loblaws pours, and a
+     pallet window may pour only "Premium Red / Premium White".
+     "What's on sample today?" compares the device's local date
+     against the running sheet's windows; Cartier pours
+     Friday/Saturday only inside windows flagged cartier:true,
+     and for the first five hours of operation inside windows
+     flagged cartier:'hours' (P9 pallet). Schedule/reference
+     content only — nothing here reads or writes product data,
+     and it never syncs to the shared list. */
   var SAMPLE_YEAR = 2026;
-  var SAMPLE_SCHEDULE = [
-    { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['JT PS Cabernet Sauvignon','Inniskillin Late Autumn Riesling VQA','MXM Blackberry'] },
-    { period:'P8', start:[10,15], end:[10,18], cartier:true,  items:['Bù Cabernet Sauvignon','Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Saintly Fracette VQA'] },
-    { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['JT PS Pinot Grigio','JT Reserve Meritage VQA','MXM Lemonade'] },
-    { period:'P8', start:[10,22], end:[10,25], cartier:true,  items:['Inniskillin Discovery Series Gamay Noir VQA','Bù Chardonnay','Saintly Fracette VQA'] },
-    { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Sandbanks Reserve French Kiss Merlot-Cabernet VQA','JT PS Sauvignon Blanc','MXM Blackberry'] },
-    { period:'P8', start:[10,29], end:[11,1],  cartier:true,  items:['Vintage Ink Wicked White VQA','Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Vintage Ink Rebel Red VQA'] },
-    { period:'P8', start:[11,2],  end:[11,4],  cartier:false, items:['Bù Cabernet Sauvignon','Bù Chardonnay','Sidney Rosé'] },
-    { period:'P8', start:[11,5],  end:[11,8],  cartier:true,  items:['Sandbanks Reserve Marquette VQA','Inniskillin Reserve Pinot Gris VQA','Saintly Fracette VQA'] },
-    { period:'P9', start:[11,9],  end:[11,11], cartier:false, items:['Bù Cabernet Sauvignon','Bù Chardonnay','Inniskillin Discovery Series P3 VQA'] },
-    { period:'P9', start:[11,12], end:[11,15], cartier:true,  items:['Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA','Sandbanks Reserve Baco Noir VQA','Inniskillin Fracette VQA'] },
-    { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Inniskillin Riesling Pinot Grigio VQA','JT Reserve Merlot VQA','JT Reserve Sparkling VQA'] },
-    { period:'P9', start:[11,19], end:[11,22], cartier:true,  items:['Inniskillin Discovery Series Susse Reserve Riesling VQA','JT Grand Reserve Shiraz VQA','KEW Fracette VQA'] },
-    { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['JT Reserve Sauvignon Blanc VQA','Inniskillin Discovery Series Gamay Noir VQA','Sandbanks Sparkling Secco VQA'] },
-    { period:'P9', start:[11,26], end:[11,29], cartier:true,  items:['Inniskillin Discovery Series Susse Reserve Riesling VQA','JT Grand Reserve Shiraz VQA','Saintly Fracette VQA'] }
-  ];
   var SAMPLE_WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var SAMPLE_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var SAMPLE_MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -10239,12 +10236,17 @@
   function sampleItemsHtml(w, dow){
     /* dow: today's day of week (5 = Friday, 6 = Saturday), or -1
        when previewing a future window — a preview never gets the
-       "not today" Cartier note, which is only about today */
+       "not today" Cartier note, which is only about today.
+       cartier:true means Fri/Sat only; cartier:'hours' means
+       Cartier pours for the first five hours of operation on any
+       day of the window (P9 pallet — that impact never says
+       Fri/Sat-only, so do not assume it). */
     var html = '<ul class="sample-list">';
     w.items.forEach(function(name){ html += '<li>' + name + '</li>'; });
-    if(w.cartier && (dow === 5 || dow === 6)) html += '<li>Cartier — any flavour</li>';
+    if(w.cartier === 'hours') html += '<li>Cartier — any flavour (first five hours of operation)</li>';
+    else if(w.cartier && (dow === 5 || dow === 6)) html += '<li>Cartier — any flavour</li>';
     html += '</ul>';
-    if(w.cartier && dow >= 0 && dow !== 5 && dow !== 6){
+    if(w.cartier === true && dow >= 0 && dow !== 5 && dow !== 6){
       html += '<p class="sample-note">Cartier (any flavour) pours Friday and Saturday only — not today.</p>';
     }
     return html;
@@ -10255,15 +10257,17 @@
     var dow = now.getDay();
     var body = document.getElementById('sampleBody');
     var html = '<p class="sample-date">Today — ' + SAMPLE_WEEKDAYS[dow] + ', ' + SAMPLE_MONTHS[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear() + '</p>';
-    /* Date accuracy: scan the WHOLE schedule every render. A
-       window is "current" only when today falls inside it
-       (start <= today <= end); a window whose end has passed is
+    /* Date accuracy: scan the WHOLE running sheet's schedule every
+       render. A window is "current" only when today falls inside
+       it (start <= today <= end); a window whose end has passed is
        never current and never "next", so an expired window's
        wines can never be shown as today's or as upcoming. "Next"
        is the earliest window that starts after today. */
+    var sel = impactSelection(now);
+    var sched = sel.sheet ? (sel.sheet.samples || []) : [];
     var current = null, next = null;
-    for(var i = 0; i < SAMPLE_SCHEDULE.length; i++){
-      var w = SAMPLE_SCHEDULE[i];
+    for(var i = 0; i < sched.length; i++){
+      var w = sched[i];
       var wStart = sampleDayStart(w.start), wEnd = sampleDayStart(w.end);
       if(today >= wStart && today <= wEnd){ current = w; }
       else if(wStart > today && (!next || wStart < sampleDayStart(next.start))){ next = w; }
@@ -10272,15 +10276,17 @@
       html += '<p class="sample-window">On sample ' + sampleRangeText(current) + ' (' + current.period + ' sampling):</p>';
       html += sampleItemsHtml(current, dow);
       html += '<p class="sample-note">If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price point and varietal.</p>';
+    } else if(!sel.sheet){
+      html += '<p class="sample-none">No impact is running for this store today, so there is no sampling schedule to show.</p>';
     } else {
       html += '<p class="sample-none">Nothing is on sample today — today isn&rsquo;t in a sampling window.</p>';
       if(next){
         html += '<p class="sample-next-head">Next sampling window</p>';
         html += '<p class="sample-window">' + sampleRangeText(next) + ' (' + next.period + ' sampling):</p>';
         html += sampleItemsHtml(next, -1);
-        if(next.cartier) html += '<p class="sample-note">Plus Cartier (any flavour) on the Friday and Saturday of that window.</p>';
-      } else if(today > sampleDayStart(SAMPLE_SCHEDULE[SAMPLE_SCHEDULE.length-1].end)){
-        html += '<p class="sample-note">The P8 / P9 sampling schedule has ended — the last window was ' + sampleRangeText(SAMPLE_SCHEDULE[SAMPLE_SCHEDULE.length-1]) + '.</p>';
+        if(next.cartier === true) html += '<p class="sample-note">Plus Cartier (any flavour) on the Friday and Saturday of that window.</p>';
+      } else if(sched.length && today > sampleDayStart(sched[sched.length-1].end)){
+        html += '<p class="sample-note">The ' + sel.sheet.id + ' sampling schedule has ended — the last window was ' + sampleRangeText(sched[sched.length-1]) + '.</p>';
       }
     }
     body.innerHTML = html;
@@ -10338,10 +10344,22 @@
       id: 'P8',
       types: ['Loblaws'],
       build: 'full',
+      pdf: 'P8-Impact.pdf',
+      pages: 29,
       start: new Date(2026, 9, 12),
       end: new Date(2026, 10, 8),
       rangeShort: 'Oct 12\u2013Nov 8',
       rangeLong: 'October 12 \u2013 November 8, 2026',
+      samples: [
+        { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['JT PS Cabernet Sauvignon', 'Inniskillin Late Autumn Riesling VQA', 'MXM Blackberry'] },
+        { period:'P8', start:[10,15], end:[10,18], cartier:true, items:['Bù Cabernet Sauvignon', 'Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['JT PS Pinot Grigio', 'JT Reserve Meritage VQA', 'MXM Lemonade'] },
+        { period:'P8', start:[10,22], end:[10,25], cartier:true, items:['Inniskillin Discovery Series Gamay Noir VQA', 'Bù Chardonnay', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Sandbanks Reserve French Kiss Merlot-Cabernet VQA', 'JT PS Sauvignon Blanc', 'MXM Blackberry'] },
+        { period:'P8', start:[10,29], end:[11,1], cartier:true, items:['Vintage Ink Wicked White VQA', 'Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Vintage Ink Rebel Red VQA'] },
+        { period:'P8', start:[11,2], end:[11,4], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'Sidney Rosé'] },
+        { period:'P8', start:[11,5], end:[11,8], cartier:true, items:['Sandbanks Reserve Marquette VQA', 'Inniskillin Reserve Pinot Gris VQA', 'Saintly Fracette VQA'] },
+      ],
       html:
         '<p class="cs-sub">Legacy Loblaws Boutique &bull; Period 8: October 12 &ndash; November 8, 2026 &bull; Printed Oct 19</p>' +
         '<h3 class="cs-h">Key dates</h3>' +
@@ -10387,10 +10405,20 @@
       id: 'P9',
       types: ['Loblaws'],
       build: 'full',
+      pdf: 'P9-Impact.pdf',
+      pages: 30,
       start: new Date(2026, 10, 9),
       end: new Date(2026, 10, 29),
       rangeShort: 'Nov 9\u201329',
       rangeLong: 'November 9 \u2013 29, 2026',
+      samples: [
+        { period:'P9', start:[11,9], end:[11,11], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'Inniskillin Discovery Series P3 VQA'] },
+        { period:'P9', start:[11,12], end:[11,15], cartier:true, items:['Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Sandbanks Reserve Baco Noir VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Inniskillin Riesling Pinot Grigio VQA', 'JT Reserve Merlot VQA', 'JT Reserve Sparkling VQA'] },
+        { period:'P9', start:[11,19], end:[11,22], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'KEW Fracette VQA'] },
+        { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['JT Reserve Sauvignon Blanc VQA', 'Inniskillin Discovery Series Gamay Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P9', start:[11,26], end:[11,29], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'Saintly Fracette VQA'] },
+      ],
       html:
         '<p class="cs-sub">Legacy Loblaws Boutique &bull; Period 9: November 9 &ndash; 29, 2026 &bull; Printed Oct 26</p>' +
         '<h3 class="cs-h">Key dates</h3>' +
@@ -10433,6 +10461,374 @@
         '<li>All LTOs run Nov 9&ndash;29. TPR/clearance: sell through on-hand stock &mdash; no replenishment orders.</li>' +
         '</ul>' +
         '<p class="cs-src">Source: P9 In-Store Impact (Legacy Loblaws Boutiques), updated Oct 21, 2026. Doc quirks to watch: the POP checklist swaps the Promo 1 and Promo 2 sides; the sampling table&rsquo;s final weeks are merged into one row (split out above); Uline Poster 2 is listed as starting Nov 15 in one table and Nov 16 in another. Weekdays verified against the 2026 calendar.</p>'
+    },
+    {
+      id: 'P8 SF',
+      types: ['Sobeys', 'Foodland'],
+      build: 'full',
+      pdf: 'P8-Sobeys-Foodland-Fully-Built.pdf',
+      pages: 20,
+      start: new Date(2026, 9, 12),
+      end: new Date(2026, 10, 8),
+      rangeShort: 'Oct 12\u2013Nov 8',
+      rangeLong: 'October 12 \u2013 November 8, 2026',
+      samples: [
+        { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['JT PS Cabernet Sauvignon', 'Inniskillin Late Autumn Riesling VQA', 'MXM Blackberry'] },
+        { period:'P8', start:[10,15], end:[10,18], cartier:true, items:['Bù Cabernet Sauvignon', 'BASK Reserve Simply White VQA', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['JT PS Pinot Grigio', 'JT Reserve Meritage VQA', 'MXM Lemonade'] },
+        { period:'P8', start:[10,22], end:[10,25], cartier:true, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Sandbanks Reserve French Kiss Merlot-Cabernet VQA', 'JT Reserve Sauvignon Blanc VQA', 'MXM Blackberry'] },
+        { period:'P8', start:[10,29], end:[11,1], cartier:true, items:['Vintage Ink Wicked White', 'Vintage Ink Tequila-Barrel Sauv Blanc', 'Vintage Ink Rebel Red'] },
+        { period:'P8', start:[11,2], end:[11,4], cartier:false, items:['Bù Cabernet Sauvignon', 'JT PS Sauvignon Blanc'] },
+        { period:'P8', start:[11,5], end:[11,8], cartier:true, items:['Sandbanks Reserve Marquette VQA', 'Inniskillin Reserve Pinot Gris VQA', 'Saintly Fracette VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &bull; Period 8: October 12 &ndash; November 8, 2026 &bull; Last updated Oct 2</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Oct 12</th><td>P8 begins (Thanksgiving Day)</td></tr>' +
+        '<tr><th scope="row">Tue Oct 13</th><td>Feature-learning tasting &amp; sampling notes due</td></tr>' +
+        '<tr><th scope="row">Oct 12 &ndash; 22</th><td>Hang sign Side A &ldquo;B&ugrave;&rdquo;</td></tr>' +
+        '<tr><th scope="row">Fri Oct 23 &ndash; Sat Oct 31</th><td>SWAP &mdash; hang sign to Side B &ldquo;Halloween&rdquo;</td></tr>' +
+        '<tr><th scope="row">Mon Oct 26</th><td>DON&rsquo;T MISS &mdash; P9 POP ships with MDC wine order &mdash; do NOT forfeit your wine order that week</td></tr>' +
+        '<tr><th scope="row">Nov 1 &ndash; 8</th><td>Hang sign back to Side A &ldquo;B&ugrave;&rdquo;</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4</th><td>P9 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Sun Nov 8</th><td>P8 ends &bull; Mon Nov 9: P9 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Oct 12 &ndash; 14</th><td>JT PS Cabernet Sauvignon &bull; Inniskillin Late Autumn Riesling VQA &bull; MXM Blackberry</td></tr>' +
+        '<tr><th scope="row">Oct 15 &ndash; 18</th><td>B&ugrave; Cabernet Sauvignon &bull; BASK Reserve Simply White VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 19 &ndash; 21</th><td>JT PS Pinot Grigio &bull; JT Reserve Meritage VQA &bull; MXM Lemonade</td></tr>' +
+        '<tr><th scope="row">Oct 22 &ndash; 25</th><td>B&ugrave; Cabernet Sauvignon &bull; B&ugrave; Chardonnay &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 26 &ndash; 28</th><td>Sandbanks Reserve French Kiss Merlot-Cab VQA &bull; JT Reserve Sauv Blanc VQA &bull; MXM Blackberry</td></tr>' +
+        '<tr><th scope="row">Oct 29 &ndash; Nov 1</th><td>Vintage Ink Wicked White &bull; Vintage Ink Tequila-Barrel Sauv Blanc &bull; Vintage Ink Rebel Red &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 2 &ndash; 4</th><td>B&ugrave; Cabernet Sauvignon &bull; JT PS Sauv Blanc</td></tr>' +
+        '<tr><th scope="row">Nov 5 &ndash; 8</th><td>Sandbanks Reserve Marquette VQA &bull; Inniskillin Reserve Pinot Gris VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>B&ugrave; feature ($15.99):</strong> Cab Sauv (80100035) + Chardonnay (80100036), 3&ndash;4 cases each, eye-level brand blocking. Reorders OK &mdash; don&rsquo;t overstock.</li>' +
+        '<li><strong>Sidney Ros&eacute; (80098997):</strong> twist cap + new label now; order 1&ndash;2 cases when old JDE drops below 1 case.</li>' +
+        '<li><strong>PVQA +$2:</strong> scan-test every PVQA item at the start of P8; file the Boutique Price Discrepancy Form on Speakeasy for any misses. Do NOT scan-test before P8 begins.</li>' +
+        '<li><strong>IWSC stickers:</strong> on the neck of each bottle, first two rows, facing out &mdash; Le Grand Clos Chardonnay 2023 (92), Montague Chardonnay 2023 (91), JT Grand Reserve White Meritage 2024 (92). Don&rsquo;t order these SKUs just for stickers.</li>' +
+        '<li><strong>P8 POP:</strong> do NOT forfeit your wine order in the POP-shipment week; if no full order is needed, order a minimum of 25 shippable cases. Report missing POP by Wed Oct 7, 5pm.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Themes: FALL all period; HALLOWEEN Oct 23&ndash;31; THANKSGIVING FLASH SALE week of Oct 12 (no products listed in the impact).</li>' +
+        '<li>All LTOs run Oct 12 &ndash; Nov 8 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuy: Buy 6, Save $2 off Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P8 In-Store Impact (New Sobeys / Foodland Boutiques), last updated Oct 2, 2026.</p>'
+    },
+    {
+      id: 'P8 SF Pallet',
+      types: ['Sobeys', 'Foodland'],
+      build: 'pallet',
+      pdf: 'P8-Sobeys-Foodland-Pallet.pdf',
+      pages: 20,
+      start: new Date(2026, 9, 12),
+      end: new Date(2026, 10, 8),
+      rangeShort: 'Oct 12\u2013Nov 8',
+      rangeLong: 'October 12 \u2013 November 8, 2026',
+      samples: [
+        { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P8', start:[10,15], end:[10,18], cartier:true, items:['Bù Chardonnay', 'Bù Cabernet Sauvignon', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P8', start:[10,22], end:[10,25], cartier:true, items:['Bù Chardonnay', 'Bù Cabernet Sauvignon', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P8', start:[10,29], end:[11,1], cartier:true, items:['Bù Chardonnay', 'Bù Cabernet Sauvignon', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[11,2], end:[11,4], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P8', start:[11,5], end:[11,8], cartier:true, items:['Bù Chardonnay', 'Bù Cabernet Sauvignon', 'Saintly Fracette VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &mdash; PALLET ONLY &bull; Period 8: October 12 &ndash; November 8, 2026 &bull; Last updated Oct 2</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Oct 12</th><td>P8 begins (Thanksgiving Day)</td></tr>' +
+        '<tr><th scope="row">Tue Oct 13</th><td>Feature-learning tasting &amp; sampling notes due</td></tr>' +
+        '<tr><th scope="row">Mon Oct 26</th><td>DON&rsquo;T MISS &mdash; P9 POP ships with MDC wine order &mdash; do NOT forfeit your wine order that week</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4</th><td>P9 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Sun Nov 8</th><td>P8 ends &bull; Mon Nov 9: P9 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Oct 12 &ndash; 14</th><td>Premium Red / Premium White</td></tr>' +
+        '<tr><th scope="row">Oct 15 &ndash; 18</th><td>B&ugrave; Chardonnay &bull; B&ugrave; Cabernet Sauvignon &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 19 &ndash; 21</th><td>Premium Red / Premium White</td></tr>' +
+        '<tr><th scope="row">Oct 22 &ndash; 25</th><td>B&ugrave; Chardonnay &bull; B&ugrave; Cabernet Sauvignon &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 26 &ndash; 28</th><td>Premium Red / Premium White</td></tr>' +
+        '<tr><th scope="row">Oct 29 &ndash; Nov 1</th><td>B&ugrave; Chardonnay &bull; B&ugrave; Cabernet Sauvignon &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 2 &ndash; 4</th><td>Premium Red / Premium White</td></tr>' +
+        '<tr><th scope="row">Nov 5 &ndash; 8</th><td>B&ugrave; Chardonnay &bull; B&ugrave; Cabernet Sauvignon &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Premium Red / Premium White windows name no specific wines in the impact &mdash; pour a premium red and a premium white you carry. If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>B&ugrave; feature ($15.99):</strong> Cab Sauv (80100035) + Chardonnay (80100036), 3&ndash;4 cases each. Reorders OK &mdash; don&rsquo;t overstock.</li>' +
+        '<li><strong>Sidney Ros&eacute; (80098997):</strong> twist cap + new label now; order 1&ndash;2 cases when old JDE drops below 1 case.</li>' +
+        '<li><strong>PVQA +$2:</strong> scan-test every PVQA item at the start of P8; file the Boutique Price Discrepancy Form on Speakeasy for any misses. Discard the shipped P8 PVQA price cards (outdated) &mdash; use the updated grocer-generated tag from your Sobeys partner.</li>' +
+        '<li><strong>IWSC stickers:</strong> on the neck of each bottle, first two rows, facing out &mdash; Le Grand Clos Chardonnay 2023 (92), Montague Chardonnay 2023 (91), JT Grand Reserve White Meritage 2024 (92). Don&rsquo;t order these SKUs just for stickers.</li>' +
+        '<li><strong>Pallet build:</strong> 1 pallet = 10 slots + tasting cart; 2 pallets = 22 slots (see impact for the slot lists). Tasting cart: Saintly Fracette top, B&ugrave; Cab Sauv middle, B&ugrave; Chardonnay bottom.</li>' +
+        '<li><strong>P8 POP:</strong> do NOT forfeit your wine order in the POP-shipment week; if no full order is needed, order a minimum of 25 shippable cases. Report missing POP by Wed Oct 7, 5pm.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Themes: FALL all period; HALLOWEEN Oct 23&ndash;31; THANKSGIVING FLASH SALE week of Oct 12 (no products listed in the impact).</li>' +
+        '<li>All LTOs run Oct 12 &ndash; Nov 8 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuy: Buy 6, Save $2 off Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P8 In-Store Impact (New Sobeys / Foodland Boutiques &mdash; PALLET ONLY), last updated Oct 2, 2026.</p>'
+    },
+    {
+      id: 'P9 SF',
+      types: ['Sobeys', 'Foodland'],
+      build: 'full',
+      pdf: 'P9-Sobeys-Foodland-Fully-Built.pdf',
+      pages: 20,
+      start: new Date(2026, 10, 9),
+      end: new Date(2026, 10, 29),
+      rangeShort: 'Nov 9\u201329',
+      rangeLong: 'November 9 \u2013 29, 2026',
+      samples: [
+        { period:'P9', start:[11,9], end:[11,11], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay'] },
+        { period:'P9', start:[11,12], end:[11,15], cartier:true, items:['Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Sandbanks Reserve Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Inniskillin Riesling Pinot Grigio VQA', 'JT Reserve Merlot VQA'] },
+        { period:'P9', start:[11,19], end:[11,22], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'JT Reserve Sparkling VQA'] },
+        { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['JT Reserve Sauvignon Blanc VQA', 'Inniskillin Discovery Series Gamay Noir VQA'] },
+        { period:'P9', start:[11,26], end:[11,29], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'Sandbanks Sparkling Secco VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &bull; Period 9: November 9 &ndash; 29, 2026 &bull; Last updated Oct 21</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 2</th><td>Feature Learning issued: Vintage Ink Tequila Barrel Sauv Blanc ($17.99, Buy 2 Save $6)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4, 5pm</th><td>DEADLINE: report missing P9 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 9</th><td>P9 BEGINS + tasting/sampling notes DUE + Uline Poster 1 &lsquo;Prices Worth Celebrating&rsquo; up</td></tr>' +
+        '<tr><th scope="row">Mon Nov 16</th><td>Black Friday Flash Sale BEGINS + P10 POP ships with MDC order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>P10 POP ships with MDC order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25</th><td>P10 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Fri Nov 27</th><td>Black Friday</td></tr>' +
+        '<tr><th scope="row">Sun Nov 29</th><td>P9 ENDS (Flash Sale runs one more day)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS (Cyber Monday) + Flash Sale FINAL DAY</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 (not before)</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 9 &ndash; 11</th><td>B&ugrave; Cabernet Sauvignon &bull; B&ugrave; Chardonnay</td></tr>' +
+        '<tr><th scope="row">Nov 12 &ndash; 15</th><td>Vintage Ink Tequila Barrel Sauv Blanc &bull; Sandbanks Baco Noir &bull; Sandbanks Sparkling Secco &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 16 &ndash; 18</th><td>Inniskillin Riesling Pinot Grigio &bull; JT Reserve Merlot</td></tr>' +
+        '<tr><th scope="row">Nov 19 &ndash; 22</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; JT Reserve Sparkling &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 23 &ndash; 25</th><td>JT Reserve Sauv Blanc &bull; Inniskillin DS Gamay Noir</td></tr>' +
+        '<tr><th scope="row">Nov 26 &ndash; 29</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; Sandbanks Sparkling Secco &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day. If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature wine:</strong> Vintage Ink Tequila Barrel Aged Sauv Blanc VQA $17.99, Buy 2 Save $6. Notes due Nov 9; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Black Friday Flash Sale Nov 16&ndash;30:</strong> Susse Reserve Riesling + JT Grand Reserve Shiraz, $3 off each. One-time order only, 1&ndash;2 cases max; no replenishment. Keep the sale active through Mon Nov 30.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Prices Worth Celebrating&rsquo; Nov 9&ndash;15; Poster 2 &lsquo;Flash Sale&rsquo; Nov 15&ndash;30; keep the Flash Sale poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Mock houses:</strong> retain all mock houses after P9 &mdash; they are reused in P10, no new units. Do not modify them to fit a shelf.</li>' +
+        '<li><strong>P10 POP:</strong> do NOT forfeit your wine order in the shipping weeks (Nov 16 + Nov 23); if no full order is needed, order a minimum of 25 shippable cases.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period (The Houses + The Windows).</li>' +
+        '<li>All LTOs run Nov 9 &ndash; 29 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $6 Vintage Ink + Sandbanks Baco; Buy 2 Save $5 Inniskillin DS Gamay + Sandbanks Secco; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P9 In-Store Impact (New Sobeys / Foodland Boutiques), last updated Oct 21, 2026.</p>'
+    },
+    {
+      id: 'P9 SF Pallet',
+      types: ['Sobeys', 'Foodland'],
+      build: 'pallet',
+      pdf: 'P9-Sobeys-Foodland-Pallet.pdf',
+      pages: 19,
+      start: new Date(2026, 10, 9),
+      end: new Date(2026, 10, 29),
+      rangeShort: 'Nov 9\u201329',
+      rangeLong: 'November 9 \u2013 29, 2026',
+      samples: [
+        { period:'P9', start:[11,9], end:[11,11], cartier:false, items:['Premium White', 'Premium Red'] },
+        { period:'P9', start:[11,12], end:[11,15], cartier:'hours', items:['Premium White', 'Premium Red'] },
+        { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Premium White', 'Premium Red'] },
+        { period:'P9', start:[11,19], end:[11,22], cartier:'hours', items:['Premium White', 'Premium Red'] },
+        { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['Premium White', 'Premium Red'] },
+        { period:'P9', start:[11,26], end:[11,29], cartier:'hours', items:['Premium White', 'Premium Red'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &mdash; PALLET ONLY &bull; Period 9: November 9 &ndash; 29, 2026 &bull; Last updated Oct 21</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 2</th><td>Feature Learning issued: Vintage Ink Tequila Barrel Sauv Blanc ($17.99, Buy 2 Save $6)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4, 5pm</th><td>DEADLINE: report missing P9 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 9</th><td>P9 BEGINS + tasting/sampling notes DUE + Uline Poster 1 &lsquo;Prices Worth Celebrating&rsquo; up</td></tr>' +
+        '<tr><th scope="row">Mon Nov 16</th><td>Black Friday Flash Sale BEGINS + P10 POP ships with MDC order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>P10 POP ships with MDC order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25</th><td>P10 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Fri Nov 27</th><td>Black Friday</td></tr>' +
+        '<tr><th scope="row">Sun Nov 29</th><td>P9 ENDS (Flash Sale runs one more day)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS (Cyber Monday) + Flash Sale FINAL DAY</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 (not before)</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 9 &ndash; 11</th><td>Premium White / Premium Red</td></tr>' +
+        '<tr><th scope="row">Nov 12 &ndash; 15</th><td>Premium White / Premium Red &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Nov 16 &ndash; 18</th><td>Premium White / Premium Red</td></tr>' +
+        '<tr><th scope="row">Nov 19 &ndash; 22</th><td>Premium White / Premium Red &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Nov 23 &ndash; 25</th><td>Premium White / Premium Red</td></tr>' +
+        '<tr><th scope="row">Nov 26 &ndash; 29</th><td>Premium White / Premium Red &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Premium White / Premium Red name no specific wines in the impact &mdash; pour a premium white and a premium red you carry. Cartier is for the first five hours of operation (not Fri/Sat-only in this impact). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature wine:</strong> Vintage Ink Tequila Barrel Aged Sauv Blanc VQA $17.99, Buy 2 Save $6. Notes due Nov 9; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Black Friday Flash Sale Nov 16&ndash;30:</strong> Susse Reserve Riesling + JT Grand Reserve Shiraz, $3 off each. One-time order only, 1&ndash;2 cases max; no replenishment. Keep the sale active through Mon Nov 30.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Prices Worth Celebrating&rsquo; Nov 9&ndash;15; Poster 2 &lsquo;Flash Sale&rsquo; Nov 15&ndash;30; keep the Flash Sale poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Mock houses:</strong> retain all mock houses after P9 &mdash; they are reused in P10, no new units. Do not modify them to fit a shelf.</li>' +
+        '<li><strong>Pallet build:</strong> 1 pallet = 11 slots; 2 pallets = 22 slots (see impact for the slot lists). Tasting cart: Saintly Fracette top, Cartier Salted Caramel middle, JT PS Merlot bottom.</li>' +
+        '<li><strong>P10 POP:</strong> do NOT forfeit your wine order in the shipping weeks (Nov 16 + Nov 23); if no full order is needed, order a minimum of 25 shippable cases.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period (The Houses + The Windows).</li>' +
+        '<li>All LTOs run Nov 9 &ndash; 29 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $6 Vintage Ink + Sandbanks Baco; Buy 2 Save $5 Inniskillin DS Gamay + Sandbanks Secco; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P9 In-Store Impact (New Sobeys / Foodland Boutiques &mdash; PALLET ONLY), last updated Oct 21, 2026.</p>'
+    },
+    {
+      id: 'P8 NB',
+      types: ['Non-boutique'],
+      build: 'both',
+      pdf: 'P8-Non-Boutique.pdf',
+      pages: 30,
+      start: new Date(2026, 9, 12),
+      end: new Date(2026, 10, 8),
+      rangeShort: 'Oct 12\u2013Nov 8',
+      rangeLong: 'October 12 \u2013 November 8, 2026',
+      samples: [
+        { period:'P8', start:[10,12], end:[10,14], cartier:false, items:['JT PS Cabernet Sauvignon', 'Inniskillin Late Autumn Riesling VQA', 'MXM Blackberry'] },
+        { period:'P8', start:[10,15], end:[10,18], cartier:true, items:['Bù Cabernet Sauvignon', 'Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,19], end:[10,21], cartier:false, items:['JT PS Pinot Grigio', 'JT Reserve Meritage VQA', 'MXM Lemonade'] },
+        { period:'P8', start:[10,22], end:[10,25], cartier:true, items:['Inniskillin Discovery Series Gamay Noir VQA', 'Bù Chardonnay', 'Saintly Fracette VQA'] },
+        { period:'P8', start:[10,26], end:[10,28], cartier:false, items:['Sandbanks Reserve French Kiss Merlot-Cabernet VQA', 'JT PS Sauvignon Blanc', 'MXM Blackberry'] },
+        { period:'P8', start:[10,29], end:[11,1], cartier:true, items:['Vintage Ink Wicked White VQA', 'Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Vintage Ink Rebel Red VQA'] },
+        { period:'P8', start:[11,2], end:[11,4], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'Sidney Rosé'] },
+        { period:'P8', start:[11,5], end:[11,8], cartier:true, items:['Sandbanks Reserve Marquette VQA', 'Inniskillin Reserve Pinot Gris VQA', 'Saintly Fracette VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Non-Boutiques &bull; Period 8: October 12 &ndash; November 8, 2026 &bull; Last updated Oct 2</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Oct 12</th><td>P8 begins (Thanksgiving Day)</td></tr>' +
+        '<tr><th scope="row">Tue Oct 13</th><td>Feature-learning tasting &amp; sampling notes due</td></tr>' +
+        '<tr><th scope="row">Oct 12 &ndash; 22</th><td>Seasonal display: FALL (Vintage Ink trio)</td></tr>' +
+        '<tr><th scope="row">Fri Oct 23 &ndash; Sat Oct 31</th><td>SWAP &mdash; seasonal display to HALLOWEEN</td></tr>' +
+        '<tr><th scope="row">Mon Oct 26</th><td>DON&rsquo;T MISS &mdash; P9 POP ships with MDC wine order &mdash; do NOT forfeit your wine order that week</td></tr>' +
+        '<tr><th scope="row">Nov 1 &ndash; 8</th><td>Seasonal display back to FALL</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4</th><td>P9 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Sun Nov 8</th><td>P8 ends &bull; Mon Nov 9: P9 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Oct 12 &ndash; 14</th><td>JT PS Cabernet Sauvignon &bull; Inniskillin Late Autumn Riesling VQA &bull; MXM Blackberry</td></tr>' +
+        '<tr><th scope="row">Oct 15 &ndash; 18</th><td>B&ugrave; Cabernet Sauvignon &bull; Vintage Ink Tequila Barrel Aged Sauv Blanc &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 19 &ndash; 21</th><td>JT PS Pinot Grigio &bull; JT Reserve Meritage VQA &bull; MXM Lemonade</td></tr>' +
+        '<tr><th scope="row">Oct 22 &ndash; 25</th><td>Inniskillin Discovery Gamay Noir VQA &bull; B&ugrave; Chardonnay &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Oct 26 &ndash; 28</th><td>Sandbanks Reserve French Kiss Merlot-Cab VQA &bull; JT PS Sauv Blanc &bull; MXM Blackberry</td></tr>' +
+        '<tr><th scope="row">Oct 29 &ndash; Nov 1</th><td>Vintage Ink Wicked White &bull; Vintage Ink Tequila-Barrel Sauv Blanc &bull; Vintage Ink Rebel Red &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 2 &ndash; 4</th><td>B&ugrave; Cabernet Sauvignon &bull; B&ugrave; Chardonnay &bull; Sidney Ros&eacute;</td></tr>' +
+        '<tr><th scope="row">Nov 5 &ndash; 8</th><td>Sandbanks Reserve Marquette VQA &bull; Inniskillin Reserve Pinot Gris VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>B&ugrave; feature ($15.99):</strong> Cab Sauv (80100035) + Chardonnay (80100036), 3&ndash;4 cases each, eye-level brand blocking. Reorders OK &mdash; don&rsquo;t overstock.</li>' +
+        '<li><strong>Sidney Ros&eacute; (80098997):</strong> twist cap + new label now; order 1&ndash;2 cases when old JDE drops below 1 case.</li>' +
+        '<li><strong>PVQA +$2:</strong> scan-test every PVQA item at the start of P8; file the Boutique Price Discrepancy Form on Speakeasy for any misses. Do NOT scan-test before P8 begins.</li>' +
+        '<li><strong>IWSC stickers:</strong> on the neck of each bottle, first two rows, facing out &mdash; Le Grand Clos Chardonnay 2023 (92), Montague Chardonnay 2023 (91), JT Grand Reserve White Meritage 2024 (92). Don&rsquo;t order these SKUs just for stickers.</li>' +
+        '<li><strong>Displays:</strong> Seasonal Vintage Ink trio (re-use P7 case stackers); Primary B&ugrave; all period; Secondary JT PS 750mLs; Impulse MXM trio; Tertiary Non-Alc (food-licensed stores) or JT Reserve quartet.</li>' +
+        '<li><strong>P8 POP:</strong> do NOT forfeit your wine order in the POP-shipment week; if no full order is needed, order a minimum of 25 shippable cases. Report missing POP by Wed Oct 7, 5pm.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Themes: FALL Oct 12&ndash;22 + Nov 1&ndash;8; HALLOWEEN Oct 23&ndash;31; THANKSGIVING FLASH SALE week of Oct 12 (no products listed in the impact).</li>' +
+        '<li>Price cards: Seasonal Set 1 Fall (3) / Set 2 Halloween (3) &mdash; swap with the display.</li>' +
+        '<li>All LTOs run Oct 12 &ndash; Nov 8 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuy: Buy 6, Save $2 off Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P8 In-Store Impact (Non-Boutiques), last updated Oct 2, 2026.</p>'
+    },
+    {
+      id: 'P9 NB',
+      types: ['Non-boutique'],
+      build: 'both',
+      pdf: 'P9-Non-Boutique.pdf',
+      pages: 28,
+      start: new Date(2026, 10, 9),
+      end: new Date(2026, 10, 29),
+      rangeShort: 'Nov 9\u201329',
+      rangeLong: 'November 9 \u2013 29, 2026',
+      samples: [
+        { period:'P9', start:[11,9], end:[11,11], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'Inniskillin Discovery Series P3 VQA'] },
+        { period:'P9', start:[11,12], end:[11,15], cartier:true, items:['Vintage Ink Tequila Barrel Aged Sauvignon Blanc VQA', 'Sandbanks Reserve Baco Noir VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P9', start:[11,16], end:[11,18], cartier:false, items:['Inniskillin Riesling Pinot Grigio VQA', 'JT Reserve Merlot VQA', 'JT Reserve Sparkling VQA'] },
+        { period:'P9', start:[11,19], end:[11,22], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'KEW Fracette VQA'] },
+        { period:'P9', start:[11,23], end:[11,25], cartier:false, items:['JT Reserve Sauvignon Blanc VQA', 'Inniskillin Discovery Series Gamay Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P9', start:[11,26], end:[11,29], cartier:true, items:['Inniskillin Discovery Series Susse Reserve Riesling VQA', 'JT Grand Reserve Shiraz VQA', 'Saintly Fracette VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Non-Boutiques &bull; Period 9: November 9 &ndash; 29, 2026 &bull; Last updated Oct 22</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 2</th><td>Feature Learning issued: Vintage Ink Tequila Barrel Sauv Blanc ($17.99, Buy 2 Save $6)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 4, 5pm</th><td>DEADLINE: report missing P9 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 9</th><td>P9 BEGINS + tasting/sampling notes DUE + Uline Poster 1 &lsquo;Prices Worth Celebrating&rsquo; up</td></tr>' +
+        '<tr><th scope="row">Mon Nov 16</th><td>Black Friday Flash Sale BEGINS + P10 POP ships with MDC order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>P10 POP ships with MDC order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25</th><td>P10 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Fri Nov 27</th><td>Black Friday</td></tr>' +
+        '<tr><th scope="row">Sun Nov 29</th><td>P9 ENDS (Flash Sale runs one more day)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS (Cyber Monday) + Flash Sale FINAL DAY</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 (not before)</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 9 &ndash; 11</th><td>B&ugrave; Cabernet Sauvignon &bull; B&ugrave; Chardonnay &bull; Inniskillin Discovery P3 VQA</td></tr>' +
+        '<tr><th scope="row">Nov 12 &ndash; 15</th><td>Vintage Ink Tequila Barrel Sauv Blanc &bull; Sandbanks Baco Noir &bull; Inniskillin Fracette &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 16 &ndash; 18</th><td>Inniskillin Riesling Pinot Grigio &bull; JT Reserve Merlot &bull; JT Reserve Sparkling</td></tr>' +
+        '<tr><th scope="row">Nov 19 &ndash; 22</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; KEW Fracette &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Nov 23 &ndash; 25</th><td>JT Reserve Sauv Blanc &bull; Inniskillin DS Gamay Noir &bull; Sandbanks Sparkling Secco</td></tr>' +
+        '<tr><th scope="row">Nov 26 &ndash; 29</th><td>Susse Reserve Riesling &bull; JT Grand Reserve Shiraz &bull; Saintly Fracette &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day. If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature wine:</strong> Vintage Ink Tequila Barrel Aged Sauv Blanc VQA $17.99, Buy 2 Save $6. Notes due Nov 9; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Black Friday Flash Sale Nov 16&ndash;30:</strong> Susse Reserve Riesling + JT Grand Reserve Shiraz, $3 off each. One-time order only, 1&ndash;2 cases max; no replenishment. Keep the sale active through Mon Nov 30.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Prices Worth Celebrating&rsquo; Nov 9&ndash;15; Poster 2 &lsquo;Flash Sale&rsquo; Nov 15&ndash;30; keep the Flash Sale poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Case stackers:</strong> retain all case stackers + header cards after P9 &mdash; they are reused in P10. Do not discard.</li>' +
+        '<li><strong>Gift With Purchase:</strong> free organza gift bag with any 750mL bottle $13.99+ after promos (before tax/deposit), while supplies last &mdash; offer it at the till.</li>' +
+        '<li><strong>P10 POP:</strong> do NOT forfeit your wine order in the shipping weeks (Nov 16 + Nov 23); if no full order is needed, order a minimum of 25 shippable cases.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period (The Houses + The Windows).</li>' +
+        '<li>All LTOs run Nov 9 &ndash; 29 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $6 Vintage Ink + Sandbanks Baco; Buy 2 Save $5 Inniskillin DS Gamay + Sandbanks Secco; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P9 In-Store Impact (Non-Boutiques), last updated Oct 22, 2026.</p>'
     }
   ];
   /* Only a period running TODAY counts. An expired period
@@ -10448,7 +10844,9 @@
   function sheetMatches(sheet, type, pallet){
     if(!sheet) return false;
     if(sheet.types && sheet.types.indexOf(type) === -1) return false;
-    return ((sheet.build || 'full') === 'pallet') === pallet;
+    var build = sheet.build || 'full';
+    if(build === 'both') return true;
+    return (build === 'pallet') === pallet;
   }
   function impactSelection(date){
     var now = date || new Date();
@@ -10475,17 +10873,37 @@
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return today > sheet.end;
   }
-  /* Expiry hiding for the Documents tab: once a period has ended,
-     its Full Impact PDF link is hidden so an expired impact never
-     shows in Documents. This only ever hides — visibility for
-     non-expired links is owned by applyStoreTypeUI (the Loblaws
-     rule), which applies the same expiry check itself, so the two
-     never fight. Called on load and on every day-change check. */
+  /* Expiry hiding for the Documents tab: the Full Impact PDF links
+     are rendered by renderImpactPdfLinks, which lists only sheets
+     for this store's type and build whose period has not ended — so
+     an expired impact never shows in Documents. Re-rendering on
+     load and on every day-change check is what enforces expiry;
+     applyStoreTypeUI calls the same render whenever the store,
+     its type or its Pallet Store flag changes, so the two never
+     fight. */
   function applyImpactExpiry(){
-    var p8 = document.getElementById('impactP8Link');
-    var p9 = document.getElementById('impactP9Link');
-    if(p8 && impactExpired(impactSheetById('P8'))) p8.hidden = true;
-    if(p9 && impactExpired(impactSheetById('P9'))) p9.hidden = true;
+    renderImpactPdfLinks();
+  }
+  /* Render the Full Impact PDF links for the store being viewed:
+     one link per impact sheet for this store's type and build
+     whose period has not ended yet (an upcoming period's PDF
+     shows; an ended period's never does). The cheat-sheet button
+     and What's on sample are separate — they only ever show the
+     impact running today. */
+  function renderImpactPdfLinks(){
+    var zone = document.getElementById('impactPdfLinks');
+    if(!zone) return;
+    var type = (typeof activeStore !== 'undefined') ? storeTypeOf(activeStore) : 'Loblaws';
+    var pallet = (typeof activeStore !== 'undefined') ? isPalletStore(activeStore) : false;
+    var today = new Date();
+    today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var html = '';
+    IMPACT_SHEETS.forEach(function(s){
+      if(!sheetMatches(s, type, pallet)) return;
+      if(today > s.end) return;
+      html += '<a class="settings-action" href="' + s.pdf + '" target="_blank" rel="noopener"><span>Full ' + s.id + ' Impact PDF<span class="sa-sub">The full ' + s.id + ' impact document &mdash; ' + s.pages + ' pages &middot; ' + s.rangeShort + ', 2026</span></span><span class="sa-ext" aria-hidden="true">PDF &#8599;</span></a>';
+    });
+    zone.innerHTML = html;
   }
   function impactStatusNote(sel){
     return '<p class="cs-status">Current impact &mdash; ' + sel.sheet.id + ' runs ' + sel.sheet.rangeLong + '.</p>';
@@ -12843,21 +13261,18 @@
     if(type && !findStoreType(type)) registerStoreType(type);
     if(settingsStoreType) settingsStoreType.value = type;
     renderStoreTypeList();
-    var p8 = document.getElementById('impactP8Link');
-    var p9 = document.getElementById('impactP9Link');
     var cheat = document.getElementById('currentCheatSheet');
     var sample = document.getElementById('sampleTodaySupport');
     /* Impact expiry, applied together with the type-and-build rule
-       so neither can resurrect the other: a Full Impact PDF shows
-       only for a store whose type AND build match that sheet AND
-       only until its period ends (P8 after Nov 8, 2026; P9 after
-       Nov 29, 2026). The cheat sheet and What's on sample today
-       show only while this store's type and build have a period
-       actually running today — never for an expired or upcoming
-       period, and never for another type or build. */
+       so neither can resurrect the other: the Full Impact PDF links
+       are rendered for this store's type and build only, and only
+       for periods that have not ended (P8 after Nov 8, 2026; P9
+       after Nov 29, 2026). The cheat sheet and What's on sample
+       today show only while this store's type and build have a
+       period actually running today — never for an expired or
+       upcoming period, and never for another type or build. */
     var sel = impactSelection(new Date());
-    if(p8) p8.hidden = !sheetMatches(impactSheetById('P8'), type, pallet) || impactExpired(impactSheetById('P8'));
-    if(p9) p9.hidden = !sheetMatches(impactSheetById('P9'), type, pallet) || impactExpired(impactSheetById('P9'));
+    renderImpactPdfLinks();
     if(cheat) cheat.hidden = !sel.sheet;
     if(sample) sample.hidden = !sel.sheet;
     if(impactNote){
@@ -12876,6 +13291,9 @@
        so switching stores never shows the last store's flag */
     var palletBox = document.getElementById('settingsPalletStore');
     if(palletBox) palletBox.checked = pallet;
+    /* A pending uncheck confirm belongs to the store it was opened
+       for — never leave it showing after the view changes */
+    hidePalletUncheckConfirm();
   }
   if(settingsStoreType){
     settingsStoreType.addEventListener('change', function(){
@@ -12887,11 +13305,53 @@
       syncToast('Store ' + activeStore + ' is now a ' + t + ' store — the impact it sees has been updated.', false);
     });
   }
+  /* Unticking Pallet Store asks first (inline confirm box, same
+     pattern as Clear history — no browser confirm dialogs, which
+     do not work in this shell). Ticking it on applies straight
+     away. On an uncheck the tick is put back until the user
+     confirms, so the box never shows a state that hasn't been
+     applied yet; only the confirming tap switches the store to
+     the fully built impact, and Documents, the cheat sheet and
+     sampling follow from applyStoreTypeUI. Cancel leaves the
+     store a pallet store and changes nothing. */
+  function hidePalletUncheckConfirm(){
+    var zone = document.getElementById('palletUncheckConfirm');
+    if(zone) zone.hidden = true;
+  }
+  function showPalletUncheckConfirm(){
+    var zone = document.getElementById('palletUncheckConfirm');
+    if(!zone) return;
+    var name = document.getElementById('palletUncheckStore');
+    if(name) name.textContent = 'Store ' + activeStore;
+    zone.hidden = false;
+    var yes = document.getElementById('palletUncheckYes');
+    if(yes) yes.focus();
+  }
   var palletBox = document.getElementById('settingsPalletStore');
   if(palletBox){
     palletBox.addEventListener('change', function(){
-      setPalletStore(activeStore, palletBox.checked, true);
-      syncToast('Store ' + activeStore + (palletBox.checked ? ' is now a pallet store — it follows the pallet impact.' : ' is now a fully built store — it follows the fully built impact.'), false);
+      if(palletBox.checked){
+        hidePalletUncheckConfirm();
+        setPalletStore(activeStore, true, true);
+        syncToast('Store ' + activeStore + ' is now a pallet store — it follows the pallet impact.', false);
+      } else {
+        palletBox.checked = true;
+        showPalletUncheckConfirm();
+      }
+    });
+  }
+  var palletUncheckYes = document.getElementById('palletUncheckYes');
+  if(palletUncheckYes){
+    palletUncheckYes.addEventListener('click', function(){
+      hidePalletUncheckConfirm();
+      setPalletStore(activeStore, false, true);
+      syncToast('Store ' + activeStore + ' is now a fully built store — it follows the fully built impact.', false);
+    });
+  }
+  var palletUncheckCancel = document.getElementById('palletUncheckCancel');
+  if(palletUncheckCancel){
+    palletUncheckCancel.addEventListener('click', function(){
+      hidePalletUncheckConfirm();
     });
   }
   /* Add-a-store-type wiring for all three places a type is
