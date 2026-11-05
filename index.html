@@ -5491,6 +5491,8 @@
         <option value="Non-boutique">Non-boutique</option>
         <option value="__add_type__">＋ Add new store type…</option>
       </select>
+      <label class="guess-opt" for="settingsPalletStore" style="margin-top:12px"><input type="checkbox" id="settingsPalletStore" /> Pallet Store</label>
+      <p class="theme-note" id="palletStoreNote">Tick this if this store is a pallet store. A pallet store follows the pallet impact; an unticked store follows the fully built impact. Unchecked — fully built — is the default.</p>
       <p class="store-settings-sub" style="margin-top:12px">Available store types</p>
       <ul class="store-type-list" id="storeTypeList" aria-label="Available store types"></ul>
       <button type="button" class="btn-add-type" id="settingsAddTypeBtn">＋ Add new store type</button>
@@ -5503,7 +5505,7 @@
           <button type="button" class="btn-ghost-small" id="settingsAddTypeCancel">Cancel</button>
         </div>
       </div>
-      <p class="theme-note">The store type decides which impact this store sees. Loblaws stores see the Legacy Loblaws impact; every other type — including types added here — sees a note that its impact is not loaded yet, until that type&rsquo;s impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
+      <p class="theme-note">The store type — and the Pallet Store box above — decide which impact this store sees. Every type has two impacts: fully built and pallet. Loblaws fully built stores see the Legacy Loblaws impact (P8/P9); a pallet store follows the pallet impact instead. Some impacts cover more than one type (for example Sobeys and Foodland share one). A type or build with no impact loaded yet sees a note saying so in Documents, until that impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
       <div class="settings-actions" style="margin-top:14px">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine — it goes into this store and the shared list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
@@ -5524,7 +5526,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.16</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.17</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5537,7 +5539,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.16</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.17</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6551,7 +6553,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.16</span>
+      <span class="manual-pill accent">Version 2026.11.04.17</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6707,9 +6709,12 @@
         </ol>
         <h3>Store types and impact documents</h3>
         <ul>
-          <li><strong>Loblaws</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws store.</li>
-          <li><strong>Sobeys, Foodland, Non-boutique</strong> and any custom type see a note that their impact isn&rsquo;t loaded yet.</li>
-          <li><strong>Store settings</strong> in Settings is a collapsible section — tap its heading to expand it. It shows your current store&rsquo;s type, the list of types, and an <span class="manual-ui">Add new store type</span> button if Michael adds more.</li>
+          <li><strong>Loblaws, fully built</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws fully built store.</li>
+          <li><strong>Pallet Store</strong> — in Store settings there is a <span class="manual-ui">Pallet Store</span> checkbox for the store being viewed. Tick it if the store is a pallet store; leave it unticked for a fully built store (unticked is the default). A pallet store follows the pallet impact for its type, not the fully built one, and the store&rsquo;s subtitle in Store settings reads “Pallet” while it is ticked. The choice syncs to the shared list, so every device sees it.</li>
+          <li><strong>Two impacts per type</strong> — every store type has a fully built impact and a pallet impact. Some impacts cover more than one type: Sobeys and Foodland share one impact, so a Sobeys store and a Foodland store of the same build see the same documents.</li>
+          <li><strong>Other types and builds</strong> see a note that their impact isn&rsquo;t loaded yet, until that impact document is added.</li>
+          <li><strong>Cheat sheet</strong> — Documents shows a cheat sheet only for the impact that is running right now for this store&rsquo;s type and build: one one-page sheet per impact, fully built and pallet each having their own. An impact that hasn&rsquo;t started yet or has already ended has no cheat sheet showing.</li>
+          <li><strong>Store settings</strong> in Settings is a collapsible section — tap its heading to expand it. It shows your current store&rsquo;s type, the Pallet Store box, the list of types, and an <span class="manual-ui">Add new store type</span> button if Michael adds more.</li>
         </ul>
       </div>
     </details>
@@ -6814,7 +6819,7 @@
         <ul>
           <li><strong>Loved wines</strong> — your loved wines, most loved first (§6).</li>
           <li><strong>This manual</strong> — the web version you&rsquo;re reading now, plus the <strong>Manual.pdf</strong> for printing. Same content, same version number as the app.</li>
-          <li><strong>Legacy Loblaws impact</strong> (Loblaws stores only) — the Current Impact Cheat Sheet, the full P8/P9 impact PDFs, and “What&rsquo;s on sample today.” Other store types see a note that their impact isn&rsquo;t loaded yet (§5).</li>
+          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods, and “What&rsquo;s on sample today.” A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); a pallet store sees the pallet impact; Sobeys and Foodland share one impact. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
         </ul>
         <div class="manual-callout tip"><strong>Which manual should you open?</strong>On your phone, the web manual — text fits your screen and search works. The PDF is for the printer: fixed pages, made for paper.</div>
       </div>
@@ -6849,7 +6854,7 @@
         </ul>
         <h3>Also in Settings</h3>
         <ul>
-          <li><strong>Store settings</strong> — collapsible section with your store type, Set store products, and Add store (§5).</li>
+          <li><strong>Store settings</strong> — collapsible section with your store type, the Pallet Store checkbox, Set store products, and Add store (§5).</li>
           <li><strong>Support Center</strong> — Wine Rack Store Support Centre contacts (§14).</li>
           <li><strong>Games &amp; Contests</strong> — its own tab at the top of Settings, beside Support; it is the home of the Wine Trivia rapid fire game (§16).</li>
           <li><strong>Admin</strong> — a button at the very bottom of Settings, visible to Michael and appointed admins (§13).</li>
@@ -6989,7 +6994,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.16</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.17</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -10303,26 +10308,36 @@
     if(ev.key === 'Escape' && !sampleOverlay.hidden) closeSample();
   });
 
-  /* Current Impact Cheat Sheet: both one-page sheets (P8 and P9)
-     are baked in below as data. Which one shows is chosen from the
-     device's local date every time the panel opens, when the page
-     loads, and on a twice-a-minute re-check — so an app left open
-     across midnight into a new period switches to the new period's
-     sheet on its own, and the Settings button label always names
-     the current period. No app update is ever needed for the switch.
-     Only the currently active period is EVER shown: a period that
-     has not started yet or has already ended is never rendered as
-     the cheat sheet, and when no period is running the cheat-sheet
-     entry is hidden from Documents altogether (see
+  /* Current Impact Cheat Sheet: one one-page sheet per impact is
+     baked in below as data, each belonging to a store type (or
+     several, for a combined impact) and a build — fully built or
+     pallet. Which one shows is chosen from the store's type and
+     Pallet Store flag and the device's local date every time the
+     panel opens, when the page loads, and on a twice-a-minute
+     re-check — so an app left open across midnight into a new
+     period switches to the new period's sheet on its own, and the
+     Settings button label always names the current period. No app
+     update is ever needed for the switch. Only the currently active
+     impact is EVER shown: a period that has not started yet or has
+     already ended is never rendered as the cheat sheet, and when no
+     period is running for this store's type and build the
+     cheat-sheet entry is hidden from Documents altogether (see
      updateCheatButton / applyImpactExpiry). The same expiry rule
      hides each Full Impact PDF in Documents once its period ends:
      P8 after Nov 8, 2026 and P9 after Nov 29, 2026 — automatically,
      with no manual removal and no empty entry left behind.
      Reference content only: nothing here reads or writes product
      data, and it never syncs to the shared list. */
+  /* Each sheet belongs to one build of one or more store types:
+     types is the list of store types the impact covers (an impact
+     can be combined across types, for example Sobeys and Foodland
+     sharing one), and build is 'full' (fully built store) or
+     'pallet'. P8/P9 are the Legacy Loblaws fully built impact. */
   var IMPACT_SHEETS = [
     {
       id: 'P8',
+      types: ['Loblaws'],
+      build: 'full',
       start: new Date(2026, 9, 12),
       end: new Date(2026, 10, 8),
       rangeShort: 'Oct 12\u2013Nov 8',
@@ -10370,6 +10385,8 @@
     },
     {
       id: 'P9',
+      types: ['Loblaws'],
+      build: 'full',
       start: new Date(2026, 10, 9),
       end: new Date(2026, 10, 29),
       rangeShort: 'Nov 9\u201329',
@@ -10422,12 +10439,26 @@
      (today past its end date) and a period that has not started
      yet both yield no selection, so their sheets are never shown
      as the "current" cheat sheet. */
+  /* Does this impact sheet belong to this store — its type is one
+     of the sheet's types and its build (pallet or fully built)
+     matches the sheet's build? A sheet with no types listed matches
+     any type, and a sheet with no build listed is a fully built
+     sheet; both are only for backwards safety — every sheet added
+     from here on names both. */
+  function sheetMatches(sheet, type, pallet){
+    if(!sheet) return false;
+    if(sheet.types && sheet.types.indexOf(type) === -1) return false;
+    return ((sheet.build || 'full') === 'pallet') === pallet;
+  }
   function impactSelection(date){
     var now = date || new Date();
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var type = (typeof activeStore !== 'undefined') ? storeTypeOf(activeStore) : 'Loblaws';
+    var pallet = (typeof activeStore !== 'undefined') ? isPalletStore(activeStore) : false;
     var i, s;
     for(i = 0; i < IMPACT_SHEETS.length; i++){
       s = IMPACT_SHEETS[i];
+      if(!sheetMatches(s, type, pallet)) continue;
       if(today >= s.start && today <= s.end) return { sheet: s, status: 'current' };
     }
     return { sheet: null, status: 'none' };
@@ -12634,6 +12665,35 @@
   }catch(e){}
   if(!storeTypes['358']) storeTypes['358'] = 'Loblaws';
   function storeTypeOf(num){ return storeTypes[num] || ''; }
+  /* Pallet flag per store: whether the store is a pallet store
+     (pallet impact) or a fully built store (fully built impact).
+     Default is fully built — the flag is absent/false unless it
+     was ticked. Saved on this device (localStorage,
+     STORE_PALLET_KEY) and, like store_type, pushed to the shared
+     list on the store record (stores.is_pallet, added in the
+     Supabase SQL Editor with:
+       alter table public.stores add column if not exists is_pallet boolean default false;
+     ). While the column is missing the PATCH is refused and the flag
+     simply stays on this device — the same graceful pattern as
+     store_type. A shared record's flag wins over this device's. */
+  var STORE_PALLET_KEY = 'wr-store-pallet';
+  var storePallet = {};
+  try{
+    var savedPallet = JSON.parse(localStorage.getItem(STORE_PALLET_KEY) || '{}');
+    if(savedPallet && typeof savedPallet === 'object'){
+      Object.keys(savedPallet).forEach(function(n){ storePallet[n] = !!savedPallet[n]; });
+    }
+  }catch(e){}
+  function isPalletStore(num){ return !!storePallet[num]; }
+  function persistStorePallet(){
+    try{ localStorage.setItem(STORE_PALLET_KEY, JSON.stringify(storePallet)); }catch(e){}
+  }
+  function setPalletStore(num, on, sync){
+    if(on) storePallet[num] = true; else delete storePallet[num];
+    persistStorePallet();
+    if(sync) sbSyncPallet(num);
+    if(num === activeStore) applyStoreTypeUI();
+  }
   function persistStoreTypes(){
     try{ localStorage.setItem(STORE_TYPES_KEY, JSON.stringify(storeTypes)); }catch(e){}
   }
@@ -12763,18 +12823,21 @@
     saveBtn.addEventListener('click', submit);
     input.addEventListener('keydown', function(ev){ if(ev.key === 'Enter'){ ev.preventDefault(); submit(); } });
   }
-  /* Reflect the current store's type across the UI: the Settings
-     store-type control, and which impact the store sees. Loblaws
-     stores see the Legacy Loblaws impact entries; any other type
-     (or no type yet) sees the not-loaded note in Documents instead,
-     and the impact-derived entries are hidden. */
+  /* Reflect the current store's type and Pallet Store flag across
+     the UI: the Settings store-type control and Pallet Store box,
+     and which impact the store sees. A store sees only the impact
+     for its own type and build — Loblaws fully built stores see
+     the Legacy Loblaws impact entries; any other type or build
+     sees the not-loaded note in Documents instead, and the
+     impact-derived entries are hidden. */
   var settingsStoreType = document.getElementById('settingsStoreType');
   var storeTypeCurrent = document.getElementById('storeTypeCurrent');
   var impactNote = document.getElementById('impactNote');
   function applyStoreTypeUI(){
     var type = storeTypeOf(activeStore);
-    var isLoblaws = (type === 'Loblaws');
-    if(storeTypeCurrent) storeTypeCurrent.textContent = 'Store ' + activeStore + (type ? ' · ' + type : ' · not set');
+    var pallet = isPalletStore(activeStore);
+    var buildLabel = pallet ? 'pallet' : 'fully built';
+    if(storeTypeCurrent) storeTypeCurrent.textContent = 'Store ' + activeStore + (type ? ' · ' + type : ' · not set') + (pallet ? ' · Pallet' : '');
     /* A type this device has not listed yet (e.g. set for this
        store on another device) is learned before it is shown */
     if(type && !findStoreType(type)) registerStoreType(type);
@@ -12784,29 +12847,35 @@
     var p9 = document.getElementById('impactP9Link');
     var cheat = document.getElementById('currentCheatSheet');
     var sample = document.getElementById('sampleTodaySupport');
-    /* Impact expiry, applied together with the Loblaws rule so
-       neither can resurrect the other: a Full Impact PDF shows
-       only for a Loblaws store AND only until its period ends
-       (P8 after Nov 8, 2026; P9 after Nov 29, 2026). The cheat
-       sheet shows only for a Loblaws store AND only while a
-       period is actually running today — never for an expired
-       or upcoming period. */
-    if(p8) p8.hidden = !isLoblaws || impactExpired(impactSheetById('P8'));
-    if(p9) p9.hidden = !isLoblaws || impactExpired(impactSheetById('P9'));
-    if(cheat) cheat.hidden = !isLoblaws || !impactSelection(new Date()).sheet;
-    if(sample) sample.hidden = !isLoblaws;
+    /* Impact expiry, applied together with the type-and-build rule
+       so neither can resurrect the other: a Full Impact PDF shows
+       only for a store whose type AND build match that sheet AND
+       only until its period ends (P8 after Nov 8, 2026; P9 after
+       Nov 29, 2026). The cheat sheet and What's on sample today
+       show only while this store's type and build have a period
+       actually running today — never for an expired or upcoming
+       period, and never for another type or build. */
+    var sel = impactSelection(new Date());
+    if(p8) p8.hidden = !sheetMatches(impactSheetById('P8'), type, pallet) || impactExpired(impactSheetById('P8'));
+    if(p9) p9.hidden = !sheetMatches(impactSheetById('P9'), type, pallet) || impactExpired(impactSheetById('P9'));
+    if(cheat) cheat.hidden = !sel.sheet;
+    if(sample) sample.hidden = !sel.sheet;
     if(impactNote){
-      if(isLoblaws){
+      if(sel.sheet){
         impactNote.hidden = true;
         impactNote.textContent = '';
       } else if(type){
         impactNote.hidden = false;
-        impactNote.textContent = 'The ' + type + ' impact is not loaded yet. It can be added by uploading the ' + type + ' impact document — the P8 / P9 impact shown for Loblaws stores does not apply to ' + type + ' stores.';
+        impactNote.textContent = 'The ' + type + ' (' + buildLabel + ') impact is not loaded yet. It can be added by uploading the ' + type + ' ' + buildLabel + ' impact document — the P8 / P9 impact shown for Loblaws fully built stores does not apply to ' + type + ' ' + buildLabel + ' stores.';
       } else {
         impactNote.hidden = false;
         impactNote.textContent = 'No store type is set for Store ' + activeStore + ' yet, so no impact is shown. Pick the store type under Store settings in Settings to see the right impact for this store.';
       }
     }
+    /* Keep the Pallet Store box in step with the store being viewed,
+       so switching stores never shows the last store's flag */
+    var palletBox = document.getElementById('settingsPalletStore');
+    if(palletBox) palletBox.checked = pallet;
   }
   if(settingsStoreType){
     settingsStoreType.addEventListener('change', function(){
@@ -12816,6 +12885,13 @@
       if(!t || t === ADD_TYPE_VALUE) return;
       setStoreType(activeStore, t, true);
       syncToast('Store ' + activeStore + ' is now a ' + t + ' store — the impact it sees has been updated.', false);
+    });
+  }
+  var palletBox = document.getElementById('settingsPalletStore');
+  if(palletBox){
+    palletBox.addEventListener('change', function(){
+      setPalletStore(activeStore, palletBox.checked, true);
+      syncToast('Store ' + activeStore + (palletBox.checked ? ' is now a pallet store — it follows the pallet impact.' : ' is now a fully built store — it follows the fully built impact.'), false);
     });
   }
   /* Add-a-store-type wiring for all three places a type is
@@ -17465,6 +17541,19 @@
       if(window.console) console.warn('Store type not synced (shared list has no store_type column yet):', err);
     });
   }
+  /* Pallet flag sync, mirroring store_type: a PATCH carrying only
+     is_pallet, so while the shared list has no is_pallet column it
+     is refused and the flag simply stays on this device. The
+     explicit true/false is always written, so unticking a store
+     that was pallet clears the shared flag too. */
+  function sbSyncPallet(num){
+    return sb('stores?store_number=eq.' + encodeURIComponent(num), {
+      method: 'PATCH', prefer: 'return=minimal',
+      body: { is_pallet: !!storePallet[num] }
+    }).then(function(){}, function(err){
+      if(window.console) console.warn('Pallet flag not synced (shared list has no is_pallet column yet):', err);
+    });
+  }
   function sbSyncStoreSave(num, prevNum, idxSet){
     var pids = [];
     idxSet.forEach(function(idx){ if(rowPid[idx]) pids.push(rowPid[idx]); });
@@ -17918,8 +18007,18 @@
         } else if(storeTypes[n]){
           sbSyncStoreType(n);
         }
+        /* Pallet flag: a flag on the shared record wins; where the
+           shared record carries none (no is_pallet column yet),
+           this device's flag is kept and pushed up, so the shared
+           list catches up on its own once its column exists */
+        if(typeof s.is_pallet === 'boolean'){
+          if(s.is_pallet) storePallet[n] = true; else delete storePallet[n];
+        } else if(storePallet[n]){
+          sbSyncPallet(n);
+        }
       });
       persistStoreTypes();
+      persistStorePallet();
       rebuildStoreOptions();
       applyStoreTypeUI();
     }
