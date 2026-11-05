@@ -5515,7 +5515,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.11</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.12</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5528,7 +5528,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.11</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.12</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6490,7 +6490,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.11</span>
+      <span class="manual-pill accent">Version 2026.11.04.12</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6907,7 +6907,7 @@
         </ul>
         <p>The questions are <strong>general wine knowledge</strong> — grapes, regions, styles, serving and wine terms from all over the wine world. They are not about any one store and not drawn from any store&rsquo;s list. The question bank is far bigger than anyone can finish in a minute, the questions are shuffled every run with no repeats, so the timer always ends the game — you can never run out of questions. Your score for a single game lives only in that session — the shared exception is the High Score board below.</p>
         <h3>High Score board</h3>
-        <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. The board shows the <strong>top 3 players and what they scored</strong>, best first, and it lives <strong>only on the game&rsquo;s own start page</strong>, under the Start button — open Wine Trivia to see who you have to beat before you play. There is no separate High Score button.</p>
+        <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. The board shows the <strong>top 3 players and what they scored</strong>, best first, and it lives <strong>only on the game&rsquo;s own start page</strong>, under the Start button — open Wine Trivia to see who you have to beat before you play. There is no separate High Score button. <strong>One spot per player:</strong> each player appears at most once, with their best score — a new score only replaces your own spot if it beats your best, and a lower score leaves your best standing.</p>
         <ul>
           <li>When a game ends, if your score makes the <strong>top 3</strong>, the end screen congratulates you and tells you the <strong>place you attained</strong> — for example, &ldquo;Congratulations! You made #3 on the High Score board!&rdquo;</li>
           <li>Enter your name and tap <span class="manual-ui">Save my score</span> to put it on the board. If you&rsquo;re signed in, the name field is <strong>prefilled with your display name</strong> — you can change it before saving; if you&rsquo;re not signed in, just type a name. No sign-in is needed to be on the board.</li>
@@ -6921,7 +6921,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.11</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.12</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -11665,24 +11665,42 @@
   var triviaHsBoardEl = document.getElementById('triviaHsBoard');
   var triviaHsNoteEl = document.getElementById('triviaHsNote');
 
-  /* Fetch the current top 3, best first (ties: earliest first).
-     Resolves with the rows array on success, or null when the
-     board could not be read — above all when the
+  /* One spot per player: a player name (case-insensitive, trimmed)
+     appears at most once on the board, with their best score — a
+     player can never hold #1, #2 and #3 at the same time. The
+     fetch keeps the first row per name from the score-descending
+     list (best score, earliest first on ties), then takes the
+     top 3 distinct players. */
+  function hsPlayerKey(name){ return String(name || '').trim().toLowerCase(); }
+  function hsDedupeBoard(list){
+    var seen = {}, out = [];
+    (list || []).forEach(function(r){
+      var k = hsPlayerKey(r.player_name);
+      if(!seen[k]){ seen[k] = true; out.push(r); }
+    });
+    return out.slice(0, 3);
+  }
+  /* Fetch the current top 3 distinct players, best first (ties:
+     earliest first). Resolves with the rows array on success, or
+     null when the board could not be read — above all when the
      trivia_high_scores table does not exist yet. Never rejects,
      so callers can always render a graceful state. */
   function hsFetchTop3(){
-    return sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc&limit=3').then(function(list){
-      return Array.isArray(list) ? list : [];
+    return sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc').then(function(list){
+      return hsDedupeBoard(Array.isArray(list) ? list : []);
     }, function(err){
       if(window.console) console.warn('Trivia high scores not loaded (the trivia_high_scores table may not exist yet):', err);
       return null;
     });
   }
   /* The place a new score attains on a board shaped like rows
-     (already sorted best first): 1 + how many scores on the
-     board beat it. A score makes the top 3 when the board is
-     not full yet, or when it beats the current #3 — tying #3 is
-     not enough, because the earlier #3 was set first. */
+     (distinct players, already sorted best first): 1 + how many
+     scores on the board beat it. A score makes the top 3 when
+     the board is not full yet, or when it beats the current #3
+     — tying #3 is not enough, because the earlier #3 was set
+     first. The save step below adds the one-spot rule on top:
+     a score that does not beat the player's own best never
+     replaces it. */
   function hsPlaceFor(score, rows){
     var place = 1;
     for(var i = 0; i < rows.length; i++){ if(rows[i].score > score) place++; }
@@ -11800,6 +11818,11 @@
         return;
       }
       if(!hsQualifies(finalScore, rows)) return;
+      if(authUser){
+        var own = null;
+        for(var oi = 0; oi < rows.length; oi++){ if(hsPlayerKey(rows[oi].player_name) === hsPlayerKey(authDisplayName())){ own = rows[oi]; break; } }
+        if(own && own.score >= finalScore) return;
+      }
       var place = hsPlaceFor(finalScore, rows);
       triviaHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
       triviaHsNameEl.value = authUser ? authDisplayName() : '';
@@ -11825,10 +11848,42 @@
     triviaHsSaveEl.disabled = true;
     triviaHsNameEl.disabled = true;
     hsShowMsg('Saving your score…');
-    sb(HS_TABLE, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(),
-      body: { player_name: name, score: trivia.score } }).then(function(created){
+    /* One spot per player: look up this name's existing rows first
+       (the board fetch above only returns the top 3, so a player
+       below the board would be missed). A score that does not
+       beat the player's own best is not saved at all — the board
+       keeps their best. A score that beats it updates their best
+       row in place and drops any older lower rows for that name,
+       so the player still holds exactly one spot. */
+    sb(HS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc').then(function(all){
+      var mine = (Array.isArray(all) ? all : []).filter(function(r){ return hsPlayerKey(r.player_name) === hsPlayerKey(name); });
+      if(mine.length && mine[0].score >= trivia.score){
+        triviaHsSaveEl.disabled = false;
+        triviaHsNameEl.disabled = false;
+        hsShowMsg('That score doesn\u2019t beat your best of ' + mine[0].score + ' — the board keeps your best, one spot per player.');
+        return null;
+      }
+      var ops = [];
+      if(mine.length){
+        var bestId = mine[0].id;
+        ops.push(sb(HS_TABLE + '?id=eq.' + encodeURIComponent(bestId), { method: 'PATCH', prefer: 'return=representation', token: sbAuthToken(),
+          body: { score: trivia.score, created_at: new Date().toISOString() } }));
+        mine.slice(1).forEach(function(r){
+          ops.push(sb(HS_TABLE + '?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }));
+        });
+        return Promise.all(ops).then(function(done){
+          var updated = done[0];
+          return (updated && updated.length) ? updated[0] : { id: bestId };
+        });
+      }
+      return sb(HS_TABLE, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(),
+        body: { player_name: name, score: trivia.score } }).then(function(created){
+        return (created && created.length) ? created[0] : null;
+      });
+    }).then(function(saved){
+      if(!saved) return;
       hsSavedThisGame = true;
-      var savedId = (created && created.length) ? created[0].id : null;
+      var savedId = saved.id;
       triviaHsFormEl.hidden = true;
       hsShowMsg('Saved — you\u2019re on the board!');
       return hsFetchTop3().then(function(rows){
