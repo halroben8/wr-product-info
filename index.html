@@ -5533,7 +5533,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.20</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.21</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5545,7 +5545,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.20</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.21</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5736,11 +5736,11 @@
   </div>
 </div>
 
-<div class="editor-overlay" id="pairingOverlay" hidden>
+<div class="editor-overlay" id="pairingQuizOverlay" hidden>
   <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="pairingTitle">
     <div class="editor-head">
       <h2 id="pairingTitle">Pairing Quiz</h2>
-      <button type="button" class="editor-x" id="pairingClose" aria-label="Close pairing quiz">&times;</button>
+      <button type="button" class="editor-x" id="pairingQuizClose" aria-label="Close pairing quiz">&times;</button>
     </div>
     <div class="trivia-scoreboard" aria-label="Scoreboard">
       <div class="trivia-sb-cell">
@@ -5809,7 +5809,7 @@
     </div>
 
     <div class="editor-actions">
-      <button type="button" class="btn-ghost" id="pairingCancel">Close &mdash; back to the list</button>
+      <button type="button" class="btn-ghost" id="pairingQuizCancel">Close &mdash; back to the list</button>
     </div>
   </div>
 </div>
@@ -6638,7 +6638,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.20</span>
+      <span class="manual-pill accent">Version 2026.11.04.21</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -7076,7 +7076,7 @@
         <p>Typing <span class="manual-ui">cvqa</span> in the main search lists the CVQA bottles.</p>
         <p>The start page also has an <span class="manual-ui">Include CVQA</span> checkbox, ticked by default. Untick it before starting and no CVQA bottle appears in that game — neither as the answer nor as a wrong choice. Play again keeps the setting you last chose.</p>
         <h3>Pairing Quiz</h3>
-        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Pairing Quiz</span>. Each round shows a <strong>dish</strong> and <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer, so take time to think. Every answer explains itself: get it right and the explanation says why that wine pairs best; get it wrong and it says why the wine you picked was wrong and why the right one was right. Right answers in a row build a <strong>hot streak</strong>, shown while you play &mdash; one wrong answer resets it to zero, and your best streak of the session is shown at the end. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only), like Wine Trivia&rsquo;s, and each entry shows the best streak of that run too. The board is stored in the shared list (the <span class="manual-ui">pairing_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way. A question only plays in a store that carries all four of its wines, so the rounds differ from store to store.</p>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Pairing Quiz</span>. Each round shows a <strong>dish</strong> and <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer, so take time to think. Every answer explains itself: get it right and the explanation says why that wine pairs best; get it wrong and it says why the wine you picked was wrong and why the right one was right. Right answers in a row build a <strong>hot streak</strong>, shown while you play &mdash; one wrong answer resets it to zero, and your best streak of the session is shown at the end. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only), like Wine Trivia&rsquo;s, and each entry shows the best streak of that run too. The board is stored in the shared list (the <span class="manual-ui">pairing_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way. A question only plays in a store that carries all four of its wines, so the rounds differ from store to store. (Fixed in Version 2026.11.04.21: tapping Pairing Quiz used to open the Food pairing finder instead of the quiz &mdash; the two shared a panel name. They now open separately.)</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -7084,7 +7084,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.20</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.21</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -12844,7 +12844,7 @@
     {"dish": "lemon tart", "options": [{"b": "Jackson-Triggs", "p": "Reserve Sparkling Moscato", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Pinot Noir", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Proprietors' Selection Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "The wine must be sweeter than the dessert — Sparkling Moscato’s gentle sweetness and bubbles match the tart’s lemon without turning sour.", "whyNot": [null, "Dry and tart — next to lemon it would taste sharp and sour.", "Too light and dry — the tart’s sugar would make it taste thin and bitter.", "Bone-dry — the lemon would strip it bare."]},
     {"dish": "lamb chops with rosemary", "options": [{"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "BASK", "p": "Sauvignon Blanc", "s": "750mL"}, {"b": "Inniskillin", "p": "Riesling Pinot Grigio", "s": "750mL"}], "correct": 0, "why": "Cab Franc’s herbal, green-pepper edge loves rosemary, and its tannins handle the lamb’s richness — the wine and the herb taste made for each other.", "whyNot": [null, "Too light — the lamb would overwhelm it.", "Crisp and lean — it has nothing to match the lamb’s fat.", "Too delicate and slightly sweet — it would clash with the rosemary."]}
   ];
-  var pairingOverlay = document.getElementById('pairingOverlay');
+  var pairingQuizOverlay = document.getElementById('pairingQuizOverlay');
   var pairingRoundEl = document.getElementById('pairingRound');
   var pairingScoreEl = document.getElementById('pairingScore');
   var pairingStreakEl = document.getElementById('pairingStreak');
@@ -12907,7 +12907,7 @@
   }
   function pqUpdateStreak(){ pairingStreakEl.textContent = String(pq.streak); }
   function openPairing(fromEl){
-    if(!pairingOverlay) return;
+    if(!pairingQuizOverlay) return;
     pq.returnFocus = fromEl || null;
     pq.playing = false;
     pq.locked = false;
@@ -12919,14 +12919,14 @@
     pairingStartNoteEl.hidden = true;
     pqShowScreen('start');
     pqHsRenderStartBoard();
-    pairingOverlay.hidden = false;
+    pairingQuizOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     document.getElementById('pairingStartBtn').focus();
   }
   function closePairing(){
-    if(!pairingOverlay || pairingOverlay.hidden) return;
+    if(!pairingQuizOverlay || pairingQuizOverlay.hidden) return;
     pq.playing = false;
-    pairingOverlay.hidden = true;
+    pairingQuizOverlay.hidden = true;
     if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && cheatOverlay.hidden && sampleOverlay.hidden) document.body.style.overflow = '';
     var backTo = pq.returnFocus || document.getElementById('pairingQuizGames');
     pq.returnFocus = null;
@@ -13213,16 +13213,16 @@
   document.getElementById('pairingStartBtn').addEventListener('click', pqStart);
   document.getElementById('pairingAgainBtn').addEventListener('click', pqStart);
   document.getElementById('pairingNextBtn').addEventListener('click', pqNext);
-  document.getElementById('pairingClose').addEventListener('click', closePairing);
-  document.getElementById('pairingCancel').addEventListener('click', closePairing);
+  document.getElementById('pairingQuizClose').addEventListener('click', closePairing);
+  document.getElementById('pairingQuizCancel').addEventListener('click', closePairing);
   document.getElementById('pairingDoneBtn').addEventListener('click', closePairing);
   if(pairingHsFormEl) pairingHsFormEl.addEventListener('submit', function(ev){
     ev.preventDefault();
     pqHsSaveScore();
   });
-  pairingOverlay.addEventListener('click', function(ev){ if(ev.target === pairingOverlay) closePairing(); });
+  pairingQuizOverlay.addEventListener('click', function(ev){ if(ev.target === pairingQuizOverlay) closePairing(); });
   document.addEventListener('keydown', function(ev){
-    if(ev.key === 'Escape' && !pairingOverlay.hidden) closePairing();
+    if(ev.key === 'Escape' && !pairingQuizOverlay.hidden) closePairing();
   });
 
 
