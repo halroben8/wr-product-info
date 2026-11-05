@@ -5533,7 +5533,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.18</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.19</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5545,7 +5545,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.18</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.19</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5560,10 +5560,11 @@
       <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
         <button type="button" class="settings-action" id="wineTriviaGames"><span>Wine Trivia &mdash; 1-minute rapid fire<span class="sa-sub">60 seconds on the clock, general wine questions in a 2&times;2 grid &mdash; right answers ding and move on, wrong answers buzz and cost you 3 seconds. How many can you get right? No sign-in needed</span></span></button>
         <button type="button" class="settings-action" id="guessWineGames"><span>Guess the Wine &mdash; from its tasting notes<span class="sa-sub">Read the tasting notes and pick the right bottle from four &mdash; 10 rounds from this store&rsquo;s own wines. No sign-in needed</span></span></button>
+        <button type="button" class="settings-action" id="pairingQuizGames"><span>Pairing Quiz &mdash; which wine with this dish?<span class="sa-sub">A dish is shown with four of this store&rsquo;s wines &mdash; pick the best pairing. 10 rounds, every answer explains why, hot streaks and a shared top-3 scoreboard. No sign-in needed</span></span></button>
         <button type="button" class="settings-action" id="reportContestResults" aria-describedby="contestReportSoonMsg"><span>Winerack Contests<span class="sa-sub">Report how a Winerack Contest went &mdash; not open yet</span></span><span class="sa-ext" aria-hidden="true">Coming soon</span></button>
         <p class="contest-soon-msg" id="contestReportSoonMsg" role="status" hidden><strong>Coming soon</strong> &mdash; reporting results of Winerack Contests isn&rsquo;t available yet. There&rsquo;s nothing to submit for now.</p>
       </div>
-      <p class="settings-note" style="margin-top:0">Games &amp; Contests is where Grapevine&rsquo;s games live &mdash; the rapid fire wine trivia is the first one here.</p>
+      <p class="settings-note" style="margin-top:0">Games &amp; Contests is where Grapevine&rsquo;s games live &mdash; Wine Trivia, Guess the Wine and the Pairing Quiz.</p>
     </div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="settingsCancel">Close</button>
@@ -5731,6 +5732,84 @@
 
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="guessCancel">Close &mdash; back to the list</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="pairingOverlay" hidden>
+  <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="pairingTitle">
+    <div class="editor-head">
+      <h2 id="pairingTitle">Pairing Quiz</h2>
+      <button type="button" class="editor-x" id="pairingClose" aria-label="Close pairing quiz">&times;</button>
+    </div>
+    <div class="trivia-scoreboard" aria-label="Scoreboard">
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Round</span>
+        <span class="trivia-sb-num" id="pairingRound" style="font-size:32px">&mdash;</span>
+      </div>
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Score &mdash; right so far</span>
+        <span class="trivia-sb-num" id="pairingScore" style="font-size:32px">0</span>
+      </div>
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Hot streak</span>
+        <span class="trivia-sb-num" id="pairingStreak" style="font-size:32px">0</span>
+      </div>
+    </div>
+
+    <div id="pairingStart">
+      <p class="trivia-intro">A dish is shown with <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer. Every answer explains why it&rsquo;s right or wrong, so you learn the pairing as you play. Get answers right in a row and your <strong>hot streak</strong> grows &mdash; one wrong answer resets it to zero.</p>
+      <button type="button" class="btn-save trivia-start-btn" id="pairingStartBtn">Start &mdash; 10 rounds</button>
+      <div class="hs-board-wrap" id="pairingStartHsWrap">
+        <p class="hs-board-head">High Score &mdash; top 3</p>
+        <ol class="hs-list" id="pairingStartHsBoard" hidden></ol>
+        <p class="hs-note" id="pairingStartHsNote" role="status">Loading the board&hellip;</p>
+      </div>
+      <p class="hs-note" id="pairingStartNote" role="status" hidden></p>
+    </div>
+
+    <div id="pairingPlay" hidden>
+      <p class="trivia-qcount" id="pairingQCount">Round 1 of 10</p>
+      <p class="trivia-question" id="pairingDish"></p>
+      <div class="trivia-answers" id="pairingAnswers"></div>
+      <p class="trivia-feedback" id="pairingFeedback" aria-live="polite"></p>
+      <p class="guess-notes" id="pairingExplain" hidden></p>
+      <div class="trivia-end-actions" id="pairingNextWrap" hidden>
+        <button type="button" class="btn-save" id="pairingNextBtn">Next</button>
+      </div>
+    </div>
+
+    <div id="pairingEnd" hidden>
+      <div class="trivia-end">
+        <p class="trivia-end-label">Game over!</p>
+        <span class="trivia-final-num" id="pairingFinalScore">0</span>
+        <p class="trivia-final-line" id="pairingFinalLine">correct out of 10</p>
+        <p class="trivia-final-detail" id="pairingFinalDetail"></p>
+        <p class="trivia-final-detail" id="pairingFinalStreak"></p>
+        <div class="hs-congrats" id="pairingHsCongrats" hidden>
+          <p class="hs-congrats-title" id="pairingHsCongratsTitle"></p>
+          <p class="hs-congrats-sub">Add your name to the shared High Score board &mdash; everyone who plays sees the same top 3.</p>
+          <form class="hs-form" id="pairingHsForm">
+            <label class="sr-only" for="pairingHsName">Your name for the High Score board</label>
+            <input id="pairingHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
+            <button type="submit" class="btn-save" id="pairingHsSave">Save my score</button>
+          </form>
+          <p class="hs-msg" id="pairingHsMsg" role="status" hidden></p>
+          <div class="hs-board-wrap" id="pairingHsBoardWrap" hidden>
+            <p class="hs-board-head">High Score board &mdash; top 3</p>
+            <ol class="hs-list" id="pairingHsBoard"></ol>
+          </div>
+        </div>
+        <p class="hs-note" id="pairingHsNote" role="status" hidden style="margin:16px 0;text-align:left"></p>
+        <div class="trivia-end-actions">
+          <button type="button" class="btn-save" id="pairingAgainBtn">Play again</button>
+          <button type="button" class="btn-ghost" id="pairingDoneBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="pairingCancel">Close &mdash; back to the list</button>
     </div>
   </div>
 </div>
@@ -6559,7 +6638,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.18</span>
+      <span class="manual-pill accent">Version 2026.11.04.19</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6865,7 +6944,7 @@
         <ul>
           <li><strong>Store settings</strong> — collapsible section with your store type, the Pallet Store checkbox, Set store products, and Add store (§5).</li>
           <li><strong>Support Center</strong> — Wine Rack Store Support Centre contacts (§14).</li>
-          <li><strong>Games &amp; Contests</strong> — its own tab at the top of Settings, beside Support; it is the home of the Wine Trivia rapid fire game (§16).</li>
+          <li><strong>Games &amp; Contests</strong> — its own tab at the top of Settings, beside Support; it is the home of Grapevine&rsquo;s games (§16).</li>
           <li><strong>Admin</strong> — a button at the very bottom of Settings, visible to Michael and appointed admins (§13).</li>
           <li>The footer line reads <em>“Created and maintained by Michael Benia WR 358.”</em></li>
         </ul>
@@ -6967,10 +7046,10 @@
     </details>
 
     <!-- 16 -->
-    <details class="manual-sec" id="manual-games" data-title="Games and Contests — Wine Trivia rapid fire">
-      <summary><span class="manual-sec-num">16</span><span class="manual-sec-title"><strong>Games &amp; Contests — Wine Trivia</strong><small>The 1-minute rapid fire game, in its own Settings tab</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+    <details class="manual-sec" id="manual-games" data-title="Games and Contests — Wine Trivia, Guess the Wine &amp; Pairing Quiz">
+      <summary><span class="manual-sec-num">16</span><span class="manual-sec-title"><strong>Games &amp; Contests — Wine Trivia, Guess the Wine &amp; Pairing Quiz</strong><small>The games, in their own Settings tab</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
-        <p>Settings has a fourth tab, <span class="manual-ui">Games &amp; Contests</span>, beside Settings, Documents and Support. It is the home for Grapevine&rsquo;s games — <strong>Wine Trivia — 1-minute rapid fire</strong> and <strong>Guess the Wine</strong>. There is no game button in the header and none in Support; the games live in Games &amp; Contests only. No sign-in is needed to play either game.</p>
+        <p>Settings has a fourth tab, <span class="manual-ui">Games &amp; Contests</span>, beside Settings, Documents and Support. It is the home for Grapevine&rsquo;s games — <strong>Wine Trivia — 1-minute rapid fire</strong>, <strong>Guess the Wine</strong> and the <strong>Pairing Quiz</strong>. There is no game button in the header and none in Support; the games live in Games &amp; Contests only. No sign-in is needed to play any of them.</p>
         <h3>How to play</h3>
         <ol>
           <li>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Wine Trivia — 1-minute rapid fire</span>. The game opens as a pop-up.</li>
@@ -6996,6 +7075,8 @@
         <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles</strong> are in the game only while the <span class="manual-ui">Include CVQA</span> box on the start page is ticked — it is ticked by default. Untick it to leave them out entirely, because not every store carries them (see Select CVQA in Admin above). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
         <p>Typing <span class="manual-ui">cvqa</span> in the main search lists the CVQA bottles.</p>
         <p>The start page also has an <span class="manual-ui">Include CVQA</span> checkbox, ticked by default. Untick it before starting and no CVQA bottle appears in that game — neither as the answer nor as a wrong choice. Play again keeps the setting you last chose.</p>
+        <h3>Pairing Quiz</h3>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Pairing Quiz</span>. Each round shows a <strong>dish</strong> and <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer, so take time to think. Every answer explains itself: get it right and the explanation says why that wine pairs best; get it wrong and it says why the wine you picked was wrong and why the right one was right. Right answers in a row build a <strong>hot streak</strong>, shown while you play &mdash; one wrong answer resets it to zero, and your best streak of the session is shown at the end. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only), like Wine Trivia&rsquo;s, and each entry shows the best streak of that run too. The board is stored in the shared list (the <span class="manual-ui">pairing_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way. A question only plays in a store that carries all four of its wines, so the rounds differ from store to store.</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -7003,7 +7084,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.18</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.19</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -12710,6 +12791,440 @@
   guessOverlay.addEventListener('click', function(ev){ if(ev.target === guessOverlay) closeGuess(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !guessOverlay.hidden) closeGuess();
+  });
+
+
+  /* ---------- Pairing Quiz — which wine with this dish? ----------
+     A third game in Games & Contests, beside Wine Trivia and Guess
+     the Wine. Each round shows a dish and four of this store's own
+     wines (from the question bank below, resolved against the
+     products the store being viewed actually carries — a question
+     whose four wines are not all carried is skipped for that
+     store, so the rounds differ from store to store). 10 rounds,
+     no timer. Correct = green + ding, and the explanation says why
+     that wine pairs best; wrong = red + buzzer, the right bottle
+     shown in green, and the explanation says why the wine picked
+     was wrong and why the right one was right. A "Next" button
+     moves on, so the explanation can be read properly. Hot streak:
+     consecutive right answers in the current game — one wrong
+     answer resets it to zero; the best streak of the session is
+     shown at the end and saved with the board entry. The shared
+     top-3 board (one spot per player, best score only, like
+     trivia) lives in the pairing_high_scores table; until that
+     table has been created the board shows a "coming soon" note
+     and the game plays exactly the same either way. SQL
+     (Supabase SQL Editor, same open policies as the other shared
+     tables):
+       create table if not exists public.pairing_high_scores (
+         id bigint generated always as identity primary key,
+         player_name text not null,
+         score integer not null,
+         best_streak integer not null default 0,
+         created_at timestamptz not null default now());
+     No sign-in needed to play. */
+  var PAIRING_ROUNDS = 10;
+  var PAIRING_TABLE = 'pairing_high_scores';
+  var PAIRING_QUESTIONS = [
+    {"dish": "grilled ribeye steak with peppercorn sauce", "options": [{"b": "Jackson-Triggs", "p": "Reserve Cabernet Franc-Cabernet Sauvignon", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Megalomaniac", "p": "Homegrown Riesling", "s": "750mL"}, {"b": "Saintly", "p": "Saintly Fracette", "s": "750mL"}], "correct": 0, "why": "A full-bodied red with firm tannins stands up to the steak’s fat and char — the tannins soften against the meat, and the wine’s dark fruit and spice echo the peppercorn.", "whyNot": [null, "Too light and sharp — the steak’s fat and char would flatten it.", "Its sweetness and aromatics would clash with the savoury, peppery steak.", "Too light and delicate — the steak would overwhelm it completely."]},
+    {"dish": "oysters on the half shell", "options": [{"b": "Sandbanks", "p": "Sparkling Secco", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Inniskillin", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Inniskillin", "p": "Discovery Series P3", "s": "750mL"}], "correct": 0, "why": "Crisp acidity and fine bubbles cut through the oyster’s brine and richness without overwhelming its delicate flavour.", "whyNot": [null, "Tannic reds turn metallic with raw shellfish — the worst possible match.", "A soft, plummy red has nothing to cut the oyster’s salt and would taste flat beside it.", "Too rich and full — it would bury the oyster’s delicate flavour."]},
+    {"dish": "spicy Thai green curry", "options": [{"b": "Megalomaniac", "p": "Homegrown Riesling", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Cabernet Franc-Cabernet Sauvignon", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "A touch of sweetness tames chilli heat, and the Riesling’s aromatics match the curry’s herbs — dry, tannic wines only make the burn worse.", "whyNot": [null, "Tannin plus chilli heat tastes bitter and harsh — the spice would turn the wine metallic.", "Same problem: tannin and heat fight each other, and the wine’s structure gets lost.", "Bone-dry and sharp — it has no sweetness to cool the heat, so the chilli wins."]},
+    {"dish": "creamy garlic pasta (alfredo)", "options": [{"b": "Bù", "p": "Chardonnay", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Sandbanks", "p": "Baco Noir", "s": "750mL"}, {"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}], "correct": 0, "why": "A rich, creamy Chardonnay mirrors the sauce’s texture, and its acidity cuts through the richness so the dish doesn’t feel heavy.", "whyNot": [null, "A soft red has no acidity to lift the cream — the dish would taste flat and heavy.", "A rustic red would fight the garlic cream instead of matching it.", "Far too sweet — dessert wine with a savoury cream sauce would taste cloying."]},
+    {"dish": "tomato bruschetta / margherita pizza", "options": [{"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}, {"b": "Bù", "p": "Chardonnay", "s": "750mL"}, {"b": "Megalomaniac", "p": "Homegrown Riesling", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Sparkling Moscato", "s": "750mL"}], "correct": 0, "why": "Tomato’s acidity needs a wine with acidity of its own — Cab Franc’s herbal edge loves tomato and basil, and its tannins are soft enough not to fight the cheese.", "whyNot": [null, "Too rich and oaky — it would smother the fresh tomato and basil.", "Its sweetness would clash with the tomato’s sharp acidity.", "Sweet and fizzy — it would taste like dessert next to a savoury pizza."]},
+    {"dish": "grilled salmon", "options": [{"b": "Bù", "p": "Pinot Noir", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Vintage Ink", "p": "Tequila Barrel Aged Sauvignon Blanc", "s": "750mL"}, {"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}], "correct": 0, "why": "Pinot Noir’s light body and earthy fruit complement salmon without overpowering it, and its acidity handles the fish’s richness.", "whyNot": [null, "Too tannic and heavy — it would overwhelm the salmon and taste bitter with the fish oils.", "Its bold, oaky barrel character would steamroll the salmon’s delicate flavour.", "Dessert-sweet with a savoury fish — the sugar would clash badly."]},
+    {"dish": "roast turkey dinner", "options": [{"b": "Inniskillin", "p": "Discovery Series Gamay Noir", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Bù", "p": "Chardonnay", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "Gamay’s bright fruit and soft tannins work with both the white and dark meat, the stuffing and the cranberry — it’s the all-rounder a turkey dinner needs.", "whyNot": [null, "Too big and tannic for turkey’s mild meat — it would dominate the plate.", "Too rich and oaky — it would fight the cranberry and stuffing.", "Too sharp and lean — it has nothing to match the roast’s richness."]},
+    {"dish": "dark chocolate dessert", "options": [{"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Pinot Noir", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Proprietors' Selection Pinot Grigio", "s": "750mL"}], "correct": 0, "why": "Dessert needs a wine sweeter than the dish — the Icewine’s honeyed intensity matches the chocolate instead of turning sour against it.", "whyNot": [null, "Dry and tart — next to dark chocolate it would taste sour and thin.", "Too light and dry — the chocolate would make it taste bitter and empty.", "Light, crisp and dry — it would disappear against the chocolate."]},
+    {"dish": "soft goat cheese (chèvre)", "options": [{"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}], "correct": 0, "why": "Sauvignon Blanc’s crisp acidity and citrus cut through the cheese’s tang and creaminess — the classic goat-cheese pairing.", "whyNot": [null, "Tannin and goat cheese clash — the wine would taste hard and the cheese chalky.", "Too soft and plummy — it has no acidity to cut the cheese’s tang.", "Its herbal tannins would fight the cheese instead of lifting it."]},
+    {"dish": "aged cheddar", "options": [{"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Megalomaniac", "p": "Homegrown Riesling", "s": "750mL"}, {"b": "Sandbanks", "p": "Sparkling Secco", "s": "750mL"}, {"b": "Saintly", "p": "Saintly Fracette", "s": "750mL"}], "correct": 0, "why": "A medium-bodied red with soft tannins stands up to aged cheddar’s sharpness without fighting it — the plum fruit rounds out the cheese’s bite.", "whyNot": [null, "Too sweet and aromatic — the cheddar’s sharpness would make it taste cloying.", "Too light and bubbly — it would be flattened by the cheddar’s intensity.", "Too delicate — the aged cheddar would overwhelm it."]},
+    {"dish": "BBQ ribs with smoky sauce", "options": [{"b": "Bodacious", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Inniskillin", "p": "Riesling Pinot Grigio", "s": "750mL"}, {"b": "BASK", "p": "Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "Bold, fruit-forward reds with a touch of spice match smoky BBQ sauce — a light white would disappear against the smoke and sugar.", "whyNot": [null, "Too light and tart — the smoky sauce would bury it.", "Too delicate — the BBQ sauce would overwhelm it.", "Crisp and lean — it has nothing to stand up to smoke and sweet sauce."]},
+    {"dish": "sushi", "options": [{"b": "Jackson-Triggs", "p": "Reserve Sparkling", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}], "correct": 0, "why": "Sparkling wine’s acidity and bubbles cut through raw fish’s richness and reset the palate between bites — and it never fights the wasabi.", "whyNot": [null, "Tannin turns metallic with raw fish — the worst match on the table.", "Too soft and heavy — it would dull the sushi’s clean flavours.", "Its herbal tannins would clash with the raw fish and soy."]},
+    {"dish": "roast chicken with herbs", "options": [{"b": "Creekside", "p": "Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}], "correct": 0, "why": "Sauvignon Blanc’s herbal, citrus character mirrors the herbs, and its acidity keeps the roast chicken lively.", "whyNot": [null, "Too big for chicken’s mild meat — it would dominate the plate.", "Dessert wine with roast chicken — the sweetness would clash with the savoury herbs.", "Too soft and heavy — it would make the chicken taste flat."]},
+    {"dish": "mushroom risotto", "options": [{"b": "Bù", "p": "Pinot Noir", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Vintage Ink", "p": "Tequila Barrel Aged Sauvignon Blanc", "s": "750mL"}, {"b": "Megalomaniac", "p": "Homegrown Riesling", "s": "750mL"}], "correct": 0, "why": "Pinot Noir’s earthy, mushroom-friendly character and light body match the risotto’s savoury depth — the wine tastes like it grew in the same forest.", "whyNot": [null, "Too sharp and citrusy — it would cut against the risotto’s earthy creaminess.", "Its bold barrel character would steamroll the mushrooms.", "Too sweet and floral — it would clash with the savoury, earthy dish."]},
+    {"dish": "butter chicken (creamy, mildly spiced)", "options": [{"b": "Inniskillin", "p": "Riesling Pinot Grigio", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Cabernet Franc-Cabernet Sauvignon", "s": "750mL"}, {"b": "Sandbanks", "p": "Baco Noir", "s": "750mL"}], "correct": 0, "why": "Aromatic, slightly off-dry whites cool the spice and match the creamy sauce — big tannic reds would turn bitter with the heat.", "whyNot": [null, "Tannin plus spice tastes bitter — the heat would turn the wine harsh.", "Same clash: tannin and chilli fight, and the cream gets lost.", "Too rustic and tannic — it would fight the creamy, spiced sauce."]},
+    {"dish": "Caesar salad", "options": [{"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Chardonnay", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}], "correct": 0, "why": "Crisp acidity cuts through the creamy dressing and parmesan, and the citrus lifts the anchovy — the salad tastes brighter with every sip.", "whyNot": [null, "Too rich and oaky — it would double down on the cream instead of cutting it.", "Too soft — it has no acidity to lift the dressing.", "Dessert-sweet with a savoury salad — it would taste cloying."]},
+    {"dish": "charcuterie board", "options": [{"b": "Inniskillin", "p": "Discovery Series Gamay Noir", "s": "750mL"}, {"b": "Inniskillin", "p": "Icewine Vidal Icewine", "s": "375mL"}, {"b": "Bù", "p": "Chardonnay", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "Gamay’s bright fruit and soft tannins work with cured meats, pâtés and cheeses alike — the board’s all-rounder.", "whyNot": [null, "Far too sweet for cured meats — it would taste like dessert.", "Too rich for the board’s salt and fat — it would feel heavy fast.", "Too sharp and lean — it would fight the cured meats’ salt."]},
+    {"dish": "fish and chips", "options": [{"b": "Jackson-Triggs", "p": "Proprietors' Selection Pinot Grigio", "s": "750mL"}, {"b": "Bù", "p": "Cabernet Sauvignon", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Reserve Merlot", "s": "750mL"}, {"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}], "correct": 0, "why": "A crisp, light white cuts through the batter’s grease, and its citrus notes love lemon and malt vinegar.", "whyNot": [null, "Tannin and fried fish clash — the wine would taste bitter.", "Too soft and heavy — it would sit on top of the grease instead of cutting it.", "Its herbal tannins would fight the fried batter."]},
+    {"dish": "lemon tart", "options": [{"b": "Jackson-Triggs", "p": "Reserve Sparkling Moscato", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "Bù", "p": "Pinot Noir", "s": "750mL"}, {"b": "Jackson-Triggs", "p": "Proprietors' Selection Sauvignon Blanc", "s": "750mL"}], "correct": 0, "why": "The wine must be sweeter than the dessert — Sparkling Moscato’s gentle sweetness and bubbles match the tart’s lemon without turning sour.", "whyNot": [null, "Dry and tart — next to lemon it would taste sharp and sour.", "Too light and dry — the tart’s sugar would make it taste thin and bitter.", "Bone-dry — the lemon would strip it bare."]},
+    {"dish": "lamb chops with rosemary", "options": [{"b": "Inniskillin", "p": "Reserve Cabernet Franc", "s": "750mL"}, {"b": "Saintly", "p": "The Good Sauvignon Blanc", "s": "750mL"}, {"b": "BASK", "p": "Sauvignon Blanc", "s": "750mL"}, {"b": "Inniskillin", "p": "Riesling Pinot Grigio", "s": "750mL"}], "correct": 0, "why": "Cab Franc’s herbal, green-pepper edge loves rosemary, and its tannins handle the lamb’s richness — the wine and the herb taste made for each other.", "whyNot": [null, "Too light — the lamb would overwhelm it.", "Crisp and lean — it has nothing to match the lamb’s fat.", "Too delicate and slightly sweet — it would clash with the rosemary."]}
+  ];
+  var pairingOverlay = document.getElementById('pairingOverlay');
+  var pairingRoundEl = document.getElementById('pairingRound');
+  var pairingScoreEl = document.getElementById('pairingScore');
+  var pairingStreakEl = document.getElementById('pairingStreak');
+  var pairingStartEl = document.getElementById('pairingStart');
+  var pairingPlayEl = document.getElementById('pairingPlay');
+  var pairingEndEl = document.getElementById('pairingEnd');
+  var pairingQCountEl = document.getElementById('pairingQCount');
+  var pairingDishEl = document.getElementById('pairingDish');
+  var pairingAnswersEl = document.getElementById('pairingAnswers');
+  var pairingFeedbackEl = document.getElementById('pairingFeedback');
+  var pairingExplainEl = document.getElementById('pairingExplain');
+  var pairingNextWrapEl = document.getElementById('pairingNextWrap');
+  var pairingStartNoteEl = document.getElementById('pairingStartNote');
+  var pairingHsCongratsEl = document.getElementById('pairingHsCongrats');
+  var pairingHsTitleEl = document.getElementById('pairingHsCongratsTitle');
+  var pairingHsFormEl = document.getElementById('pairingHsForm');
+  var pairingHsNameEl = document.getElementById('pairingHsName');
+  var pairingHsSaveEl = document.getElementById('pairingHsSave');
+  var pairingHsMsgEl = document.getElementById('pairingHsMsg');
+  var pairingHsBoardWrapEl = document.getElementById('pairingHsBoardWrap');
+  var pairingHsBoardEl = document.getElementById('pairingHsBoard');
+  var pairingHsNoteEl = document.getElementById('pairingHsNote');
+  var pq = { playing:false, locked:false, deck:[], pos:0, current:null,
+    score:0, answered:0, best:0, streak:0, bestStreak:0, returnFocus:null, savedThisGame:false };
+  function pqKey(b, p, s){ return String(b + '|' + p + '|' + s).toLowerCase(); }
+  function pqFindRow(opt){
+    var store = storeSets[activeStore];
+    if(!store) return null;
+    for(var i = 0; i < rows.length; i++){
+      var row = rows[i];
+      if(!store.has(row.getAttribute('data-idx'))) continue;
+      var info = guessRowInfo(row);
+      if(pqKey(info.brand, info.product, info.size) === pqKey(opt.b, opt.p, opt.s)) return info;
+    }
+    return null;
+  }
+  function pqBuildDeck(){
+    var deck = [];
+    PAIRING_QUESTIONS.forEach(function(q){
+      var opts = q.options.map(pqFindRow);
+      for(var i = 0; i < opts.length; i++){ if(!opts[i]) return; }
+      /* The same brand+product must not appear twice in one round,
+         even in a different size — the two sizes would be
+         indistinguishable as answers. */
+      var keys = {};
+      for(var j = 0; j < opts.length; j++){
+        var k = (opts[j].brand + '|' + opts[j].product).toLowerCase();
+        if(keys[k]) return;
+        keys[k] = true;
+      }
+      deck.push({ q:q, opts:opts });
+    });
+    triviaShuffle(deck);
+    return deck.slice(0, Math.min(PAIRING_ROUNDS, deck.length));
+  }
+  function pqShowScreen(which){
+    pairingStartEl.hidden = which !== 'start';
+    pairingPlayEl.hidden = which !== 'play';
+    pairingEndEl.hidden = which !== 'end';
+  }
+  function pqUpdateStreak(){ pairingStreakEl.textContent = String(pq.streak); }
+  function openPairing(fromEl){
+    if(!pairingOverlay) return;
+    pq.returnFocus = fromEl || null;
+    pq.playing = false;
+    pq.locked = false;
+    pq.score = 0;
+    pq.streak = 0;
+    pqUpdateStreak();
+    pairingScoreEl.textContent = '0';
+    pairingRoundEl.textContent = '—';
+    pairingStartNoteEl.hidden = true;
+    pqShowScreen('start');
+    pqHsRenderStartBoard();
+    pairingOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('pairingStartBtn').focus();
+  }
+  function closePairing(){
+    if(!pairingOverlay || pairingOverlay.hidden) return;
+    pq.playing = false;
+    pairingOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && cheatOverlay.hidden && sampleOverlay.hidden) document.body.style.overflow = '';
+    var backTo = pq.returnFocus || document.getElementById('pairingQuizGames');
+    pq.returnFocus = null;
+    if(backTo) backTo.focus();
+  }
+  function pqStart(){
+    triviaAudio(); /* unlock sound inside this tap, like trivia */
+    var deck = pqBuildDeck();
+    if(deck.length < 4){
+      pairingStartNoteEl.textContent = 'Not enough of this quiz\u2019s wines are carried in this store to play yet \u2014 try another store.';
+      pairingStartNoteEl.hidden = false;
+      return;
+    }
+    pq.deck = deck;
+    pq.pos = 0;
+    pq.score = 0;
+    pq.answered = 0;
+    pq.streak = 0;
+    pq.bestStreak = 0;
+    pq.locked = false;
+    pq.playing = true;
+    pq.savedThisGame = false;
+    pairingScoreEl.textContent = '0';
+    pqUpdateStreak();
+    pqShowScreen('play');
+    pqShowRound();
+  }
+  function pqShowRound(){
+    var entry = pq.deck[pq.pos];
+    pq.current = entry;
+    pq.locked = false;
+    pairingRoundEl.textContent = (pq.pos + 1) + ' / ' + pq.deck.length;
+    pairingQCountEl.textContent = 'Round ' + (pq.pos + 1) + ' of ' + pq.deck.length;
+    pairingDishEl.textContent = 'Which wine pairs best with ' + entry.q.dish + '?';
+    pairingFeedbackEl.textContent = '';
+    pairingFeedbackEl.className = 'trivia-feedback';
+    pairingExplainEl.hidden = true;
+    pairingExplainEl.textContent = '';
+    pairingNextWrapEl.hidden = true;
+    /* Shuffle the four options and carry each one's why-not with
+       it, so the explanation always matches the bottle tapped. */
+    var display = entry.opts.map(function(info, i){
+      return { info:info, isCorrect:(i === entry.q.correct), whyNot:entry.q.whyNot[i] };
+    });
+    triviaShuffle(display);
+    pairingAnswersEl.innerHTML = '';
+    display.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'trivia-answer';
+      btn.textContent = guessLabel(opt.info);
+      if(opt.isCorrect) btn.setAttribute('data-correct', '1');
+      btn.addEventListener('click', function(){ pqAnswer(btn, opt); });
+      pairingAnswersEl.appendChild(btn);
+    });
+  }
+  function pqAnswer(btn, opt){
+    if(!pq.playing || pq.locked) return;
+    pq.locked = true;
+    pq.answered++;
+    var buttons = pairingAnswersEl.querySelectorAll('.trivia-answer');
+    Array.prototype.forEach.call(buttons, function(b){ b.disabled = true; });
+    var rightInfo = pq.current.opts[pq.current.q.correct];
+    if(opt.isCorrect){
+      pq.score++;
+      pq.streak++;
+      if(pq.streak > pq.bestStreak) pq.bestStreak = pq.streak;
+      pairingScoreEl.textContent = String(pq.score);
+      pqUpdateStreak();
+      btn.classList.add('is-correct');
+      pairingFeedbackEl.textContent = 'Correct!';
+      pairingFeedbackEl.className = 'trivia-feedback good';
+      pairingExplainEl.textContent = pq.current.q.why;
+      triviaDing();
+    } else {
+      pq.streak = 0;
+      pqUpdateStreak();
+      btn.classList.add('is-wrong');
+      var right = pairingAnswersEl.querySelector('[data-correct="1"]');
+      if(right) right.classList.add('is-correct');
+      pairingFeedbackEl.textContent = 'Not quite \u2014 the best pairing was ' + guessLabel(rightInfo) + '.';
+      pairingFeedbackEl.className = 'trivia-feedback bad';
+      pairingExplainEl.textContent = (opt.whyNot ? opt.whyNot + ' ' : '') + pq.current.q.why;
+      triviaBuzz();
+      if(window.navigator && navigator.vibrate) navigator.vibrate(80);
+    }
+    pairingExplainEl.hidden = false;
+    pairingNextWrapEl.hidden = false;
+    document.getElementById('pairingNextBtn').focus();
+  }
+  function pqNext(){
+    if(!pq.playing) return;
+    pq.pos++;
+    if(pq.pos >= pq.deck.length) pqEnd();
+    else pqShowRound();
+  }
+  function pqEnd(){
+    pq.playing = false;
+    if(pq.score > pq.best) pq.best = pq.score;
+    document.getElementById('pairingFinalScore').textContent = String(pq.score);
+    document.getElementById('pairingFinalLine').textContent = 'correct out of ' + pq.deck.length;
+    document.getElementById('pairingFinalDetail').textContent = 'Best this session: ' + pq.best + ' out of ' + pq.deck.length + '.';
+    document.getElementById('pairingFinalStreak').textContent = 'Best hot streak this session: \uD83D\uDD25 ' + pq.bestStreak + ' in a row.';
+    pqShowScreen('end');
+    pqHsOnGameEnd();
+    document.getElementById('pairingAgainBtn').focus();
+  }
+  /* ----- The shared top-3 board: same one-spot-per-player rules
+     as Wine Trivia, plus the best streak saved with the entry so
+     the board shows how hot the run was. ----- */
+  function pqHsFetchTop3(){
+    return sb(PAIRING_TABLE + '?select=id,player_name,score,best_streak,created_at&order=score.desc,created_at.asc').then(function(list){
+      return hsDedupeBoard(Array.isArray(list) ? list : []);
+    }, function(err){
+      if(window.console) console.warn('Pairing high scores not loaded (the pairing_high_scores table may not exist yet):', err);
+      return null;
+    });
+  }
+  function pqHsRenderList(listEl, rows, highlightId){
+    listEl.innerHTML = '';
+    rows.forEach(function(r, i){
+      var li = document.createElement('li');
+      li.className = 'hs-row' + (i === 0 ? ' is-first' : '') +
+        (highlightId != null && String(r.id) === String(highlightId) ? ' is-new' : '');
+      var rank = document.createElement('span');
+      rank.className = 'hs-rank';
+      rank.textContent = '#' + (i + 1);
+      li.appendChild(rank);
+      var name = document.createElement('span');
+      name.className = 'hs-name';
+      name.textContent = r.player_name || 'Player';
+      var date = hsDateText(r.created_at);
+      if(date){
+        var dEl = document.createElement('span');
+        dEl.className = 'hs-date';
+        dEl.textContent = date;
+        name.appendChild(dEl);
+      }
+      if(r.best_streak > 0){
+        var st = document.createElement('span');
+        st.className = 'hs-date';
+        st.textContent = '\uD83D\uDD25 ' + r.best_streak;
+        name.appendChild(st);
+      }
+      li.appendChild(name);
+      var sc = document.createElement('span');
+      sc.className = 'hs-score';
+      sc.textContent = String(r.score);
+      var scSmall = document.createElement('small');
+      scSmall.textContent = 'correct';
+      sc.appendChild(scSmall);
+      li.appendChild(sc);
+      listEl.appendChild(li);
+    });
+  }
+  function pqHsShowMsg(text){
+    if(!pairingHsMsgEl) return;
+    pairingHsMsgEl.textContent = text || '';
+    pairingHsMsgEl.hidden = !text;
+  }
+  function pqHsRenderStartBoard(){
+    var listEl = document.getElementById('pairingStartHsBoard');
+    var noteEl = document.getElementById('pairingStartHsNote');
+    if(!listEl || !noteEl) return;
+    listEl.innerHTML = '';
+    listEl.hidden = true;
+    noteEl.hidden = false;
+    noteEl.textContent = 'Loading the board\u2026';
+    pqHsFetchTop3().then(function(rows){
+      if(rows === null){
+        noteEl.textContent = 'High scores coming soon \u2014 the shared board isn\u2019t set up yet.';
+        return;
+      }
+      if(!rows.length){
+        noteEl.textContent = 'No scores on the board yet \u2014 be the first!';
+        return;
+      }
+      pqHsRenderList(listEl, rows, null);
+      listEl.hidden = false;
+      noteEl.hidden = true;
+    });
+  }
+  function pqHsOnGameEnd(){
+    pq.savedThisGame = false;
+    pairingHsCongratsEl.hidden = true;
+    pairingHsNoteEl.hidden = true;
+    pairingHsBoardWrapEl.hidden = true;
+    pairingHsFormEl.hidden = false;
+    pairingHsSaveEl.disabled = false;
+    pairingHsNameEl.disabled = false;
+    pqHsShowMsg('');
+    if(!(pq.score > 0)) return;
+    var finalScore = pq.score;
+    pqHsFetchTop3().then(function(rows){
+      if(pq.playing || pairingEndEl.hidden || pq.score !== finalScore) return;
+      if(rows === null){
+        pairingHsNoteEl.textContent = 'The shared High Score board is coming soon \u2014 it isn\u2019t set up yet, so this score couldn\u2019t be entered on it. Once the board is live, top-3 scores will be entered here.';
+        pairingHsNoteEl.hidden = false;
+        return;
+      }
+      if(!hsQualifies(finalScore, rows)) return;
+      if(authUser){
+        var own = null;
+        for(var oi = 0; oi < rows.length; oi++){ if(hsPlayerKey(rows[oi].player_name) === hsPlayerKey(authDisplayName())){ own = rows[oi]; break; } }
+        if(own && own.score >= finalScore) return;
+      }
+      var place = hsPlaceFor(finalScore, rows);
+      pairingHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
+      pairingHsNameEl.value = authUser ? authDisplayName() : '';
+      pairingHsCongratsEl.hidden = false;
+      pairingHsNameEl.focus();
+    });
+  }
+  function pqHsSaveScore(){
+    if(pq.savedThisGame) return;
+    var name = cleanDisplayName(pairingHsNameEl.value);
+    if(!name){
+      pqHsShowMsg('Please enter your name for the board first.');
+      pairingHsNameEl.focus();
+      return;
+    }
+    pairingHsNameEl.value = name;
+    pairingHsSaveEl.disabled = true;
+    pairingHsNameEl.disabled = true;
+    pqHsShowMsg('Saving your score\u2026');
+    sb(PAIRING_TABLE + '?select=id,player_name,score,best_streak,created_at&order=score.desc,created_at.asc').then(function(all){
+      var mine = (Array.isArray(all) ? all : []).filter(function(r){ return hsPlayerKey(r.player_name) === hsPlayerKey(name); });
+      if(mine.length && mine[0].score >= pq.score){
+        pairingHsSaveEl.disabled = false;
+        pairingHsNameEl.disabled = false;
+        pqHsShowMsg('That score doesn\u2019t beat your best of ' + mine[0].score + ' \u2014 the board keeps your best, one spot per player.');
+        return null;
+      }
+      var ops = [];
+      if(mine.length){
+        var bestId = mine[0].id;
+        ops.push(sb(PAIRING_TABLE + '?id=eq.' + encodeURIComponent(bestId), { method: 'PATCH', prefer: 'return=representation', token: sbAuthToken(),
+          body: { score: pq.score, best_streak: pq.bestStreak, created_at: new Date().toISOString() } }));
+        mine.slice(1).forEach(function(r){
+          ops.push(sb(PAIRING_TABLE + '?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }));
+        });
+        return Promise.all(ops).then(function(done){
+          var updated = done[0];
+          return (updated && updated.length) ? updated[0] : { id: bestId };
+        });
+      }
+      return sb(PAIRING_TABLE, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(),
+        body: { player_name: name, score: pq.score, best_streak: pq.bestStreak } }).then(function(created){
+        return (created && created.length) ? created[0] : null;
+      });
+    }).then(function(saved){
+      if(!saved) return;
+      pq.savedThisGame = true;
+      var savedId = saved.id;
+      pairingHsFormEl.hidden = true;
+      pqHsShowMsg('Saved \u2014 you\u2019re on the board!');
+      return pqHsFetchTop3().then(function(rows){
+        if(rows && rows.length){
+          pqHsRenderList(pairingHsBoardEl, rows, savedId);
+          pairingHsBoardWrapEl.hidden = false;
+          if(savedId != null){
+            for(var i = 0; i < rows.length; i++){
+              if(String(rows[i].id) === String(savedId)){
+                pairingHsTitleEl.textContent = 'Congratulations! You made #' + (i + 1) + ' on the High Score board!';
+                break;
+              }
+            }
+          }
+        }
+        pqHsRenderStartBoard();
+      });
+    }, function(err){
+      if(window.console) console.warn('Pairing high score not saved (the pairing_high_scores table may not exist yet):', err);
+      pairingHsSaveEl.disabled = false;
+      pairingHsNameEl.disabled = false;
+      pqHsShowMsg('Couldn\u2019t save your score to the board \u2014 it may not be set up yet, or the connection dropped. Your game score above still stands.');
+    });
+  }
+  var pairingQuizGamesBtn = document.getElementById('pairingQuizGames');
+  if(pairingQuizGamesBtn) pairingQuizGamesBtn.addEventListener('click', function(){
+    closeSettings();
+    openPairing(pairingQuizGamesBtn);
+  });
+  document.getElementById('pairingStartBtn').addEventListener('click', pqStart);
+  document.getElementById('pairingAgainBtn').addEventListener('click', pqStart);
+  document.getElementById('pairingNextBtn').addEventListener('click', pqNext);
+  document.getElementById('pairingClose').addEventListener('click', closePairing);
+  document.getElementById('pairingCancel').addEventListener('click', closePairing);
+  document.getElementById('pairingDoneBtn').addEventListener('click', closePairing);
+  if(pairingHsFormEl) pairingHsFormEl.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    pqHsSaveScore();
+  });
+  pairingOverlay.addEventListener('click', function(ev){ if(ev.target === pairingOverlay) closePairing(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !pairingOverlay.hidden) closePairing();
   });
 
 
