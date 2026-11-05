@@ -5522,7 +5522,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.14</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.15</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5535,7 +5535,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.14</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.15</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6548,7 +6548,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.14</span>
+      <span class="manual-pill accent">Version 2026.11.04.15</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6880,6 +6880,8 @@
           <li><span class="manual-ui">Make admin</span> — appoint that user as an admin. The button becomes <span class="manual-ui">Remove admin</span> once they are one.</li>
           <li><span class="manual-ui">Ban</span> — block that account. The button becomes <span class="manual-ui">Unban</span>; bans are reversible from the same row.</li>
         </ul>
+        <h3>Select CVQA</h3>
+        <p>Some bottles are <strong>CVQA</strong> — competitor VQA — and not every store carries them. Tap <span class="manual-ui">Select CVQA</span> in Admin: it opens a checkbox list of every product, ticked bottles are CVQA. Ticked bottles are <strong>left out of Guess the Wine</strong>, so stores that don&rsquo;t carry them aren&rsquo;t at a disadvantage, and typing <span class="manual-ui">cvqa</span> in the main search finds them. The flag is shared for all stores. Tick or untick, then tap <span class="manual-ui">Save CVQA</span>.</p>
         <h3>The safeguards</h3>
         <ul>
           <li>Only <strong>Michael</strong> can make or remove admins.</li>
@@ -6974,7 +6976,8 @@
           <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
         </ul>
         <h3>Guess the Wine</h3>
-        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles are left out entirely</strong> — see Select CVQA in Admin above — because not every store carries them. Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
+        <p>Typing <span class="manual-ui">cvqa</span> in the main search lists the CVQA bottles.</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -6982,7 +6985,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.14</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.15</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7362,6 +7365,9 @@
     <p class="theme-note">A banned user can&rsquo;t use signed-in features — if they&rsquo;re signed in when banned, they&rsquo;re signed out with a blocked message, and they can&rsquo;t love wines or make changes (they can still browse the list). Unban anyone from this list or from the Signed-in users window. Michael (halroben8@gmail.com) can&rsquo;t be banned.</p>
     <h3 class="be-head">Suggestions</h3>
     <div id="adminSuggestions"><p class="hist-empty">Loading…</p></div>
+    <h3 class="be-head">CVQA &mdash; competitor VQA</h3>
+    <button type="button" class="history-open-btn" id="openCvqaBtn"><span>Select CVQA<span class="sa-sub">Tick the bottles that are competitor VQA (CVQA) &mdash; opens in its own view</span></span><span class="sa-arrow" aria-hidden="true">&rsaquo;</span></button>
+    <div class="hist-summary"><p class="hist-empty">CVQA bottles are left out of Guess the Wine, so stores that don&rsquo;t carry them aren&rsquo;t at a disadvantage. Tick them here — the flag is shared for all stores.</p></div>
     <h3 class="be-head">Change history</h3>
     <button type="button" class="history-open-btn" id="openHistoryBtn"><span>Open Change history<span class="sa-sub">Every add and edit, newest change on top &mdash; opens in its own view</span></span><span class="sa-arrow" aria-hidden="true">&rsaquo;</span></button>
     <div id="adminLog" class="hist-summary"><p class="hist-empty">Change history opens in its own view, so this panel stays short however long the history grows.</p></div>
@@ -7393,6 +7399,44 @@
     <div class="history-list" id="adminUsers"><p class="hist-empty">Loading&hellip;</p></div>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="usersDone">Back to Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- Select CVQA (appointed admins only): a dedicated picker
+     opened from the Admin area — a checkbox list of every product
+     in the shared list, ticked = CVQA. Saving writes the flag to
+     the shared products table (cvqa column) for the bottles whose
+     tick changed, and only those — routine product sync never
+     writes cvqa, so a stale old tab cannot wipe the flags (the
+     same protection barcodes have). CVQA bottles are left out of
+     Guess the Wine entirely, and typing "cvqa" in the main search
+     finds them, because writeRow adds "cvqa" to the row's search
+     text. Closing it (back arrow, ×, Back to Admin, Escape or a
+     tap outside) returns to the Admin panel, which stays open
+     underneath. -->
+<div class="editor-overlay" id="cvqaOverlay" hidden>
+  <div class="editor-panel store-panel" role="dialog" aria-modal="true" aria-labelledby="cvqaTitle">
+    <div class="editor-head">
+      <button type="button" class="history-back" id="cvqaBack" aria-label="Back to Admin">&larr;</button>
+      <h2 id="cvqaTitle">Select CVQA</h2>
+      <button type="button" class="editor-x" id="cvqaClose" aria-label="Close select CVQA">&times;</button>
+    </div>
+    <p class="editor-note">Tick the bottles that are <strong>CVQA</strong> — competitor VQA. Not every store carries them, so ticked bottles are <strong>left out of Guess the Wine</strong> (as the answer and as a wrong choice), and typing <strong>cvqa</strong> in the main search finds them. The flag is shared for all stores. Tick or untick, then Save.</p>
+    <p class="store-err" id="cvqaErr" role="alert" hidden></p>
+    <div class="efield store-search-field">
+      <label for="cvqaQ">Find a bottle — tick to mark it CVQA</label>
+      <input id="cvqaQ" type="search" placeholder="Filter the product list…" autocomplete="off" />
+    </div>
+    <div class="store-tools">
+      <button type="button" id="cvqaSelAll">Tick all shown</button>
+      <button type="button" id="cvqaSelNone">Untick all</button>
+      <span class="selcount" id="cvqaSelCount" role="status"></span>
+    </div>
+    <div class="store-list" id="cvqaList"></div>
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="cvqaCancel">Cancel</button>
+      <button type="button" class="btn-save" id="cvqaSave">Save CVQA</button>
     </div>
   </div>
 </div>
@@ -8492,6 +8536,7 @@
       sale: row.getAttribute('data-sale') === 'Yes',
       salePrice: row.getAttribute('data-sale-price') || '',
       saleBroken: row.getAttribute('data-sale-broken') === 'Yes',
+      cvqa: row.getAttribute('data-cvqa') === 'Yes',
       vqa: isVqa(row),
       status: row.getAttribute('data-status') || 'Planogram',
       unavailable: isUnavail(row),
@@ -9477,10 +9522,11 @@
     row.setAttribute('data-sale', data.sale ? 'Yes' : 'No');
     row.setAttribute('data-sale-price', data.salePrice || '');
     row.setAttribute('data-sale-broken', data.saleBroken ? 'Yes' : 'No');
+    row.setAttribute('data-cvqa', data.cvqa ? 'Yes' : 'No');
     row.classList.toggle('is-sale', !!data.sale);
     row.setAttribute('data-rs', data.rs);
     row.setAttribute('data-barcode', data.barcode ? String(data.barcode).replace(/\D/g, '') : '');
-    row.setAttribute('data-search', (data.brand + ' ' + data.name + (data.vqa ? ' vqa' : '') + ' ' + data.varietal + ' ' + data.size + (data.status === 'Not In Plano' ? ' not in plano' : '') + (data.cooler === 'Yes' ? ' cooler' : '') + (data.sale ? ' on sale sale' : '') + (data.barcode ? ' ' + String(data.barcode).replace(/\D/g, '') : '')).toLowerCase());
+    row.setAttribute('data-search', (data.brand + ' ' + data.name + (data.vqa ? ' vqa' : '') + (data.cvqa ? ' cvqa' : '') + ' ' + data.varietal + ' ' + data.size + (data.status === 'Not In Plano' ? ' not in plano' : '') + (data.cooler === 'Yes' ? ' cooler' : '') + (data.sale ? ' on sale sale' : '') + (data.barcode ? ' ' + String(data.barcode).replace(/\D/g, '') : '')).toLowerCase());
     var pcell = cellEl(row, 'Product');
     pcell.innerHTML = '';
     var b = document.createElement('span');
@@ -12052,6 +12098,7 @@
       size: cellText(row, 'Size'),
       sweet: row.getAttribute('data-sweet') || '',
       rich: row.getAttribute('data-rich') || '',
+      cvqa: row.getAttribute('data-cvqa') === 'Yes',
       notes: notesEl ? notesEl.textContent.trim() : ''
     };
   }
@@ -12063,6 +12110,10 @@
       if(!store.has(row.getAttribute('data-idx'))) return false;
       var info = guessRowInfo(row);
       if(info.notes.length < 25) return false;
+      /* CVQA bottles are competitor VQA — not every store carries
+         them, so they never appear in Guess the Wine, neither as
+         the answer nor as a wrong choice. */
+      if(info.cvqa) return false;
       var low = info.notes.toLowerCase();
       if(info.brand && low.indexOf(info.brand.toLowerCase()) !== -1) return false;
       if(info.product && low.indexOf(info.product.toLowerCase()) !== -1) return false;
@@ -12202,6 +12253,153 @@
   guessOverlay.addEventListener('click', function(ev){ if(ev.target === guessOverlay) closeGuess(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !guessOverlay.hidden) closeGuess();
+  });
+
+
+  /* ---------- Select CVQA — Admin picker ----------
+     CVQA = competitor VQA. Some bottles are CVQA and not every
+     store carries them, so an admin ticks them here and they are
+     left out of Guess the Wine (the tasting-notes game) — it would
+     not be fair to stores that do not have them. The flag lives in
+     the shared products table (cvqa boolean, default false) and is
+     shared by all stores; it is NOT per-store. Saving PATCHes only
+     the bottles whose tick changed, via the dedicated cvqa write
+     below — routine product sync (rowToProduct / sbSyncProduct)
+     deliberately carries no cvqa field, so a stale old tab can
+     never wipe the flags. Typing "cvqa" in the main search finds
+     the ticked bottles because writeRow adds "cvqa" to the row's
+     search text. Appointed admins only, like the rest of Admin. */
+  var cvqaOverlay = document.getElementById('cvqaOverlay');
+  var cvqaList = document.getElementById('cvqaList');
+  var cvqaQ = document.getElementById('cvqaQ');
+  var cvqaErr = document.getElementById('cvqaErr');
+  var cvqaSelCount = document.getElementById('cvqaSelCount');
+  var cvqaSaveBtn = document.getElementById('cvqaSave');
+  var cvqaSet = null, cvqaInitial = null, cvqaItems = [];
+  function cvqaCount(){
+    cvqaSelCount.textContent = cvqaSet.size + ' of ' + rows.length + ' products ticked as CVQA';
+  }
+  function buildCvqaList(){
+    cvqaList.innerHTML = '';
+    cvqaItems = [];
+    rows.forEach(function(row){
+      var idx = row.getAttribute('data-idx');
+      var item = document.createElement('label');
+      item.className = 'store-item';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = cvqaSet.has(idx);
+      cb.setAttribute('aria-label', productLabel(row));
+      cb.addEventListener('change', function(){
+        if(cb.checked) cvqaSet.add(idx); else cvqaSet.delete(idx);
+        cvqaCount();
+      });
+      var span = document.createElement('span');
+      span.textContent = productLabel(row);
+      item.appendChild(cb);
+      item.appendChild(span);
+      cvqaList.appendChild(item);
+      cvqaItems.push(item);
+    });
+    cvqaCount();
+  }
+  function filterCvqaList(){
+    var qv = foldAccents(cvqaQ.value.trim());
+    cvqaItems.forEach(function(item){
+      item.style.display = (!qv || foldAccents(item.textContent).indexOf(qv) !== -1) ? '' : 'none';
+    });
+  }
+  function openCvqa(){
+    if(!isAppointed()){
+      syncToast('Select CVQA is restricted to appointed admins.', true);
+      return;
+    }
+    if(!cvqaOverlay) return;
+    cvqaSet = new Set(); cvqaInitial = new Set();
+    rows.forEach(function(row){
+      var idx = row.getAttribute('data-idx');
+      if(row.getAttribute('data-cvqa') === 'Yes'){ cvqaSet.add(idx); cvqaInitial.add(idx); }
+    });
+    cvqaErr.hidden = true;
+    cvqaQ.value = '';
+    buildCvqaList();
+    cvqaOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    cvqaQ.focus();
+  }
+  function closeCvqa(){
+    if(!cvqaOverlay || cvqaOverlay.hidden) return;
+    cvqaOverlay.hidden = true;
+    if(adminOverlay && !adminOverlay.hidden){
+      document.body.style.overflow = 'hidden';
+    } else if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden && sampleOverlay.hidden && cheatOverlay.hidden && supportOverlay.hidden && scannerOverlay.hidden && scanLinkOverlay.hidden && signinOverlay.hidden && suggestOverlay.hidden && bannedOverlay.hidden){
+      document.body.style.overflow = '';
+    }
+    var opener = document.getElementById('openCvqaBtn');
+    if(opener && adminOverlay && !adminOverlay.hidden) opener.focus();
+  }
+  function cvqaSave(){
+    var changed = [];
+    rows.forEach(function(row){
+      var idx = row.getAttribute('data-idx');
+      var now = cvqaSet.has(idx), was = cvqaInitial.has(idx);
+      if(now !== was) changed.push({ row: row, idx: idx, cvqa: now });
+    });
+    if(!changed.length){ closeCvqa(); return; }
+    cvqaSaveBtn.disabled = true;
+    var done = 0, failed = 0, marked = 0, unmarked = 0;
+    function finishOne(){
+      done++;
+      if(done < changed.length) return;
+      cvqaSaveBtn.disabled = false;
+      if(failed){
+        cvqaErr.textContent = 'Couldn\u2019t save ' + failed + ' bottle' + (failed > 1 ? 's' : '') + ' — the CVQA column may not be in the shared list yet. Run this in Supabase (SQL editor): alter table public.products add column if not exists cvqa boolean default false; Then try saving again.';
+        cvqaErr.hidden = false;
+        return;
+      }
+      closeCvqa();
+      syncToast('CVQA saved — ' + marked + ' marked, ' + unmarked + ' unmarked. Guess the Wine now skips CVQA bottles.');
+    }
+    changed.forEach(function(c){
+      var pid = rowPid[c.idx];
+      if(!pid){ failed++; finishOne(); return; }
+      sb('products?product_id=eq.' + encodeURIComponent(pid), {
+        method: 'PATCH', prefer: 'return=minimal', body: { cvqa: c.cvqa }
+      }).then(function(){
+        var d = readRow(c.row); d.cvqa = c.cvqa; writeRow(c.row, d);
+        if(c.cvqa) marked++; else unmarked++;
+        finishOne();
+      }, function(err){
+        failed++;
+        if(window.console) console.warn('CVQA not saved to the shared list:', err);
+        finishOne();
+      });
+    });
+  }
+  document.getElementById('openCvqaBtn').addEventListener('click', openCvqa);
+  document.getElementById('cvqaBack').addEventListener('click', closeCvqa);
+  document.getElementById('cvqaClose').addEventListener('click', closeCvqa);
+  document.getElementById('cvqaCancel').addEventListener('click', closeCvqa);
+  document.getElementById('cvqaSave').addEventListener('click', cvqaSave);
+  cvqaQ.addEventListener('input', filterCvqaList);
+  document.getElementById('cvqaSelAll').addEventListener('click', function(){
+    cvqaItems.forEach(function(item, i){
+      if(item.style.display === 'none') return;
+      item.querySelector('input[type="checkbox"]').checked = true;
+      cvqaSet.add(rows[i].getAttribute('data-idx'));
+    });
+    cvqaCount();
+  });
+  document.getElementById('cvqaSelNone').addEventListener('click', function(){
+    cvqaSet.clear();
+    cvqaItems.forEach(function(item){
+      item.querySelector('input[type="checkbox"]').checked = false;
+    });
+    cvqaCount();
+  });
+  cvqaOverlay.addEventListener('click', function(ev){ if(ev.target === cvqaOverlay) closeCvqa(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !cvqaOverlay.hidden) closeCvqa();
   });
 
   /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
@@ -13919,7 +14117,7 @@
       varietal: p.varietal || '', tannins: p.tannins || '', acidity: p.acidity || '',
       cooler: p.in_cooler ? 'Yes' : 'No',
       sale: !!p.on_sale, salePrice: (p.sale_price === null || p.sale_price === undefined) ? '' : String(p.sale_price),
-      saleBroken: !!p.sale_broken,
+      saleBroken: !!p.sale_broken, cvqa: !!p.cvqa,
       barcode: (p.barcode === null || p.barcode === undefined) ? '' : String(p.barcode),
       vqa: !!p.vqa,
       status: p.status || 'Planogram', unavailable: false, notes: p.tasting_notes || ''
@@ -17613,6 +17811,10 @@
          record with no sale_broken field at all must never wipe
          a flag set on this screen */
       if(!('sale_broken' in p)){ want.saleBroken = cur.saleBroken; }
+      /* Same protection for the CVQA flag: a shared record with no
+         cvqa field at all (the column does not exist yet) must
+         never wipe a flag set on this screen */
+      if(!('cvqa' in p)){ want.cvqa = cur.cvqa; }
       /* Cooler: the shared record's in_cooler is the catalogue's
          original (Store 358) value — it updates globalCooler
          only. The row keeps the ACTIVE store's own cooler value:
@@ -17647,7 +17849,7 @@
          cur.tannins !== want.tannins || cur.acidity !== want.acidity ||
          (cur.cooler === 'Yes') !== (want.cooler === 'Yes') || cur.vqa !== want.vqa ||
          cur.sale !== want.sale || String(cur.salePrice) !== String(want.salePrice) ||
-         cur.saleBroken !== want.saleBroken ||
+         cur.saleBroken !== want.saleBroken || cur.cvqa !== want.cvqa ||
          String(cur.barcode || '') !== String(want.barcode || '') ||
          cur.status !== want.status || cur.notes !== want.notes){
         want.unavailable = isUnavail(row);
