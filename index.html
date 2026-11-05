@@ -629,6 +629,8 @@
   .guess-hints{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
   .guess-hint{border:1.5px solid var(--line);border-radius:999px;padding:4px 11px;
     font-size:13px;font-weight:700;color:var(--muted);background:var(--panel2)}
+  .guess-opt{display:flex;align-items:center;gap:9px;margin:0 0 14px;font-size:15.5px;font-weight:700;color:var(--ink);cursor:pointer}
+  .guess-opt input{width:20px;height:20px;accent-color:var(--plum);cursor:pointer;flex:none}
   .trivia-feedback.good{color:#15803d}
   .trivia-feedback.bad{color:#dc2626}
   :root[data-theme="dark"] .trivia-feedback.good{color:#4ade80}
@@ -5522,7 +5524,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.15</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.16</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5535,7 +5537,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.15</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.16</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5693,6 +5695,7 @@
 
     <div id="guessStart">
       <p class="trivia-intro">Read the tasting notes, then pick the bottle they belong to. <strong>10 rounds</strong>, four choices each, from the wines this store carries &mdash; no timer, so take your time and read properly.</p>
+      <label class="guess-opt" for="guessIncludeCvqa"><input type="checkbox" id="guessIncludeCvqa" checked /> Include CVQA</label>
       <button type="button" class="btn-save trivia-start-btn" id="guessStartBtn">Start &mdash; 10 rounds</button>
       <p class="hs-note" id="guessStartNote" role="status" hidden></p>
     </div>
@@ -6548,7 +6551,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.15</span>
+      <span class="manual-pill accent">Version 2026.11.04.16</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6976,8 +6979,9 @@
           <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
         </ul>
         <h3>Guess the Wine</h3>
-        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles are left out entirely</strong> — see Select CVQA in Admin above — because not every store carries them. Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles</strong> are in the game only while the <span class="manual-ui">Include CVQA</span> box on the start page is ticked — it is ticked by default. Untick it to leave them out entirely, because not every store carries them (see Select CVQA in Admin above). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
         <p>Typing <span class="manual-ui">cvqa</span> in the main search lists the CVQA bottles.</p>
+        <p>The start page also has an <span class="manual-ui">Include CVQA</span> checkbox, ticked by default. Untick it before starting and no CVQA bottle appears in that game — neither as the answer nor as a wrong choice. Play again keeps the setting you last chose.</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -6985,7 +6989,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.15</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.16</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -12086,7 +12090,7 @@
   var guessFeedbackEl = document.getElementById('guessFeedback');
   var guessStartNoteEl = document.getElementById('guessStartNote');
   var guess = { playing:false, locked:false, deck:[], pos:0, current:null,
-    score:0, answered:0, best:0, advanceId:null, returnFocus:null };
+    score:0, answered:0, best:0, advanceId:null, returnFocus:null, includeCvqa:true };
   function guessRowInfo(row){
     var d = details[row.getAttribute('data-idx')];
     var notesEl = d ? d.querySelector('.notes') : null;
@@ -12111,9 +12115,11 @@
       var info = guessRowInfo(row);
       if(info.notes.length < 25) return false;
       /* CVQA bottles are competitor VQA — not every store carries
-         them, so they never appear in Guess the Wine, neither as
-         the answer nor as a wrong choice. */
-      if(info.cvqa) return false;
+         them, so they are in the game only while the "Include
+         CVQA" box on the start page is ticked (it is ticked by
+         default). Untick it and they never appear, neither as the
+         answer nor as a wrong choice. */
+      if(info.cvqa && !guess.includeCvqa) return false;
       var low = info.notes.toLowerCase();
       if(info.brand && low.indexOf(info.brand.toLowerCase()) !== -1) return false;
       if(info.product && low.indexOf(info.product.toLowerCase()) !== -1) return false;
@@ -12153,6 +12159,8 @@
   function guessStart(){
     triviaAudio(); /* unlock sound inside this tap, like trivia */
     if(guess.advanceId){ clearTimeout(guess.advanceId); guess.advanceId = null; }
+    var includeBox = document.getElementById('guessIncludeCvqa');
+    guess.includeCvqa = !includeBox || includeBox.checked;
     var pool = triviaShuffle(guessBuildPool());
     if(pool.length < 4){
       guessStartNoteEl.textContent = 'Not enough wines with tasting notes in this store to play yet — try another store, or add tasting notes to more products first.';
