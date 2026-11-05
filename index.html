@@ -2028,6 +2028,8 @@
         <label for="rich">Style / Richness</label>
         <select id="rich">
           <option value="">All styles</option>
+          <option value="ALL_REDS">All reds</option>
+          <option value="ALL_WHITES">All whites</option>
           <option value="Cider">Cider</option>
           <option value="Extra Rich White">Extra Rich White</option>
           <option value="Light Red">Light Red</option>
@@ -5513,7 +5515,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.10</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.11</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5526,7 +5528,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.10</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.11</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6488,7 +6490,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.10</span>
+      <span class="manual-pill accent">Version 2026.11.04.11</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6919,7 +6921,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.10</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.11</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7895,7 +7897,12 @@
       } else {
         if(query && foldAccents(row.getAttribute('data-search')).indexOf(query) === -1) ok = false;
         if(b && row.getAttribute('data-brand') !== b) ok = false;
-        if(r && row.getAttribute('data-rich') !== r) ok = false;
+        if(r){
+          var rv = row.getAttribute('data-rich');
+          if(r === 'ALL_REDS'){ if(rv.indexOf('Red') === -1) ok = false; }
+          else if(r === 'ALL_WHITES'){ if(rv.indexOf('White') === -1) ok = false; }
+          else if(rv !== r) ok = false;
+        }
         if(sweetSel.length && !sweetSel.some(function(l){ return row.getAttribute('data-sweet').indexOf(l) === 0; })) ok = false;
         if(t && !tanninMatches(cellText(row, 'Tannins'), t)) ok = false;
         if(saleOnlyOn() && row.getAttribute('data-sale') !== 'Yes') ok = false;
