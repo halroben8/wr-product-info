@@ -622,6 +622,13 @@
   :root[data-theme="dark"] .trivia-answer.is-correct{background:#16a34a;border-color:#4ade80}
   :root[data-theme="dark"] .trivia-answer.is-wrong{background:#b91c1c;border-color:#f87171}
   .trivia-feedback{margin:12px 0 0;min-height:24px;font-size:15px;font-weight:700;text-align:center}
+  /* Guess the Wine: the tasting notes are the question, so they
+     get a larger, roomier block than a trivia question; the
+     sweetness / style hints sit under them as small chips. */
+  .guess-notes{margin:0 0 12px;font-size:17px;line-height:1.6;color:var(--ink)}
+  .guess-hints{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px}
+  .guess-hint{border:1.5px solid var(--line);border-radius:999px;padding:4px 11px;
+    font-size:13px;font-weight:700;color:var(--muted);background:var(--panel2)}
   .trivia-feedback.good{color:#15803d}
   .trivia-feedback.bad{color:#dc2626}
   :root[data-theme="dark"] .trivia-feedback.good{color:#4ade80}
@@ -5515,7 +5522,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.13</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.14</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5528,7 +5535,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.13</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.14</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5542,6 +5549,7 @@
     <div class="settings-tabpanel" id="settingsPanel-games" role="tabpanel" aria-labelledby="settingsTab-games" hidden>
       <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
         <button type="button" class="settings-action" id="wineTriviaGames"><span>Wine Trivia &mdash; 1-minute rapid fire<span class="sa-sub">60 seconds on the clock, general wine questions in a 2&times;2 grid &mdash; right answers ding and move on, wrong answers buzz and cost you 3 seconds. How many can you get right? No sign-in needed</span></span></button>
+        <button type="button" class="settings-action" id="guessWineGames"><span>Guess the Wine &mdash; from its tasting notes<span class="sa-sub">Read the tasting notes and pick the right bottle from four &mdash; 10 rounds from this store&rsquo;s own wines. No sign-in needed</span></span></button>
         <button type="button" class="settings-action" id="reportContestResults" aria-describedby="contestReportSoonMsg"><span>Winerack Contests<span class="sa-sub">Report how a Winerack Contest went &mdash; not open yet</span></span><span class="sa-ext" aria-hidden="true">Coming soon</span></button>
         <p class="contest-soon-msg" id="contestReportSoonMsg" role="status" hidden><strong>Coming soon</strong> &mdash; reporting results of Winerack Contests isn&rsquo;t available yet. There&rsquo;s nothing to submit for now.</p>
       </div>
@@ -5662,6 +5670,56 @@
 
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="triviaCancel">Close &mdash; back to the list</button>
+    </div>
+  </div>
+</div>
+
+<div class="editor-overlay" id="guessOverlay" hidden>
+  <div class="editor-panel trivia-panel" role="dialog" aria-modal="true" aria-labelledby="guessTitle">
+    <div class="editor-head">
+      <h2 id="guessTitle">Guess the Wine</h2>
+      <button type="button" class="editor-x" id="guessClose" aria-label="Close guess the wine">&times;</button>
+    </div>
+    <div class="trivia-scoreboard" aria-label="Scoreboard">
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Round</span>
+        <span class="trivia-sb-num" id="guessRound" style="font-size:32px">—</span>
+      </div>
+      <div class="trivia-sb-cell">
+        <span class="trivia-sb-label">Score &mdash; right so far</span>
+        <span class="trivia-sb-num" id="guessScore" style="font-size:32px">0</span>
+      </div>
+    </div>
+
+    <div id="guessStart">
+      <p class="trivia-intro">Read the tasting notes, then pick the bottle they belong to. <strong>10 rounds</strong>, four choices each, from the wines this store carries &mdash; no timer, so take your time and read properly.</p>
+      <button type="button" class="btn-save trivia-start-btn" id="guessStartBtn">Start &mdash; 10 rounds</button>
+      <p class="hs-note" id="guessStartNote" role="status" hidden></p>
+    </div>
+
+    <div id="guessPlay" hidden>
+      <p class="trivia-qcount" id="guessQCount">Round 1 of 10</p>
+      <p class="guess-notes" id="guessNotes"></p>
+      <div class="guess-hints" id="guessHints"></div>
+      <div class="trivia-answers" id="guessAnswers"></div>
+      <p class="trivia-feedback" id="guessFeedback" aria-live="polite"></p>
+    </div>
+
+    <div id="guessEnd" hidden>
+      <div class="trivia-end">
+        <p class="trivia-end-label">Game over!</p>
+        <span class="trivia-final-num" id="guessFinalScore">0</span>
+        <p class="trivia-final-line" id="guessFinalLine">correct out of 10</p>
+        <p class="trivia-final-detail" id="guessFinalDetail"></p>
+        <div class="trivia-end-actions">
+          <button type="button" class="btn-save" id="guessAgainBtn">Play again</button>
+          <button type="button" class="btn-ghost" id="guessDoneBtn">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button type="button" class="btn-ghost" id="guessCancel">Close &mdash; back to the list</button>
     </div>
   </div>
 </div>
@@ -6490,7 +6548,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.13</span>
+      <span class="manual-pill accent">Version 2026.11.04.14</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6893,7 +6951,7 @@
     <details class="manual-sec" id="manual-games" data-title="Games and Contests — Wine Trivia rapid fire">
       <summary><span class="manual-sec-num">16</span><span class="manual-sec-title"><strong>Games &amp; Contests — Wine Trivia</strong><small>The 1-minute rapid fire game, in its own Settings tab</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
-        <p>Settings has a fourth tab, <span class="manual-ui">Games &amp; Contests</span>, beside Settings, Documents and Support. It is the home for Grapevine&rsquo;s games — the first one there is <strong>Wine Trivia — 1-minute rapid fire</strong>. There is no trivia button in the header and none in Support; the game lives in Games &amp; Contests only. No sign-in is needed to play.</p>
+        <p>Settings has a fourth tab, <span class="manual-ui">Games &amp; Contests</span>, beside Settings, Documents and Support. It is the home for Grapevine&rsquo;s games — <strong>Wine Trivia — 1-minute rapid fire</strong> and <strong>Guess the Wine</strong>. There is no game button in the header and none in Support; the games live in Games &amp; Contests only. No sign-in is needed to play either game.</p>
         <h3>How to play</h3>
         <ol>
           <li>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Wine Trivia — 1-minute rapid fire</span>. The game opens as a pop-up.</li>
@@ -6915,6 +6973,8 @@
           <li>Tying the current #3 score isn&rsquo;t quite enough — the earlier #3 was set first, so a new score has to beat it to take the place.</li>
           <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
         </ul>
+        <h3>Guess the Wine</h3>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -6922,7 +6982,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.13</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.14</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -11947,6 +12007,201 @@
   triviaOverlay.addEventListener('click', function(ev){ if(ev.target === triviaOverlay) closeTrivia(); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !triviaOverlay.hidden) closeTrivia();
+  });
+
+
+  /* ---------- Guess the Wine — from its tasting notes ----------
+     A second game in Games & Contests, beside Wine Trivia. Each
+     round shows one wine's tasting notes (plus its sweetness and
+     style as hints) and four bottles to choose from, in a 2x2
+     grid like trivia. The wines come from the store being viewed
+     — only products that store carries, that have tasting notes
+     long enough to play with, and whose notes do NOT name the
+     brand or product (that would give the answer away). The same
+     brand+product never appears twice in one round, even in a
+     different size, because notes carry across sizes and the two
+     sizes would be indistinguishable. 10 rounds, no timer (notes
+     need reading), correct = green + ding, wrong = red + buzzer
+     and the right answer shown in green, then the next round.
+     Scores live only in the session — there is no shared board
+     for this game, so it never touches trivia_high_scores. No
+     sign-in needed to play. */
+  var GUESS_ROUNDS = 10;
+  var guessOverlay = document.getElementById('guessOverlay');
+  var guessRoundEl = document.getElementById('guessRound');
+  var guessScoreEl = document.getElementById('guessScore');
+  var guessStartEl = document.getElementById('guessStart');
+  var guessPlayEl = document.getElementById('guessPlay');
+  var guessEndEl = document.getElementById('guessEnd');
+  var guessQCountEl = document.getElementById('guessQCount');
+  var guessNotesEl = document.getElementById('guessNotes');
+  var guessHintsEl = document.getElementById('guessHints');
+  var guessAnswersEl = document.getElementById('guessAnswers');
+  var guessFeedbackEl = document.getElementById('guessFeedback');
+  var guessStartNoteEl = document.getElementById('guessStartNote');
+  var guess = { playing:false, locked:false, deck:[], pos:0, current:null,
+    score:0, answered:0, best:0, advanceId:null, returnFocus:null };
+  function guessRowInfo(row){
+    var d = details[row.getAttribute('data-idx')];
+    var notesEl = d ? d.querySelector('.notes') : null;
+    var pnameEl = row.querySelector('.pname');
+    return {
+      row: row,
+      brand: row.getAttribute('data-brand') || '',
+      product: pnameEl ? pnameEl.textContent : '',
+      size: cellText(row, 'Size'),
+      sweet: row.getAttribute('data-sweet') || '',
+      rich: row.getAttribute('data-rich') || '',
+      notes: notesEl ? notesEl.textContent.trim() : ''
+    };
+  }
+  function guessLabel(info){ return info.brand + ' ' + info.product + ' (' + info.size + ')'; }
+  function guessBuildPool(){
+    var store = storeSets[activeStore];
+    if(!store) return [];
+    return rows.filter(function(row){
+      if(!store.has(row.getAttribute('data-idx'))) return false;
+      var info = guessRowInfo(row);
+      if(info.notes.length < 25) return false;
+      var low = info.notes.toLowerCase();
+      if(info.brand && low.indexOf(info.brand.toLowerCase()) !== -1) return false;
+      if(info.product && low.indexOf(info.product.toLowerCase()) !== -1) return false;
+      return true;
+    }).map(guessRowInfo);
+  }
+  function guessShowScreen(which){
+    guessStartEl.hidden = which !== 'start';
+    guessPlayEl.hidden = which !== 'play';
+    guessEndEl.hidden = which !== 'end';
+  }
+  function openGuess(fromEl){
+    if(!guessOverlay) return;
+    guess.returnFocus = fromEl || null;
+    if(guess.advanceId){ clearTimeout(guess.advanceId); guess.advanceId = null; }
+    guess.playing = false;
+    guess.locked = false;
+    guess.score = 0;
+    guessScoreEl.textContent = '0';
+    guessRoundEl.textContent = '—';
+    guessStartNoteEl.hidden = true;
+    guessShowScreen('start');
+    guessOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('guessStartBtn').focus();
+  }
+  function closeGuess(){
+    if(!guessOverlay || guessOverlay.hidden) return;
+    if(guess.advanceId){ clearTimeout(guess.advanceId); guess.advanceId = null; }
+    guess.playing = false;
+    guessOverlay.hidden = true;
+    if(editorOverlay.hidden && storeOverlay.hidden && settingsOverlay.hidden && knowledgeOverlay.hidden) document.body.style.overflow = '';
+    var backTo = guess.returnFocus || document.getElementById('guessWineGames');
+    guess.returnFocus = null;
+    if(backTo) backTo.focus();
+  }
+  function guessStart(){
+    triviaAudio(); /* unlock sound inside this tap, like trivia */
+    if(guess.advanceId){ clearTimeout(guess.advanceId); guess.advanceId = null; }
+    var pool = triviaShuffle(guessBuildPool());
+    if(pool.length < 4){
+      guessStartNoteEl.textContent = 'Not enough wines with tasting notes in this store to play yet — try another store, or add tasting notes to more products first.';
+      guessStartNoteEl.hidden = false;
+      return;
+    }
+    guess.deck = pool.slice(0, Math.min(GUESS_ROUNDS, pool.length));
+    guess.pool = pool;
+    guess.pos = 0;
+    guess.score = 0;
+    guess.answered = 0;
+    guess.locked = false;
+    guess.playing = true;
+    guessScoreEl.textContent = '0';
+    guessShowScreen('play');
+    guessShowRound();
+  }
+  function guessShowRound(){
+    var info = guess.deck[guess.pos];
+    guess.current = info;
+    guess.locked = false;
+    guessRoundEl.textContent = (guess.pos + 1) + ' / ' + guess.deck.length;
+    guessQCountEl.textContent = 'Round ' + (guess.pos + 1) + ' of ' + guess.deck.length;
+    guessNotesEl.textContent = info.notes;
+    guessHintsEl.innerHTML = '';
+    if(info.sweet){
+      var s = document.createElement('span'); s.className = 'guess-hint'; s.textContent = 'Sweetness: ' + info.sweet; guessHintsEl.appendChild(s);
+    }
+    if(info.rich){
+      var r = document.createElement('span'); r.className = 'guess-hint'; r.textContent = 'Style: ' + info.rich; guessHintsEl.appendChild(r);
+    }
+    var key = (info.brand + '|' + info.product).toLowerCase();
+    var others = guess.pool.filter(function(o){ return (o.brand + '|' + o.product).toLowerCase() !== key; });
+    triviaShuffle(others);
+    var options = triviaShuffle([info].concat(others.slice(0, 3)));
+    guessAnswersEl.innerHTML = '';
+    guessFeedbackEl.textContent = '';
+    guessFeedbackEl.className = 'trivia-feedback';
+    options.forEach(function(opt){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'trivia-answer';
+      btn.textContent = guessLabel(opt);
+      var ok = (opt === info);
+      if(ok) btn.setAttribute('data-correct', '1');
+      btn.addEventListener('click', function(){ guessAnswer(btn, ok); });
+      guessAnswersEl.appendChild(btn);
+    });
+  }
+  function guessAnswer(btn, ok){
+    if(!guess.playing || guess.locked) return;
+    guess.locked = true;
+    guess.answered++;
+    var buttons = guessAnswersEl.querySelectorAll('.trivia-answer');
+    Array.prototype.forEach.call(buttons, function(b){ b.disabled = true; });
+    if(ok){
+      guess.score++;
+      guessScoreEl.textContent = String(guess.score);
+      btn.classList.add('is-correct');
+      guessFeedbackEl.textContent = 'Correct!';
+      guessFeedbackEl.className = 'trivia-feedback good';
+      triviaDing();
+    } else {
+      btn.classList.add('is-wrong');
+      var right = guessAnswersEl.querySelector('[data-correct="1"]');
+      if(right) right.classList.add('is-correct');
+      guessFeedbackEl.textContent = 'That was ' + guessLabel(guess.current) + '.';
+      guessFeedbackEl.className = 'trivia-feedback bad';
+      triviaBuzz();
+      if(window.navigator && navigator.vibrate) navigator.vibrate(80);
+    }
+    guess.advanceId = setTimeout(function(){
+      guess.advanceId = null;
+      guess.pos++;
+      if(guess.pos >= guess.deck.length) guessEnd();
+      else guessShowRound();
+    }, ok ? 900 : 2200);
+  }
+  function guessEnd(){
+    guess.playing = false;
+    if(guess.score > guess.best) guess.best = guess.score;
+    document.getElementById('guessFinalScore').textContent = String(guess.score);
+    document.getElementById('guessFinalLine').textContent = 'correct out of ' + guess.deck.length;
+    document.getElementById('guessFinalDetail').textContent = 'Best this session: ' + guess.best + ' out of ' + guess.deck.length + '.';
+    guessShowScreen('end');
+    document.getElementById('guessAgainBtn').focus();
+  }
+  var guessWineGamesBtn = document.getElementById('guessWineGames');
+  if(guessWineGamesBtn) guessWineGamesBtn.addEventListener('click', function(){
+    closeSettings();
+    openGuess(guessWineGamesBtn);
+  });
+  document.getElementById('guessStartBtn').addEventListener('click', guessStart);
+  document.getElementById('guessAgainBtn').addEventListener('click', guessStart);
+  document.getElementById('guessClose').addEventListener('click', closeGuess);
+  document.getElementById('guessCancel').addEventListener('click', closeGuess);
+  document.getElementById('guessDoneBtn').addEventListener('click', closeGuess);
+  guessOverlay.addEventListener('click', function(ev){ if(ev.target === guessOverlay) closeGuess(); });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && !guessOverlay.hidden) closeGuess();
   });
 
   /* ---------- Product Info Manual — mobile-friendly web version (Documents) ----------
