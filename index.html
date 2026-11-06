@@ -5535,10 +5535,11 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.23</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.24</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
+        <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
         <div id="impactPdfLinks"></div>
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
@@ -5547,14 +5548,13 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.23</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.24</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-support" role="tabpanel" aria-labelledby="settingsTab-support" hidden>
       <div class="settings-actions" style="margin-top:0;margin-bottom:14px">
         <button type="button" class="settings-action" id="supportCenter"><span>Support Center<span class="sa-sub">Wine Rack Store Support Centre contacts &mdash; support, marketing, operations, marketplace, distribution and HR &middot; Last updated April 21, 2026</span></span></button>
-        <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
         <button type="button" class="settings-action" id="wineKnowledgeSupport"><span>Wine Knowledge<span class="sa-sub">Tasting steps, sweetness, tannins, serving, storing, food pairing and red &amp; white wine varietals</span></span></button>
       </div>
     </div>
@@ -6671,7 +6671,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.23</span>
+      <span class="manual-pill accent">Version 2026.11.04.24</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6938,9 +6938,10 @@
       <div class="manual-sec-body">
         <p>The <span class="manual-ui">Documents</span> tab is a collapsible section — tap its heading to expand or collapse it. Inside:</p>
         <ul>
+          <li><strong>What&rsquo;s on sample today?</strong> — at the very top of the tab: what&rsquo;s pouring today from the sampling schedule of the impact running for this store&rsquo;s type and build.</li>
           <li><strong>Loved wines</strong> — your loved wines, most loved first (§6).</li>
           <li><strong>This manual</strong> — the web version you&rsquo;re reading now, plus the <strong>Manual.pdf</strong> for printing. Same content, same version number as the app.</li>
-          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods, and “What&rsquo;s on sample today.” A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); Sobeys and Foodland share one impact per build (fully built or pallet); a Non-boutique store sees the Non-Boutique impact either way. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
+          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods. A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); Sobeys and Foodland share one impact per build (fully built or pallet); a Non-boutique store sees the Non-Boutique impact either way. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
         </ul>
         <div class="manual-callout tip"><strong>Which manual should you open?</strong>On your phone, the web manual — text fits your screen and search works. The PDF is for the printer: fixed pages, made for paper.</div>
       </div>
@@ -7035,7 +7036,7 @@
       <summary><span class="manual-sec-num">14</span><span class="manual-sec-title"><strong>Support — Food pairing finder &amp; Support Center</strong><small>“What are you eating?”, and who to call at Wine Rack Store Support</small></span><span class="manual-chev"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span></summary>
       <div class="manual-sec-body">
         <p><strong>Support Center</strong> is at the very top of <span class="manual-ui">Settings → Support</span> — the Wine Rack Store Support Centre contacts, described below.</p>
-        <p><strong>What&rsquo;s on sample today?</strong> and <strong>Wine Knowledge</strong> live in <span class="manual-ui">Settings → Support</span> only — they are not in Documents. The Support tab holds just three entries: Support Center, What&rsquo;s on sample today? and Wine Knowledge. The impact documents and this manual stay in Documents.</p>
+        <p><strong>Wine Knowledge</strong> lives in <span class="manual-ui">Settings → Support</span>; <strong>What&rsquo;s on sample today?</strong> sits at the top of <span class="manual-ui">Settings → Documents</span>. The Support tab holds just two entries: Support Center and Wine Knowledge. The impact documents and this manual stay in Documents.</p>
         <p><strong>Food pairing finder — “What are you eating?”</strong> The finder is a <strong>pop-up window</strong>, never an inline form. One button opens it: the <span class="manual-ui">Food pairing finder</span> button under the store pill in the header, and the pop-up opens over the list. There is no Food pairing entry in the Support tab. Close the pop-up (× or <span class="manual-ui">Close — back to the list</span>) to return to the list. Type a dish (spicy Thai curry, roast chicken, steak, salmon, chocolate dessert…) and the finder ranks the wines <strong>the store you&rsquo;re viewing actually carries and has available</strong>, closest match first with a few backups. Each recommendation gives a <strong>reason tailored to the dish you typed</strong>, naming the actual element in it: how the wine&rsquo;s sweetness handles the spice you mentioned, how its acidity cuts the creamy or rich part, how its acidity meets tomato, how its tannins grip grilled meat, how it suits the named fish, or why it stays sweeter than the named dessert — drawn from the wine&rsquo;s sweetness, acidity, tannins, richness, varietal and tasting notes. It follows the classic rules: sweetness for spicy food, acidity for rich or tomato-based dishes, tannin for red meat, light high-acid whites for fish, and a wine sweeter than the dessert. Wines the store does not carry, and wines marked unavailable at your store, are never recommended. <strong>Tap any recommendation to open that wine in the list.</strong></p>
         <p>The app carries the <strong>Wine Rack Store Support Centre</strong> contact sheet (last updated April 21, 2026) in <span class="manual-ui">Settings → Support Center</span>, so it&rsquo;s in your pocket on the floor — no hunting for the sheet.</p>
         <p>Contacts are grouped the same way as the sheet:</p>
@@ -7122,8 +7123,8 @@
   <p>Grapevine can sit on your phone&rsquo;s home screen just like an app: one tap on the grape icon and it opens full-screen, with no address to type and no browser bars in the way. Adding it takes under a minute, in the browser you already use — find your phone and browser below.</p>
   <h4 class="manual-subhead">Android</h4>
   <ul class="cs-list">
-    <li><strong>Chrome:</strong> open Grapevine, tap the <strong>&#8942; menu</strong> at the top right, and tap <strong>Add to home screen</strong> — if the menu offers <strong>Install app</strong> instead, tap that; both put the same icon on the home screen. Confirm with <strong>Add</strong> (or <strong>Install</strong>).</li>
-    <li><strong>Firefox:</strong> open Grapevine, tap the <strong>&#8942; menu</strong>, and tap <strong>Add to Home screen</strong>. Either drag the icon to where you want it, or tap <strong>Add automatically</strong>.</li>
+    <li><strong>Chrome:</strong> open Grapevine, tap the <strong>&#8942; menu</strong> at the top right, and tap <strong>Add to home screen</strong> — on your version it may be called <strong>Install app</strong> or <strong>Install and create shortcut</strong> instead; all three put the same icon on the home screen. Confirm with <strong>Add</strong> (or <strong>Install</strong>).</li>
+    <li><strong>Firefox:</strong> open Grapevine, tap the <strong>&#8942; menu</strong>, and tap <strong>Add to Home screen</strong> — for a site like Grapevine it may simply say <strong>Install</strong>. Either drag the icon to where you want it, or tap <strong>Add automatically</strong>.</li>
     <li><strong>Samsung Internet:</strong> open Grapevine, tap the <strong>&#9776; menu</strong>, tap <strong>Add page to</strong>, then <strong>Home screen</strong>, and tap <strong>Add</strong>.</li>
     <li><strong>Microsoft Edge:</strong> open Grapevine, tap the <strong>&#8943; menu</strong> along the bottom, and tap <strong>Add to phone</strong>, then <strong>Install</strong>.</li>
   </ul>
@@ -7145,7 +7146,7 @@
   </div>
 </details>
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.23</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.24</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
