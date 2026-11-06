@@ -5535,7 +5535,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.24</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.25</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5548,7 +5548,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.24</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.25</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6671,7 +6671,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.24</span>
+      <span class="manual-pill accent">Version 2026.11.04.25</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6820,6 +6820,7 @@
         </table>
         <p>The shared list refreshes itself about every <strong>30 seconds</strong> while the app is open, so changes made on another phone appear without reloading.</p>
         <h3>Adding a store</h3>
+        <p>Adding a store needs you <strong>signed in</strong> — if you&rsquo;re not, the app asks you to sign in first, and no store is created until you do. Choosing a store that&rsquo;s already on the list works signed out.</p>
         <ol>
           <li>Choose <span class="manual-ui">Add store</span> — either in the first-visit popup or in Settings.</li>
           <li>Enter the store number and choose a <strong>store type</strong>: Loblaws, Sobeys, Foodland, or Non-boutique.</li>
@@ -7146,7 +7147,7 @@
   </div>
 </details>
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.24</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.25</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -14370,6 +14371,9 @@
         if(welcomeType) welcomeType.focus();
         return;
       }
+      /* Same rule as the store dialog: creating a store needs a
+         signed-in user. Picking an existing store stays open. */
+      if(!requireSignIn('add a store')) return;
     } else if(welcomeSel && welcomeSel.value){
       num = welcomeSel.value;
     } else {
@@ -14635,6 +14639,11 @@
         return;
       }
     }
+    /* Creating a store changes the shared list, so it needs a
+       signed-in user: signed out, Save shows the sign-in prompt
+       and nothing is created. Saving an existing store's
+       products (wasAdd false) is not affected. */
+    if(wasAdd && !requireSignIn('add a store')) return;
     if(wasAdd){
       storeOrder.push(num);
       storeSets[num] = dlgSet;
