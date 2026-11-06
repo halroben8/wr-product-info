@@ -681,6 +681,8 @@
   .hs-form input{flex:1;min-width:0;min-height:48px;font-size:16px}
   .hs-form .btn-save{flex:none;min-height:48px}
   .hs-form[hidden]{display:none !important}
+  .hs-signin-btn{margin-top:10px;width:100%;min-height:48px}
+  .hs-signin-btn[hidden]{display:none !important}
   .hs-msg{margin:9px 0 0;font-size:13.5px;line-height:1.5;font-weight:650;color:var(--plum)}
   :root[data-theme="dark"] .hs-msg{color:var(--lilac)}
   .hs-msg[hidden]{display:none !important}
@@ -5533,7 +5535,7 @@
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.21</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.22</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5545,7 +5547,7 @@
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.21</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.22</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -5665,6 +5667,7 @@
             <input id="triviaHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
             <button type="submit" class="btn-save" id="triviaHsSave">Save my score</button>
           </form>
+          <button type="button" class="btn-ghost hs-signin-btn" id="triviaHsSignIn" hidden>Sign in to save your score</button>
           <p class="hs-msg" id="triviaHsMsg" role="status" hidden></p>
           <div class="hs-board-wrap" id="triviaHsBoardWrap" hidden>
             <p class="hs-board-head">High Score board &mdash; top 3</p>
@@ -5707,6 +5710,15 @@
       <label class="guess-opt" for="guessIncludeCvqa"><input type="checkbox" id="guessIncludeCvqa" checked /> Include CVQA</label>
       <button type="button" class="btn-save trivia-start-btn" id="guessStartBtn">Start &mdash; 10 rounds</button>
       <p class="hs-note" id="guessStartNote" role="status" hidden></p>
+      <!-- The shared High Score board lives on the game's start
+           page, under Start, exactly like Wine Trivia's. While the
+           guess_high_scores table does not exist yet it shows a
+           short "coming soon" note instead. -->
+      <div class="hs-board-wrap" id="guessStartHsWrap">
+        <p class="hs-board-head">High Score &mdash; top 3</p>
+        <ol class="hs-list" id="guessStartHsBoard" hidden></ol>
+        <p class="hs-note" id="guessStartHsNote" role="status">Loading the board&hellip;</p>
+      </div>
     </div>
 
     <div id="guessPlay" hidden>
@@ -5723,6 +5735,26 @@
         <span class="trivia-final-num" id="guessFinalScore">0</span>
         <p class="trivia-final-line" id="guessFinalLine">correct out of 10</p>
         <p class="trivia-final-detail" id="guessFinalDetail"></p>
+        <!-- High Score entry: shown only when this game's score
+             makes the shared top 3 — the same entry as Wine
+             Trivia's, including the sign-in button that only
+             appears while the player is signed out. -->
+        <div class="hs-congrats" id="guessHsCongrats" hidden>
+          <p class="hs-congrats-title" id="guessHsCongratsTitle"></p>
+          <p class="hs-congrats-sub">Add your name to the shared High Score board &mdash; everyone who plays sees the same top 3.</p>
+          <form class="hs-form" id="guessHsForm">
+            <label class="sr-only" for="guessHsName">Your name for the High Score board</label>
+            <input id="guessHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
+            <button type="submit" class="btn-save" id="guessHsSave">Save my score</button>
+          </form>
+          <button type="button" class="btn-ghost hs-signin-btn" id="guessHsSignIn" hidden>Sign in to save your score</button>
+          <p class="hs-msg" id="guessHsMsg" role="status" hidden></p>
+          <div class="hs-board-wrap" id="guessHsBoardWrap" hidden>
+            <p class="hs-board-head">High Score board &mdash; top 3</p>
+            <ol class="hs-list" id="guessHsBoard"></ol>
+          </div>
+        </div>
+        <p class="hs-note" id="guessHsNote" role="status" hidden style="margin:16px 0;text-align:left"></p>
         <div class="trivia-end-actions">
           <button type="button" class="btn-save" id="guessAgainBtn">Play again</button>
           <button type="button" class="btn-ghost" id="guessDoneBtn">Close</button>
@@ -5794,6 +5826,7 @@
             <input id="pairingHsName" type="text" maxlength="60" autocomplete="name" placeholder="Your name" />
             <button type="submit" class="btn-save" id="pairingHsSave">Save my score</button>
           </form>
+          <button type="button" class="btn-ghost hs-signin-btn" id="pairingHsSignIn" hidden>Sign in to save your score</button>
           <p class="hs-msg" id="pairingHsMsg" role="status" hidden></p>
           <div class="hs-board-wrap" id="pairingHsBoardWrap" hidden>
             <p class="hs-board-head">High Score board &mdash; top 3</p>
@@ -6638,7 +6671,7 @@
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.21</span>
+      <span class="manual-pill accent">Version 2026.11.04.22</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -7067,16 +7100,16 @@
         <p>Trivia is a social game, so its high scores are <strong>shared</strong> — one board for everyone who plays, not just the scores on your own phone. The board shows the <strong>top 3 players and what they scored</strong>, best first, and it lives <strong>only on the game&rsquo;s own start page</strong>, under the Start button — open Wine Trivia to see who you have to beat before you play. There is no separate High Score button. <strong>One spot per player:</strong> each player appears at most once, with their best score — a new score only replaces your own spot if it beats your best, and a lower score leaves your best standing.</p>
         <ul>
           <li>When a game ends, if your score makes the <strong>top 3</strong>, the end screen congratulates you and tells you the <strong>place you attained</strong> — for example, &ldquo;Congratulations! You made #3 on the High Score board!&rdquo;</li>
-          <li>Enter your name and tap <span class="manual-ui">Save my score</span> to put it on the board. If you&rsquo;re signed in, the name field is <strong>prefilled with your display name</strong> — you can change it before saving; if you&rsquo;re not signed in, just type a name. No sign-in is needed to be on the board.</li>
+          <li>Enter your name and tap <span class="manual-ui">Save my score</span> to put it on the board. If you&rsquo;re signed in, the name field is <strong>prefilled with your display name</strong> — you can change it before saving; if you&rsquo;re not signed in, just type a name. No sign-in is needed to be on the board. Or tap <span class="manual-ui">Sign in to save your score</span> (shown only while you&rsquo;re signed out): after Google sign-in you come back to the app and the score is saved under your own name for you.</li>
           <li>Tying the current #3 score isn&rsquo;t quite enough — the earlier #3 was set first, so a new score has to beat it to take the place.</li>
           <li>The board is stored in the shared list (the <span class="manual-ui">trivia_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon or that no scores are on it yet — and the game itself plays exactly the same either way.</li>
         </ul>
         <h3>Guess the Wine</h3>
-        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles</strong> are in the game only while the <span class="manual-ui">Include CVQA</span> box on the start page is ticked — it is ticked by default. Untick it to leave them out entirely, because not every store carries them (see Select CVQA in Admin above). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. Scores live only in that session — there is no shared board for this game.</p>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Guess the Wine</span>. Each round shows one wine&rsquo;s <strong>tasting notes</strong>, with its sweetness and style as hints, and four bottles to choose from — <strong>10 rounds</strong>, no timer, so take time to read properly. The wines come from the store you&rsquo;re viewing, and only wines whose notes don&rsquo;t name the brand or product can be the answer (that would give it away). <strong>CVQA bottles</strong> are in the game only while the <span class="manual-ui">Include CVQA</span> box on the start page is ticked — it is ticked by default. Untick it to leave them out entirely, because not every store carries them (see Select CVQA in Admin above). Correct answers ding and go green; wrong answers buzz, go red, and show the right bottle. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only) on its start page, like Wine Trivia&rsquo;s: when a game ends, a score that makes the board can be saved there under your name, or with <span class="manual-ui">Sign in to save your score</span> if you&rsquo;re signed out. The board is stored in the shared list (the <span class="manual-ui">guess_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way.</p>
         <p>Typing <span class="manual-ui">cvqa</span> in the main search lists the CVQA bottles.</p>
         <p>The start page also has an <span class="manual-ui">Include CVQA</span> checkbox, ticked by default. Untick it before starting and no CVQA bottle appears in that game — neither as the answer nor as a wrong choice. Play again keeps the setting you last chose.</p>
         <h3>Pairing Quiz</h3>
-        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Pairing Quiz</span>. Each round shows a <strong>dish</strong> and <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer, so take time to think. Every answer explains itself: get it right and the explanation says why that wine pairs best; get it wrong and it says why the wine you picked was wrong and why the right one was right. Right answers in a row build a <strong>hot streak</strong>, shown while you play &mdash; one wrong answer resets it to zero, and your best streak of the session is shown at the end. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only), like Wine Trivia&rsquo;s, and each entry shows the best streak of that run too. The board is stored in the shared list (the <span class="manual-ui">pairing_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way. A question only plays in a store that carries all four of its wines, so the rounds differ from store to store. (Fixed in Version 2026.11.04.21: tapping Pairing Quiz used to open the Food pairing finder instead of the quiz &mdash; the two shared a panel name. They now open separately.)</p>
+        <p>Open <span class="manual-ui">Settings → Games &amp; Contests</span> and tap <span class="manual-ui">Pairing Quiz</span>. Each round shows a <strong>dish</strong> and <strong>four of this store&rsquo;s wines</strong> &mdash; pick the one that pairs best. <strong>10 rounds</strong>, no timer, so take time to think. Every answer explains itself: get it right and the explanation says why that wine pairs best; get it wrong and it says why the wine you picked was wrong and why the right one was right. Right answers in a row build a <strong>hot streak</strong>, shown while you play &mdash; one wrong answer resets it to zero, and your best streak of the session is shown at the end. The game has a <strong>shared High Score board</strong> (top 3, one spot per player, best score only), like Wine Trivia&rsquo;s, and each entry shows the best streak of that run too. A score that makes the board can be saved under a typed name, or with <span class="manual-ui">Sign in to save your score</span> (shown only while signed out), which saves it under your own name when you come back from Google sign-in. The board is stored in the shared list (the <span class="manual-ui">pairing_high_scores</span> table). Until that table has been created, the board simply shows that high scores are coming soon &mdash; and the game itself plays exactly the same either way. A question only plays in a store that carries all four of its wines, so the rounds differ from store to store. (Fixed in Version 2026.11.04.21: tapping Pairing Quiz used to open the Food pairing finder instead of the quiz &mdash; the two shared a panel name. They now open separately.)</p>
         <h3>Winerack Contests</h3>
         <p>Below Wine Trivia in the same tab is <span class="manual-ui">Winerack Contests</span>, marked <strong>Coming soon</strong>. It is a placeholder for now: tapping it just shows a &ldquo;Coming soon&rdquo; note — it does not open a form and does not submit or save anything yet.</p>
         <div class="manual-callout tip"><strong>No sound?</strong> The game&rsquo;s sounds are switched on by your tap on Start (phones require a tap before any sound can play). If it&rsquo;s still quiet, check the phone isn&rsquo;t on silent or turned down — the game itself has no mute switch.</div>
@@ -7084,7 +7117,7 @@
     </details>
 
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.21</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.22</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -12329,6 +12362,7 @@
   var triviaHsBoardWrapEl = document.getElementById('triviaHsBoardWrap');
   var triviaHsBoardEl = document.getElementById('triviaHsBoard');
   var triviaHsNoteEl = document.getElementById('triviaHsNote');
+  var triviaHsSignInEl = document.getElementById('triviaHsSignIn');
 
   /* One spot per player: a player name (case-insensitive, trimmed)
      appears at most once on the board, with their best score — a
@@ -12467,6 +12501,7 @@
     triviaHsNoteEl.hidden = true;
     triviaHsBoardWrapEl.hidden = true;
     triviaHsFormEl.hidden = false;
+    if(triviaHsSignInEl) triviaHsSignInEl.hidden = true;
     triviaHsSaveEl.disabled = false;
     triviaHsNameEl.disabled = false;
     hsShowMsg('');
@@ -12492,6 +12527,8 @@
       triviaHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
       triviaHsNameEl.value = authUser ? authDisplayName() : '';
       triviaHsCongratsEl.hidden = false;
+      /* The sign-in button is offered only while signed out */
+      if(triviaHsSignInEl) triviaHsSignInEl.hidden = !!authUser;
       triviaHsNameEl.focus();
     });
   }
@@ -12576,6 +12613,12 @@
   if(triviaHsFormEl) triviaHsFormEl.addEventListener('submit', function(ev){
     ev.preventDefault();
     hsSaveScore();
+  });
+  if(triviaHsFormEl) triviaHsFormEl.addEventListener('submit', function(){
+    if(triviaHsSignInEl) triviaHsSignInEl.hidden = true;
+  });
+  if(triviaHsSignInEl) triviaHsSignInEl.addEventListener('click', function(){
+    signInToSaveScore('trivia', trivia.score, 0);
   });
   document.getElementById('triviaStartBtn').addEventListener('click', triviaStart);
   document.getElementById('triviaAgainBtn').addEventListener('click', triviaStart);
@@ -12670,6 +12713,7 @@
     guessRoundEl.textContent = '—';
     guessStartNoteEl.hidden = true;
     guessShowScreen('start');
+    guessHsRenderStartBoard();
     guessOverlay.hidden = false;
     document.body.style.overflow = 'hidden';
     document.getElementById('guessStartBtn').focus();
@@ -12774,6 +12818,7 @@
     document.getElementById('guessFinalLine').textContent = 'correct out of ' + guess.deck.length;
     document.getElementById('guessFinalDetail').textContent = 'Best this session: ' + guess.best + ' out of ' + guess.deck.length + '.';
     guessShowScreen('end');
+    guessHsOnGameEnd();
     document.getElementById('guessAgainBtn').focus();
   }
   var guessWineGamesBtn = document.getElementById('guessWineGames');
@@ -12791,6 +12836,243 @@
     if(ev.key === 'Escape' && !guessOverlay.hidden) closeGuess();
   });
 
+
+  /* ---------- Guess the Wine — shared High Score board ----------
+     Mirrors Wine Trivia's board exactly (same shared helpers):
+     top 3 distinct players, one spot per player, best score only,
+     the board on the game's start page and the entry on its end
+     screen. Stored in the guess_high_scores table; while that
+     table does not exist the board shows "coming soon" and the
+     game plays exactly the same. */
+  var GUESS_TABLE = 'guess_high_scores';
+  var guessHsCongratsEl = document.getElementById('guessHsCongrats');
+  var guessHsTitleEl = document.getElementById('guessHsCongratsTitle');
+  var guessHsFormEl = document.getElementById('guessHsForm');
+  var guessHsNameEl = document.getElementById('guessHsName');
+  var guessHsSaveEl = document.getElementById('guessHsSave');
+  var guessHsMsgEl = document.getElementById('guessHsMsg');
+  var guessHsBoardWrapEl = document.getElementById('guessHsBoardWrap');
+  var guessHsBoardEl = document.getElementById('guessHsBoard');
+  var guessHsNoteEl = document.getElementById('guessHsNote');
+  var guessHsSignInEl = document.getElementById('guessHsSignIn');
+  var guessHsSaved = false;
+  function guessHsShowMsg(text){
+    if(!guessHsMsgEl) return;
+    guessHsMsgEl.textContent = text || '';
+    guessHsMsgEl.hidden = !text;
+  }
+  function guessHsFetchTop3(){
+    return sb(GUESS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc').then(function(list){
+      return hsDedupeBoard(Array.isArray(list) ? list : []);
+    }, function(err){
+      if(window.console) console.warn('Guess the Wine high scores not loaded (the guess_high_scores table may not exist yet):', err);
+      return null;
+    });
+  }
+  function guessHsRenderStartBoard(){
+    var listEl = document.getElementById('guessStartHsBoard');
+    var noteEl = document.getElementById('guessStartHsNote');
+    if(!listEl || !noteEl) return;
+    listEl.innerHTML = '';
+    listEl.hidden = true;
+    noteEl.hidden = false;
+    noteEl.textContent = 'Loading the board…';
+    guessHsFetchTop3().then(function(rows){
+      if(rows === null){
+        noteEl.textContent = 'High scores coming soon — the shared board isn\u2019t set up yet.';
+        return;
+      }
+      if(!rows.length){
+        noteEl.textContent = 'No scores on the board yet — be the first!';
+        return;
+      }
+      hsRenderList(listEl, rows, null);
+      listEl.hidden = false;
+      noteEl.hidden = true;
+    });
+  }
+  function guessHsOnGameEnd(){
+    guessHsSaved = false;
+    guessHsCongratsEl.hidden = true;
+    guessHsNoteEl.hidden = true;
+    guessHsBoardWrapEl.hidden = true;
+    guessHsFormEl.hidden = false;
+    guessHsSaveEl.disabled = false;
+    guessHsNameEl.disabled = false;
+    if(guessHsSignInEl) guessHsSignInEl.hidden = true;
+    guessHsShowMsg('');
+    if(!(guess.score > 0)) return;
+    var finalScore = guess.score;
+    guessHsFetchTop3().then(function(rows){
+      if(guess.playing || guessEndEl.hidden || guess.score !== finalScore) return;
+      if(rows === null){
+        guessHsNoteEl.textContent = 'The shared High Score board is coming soon — it isn\u2019t set up yet, so this score couldn\u2019t be entered on it. Once the board is live, top-3 scores will be entered here.';
+        guessHsNoteEl.hidden = false;
+        return;
+      }
+      if(!hsQualifies(finalScore, rows)) return;
+      if(authUser){
+        var own = null;
+        for(var oi = 0; oi < rows.length; oi++){ if(hsPlayerKey(rows[oi].player_name) === hsPlayerKey(authDisplayName())){ own = rows[oi]; break; } }
+        if(own && own.score >= finalScore) return;
+      }
+      var place = hsPlaceFor(finalScore, rows);
+      guessHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
+      guessHsNameEl.value = authUser ? authDisplayName() : '';
+      guessHsCongratsEl.hidden = false;
+      /* The sign-in button is offered only while signed out */
+      if(guessHsSignInEl) guessHsSignInEl.hidden = !!authUser;
+      guessHsNameEl.focus();
+    });
+  }
+  function guessHsSaveScore(){
+    if(guessHsSaved) return;
+    var name = cleanDisplayName(guessHsNameEl.value);
+    if(!name){
+      guessHsShowMsg('Please enter your name for the board first.');
+      guessHsNameEl.focus();
+      return;
+    }
+    guessHsNameEl.value = name;
+    guessHsSaveEl.disabled = true;
+    guessHsNameEl.disabled = true;
+    guessHsShowMsg('Saving your score…');
+    sb(GUESS_TABLE + '?select=id,player_name,score,created_at&order=score.desc,created_at.asc').then(function(all){
+      var mine = (Array.isArray(all) ? all : []).filter(function(r){ return hsPlayerKey(r.player_name) === hsPlayerKey(name); });
+      if(mine.length && mine[0].score >= guess.score){
+        guessHsSaveEl.disabled = false;
+        guessHsNameEl.disabled = false;
+        guessHsShowMsg('That score doesn\u2019t beat your best of ' + mine[0].score + ' — the board keeps your best, one spot per player.');
+        return null;
+      }
+      var ops = [];
+      if(mine.length){
+        var bestId = mine[0].id;
+        ops.push(sb(GUESS_TABLE + '?id=eq.' + encodeURIComponent(bestId), { method: 'PATCH', prefer: 'return=representation', token: sbAuthToken(),
+          body: { score: guess.score, created_at: new Date().toISOString() } }));
+        mine.slice(1).forEach(function(r){
+          ops.push(sb(GUESS_TABLE + '?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }));
+        });
+        return Promise.all(ops).then(function(done){
+          var updated = done[0];
+          return (updated && updated.length) ? updated[0] : { id: bestId };
+        });
+      }
+      return sb(GUESS_TABLE, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(),
+        body: { player_name: name, score: guess.score } }).then(function(created){
+        return (created && created.length) ? created[0] : null;
+      });
+    }).then(function(saved){
+      if(!saved) return;
+      guessHsSaved = true;
+      var savedId = saved.id;
+      guessHsFormEl.hidden = true;
+      guessHsShowMsg('Saved — you\u2019re on the board!');
+      return guessHsFetchTop3().then(function(rows){
+        if(rows && rows.length){
+          hsRenderList(guessHsBoardEl, rows, savedId);
+          guessHsBoardWrapEl.hidden = false;
+          if(savedId != null){
+            for(var i = 0; i < rows.length; i++){
+              if(String(rows[i].id) === String(savedId)){
+                guessHsTitleEl.textContent = 'Congratulations! You made #' + (i + 1) + ' on the High Score board!';
+                break;
+              }
+            }
+          }
+        }
+        guessHsRenderStartBoard();
+      });
+    }, function(err){
+      if(window.console) console.warn('Guess the Wine high score not saved (the guess_high_scores table may not exist yet):', err);
+      guessHsSaveEl.disabled = false;
+      guessHsNameEl.disabled = false;
+      guessHsShowMsg('Couldn\u2019t save your score to the board — it may not be set up yet, or the connection dropped. Your game score above still stands.');
+    });
+  }
+  if(guessHsFormEl) guessHsFormEl.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    guessHsSaveScore();
+  });
+  if(guessHsFormEl) guessHsFormEl.addEventListener('submit', function(){
+    if(guessHsSignInEl) guessHsSignInEl.hidden = true;
+  });
+  if(guessHsSignInEl) guessHsSignInEl.addEventListener('click', function(){
+    signInToSaveScore('guess', guess.score, 0);
+  });
+
+  /* ---------- Sign in to save your score (all three games) ----------
+     The end-screen button (shown only while signed out) stashes
+     the finished game's score on this device and starts Google
+     sign-in. Sign-in leaves the page and comes back, so the score
+     cannot ride along in memory — when the player returns signed
+     in, applyAuthSession() calls maybeSavePendingGameScore(),
+     which saves the stashed score under their own display name
+     with the boards' usual one-spot-per-player rules and says so
+     in a toast. The stash is taken (and so cleared) before the
+     save is attempted, so it can only ever fire once; a stash
+     older than an hour is dropped silently. */
+  var PENDING_SCORE_KEY = 'wr-pending-game-score';
+  function stashPendingGameScore(game, score, streak){
+    try{ localStorage.setItem(PENDING_SCORE_KEY, JSON.stringify({ game: game, score: score, streak: streak || 0, ts: Date.now() })); }catch(e){}
+  }
+  function takePendingGameScore(){
+    var p = null;
+    try{
+      var raw = localStorage.getItem(PENDING_SCORE_KEY);
+      if(raw){ p = JSON.parse(raw); localStorage.removeItem(PENDING_SCORE_KEY); }
+    }catch(e){}
+    if(!p || !p.game || typeof p.score !== 'number') return null;
+    if(Date.now() - (p.ts || 0) > 60 * 60 * 1000) return null;
+    return p;
+  }
+  function signInToSaveScore(game, score, streak){
+    stashPendingGameScore(game, score, streak);
+    signInWithGoogle();
+  }
+  /* One spot per player, best score only — the same save the
+     end-screen forms make, for an arbitrary name and score.
+     Resolves 'saved', 'best' (the score did not beat the player's
+     own best, so nothing was written) or 'error'. */
+  function hsSaveCore(table, name, score, streak){
+    var withStreak = (table === PAIRING_TABLE);
+    var cols = withStreak ? 'id,player_name,score,best_streak,created_at' : 'id,player_name,score,created_at';
+    return sb(table + '?select=' + cols + '&order=score.desc,created_at.asc').then(function(all){
+      var mine = (Array.isArray(all) ? all : []).filter(function(r){ return hsPlayerKey(r.player_name) === hsPlayerKey(name); });
+      if(mine.length && mine[0].score >= score) return 'best';
+      if(mine.length){
+        var bestId = mine[0].id;
+        var body = { score: score, created_at: new Date().toISOString() };
+        if(withStreak) body.best_streak = streak || 0;
+        var ops = [ sb(table + '?id=eq.' + encodeURIComponent(bestId), { method: 'PATCH', prefer: 'return=representation', token: sbAuthToken(), body: body }) ];
+        mine.slice(1).forEach(function(r){
+          ops.push(sb(table + '?id=eq.' + encodeURIComponent(r.id), { method: 'DELETE', prefer: 'return=minimal', token: sbAuthToken() }));
+        });
+        return Promise.all(ops).then(function(){ return 'saved'; });
+      }
+      var post = { player_name: name, score: score };
+      if(withStreak) post.best_streak = streak || 0;
+      return sb(table, { method: 'POST', prefer: 'return=representation', token: sbAuthToken(), body: post }).then(function(){ return 'saved'; });
+    }, function(err){
+      if(window.console) console.warn('Sign-in score save failed:', err);
+      return 'error';
+    });
+  }
+  function maybeSavePendingGameScore(){
+    if(!authUser) return;
+    var p = takePendingGameScore();
+    if(!p) return;
+    var name = cleanDisplayName(authDisplayName());
+    if(!name) return;
+    var table = p.game === 'trivia' ? HS_TABLE : (p.game === 'pairing' ? PAIRING_TABLE : (p.game === 'guess' ? GUESS_TABLE : null));
+    var label = p.game === 'trivia' ? 'Wine Trivia' : (p.game === 'pairing' ? 'Pairing Quiz' : (p.game === 'guess' ? 'Guess the Wine' : ''));
+    if(!table || !label) return;
+    hsSaveCore(table, name, p.score, p.streak).then(function(result){
+      if(result === 'saved') syncToast('Your ' + label + ' score of ' + p.score + ' was saved to the High Score board.');
+      else if(result === 'best') syncToast('Your ' + label + ' score of ' + p.score + ' didn\u2019t beat your best — the board keeps your best.');
+      else syncToast('Couldn\u2019t save your ' + label + ' score to the board — it may not be set up yet, or the connection dropped.', true);
+    });
+  }
 
   /* ---------- Pairing Quiz — which wine with this dish? ----------
      A third game in Games & Contests, beside Wine Trivia and Guess
@@ -12867,6 +13149,7 @@
   var pairingHsBoardWrapEl = document.getElementById('pairingHsBoardWrap');
   var pairingHsBoardEl = document.getElementById('pairingHsBoard');
   var pairingHsNoteEl = document.getElementById('pairingHsNote');
+  var pairingHsSignInEl = document.getElementById('pairingHsSignIn');
   var pq = { playing:false, locked:false, deck:[], pos:0, current:null,
     score:0, answered:0, best:0, streak:0, bestStreak:0, returnFocus:null, savedThisGame:false };
   function pqKey(b, p, s){ return String(b + '|' + p + '|' + s).toLowerCase(); }
@@ -13115,6 +13398,7 @@
     pairingHsNoteEl.hidden = true;
     pairingHsBoardWrapEl.hidden = true;
     pairingHsFormEl.hidden = false;
+    if(pairingHsSignInEl) pairingHsSignInEl.hidden = true;
     pairingHsSaveEl.disabled = false;
     pairingHsNameEl.disabled = false;
     pqHsShowMsg('');
@@ -13137,6 +13421,8 @@
       pairingHsTitleEl.textContent = 'Congratulations! You made #' + place + ' on the High Score board!';
       pairingHsNameEl.value = authUser ? authDisplayName() : '';
       pairingHsCongratsEl.hidden = false;
+      /* The sign-in button is offered only while signed out */
+      if(pairingHsSignInEl) pairingHsSignInEl.hidden = !!authUser;
       pairingHsNameEl.focus();
     });
   }
@@ -13219,6 +13505,12 @@
   if(pairingHsFormEl) pairingHsFormEl.addEventListener('submit', function(ev){
     ev.preventDefault();
     pqHsSaveScore();
+  });
+  if(pairingHsFormEl) pairingHsFormEl.addEventListener('submit', function(){
+    if(pairingHsSignInEl) pairingHsSignInEl.hidden = true;
+  });
+  if(pairingHsSignInEl) pairingHsSignInEl.addEventListener('click', function(){
+    signInToSaveScore('pairing', pq.score, pq.bestStreak);
   });
   pairingQuizOverlay.addEventListener('click', function(ev){ if(ev.target === pairingQuizOverlay) closePairing(); });
   document.addEventListener('keydown', function(ev){
@@ -16698,6 +16990,10 @@
          other user's rendered name */
       loadOwnDisplayName();
       loadDisplayNames();
+      /* A game score stashed before sign-in by a game's "Sign in
+         to save your score" button is saved now, under this
+         player's own name */
+      maybeSavePendingGameScore();
     }
     /* Browsing stays open either way: signing in or out never
        hides or locks the app — it only changes what the
