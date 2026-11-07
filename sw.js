@@ -15,7 +15,7 @@
      not this worker's.
    The cache name carries the app version: shipping a new version =
    a new worker file = old caches are deleted on activate. */
-var CACHE = 'grapevine-v2026.11.04.29';
+var CACHE = 'grapevine-v2026.11.04.30';
 var CORE = ['./', './index.html', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function(e){
