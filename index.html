@@ -5554,7 +5554,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.27</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.28</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5567,7 +5567,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.27</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.28</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6690,7 +6690,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.27</span>
+      <span class="manual-pill accent">Version 2026.11.04.28</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6839,7 +6839,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         </table>
         <p>The shared list refreshes itself about every <strong>30 seconds</strong> while the app is open, so changes made on another phone appear without reloading.</p>
         <h3>Working offline</h3>
-        <p>Grapevine itself opens with <strong>no connection at all</strong> once it has been opened on the phone before — the list, search, the Food pairing finder, the games and this manual are all on the device. You can also <strong>add and edit while offline</strong>: every change is saved on the phone the moment you make it, the <strong>Settings</strong> sync line shows how many changes are waiting, and they send themselves to the shared list automatically when a connection comes back — you don&rsquo;t have to redo or resend anything, and you can close the app in between. Changes made offline appear for everyone once they&rsquo;ve synced. Signing in needs a connection, and a change tied to your account (a love, a comment) only sends while you&rsquo;re signed in as yourself. (Added in Version 2026.11.04.27.)</p>
+        <p>Grapevine itself opens with <strong>no connection at all</strong> once it has been opened on the phone before — the list, search, the Food pairing finder, the games and this manual are all on the device. You can also <strong>add and edit while offline</strong>: every change is saved on the phone the moment you make it, the <strong>Settings</strong> sync line shows how many changes are waiting, and they send themselves to the shared list automatically when a connection comes back — you don&rsquo;t have to redo or resend anything, and you can close the app in between. Changes made offline appear for everyone once they&rsquo;ve synced. Signing in needs a connection, and a change tied to your account (a love, a comment) only sends while you&rsquo;re signed in as yourself. (Added in Version 2026.11.04.27; Version 2026.11.04.28 fixed offline loves being blocked by a wrong &ldquo;not set up&rdquo; message — offline, the heart now queues your love like any other change.)</p>
         <h3>Adding a store</h3>
         <p>Adding a store needs you <strong>signed in</strong> — if you&rsquo;re not, the app asks you to sign in first, and no store is created until you do. Choosing a store that&rsquo;s already on the list works signed out.</p>
         <ol>
@@ -7170,7 +7170,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   </div>
 </details>
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.27</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.28</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -15747,6 +15747,9 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     return chain.then(function(){
       outboxFlushing = false;
       outboxNote();
+      /* Queued loves that just sent (or are still waiting) must
+         match the hearts (2026.11.04.28) */
+      if(typeof loadLikes === 'function') loadLikes();
       if(sentAny && !blocked && typeof sbLoad === 'function') sbLoad();
     }, function(){
       outboxFlushing = false;
@@ -16537,7 +16540,11 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   }
   function toggleLike(row){
     if(!requireSignIn('love wines')) return;
-    if(likesReady === false){
+    if(likesReady === false && !outbox.length && typeof navigator !== 'undefined' && navigator.onLine !== false && lastLoadOk){
+      /* Blocked only when the shared list has actually answered
+         and the table is missing (2026.11.04.28). While offline,
+         or while earlier changes are still queued, the heart
+         works and the love queues behind them */
       syncToast('Loves aren\u2019t set up yet \u2014 the user_likes table still needs to be created in the shared list. Everything else works as normal.', true);
       return;
     }
@@ -16608,18 +16615,38 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         if(authUser && l.user_id === authUser.id) myLikes[l.product_id] = 1;
       });
       refreshAllLikes();
+      applyQueuedLikes();
       syncLikesSetupNote();
       if(state.sort === 'likes') applySort();
       if(likedOnlyOn()) apply();
     }, function(err){
-      /* Almost certainly the table does not exist yet: hearts
-         stay quiet, the note in Settings says so, and this runs
-         again on the 30-second tick so likes start working on
-         their own once the table is created */
+      /* A NETWORK failure (2026.11.04.28) is not evidence about
+         the table: the phone is simply offline, so the state is
+         left exactly as it was (null = unknown on a cold start)
+         and the hearts stay usable — a love tapped now queues
+         and sends on reconnect. Only an answer from the shared
+         list itself marks loves not set up */
+      if(isNetworkError(err)){ if(window.console) console.warn('Likes not loaded (no connection):', err); return; }
       likesReady = false;
       if(window.console) console.warn('Likes not loaded (user_likes table may not exist yet):', err);
       syncLikesSetupNote();
     });
+  }
+  /* Queued loves (2026.11.04.28): loves made offline sit in the
+     outbox; whenever likes are (re)built — on load and after a
+     flush — the queued ones are laid over myLikes/likeCounts so
+     the hearts show the truth on this phone before the sync
+     lands. Called from loadLikes' success, at boot, and after
+     flushOutbox sends (via sbLoad's tick companions below) */
+  function applyQueuedLikes(){
+    if(typeof outbox === 'undefined' || !outbox.length) return;
+    var changed = false;
+    outbox.forEach(function(e){
+      if(e.kind !== 'like' || !authUser || e.userId !== authUser.id) return;
+      if(e.liked && !myLikes[e.likePid]){ myLikes[e.likePid] = 1; likeCounts[e.likePid] = (likeCounts[e.likePid] || 0) + 1; changed = true; }
+      if(!e.liked && myLikes[e.likePid]){ delete myLikes[e.likePid]; likeCounts[e.likePid] = Math.max(0, (likeCounts[e.likePid] || 1) - 1); changed = true; }
+    });
+    if(changed) refreshAllLikes();
   }
   /* ---------- Wine comments ----------
      The comment icon lives in the wine's EXPANDED NOTES (its
@@ -16868,6 +16895,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
          badges, no noise — an opened thread carries the setup
          message, and this runs again on the tick so badges
          start working on their own once the table is created */
+      if(isNetworkError(err)){ if(window.console) console.warn('Comment counts not loaded (no connection):', err); return; }
       commentsCountsReady = false;
       if(window.console) console.warn('Comment counts not loaded (product_comments table may not exist yet):', err);
     });
@@ -16898,6 +16926,10 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       list.forEach(function(c){ els.list.appendChild(buildCommentItem(c, row)); });
     }, function(err){
       if(window.console) console.warn(err);
+      if(isNetworkError(err)){
+        adminMsg(els.list, 'No connection right now \u2014 comments can\u2019t load offline. They\u2019ll be here when you\u2019re back online.');
+        return;
+      }
       commentsReady = false;
       adminMsg(els.list, 'Comments aren\u2019t set up yet \u2014 the product_comments table still needs to be created in the shared list. Once it exists, comments on each wine show up here, and the comment icons get their count badges.');
     });
@@ -17441,6 +17473,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   }
   updateAccountUI();
   loadLikes();
+  applyQueuedLikes();
   /* Other users' display names load even while signed out, so
      comments and other names shown to browsing users already
      use them */
@@ -17621,6 +17654,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         }
       }
     }, function(err){
+      if(isNetworkError(err)){ if(window.console) console.warn('Appointed admins not loaded (no connection):', err); return; }
       adminsReady = false;
       if(!adminsListFull) appointedAdmins = [];
       if(window.console) console.warn('Appointed admins not loaded (app_admins table may not exist yet):', err);
@@ -17638,6 +17672,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       adminsListFull = true;
       appointedAdmins = list || [];
     }, function(err){
+      if(isNetworkError(err)){ if(window.console) console.warn('Appointed admins not loaded (no connection):', err); return; }
       adminsReady = false;
       adminsListFull = false;
       appointedAdmins = [];
@@ -17697,6 +17732,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
          in takes effect the moment the fresh list arrives */
       enforceBanIfNeeded();
     }, function(err){
+      if(isNetworkError(err)){ if(window.console) console.warn('Banned users not loaded (no connection):', err); return; }
       bannedReady = false;
       if(!bannedListFull) bannedUsers = [];
       if(window.console) console.warn('Banned users not loaded (banned_users table may not exist yet):', err);
@@ -17714,6 +17750,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       bannedUsers = list || [];
       enforceBanIfNeeded();
     }, function(err){
+      if(isNetworkError(err)){ if(window.console) console.warn('Banned users not loaded (no connection):', err); return; }
       bannedReady = false;
       bannedListFull = false;
       bannedUsers = [];
@@ -18725,6 +18762,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       });
     }, function(err){
       if(window.console) console.warn(err);
+      if(isNetworkError(err)){ adminMsg(box, 'No connection right now \u2014 your suggestions can\u2019t load offline.'); return; }
       suggestionsReady = false;
       adminMsg(box, 'Your suggestions aren\u2019t available yet \u2014 the user_suggestions table still needs to be created in the shared list. Once it exists, the suggestions you send show up here.');
     });
@@ -18905,6 +18943,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       });
     }, function(err){
       if(window.console) console.warn(err);
+      if(isNetworkError(err)){ adminMsg(box, 'No connection right now \u2014 suggestions can\u2019t load offline.'); return; }
       suggestionsReady = false;
       adminMsg(box, 'Suggestions are not set up yet \u2014 the user_suggestions table still needs to be created in the shared list. Once it exists, suggestions left from Settings show up here, newest first.');
     });
@@ -19861,13 +19900,15 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
          load must never fail because of it */
       sb('store_cooler?select=*').catch(function(){ return []; })
     ]).then(function(res){
-      setSyncStatus('Shared list connected — everyone sees adds and edits. Last synced ' + new Date().toLocaleTimeString() + '.');
+      lastLoadOk = true;
+      setSyncStatus(outboxStatusText() || ('Shared list connected — everyone sees adds and edits. Last synced ' + new Date().toLocaleTimeString() + '.'));
       sbApplyRemote({ products: res[0] || [], stores: res[1] || [], memberships: res[2] || [], unavailable: res[3] || [], cooler: res[4] || [] });
     }).catch(function(err){
       setSyncStatus('Shared list unreachable — showing the built-in list. Changes made now won’t sync until the connection is back.');
       if(window.console) console.warn(err);
     });
   }
+  var lastLoadOk = false;
   setSyncStatus('Connecting to the shared list…');
   /* First paint already follows the calendar, before (and even
      without) the shared list answering */

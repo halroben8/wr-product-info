@@ -1,4 +1,4 @@
-/* Grapevine service worker — offline support (Version 2026.11.04.27).
+/* Grapevine service worker — offline support (Version 2026.11.04.28).
    Strategy:
    - The app page (index.html / the site root): network-first. Online,
      the freshest copy always wins and a copy is kept in the cache;
@@ -15,7 +15,7 @@
      not this worker's.
    The cache name carries the app version: shipping a new version =
    a new worker file = old caches are deleted on activate. */
-var CACHE = 'grapevine-v2026.11.04.27';
+var CACHE = 'grapevine-v2026.11.04.28';
 var CORE = ['./', './index.html', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', function(e){
