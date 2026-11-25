@@ -5534,7 +5534,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <button type="button" class="btn-ghost-small" id="settingsAddTypeCancel">Cancel</button>
         </div>
       </div>
-      <p class="theme-note">The store type — and the Pallet Store box above — decide which impact this store sees. Every type has two impacts: fully built and pallet. Loblaws fully built stores see the Legacy Loblaws impact (P8/P9); a pallet store follows the pallet impact instead. Some impacts cover more than one type (for example Sobeys and Foodland share one). A type or build with no impact loaded yet sees a note saying so in Documents, until that impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
+      <p class="theme-note">The store type — and the Pallet Store box above — decide which impact this store sees. Every type has two impacts: fully built and pallet. Loblaws fully built stores see the Legacy Loblaws impact (P8/P9/P10); a pallet store follows the pallet impact instead. New Loblaws, Legacy Sobeys, Metro, Farm Boy, Longo&rsquo;s and FreshCo stores each see their own banner&rsquo;s P10 impact. Some impacts cover more than one type (for example Sobeys and Foodland share one). A type or build with no impact loaded yet sees a note saying so in Documents, until that impact document is added. New types are saved on this device and, when a store uses the type, pushed to the shared list with that store so other devices learn it too.</p>
       <div class="settings-actions" style="margin-top:14px">
       <button type="button" class="settings-action" id="addProduct"><span>＋ Add product<span class="sa-sub">Add a new wine — it goes into this store and the shared list</span></span></button>
       <button type="button" class="settings-action" id="setStoreProducts"><span>Set store products<span class="sa-sub">Choose which products the current store carries</span></span></button>
@@ -5555,11 +5555,11 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.30</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.31</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
-        <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the P8 / P9 impact sampling schedule</span></span></button>
+        <button type="button" class="settings-action" id="sampleTodaySupport"><span>What&rsquo;s on sample today?<span class="sa-sub">What&rsquo;s pouring today from the current impact&rsquo;s sampling schedule</span></span></button>
         <div id="impactPdfLinks"></div>
         <button type="button" class="settings-action" id="currentCheatSheet"><span><span id="cheatBtnLabel">P8 Impact Cheat Sheet</span><span class="sa-sub" id="cheatBtnSub">Current impact &mdash; key dates, sampling, must-do actions and promo notes for Oct 12&ndash;Nov 8</span></span></button>
         <p class="docs-note" id="impactNote" hidden></p>
@@ -5568,7 +5568,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.30</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.31</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6691,7 +6691,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.30</span>
+      <span class="manual-pill accent">Version 2026.11.04.31</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6850,11 +6850,13 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         </ol>
         <h3>Store types and impact documents</h3>
         <ul>
-          <li><strong>Loblaws, fully built</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws fully built store.</li>
-          <li><strong>Sobeys and Foodland</strong> share one impact per build: a fully built Sobeys or Foodland store sees the Sobeys/Foodland fully built impact (P8/P9 PDFs, cheat sheet, sampling); a pallet Sobeys or Foodland store sees the Sobeys/Foodland pallet impact instead. The pours differ — the pallet sampling often pours only “Premium Red / Premium White” where the fully built sampling names the wines.</li>
-          <li><strong>Non-boutique</strong> stores see the Non-Boutique impact (P8/P9 PDFs, cheat sheet, sampling) — one impact for all Non-boutique stores, the same whether the store is a pallet store or fully built.</li>
+          <li><strong>Loblaws, fully built</strong> stores see the Legacy Loblaws impact in Documents: the current impact cheat sheet, the full P8/P9/P10 PDFs, and “What&rsquo;s on sample today.” Store 358 is a Loblaws fully built store.</li>
+          <li><strong>New Loblaws</strong> stores see the New Loblaws impact (P10), and <strong>Legacy Sobeys</strong> stores see the Legacy Sobeys impact (P10) — each banner has its own impact from P10 on, with its own cheat sheet, full PDF and sampling.</li>
+          <li><strong>Metro, Farm Boy, Longo&rsquo;s and FreshCo</strong> stores each see their own banner&rsquo;s impact (P10): cheat sheet, full PDF and sampling. These banners have one impact covering both fully built and pallet stores.</li>
+          <li><strong>Sobeys and Foodland</strong> share one impact per build: a fully built Sobeys or Foodland store sees the Sobeys/Foodland fully built impact (P8/P9/P10 PDFs, cheat sheet, sampling); a pallet Sobeys or Foodland store sees the Sobeys/Foodland pallet impact instead. The pours differ — the pallet sampling often pours only “Premium Red / Premium White” where the fully built sampling names the wines.</li>
+          <li><strong>Non-boutique</strong> stores see the Non-Boutique impact (P8/P9/P10 PDFs, cheat sheet, sampling) — one impact for all Non-boutique stores, the same whether the store is a pallet store or fully built.</li>
           <li><strong>Pallet Store</strong> — in Store settings there is a <span class="manual-ui">Pallet Store</span> checkbox for the store being viewed. Tick it if the store is a pallet store; leave it unticked for a fully built store (unticked is the default). A pallet store follows the pallet impact for its type, not the fully built one, and the store&rsquo;s subtitle in Store settings reads “Pallet” while it is ticked. The choice syncs to the shared list, so every device sees it. Unticking it asks first — confirm with <span class="manual-ui">Remove pallet store status</span> (or <span class="manual-ui">Cancel</span> to keep the pallet impact); the impact, its cheat sheet and its sampling only change once you confirm.</li>
-          <li><strong>Two impacts per type</strong> — every store type has a fully built impact and a pallet impact, except Non-boutique, which has one impact covering both builds. Some impacts cover more than one type: Sobeys and Foodland share one, so a Sobeys store and a Foodland store of the same build see the same documents.</li>
+          <li><strong>Two impacts per type</strong> — every store type has a fully built impact and a pallet impact, except Non-boutique, Metro, Farm Boy, Longo&rsquo;s and FreshCo, which each have one impact covering both builds. Some impacts cover more than one type: Sobeys and Foodland share one, so a Sobeys store and a Foodland store of the same build see the same documents.</li>
           <li><strong>Other types and builds</strong> see a note that their impact isn&rsquo;t loaded yet, until that impact document is added.</li>
           <li><strong>Cheat sheet</strong> — Documents shows a cheat sheet only for the impact that is running right now for this store&rsquo;s type and build: one one-page sheet per impact, fully built and pallet each having their own. An impact that hasn&rsquo;t started yet or has already ended has no cheat sheet showing.</li>
           <li><strong>Sampling</strong> — “What&rsquo;s on sample today?” follows the same impact: each impact has its own pours for each window, so the wines shown are always the ones for this store&rsquo;s type and build.</li>
@@ -6951,7 +6953,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <li><strong>Impact sale prices are locked.</strong> Sale prices that come from a period impact document can&rsquo;t be edited in the app — they follow the impact.</li>
         </ul>
         <h3>“Sale price not working”</h3>
-        <p>If a sale price is set but isn&rsquo;t displaying or saving properly, use the <strong>sale-broken flag</strong> on the product to mark it. That flags it for follow-up instead of the problem being silently lost — un-flag it once it&rsquo;s displaying correctly.</p><h3>Flash sales</h3><p>Some sales are <strong>flash sales</strong> — short scheduled sales like the <strong>Black Friday Flash Sale</strong> (Nov 16–30: Susse Reserve Riesling and JT Grand Reserve Shiraz, $3 off each). A wine in a flash sale carries a black-and-yellow <span class="manual-bdg flash">⚡ Flash Sale</span> badge beside its pink Sale badge — on the card, and again in the expanded details beside the Sale / Reg / Save lines — so a flash sale never just looks like an ordinary sale.</p><h3>When an impact sale ends, the sale clears itself</h3><p>When a scheduled impact sale period ends, the sale comes off the products in that impact automatically — <strong>both the on-sale flag and the sale price are cleared</strong>, even if that sale was typed in manually, so a stale sale never lingers past its impact. The <strong>regular price is never cleared</strong> — only the sale state is. A product that belongs to no impact sale is untouched: a one-off manual sale on it stays until someone turns it off.</p>
+        <p>If a sale price is set but isn&rsquo;t displaying or saving properly, use the <strong>sale-broken flag</strong> on the product to mark it. That flags it for follow-up instead of the problem being silently lost — un-flag it once it&rsquo;s displaying correctly.</p><h3>Flash sales</h3><p>Some sales are <strong>flash sales</strong> — short scheduled sales like the <strong>Black Friday Flash Sale</strong> (Nov 16–30: Susse Reserve Riesling and JT Grand Reserve Shiraz, $3 off each). A wine in a flash sale carries a black-and-yellow <span class="manual-bdg flash">⚡ Flash Sale</span> badge beside its pink Sale badge — on the card, and again in the expanded details beside the Sale / Reg / Save lines — so a flash sale never just looks like an ordinary sale. P10 brings a second one: the <strong>Boxing Week Flash Sale</strong> (Dec 26, 2026 – Jan 3, 2027: Sandbanks Countryside White Blend, Sandbanks Countryside Red Blend and JT Entourage Grand Reserve Brut, $3 off each), which runs past the end of P10 itself and clears on Jan 4. The P10 LTOs (17 wines, Nov 30, 2026 – Jan 3, 2027, at the P10 impacts&rsquo; promo shelf prices) are a scheduled sale period like the P8/P9 LTOs. (Added in Version 2026.11.04.31, with the P10 impacts for every store type.)</p><h3>When an impact sale ends, the sale clears itself</h3><p>When a scheduled impact sale period ends, the sale comes off the products in that impact automatically — <strong>both the on-sale flag and the sale price are cleared</strong>, even if that sale was typed in manually, so a stale sale never lingers past its impact. The <strong>regular price is never cleared</strong> — only the sale state is. A product that belongs to no impact sale is untouched: a one-off manual sale on it stays until someone turns it off.</p>
       </div>
     </details>
 
@@ -6964,7 +6966,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <li><strong>What&rsquo;s on sample today?</strong> — at the very top of the tab: what&rsquo;s pouring today from the sampling schedule of the impact running for this store&rsquo;s type and build.</li>
           <li><strong>Loved wines</strong> — your loved wines, most loved first (§6).</li>
           <li><strong>This manual</strong> — the web version you&rsquo;re reading now, plus the <strong>Manual.pdf</strong> for printing. Same content, same version number as the app.</li>
-          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods. A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9); Sobeys and Foodland share one impact per build (fully built or pallet); a Non-boutique store sees the Non-Boutique impact either way. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
+          <li><strong>Impact for this store</strong> — only the impact for this store&rsquo;s type and build shows here: the Current Impact Cheat Sheet (the one-page sheet for the impact running right now), the full impact PDFs for its periods. A Loblaws fully built store sees the Legacy Loblaws impact (P8/P9/P10); New Loblaws, Legacy Sobeys, Metro, Farm Boy, Longo&rsquo;s and FreshCo stores each see their own banner&rsquo;s P10 impact; Sobeys and Foodland share one impact per build (fully built or pallet); a Non-boutique store sees the Non-Boutique impact either way. A type or build with no impact loaded yet sees a note saying so instead (§5).</li>
         </ul>
         <div class="manual-callout tip"><strong>Which manual should you open?</strong>On your phone, the web manual — text fits your screen and search works. The PDF is for the printer: fixed pages, made for paper.</div>
       </div>
@@ -7171,7 +7173,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   </div>
 </details>
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.30</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.31</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -10390,11 +10392,14 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
      flagged cartier:'hours' (P9 pallet). Schedule/reference
      content only — nothing here reads or writes product data,
      and it never syncs to the shared list. */
+  /* Window months run on SAMPLE_YEAR, except January, which is
+     the January AFTER it (a period that crosses New Year, like
+     P10's Dec 31 – Jan 3 window, ends in the next year). */
   var SAMPLE_YEAR = 2026;
   var SAMPLE_WEEKDAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var SAMPLE_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   var SAMPLE_MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  function sampleDayStart(md){ return new Date(SAMPLE_YEAR, md[0]-1, md[1]); }
+  function sampleDayStart(md){ return new Date(SAMPLE_YEAR + (md[0] === 1 ? 1 : 0), md[0]-1, md[1]); }
   function sampleRangeText(w){
     var s = sampleDayStart(w.start), e = sampleDayStart(w.end);
     if(s.getMonth() === e.getMonth()){
@@ -10507,7 +10512,10 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
      types is the list of store types the impact covers (an impact
      can be combined across types, for example Sobeys and Foodland
      sharing one), and build is 'full' (fully built store) or
-     'pallet'. P8/P9 are the Legacy Loblaws fully built impact. */
+     'pallet'. P8/P9 are the Legacy Loblaws fully built impact.
+     P10 adds a sheet per banner: Legacy Loblaws (types Loblaws),
+     New Loblaws, Legacy Sobeys, Sobeys/Foodland fully built and
+     pallet, Metro, Farm Boy, Longo's, FreshCo and Non-Boutique. */
   var IMPACT_SHEETS = [
     {
       id: 'P8',
@@ -10998,6 +11006,711 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
         '</ul>' +
         '<p class="cs-src">Source: P9 In-Store Impact (Non-Boutiques), last updated Oct 22, 2026.</p>'
+    },
+    {
+      id: 'P10',
+      types: ['Loblaws'],
+      build: 'full',
+      pdf: 'P10-Impact.pdf',
+      pages: 31,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'JT Entourage Grand Reserve Brut VQA', 'Inniskillin Pinot Noir VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Legacy Loblaws Boutique &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 25</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Inniskillin Pinot Noir VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Displays:</strong> Promo 1 cubes &mdash; Gifts under $40 / under $30, Fracette, Sparkling New Year, Icewine, Cartier (empty display bottles only for Icewine); Promo 2 &mdash; Gifts under $25, Boxing Week Flash Sale, Give the Gift of Great Wine, JT Nation; Promo 3 case stackers re-used from P9, changeover Mon Nov 30; Feature Frame: Stocking Stuffers Nov 30&ndash;Dec 25, then Sparkling New Year Dec 26&ndash;Jan 3; Profit Panel posters (Loblaws only): Cartier, Fracette, JT Nation.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Legacy Loblaws Boutiques), last updated Nov 25, 2026. Doc quirks to watch: the sampling table&rsquo;s first two windows overlap on Dec 2 (printed Nov 30&ndash;Dec 2 and Dec 2&ndash;6); the Pink Ink LTO scan price prints $39.74 (the BASK 3L figure) &mdash; the $14.99 shelf price is the one used in the app. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 NL',
+      types: ['New Loblaws'],
+      build: 'full',
+      pdf: 'P10-New-Loblaws.pdf',
+      pages: 23,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'JT Entourage Grand Reserve Brut VQA', 'Inniskillin Pinot Noir VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">New Loblaws Boutique &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Inniskillin Pinot Noir VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Promo 1 (New LCL Boutiques):</strong> display runs Nov 30&ndash;Jan 3 with Medium Hang Sign &mdash; IMPORTANT: the hang sign in the POP kit is NOT the correct version; do NOT display it. A replacement comes separately by FedEx closer to the start of P10; display only the replacement.</li>' +
+        '<li><strong>Promo 2 (WR024 ONLY):</strong> changeover Tue Dec 1; Medium Hang Sign Side A &lsquo;JT Nation&rsquo; Dec 1&ndash;25, Side B &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (New Loblaws Boutiques), last updated Nov 6, 2026. Doc quirks to watch: the document also contains Legacy Loblaws / Legacy Sobeys additional-programming and POP-checklist pages (pp.19&ndash;22) that do not apply to New Loblaws stores; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 LS',
+      types: ['Legacy Sobeys'],
+      build: 'full',
+      pdf: 'P10-Legacy-Sobeys.pdf',
+      pages: 26,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'JT Entourage Grand Reserve Brut VQA', 'Inniskillin Pinot Noir VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Legacy Sobeys Boutique &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 25</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Inniskillin Pinot Noir VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Displays:</strong> Promo 1 merch cubes &mdash; Gifts under $40 / under $30, Fracette, Sparkling New Year; Icewine + Cartier (all Icewine bottles on the endcap must be EMPTY display bottles); Promo 2 cube from Dec 1 &mdash; Gifts under $25, Boxing Week Flash Sale, Give the Gift of Great Wine, JT Nation; Promo 3 case stackers re-used from P9, changeover Mon Nov 30 (Small Hang Sign WR093 only); Feature Frame: Stocking Stuffers, then Sparkling New Year.</li>' +
+        '<li><strong>Ordering:</strong> do not order Mix &amp; Match or LTO items outside your permanent assortment &mdash; exception: flash sales.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Legacy Sobeys Boutiques), last updated Nov 25, 2026. Doc quirks to watch: the Feature Frame 2 heading says Sparkling New Year Dec 26&ndash;Jan 3 but its timing column still prints 11/30&ndash;12/25; the POP checklist counts 17 red LTO tags against 18 LTO rows; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 SF',
+      types: ['Sobeys', 'Foodland'],
+      build: 'full',
+      pdf: 'P10-Sobeys-Foodland-Fully-Built.pdf',
+      pages: 20,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Inniskillin Pinot Noir VQA', 'JT Reserve Sauvignon Blanc VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Bù Pinot Noir', 'Sandbanks Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Bù Chardonnay', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['JT Reserve Shiraz Cabernet VQA', 'BASK Reserve Simply White VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Bù Cabernet Sauvignon', 'Saintly The Good Sauvignon Blanc VQA', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['JT Reserve Merlot VQA', 'Inniskillin Pinot Grigio VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Inniskillin Pinot Noir VQA &bull; JT Reserve Sauvignon Blanc VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Bù Pinot Noir &bull; Sandbanks Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Sandbanks Sparkling Secco VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Bù Chardonnay &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>JT Reserve Shiraz Cabernet VQA &bull; BASK Reserve Simply White VQA &bull; Inniskillin Vidal Icewine VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Bù Cabernet Sauvignon &bull; Saintly The Good Sauvignon Blanc VQA &bull; JT Reserve Sparkling VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>JT Reserve Merlot VQA &bull; Inniskillin Pinot Grigio VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Displays:</strong> Promo 1 changeover Mon Nov 30; Promo 2 (WR069 ONLY) changeover Tue Dec 1, Medium Hang Sign Side A &lsquo;JT Nation&rsquo; Dec 1&ndash;25, Side B &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (New Sobeys / Foodland Boutiques), last updated Nov 6, 2026. Doc quirks to watch: the cover prints the period ending January 4, 2027, but the calendar, Feature Learning and LTO pages all end it January 3 (P11 begins Jan 4) &mdash; the app follows January 3; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 SF Pallet',
+      types: ['Sobeys', 'Foodland'],
+      build: 'pallet',
+      pdf: 'P10-Sobeys-Foodland-Pallet.pdf',
+      pages: 20,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:'hours', items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:'hours', items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:'hours', items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:'hours', items:['Premium Red', 'Premium White'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:'hours', items:['Premium Red', 'Premium White', 'JT Entourage Grand Reserve Brut VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Sobeys / Foodland Boutiques &mdash; PALLET ONLY &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>Premium Red &bull; Premium White</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Premium Red &bull; Premium White &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Premium Red &bull; Premium White</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>Premium Red &bull; Premium White &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Premium Red &bull; Premium White</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>Premium Red &bull; Premium White &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Premium Red &bull; Premium White</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Premium Red &bull; Premium White &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Premium Red &bull; Premium White &bull; JT Entourage Grand Reserve Brut VQA &bull; Cartier (first 5 hrs of operation)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Premium Red / Premium White name no specific wines in the impact &mdash; pour a premium red and a premium white you carry. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Pallet build:</strong> 1 pallet = 10 slots + tasting cart (Cartier Irish Cream); 2 pallets = 22 slots (see impact for the slot lists). Do not order SKUs outside your Power Ranking, and do not bring in multibuy or TPR items you don&rsquo;t already carry.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (New Sobeys / Foodland Boutiques &mdash; PALLET ONLY), last updated Nov 6, 2026. Doc quirks to watch: the tasting-cart bottom shelf is blank in the impact; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 Metro',
+      types: ['Metro'],
+      build: 'both',
+      pdf: 'P10-Metro.pdf',
+      pages: 27,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'JT Entourage Grand Reserve Brut VQA', 'Inniskillin Pinot Noir VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Metro Boutiques &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 25</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Inniskillin Pinot Noir VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Displays:</strong> Promo 1 + Promo 2 merch cubes and Promo 3 (case stackers re-used from P9): Promo 3 changeover Mon Nov 30, Promo 2 changeover Tue Dec 1. All Icewine bottles displayed on the endcap are EMPTY display bottles only.</li>' +
+        '<li><strong>Ordering:</strong> do not order Mix &amp; Match or LTO items outside your permanent assortment &mdash; exception: flash sales.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Metro Boutiques), last updated Nov 25, 2026. Doc quirks to watch: the second Feature Frame (Dec 26&ndash;Jan 3) repeats the 11/30&ndash;12/25 timing; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 FB',
+      types: ['Farm Boy'],
+      build: 'both',
+      pdf: 'P10-Farm-Boy.pdf',
+      pages: 26,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Inniskillin Montague Vineyard Chardonnay VQA', 'Inniskillin Montague Vineyard Pinot Noir VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Vintage Ink Wicked White VQA', 'Vintage Ink Rebel Red VQA', 'Inniskillin Reserve Cabernet Franc Rosé VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['Le Clos Jordanne Le Grand Clos Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'Le Clos Jordanne Le Grand Clos Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['JT Grand Reserve Pinot Noir VQA', 'JT Grand Reserve Chardonnay VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'Inniskillin Pinot Noir VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Farm Boy Boutiques &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Inniskillin Montague Vineyard Chardonnay VQA &bull; Inniskillin Montague Vineyard Pinot Noir VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Vintage Ink Wicked White VQA &bull; Vintage Ink Rebel Red VQA &bull; Inniskillin Reserve Cabernet Franc Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>Le Clos Jordanne Le Grand Clos Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; Le Clos Jordanne Le Grand Clos Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>JT Grand Reserve Pinot Noir VQA &bull; JT Grand Reserve Chardonnay VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; Inniskillin Pinot Noir VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>WR004 / Promo 1 hang sign:</strong> do NOT display the hang sign from the POP kit &mdash; it is the wrong version; a replacement comes separately by FedEx closer to the start of P10; display only the replacement. Promos 1, 3 + 4 changeover Mon Nov 30; Promo 2 changeover Tue Dec 1.</li>' +
+        '<li><strong>Promo 4 Icewine:</strong> merchandise with the &lsquo;Please see a Wine Rack employee to purchase Icewine&rsquo; sign, and display empty boxes only.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Farm Boy Boutiques), last updated Nov 6, 2026. Doc quirks to watch: the POP checklist counts 17 red LTO tags against 18 LTO rows; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 Longo\'s',
+      types: ["Longo's"],
+      build: 'both',
+      pdf: 'P10-Longos.pdf',
+      pages: 19,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Inniskillin Montague Vineyard Chardonnay VQA', 'Inniskillin Montague Vineyard Pinot Noir VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Vintage Ink Wicked White VQA', 'Vintage Ink Rebel Red VQA', 'Inniskillin Reserve Cabernet Franc Rosé VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['Le Clos Jordanne Le Grand Clos Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'Le Clos Jordanne Le Grand Clos Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['JT Grand Reserve Pinot Noir VQA', 'JT Grand Reserve Chardonnay VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'Inniskillin Pinot Noir VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Longo&rsquo;s Boutique &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Inniskillin Montague Vineyard Chardonnay VQA &bull; Inniskillin Montague Vineyard Pinot Noir VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Vintage Ink Wicked White VQA &bull; Vintage Ink Rebel Red VQA &bull; Inniskillin Reserve Cabernet Franc Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>Le Clos Jordanne Le Grand Clos Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; Le Clos Jordanne Le Grand Clos Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>JT Grand Reserve Pinot Noir VQA &bull; JT Grand Reserve Chardonnay VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; Inniskillin Pinot Noir VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Promo 1:</strong> changeover Tue Dec 1. Do NOT display the hang sign from the POP kit (wrong version) &mdash; a replacement comes separately by FedEx closer to the start of P10; display only the replacement (Side B, Inniskillin, runs Nov 30&ndash;Jan 3).</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Longo&rsquo;s Boutiques), last updated Nov 6, 2026. Doc quirks to watch: the POP-checklist hang-sign descriptions do not all match the display POP pages; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 FreshCo',
+      types: ['FreshCo'],
+      build: 'both',
+      pdf: 'P10-FreshCo.pdf',
+      pages: 21,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Inniskillin Pinot Noir VQA', 'JT Reserve Sauvignon Blanc VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Bù Pinot Noir', 'Sandbanks Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Bù Chardonnay', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['JT Reserve Shiraz Cabernet VQA', 'BASK Reserve Simply White VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Bù Cabernet Sauvignon', 'Saintly The Good Sauvignon Blanc VQA', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['JT Reserve Merlot VQA', 'Inniskillin Pinot Grigio VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">FreshCo Boutiques &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Inniskillin Pinot Noir VQA &bull; JT Reserve Sauvignon Blanc VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Bù Pinot Noir &bull; Sandbanks Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Sandbanks Sparkling Secco VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Bù Chardonnay &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>JT Reserve Shiraz Cabernet VQA &bull; BASK Reserve Simply White VQA &bull; Inniskillin Vidal Icewine VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Bù Cabernet Sauvignon &bull; Saintly The Good Sauvignon Blanc VQA &bull; JT Reserve Sparkling VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>JT Reserve Merlot VQA &bull; Inniskillin Pinot Grigio VQA &bull; JT Entourage Grand Reserve Brut VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Promo 1:</strong> display ONLY SIDE B of the small hang sign, and do NOT display the hang sign from the POP kit (wrong version) &mdash; a replacement comes separately by FedEx closer to the start of P10; display only the replacement. Promo 2 changeover Tue Dec 1: Side A &lsquo;Holiday&rsquo; Dec 1&ndash;25, Side B &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3. WR44 may order flash sale items for the promo.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>Gift with purchase wobblers:</strong> Organza Bag; Felt Bag; Saintly Puffers (Pink, White and Black); Saintly Puffers (GOLD ONLY).</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (FreshCo Boutiques), last updated Nov 6, 2026. Doc quirks to watch: the POP checklist calls Promo 1 &lsquo;Vintage Ink Bundle&rsquo; and Promo 2 sides &lsquo;Bundles / Flash Sale&rsquo; where the POP pages say Holiday / Flash Sale, and counts 17 red LTO tags against 18 LTO rows; the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
+    },
+    {
+      id: 'P10 NB',
+      types: ['Non-boutique'],
+      build: 'both',
+      pdf: 'P10-Non-Boutique.pdf',
+      pages: 28,
+      start: new Date(2026, 10, 30),
+      end: new Date(2027, 0, 3),
+      rangeShort: 'Nov 30\u2013Jan 3',
+      rangeLong: 'November 30, 2026 \u2013 January 3, 2027',
+      samples: [
+        { period:'P10', start:[11,30], end:[12,2], cartier:false, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Saintly The Good Sparkling Rosé VQA'] },
+        { period:'P10', start:[12,2], end:[12,6], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,7], end:[12,9], cartier:false, items:['Inniskillin Late Autumn Riesling VQA', 'Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA', 'Sandbanks Sparkling Secco VQA'] },
+        { period:'P10', start:[12,10], end:[12,13], cartier:true, items:['JT Reserve Chardonnay VQA', 'JT Reserve Cabernet Franc-Cabernet Sauvignon VQA', 'Inniskillin Vidal Icewine VQA'] },
+        { period:'P10', start:[12,14], end:[12,16], cartier:false, items:['Inniskillin Pinot Noir VQA', 'Sandbanks Pinot Grigio VQA', 'JT Reserve Sparkling Moscato VQA'] },
+        { period:'P10', start:[12,17], end:[12,20], cartier:true, items:['JT Grand Reserve Chardonnay VQA', 'JT Grand Reserve Pinot Noir VQA', 'Saintly Fracette VQA'] },
+        { period:'P10', start:[12,21], end:[12,23], cartier:false, items:['Bù Cabernet Sauvignon', 'Bù Chardonnay', 'JT Reserve Sparkling VQA'] },
+        { period:'P10', start:[12,24], end:[12,27], cartier:true, items:['Vintage Ink Rebel Red VQA', 'Vintage Ink Wicked White VQA', 'Inniskillin Fracette VQA'] },
+        { period:'P10', start:[12,28], end:[12,30], cartier:false, items:['Sandbanks Countryside White Blend VQA', 'Sandbanks Countryside Red Blend VQA', 'JT Entourage Grand Reserve Brut VQA'] },
+        { period:'P10', start:[12,31], end:[1,3], cartier:true, items:['Saintly The Good Sauvignon Blanc VQA', 'Saintly Heavensent Non-Alcoholic Sparkling Rosé (select stores only)', 'JT Entourage Grand Reserve Brut VQA', 'Inniskillin Pinot Noir VQA'] },
+      ],
+      html:
+        '<p class="cs-sub">Non-Boutiques &bull; Period 10: November 30, 2026 &ndash; January 3, 2027 &bull; Last updated Nov 6</p>' +
+        '<h3 class="cs-h">Key dates</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Mon Nov 23</th><td>Feature Learning issued: sparkling wines (see Must-do)</td></tr>' +
+        '<tr><th scope="row">Wed Nov 25, 5pm</th><td>DEADLINE: report missing P10 POP (Speakeasy form)</td></tr>' +
+        '<tr><th scope="row">Mon Nov 30</th><td>P10 BEGINS + tasting/sampling notes DUE + P10 changeover</td></tr>' +
+        '<tr><th scope="row">Tue Dec 1</th><td>Switch Uline poster to P10 Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; (Dec 1&ndash;25) &mdash; not before; keep the P9 Black Friday poster up through Mon Nov 30</td></tr>' +
+        '<tr><th scope="row">Mon Dec 7</th><td>P11 POP ships with MDC wine order &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 14</th><td>P11 POP ships with MDC wine order (2nd shipping week) &mdash; do NOT forfeit</td></tr>' +
+        '<tr><th scope="row">Mon Dec 21</th><td>P11 POP confirmation due</td></tr>' +
+        '<tr><th scope="row">Thu Dec 24 / Fri Dec 25</th><td>Christmas Eve / Christmas Day</td></tr>' +
+        '<tr><th scope="row">Sat Dec 26</th><td>Boxing Day &mdash; Boxing Week Flash Sale BEGINS + Uline Poster 2 &lsquo;Flash Sale&rsquo; up (Dec 26&ndash;Jan 3)</td></tr>' +
+        '<tr><th scope="row">Thu Dec 31 / Fri Jan 1</th><td>New Year&rsquo;s Eve / New Year&rsquo;s Day</td></tr>' +
+        '<tr><th scope="row">Sun Jan 3</th><td>P10 ENDS &bull; Mon Jan 4: P11 begins</td></tr>' +
+        '</tbody></table>' +
+        '<h3 class="cs-h">Sampling &mdash; what&rsquo;s pouring</h3>' +
+        '<table class="cs-table"><tbody>' +
+        '<tr><th scope="row">Nov 30 – Dec 2</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Saintly The Good Sparkling Rosé VQA</td></tr>' +
+        '<tr><th scope="row">Dec 2 – 6</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 7 – 9</th><td>Inniskillin Late Autumn Riesling VQA &bull; Sandbanks Reserve Sleeping Giant Foch-Baco Noir VQA &bull; Sandbanks Sparkling Secco VQA</td></tr>' +
+        '<tr><th scope="row">Dec 10 – 13</th><td>JT Reserve Chardonnay VQA &bull; JT Reserve Cabernet Franc-Cabernet Sauvignon VQA &bull; Inniskillin Vidal Icewine VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 14 – 16</th><td>Inniskillin Pinot Noir VQA &bull; Sandbanks Pinot Grigio VQA &bull; JT Reserve Sparkling Moscato VQA</td></tr>' +
+        '<tr><th scope="row">Dec 17 – 20</th><td>JT Grand Reserve Chardonnay VQA &bull; JT Grand Reserve Pinot Noir VQA &bull; Saintly Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 21 – 23</th><td>Bù Cabernet Sauvignon &bull; Bù Chardonnay &bull; JT Reserve Sparkling VQA</td></tr>' +
+        '<tr><th scope="row">Dec 24 – 27</th><td>Vintage Ink Rebel Red VQA &bull; Vintage Ink Wicked White VQA &bull; Inniskillin Fracette VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '<tr><th scope="row">Dec 28 – 30</th><td>Sandbanks Countryside White Blend VQA &bull; Sandbanks Countryside Red Blend VQA &bull; JT Entourage Grand Reserve Brut VQA</td></tr>' +
+        '<tr><th scope="row">Dec 31 – Jan 3</th><td>Saintly The Good Sauvignon Blanc VQA &bull; Saintly Heavensent Non-Alcoholic Sparkling Rosé (select stores only) &bull; JT Entourage Grand Reserve Brut VQA &bull; Inniskillin Pinot Noir VQA &bull; Cartier (Fri/Sat only)</td></tr>' +
+        '</tbody></table>' +
+        '<p class="cs-note">Cartier: any flavour, Friday and Saturday only, max 5 hrs/day, in the windows marked. Phase 3 sampling, every window: Refresh (any flavour). If a product isn&rsquo;t carried or is out of stock, substitute a VQA of similar price/varietal.</p>' +
+        '<h3 class="cs-h">Must-do actions</h3>' +
+        '<ul class="cs-list">' +
+        '<li><strong>Feature Learning (sparkling):</strong> mandatory bottle Sandbanks Sparkling Rosé VQA ($16.99) + one choice from the JT Reserve sparkling lineup (Sparkling VQA $16.99 or Sparkling Moscato VQA $21.99). Notes due Nov 30; 2+ shifts/week + up-to-date notes to receive a bottle.</li>' +
+        '<li><strong>Boxing Week Flash Sale Dec 26&ndash;Jan 3:</strong> Sandbanks Countryside White Blend + Countryside Red Blend + JT Entourage Grand Reserve Brut, $3 off each. Order ahead &mdash; 3x average weekly sales for the Sandbanks, 3.5x for the Brut; stores that don&rsquo;t carry them: 1&ndash;2 cases of each Sandbanks, 2&ndash;4 cases of the Brut.</li>' +
+        '<li><strong>Displays:</strong> Seasonal (re-use P9 case stackers + header cards; only the price cards are new), Primary, Impulse + Tertiary changeovers Mon Nov 30; Secondary changeover Tue Dec 1, flipping to the Boxing Week side/set for Dec 26&ndash;Jan 3. Poster frame stores get a poster, others a tent card &mdash; not both.</li>' +
+        '<li><strong>Gift with purchase:</strong> free organza bag with one 750mL wine over $13.99; free gift bag with one 750mL wine over $17.99; free bottle puffer jacket with two Saintly 750mL bottles; free GOLD puffer jacket with one Saintly Fracette Sparkling VQA 750mL.</li>' +
+        '<li><strong>Uline posters:</strong> Poster 1 &lsquo;Give the Gift of Great Wine&rsquo; Dec 1&ndash;25; Poster 2 &lsquo;Flash Sale&rsquo; Dec 26&ndash;Jan 3; keep the P9 Black Friday poster up through EOD Mon Nov 30; switch to P10 Tue Dec 1.</li>' +
+        '<li><strong>P10 POP:</strong> shipped with the MDC wine order at least two weeks before the period start &mdash; do NOT forfeit your wine order that week; if no full order is needed, order a minimum of 25 shippable cases. P11 POP ships Dec 7 + Dec 14 &mdash; do not forfeit those weeks either.</li>' +
+        '</ul>' +
+        '<h3 class="cs-h">Promo notes</h3>' +
+        '<ul class="cs-list">' +
+        '<li>Theme: HOLIDAY all period.</li>' +
+        '<li>All LTOs run Nov 30 &ndash; Jan 3 (see impact for full list &amp; prices).</li>' +
+        '<li>Multibuys: Buy 2 Save $5 Vintage Ink 750mL; Buy 2 Save $4 JT Reserve 750mL; Buy 2 Save $10 JT Grand Reserve 750mL; Buy 6 Save $2 Growers 473mL.</li>' +
+        '<li>TPRs: sell through on-hand stock &mdash; no replenishment orders.</li>' +
+        '<li>Extra TPRs in this impact: Growers Light Black Cherry 355mL and Growers Light Dry Apple 355mL, $2.79 each (sell through only).</li>' +
+        '</ul>' +
+        '<p class="cs-src">Source: P10 In-Store Impact (Non-Boutiques), last updated Nov 6, 2026. Doc quirks to watch: Uline Poster 1 is dated 12/01 on one page and 11/30 on another (the document also says do not change it until Tue Dec 1 &mdash; the app follows Dec 1); the sampling windows overlap on Dec 2 as printed. Weekdays verified against the calendar.</p>'
     }
   ];
   /* Only a period running TODAY counts. An expired period
@@ -14009,7 +14722,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
      (STORE_TYPES_KEY), so they survive even where the shared list
      has no store_type column yet. Store 358 is a Loblaws boutique,
      so it defaults to Loblaws. */
-  var BUILTIN_STORE_TYPES = ['Loblaws', 'Sobeys', 'Foodland', 'Non-boutique'];
+  var BUILTIN_STORE_TYPES = ['Loblaws', 'New Loblaws', 'Sobeys', 'Legacy Sobeys', 'Foodland', 'Metro', 'Farm Boy', "Longo's", 'FreshCo', 'Non-boutique'];
   var STORE_TYPE_OPTIONS = BUILTIN_STORE_TYPES.slice();
   var STORE_TYPES_KEY = 'wr-store-types';
   var CUSTOM_STORE_TYPES_KEY = 'wr-custom-store-types';
@@ -14272,7 +14985,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
         impactNote.textContent = '';
       } else if(type){
         impactNote.hidden = false;
-        impactNote.textContent = 'The ' + type + ' (' + buildLabel + ') impact is not loaded yet. It can be added by uploading the ' + type + ' ' + buildLabel + ' impact document — the P8 / P9 impact shown for Loblaws fully built stores does not apply to ' + type + ' ' + buildLabel + ' stores.';
+        impactNote.textContent = 'The ' + type + ' (' + buildLabel + ') impact is not loaded yet. It can be added by uploading the ' + type + ' ' + buildLabel + ' impact document — an impact loaded for another store type does not apply to ' + type + ' ' + buildLabel + ' stores.';
       } else {
         impactNote.hidden = false;
         impactNote.textContent = 'No store type is set for Store ' + activeStore + ' yet, so no impact is shown. Pick the store type under Store settings in Settings to see the right impact for this store.';
@@ -19370,11 +20083,20 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
        · Black Friday Flash Sale — Nov 16 to Nov 30, 2026: $3 off
          each product's regular price (the price on its row when this
          runs, so a price corrected in the shared list is honoured).
+       · P10 LTOs — Nov 30, 2026 to Jan 3, 2027 (all ten P10 banner
+         impacts print the identical LTO list): the 17 products below
+         at the impacts' promo shelf prices. Bodacious Smooth White
+         750mL is listed under two JDEs (80099119 and 80015842) at
+         the same price — one entry covers both. The Pink Ink scan
+         price in the impacts prints $39.74 (the BASK 3L figure);
+         the $14.99 shelf price is used here, as in P8/P9.
+       · Boxing Week Flash Sale — Dec 26, 2026 to Jan 3, 2027:
+         $3 off each product's regular price, same as Black Friday.
      Outside its period a scheduled product is NOT on sale: on Nov 9
      the P8 items come off (except the one carried into P9), on
      Nov 30 the P9 items come off while the flash sale runs its last
-     day, and from Dec 1 nothing here is on sale until a later period
-     is added to this table. Products that appear in no period are
+     day and the P10 LTOs switch on, and from Jan 4, 2027 nothing
+     here is on sale until a later period is added to this table. Products that appear in no period are
      left exactly as they are, so a one-off manual sale set in the
      editor on one of those is untouched. Products that DO appear
      in a period are different once that period has ENDED: their
@@ -19429,6 +20151,30 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     { name: 'Black Friday Flash Sale', flash: true, start: new Date(2026, 10, 16), end: new Date(2026, 10, 30), items: [
       { pid: '80020465', brand: 'Inniskillin', product: 'Discovery Series Susse Reserve Riesling', size: '750mL', off: 3 },
       { pid: '80011979', brand: 'Jackson-Triggs', product: 'Grand Reserve Shiraz', size: '750mL', off: 3 }
+    ] },
+    { name: 'P10 LTOs', start: new Date(2026, 10, 30), end: new Date(2027, 0, 3), items: [
+      { pid: '80090372', brand: 'BASK', product: 'Pinot Noir', size: '3L', price: '34.99' },
+      { pid: '80099115', brand: 'Bodacious', product: 'Smooth Red', size: '4L', price: '41.49' },
+      { pid: '80099119', brand: 'Bodacious', product: 'Smooth White', size: '750mL', price: '10.49' },
+      { pid: '80031387', brand: 'Cartier', product: 'Irish Cream', size: '750mL', price: '17.99' },
+      { pid: '80062891', brand: 'Cartier', product: 'Salted Caramel', size: '750mL', price: '17.99' },
+      { pid: '80097274', brand: 'Inniskillin', product: 'Fracette Rosé Sparkling', size: '750mL', price: '26.99' },
+      { pid: '551085', brand: 'Inniskillin', product: 'Vidal Icewine', size: '375mL', price: '42.99' },
+      { pid: '219543', brand: 'Inniskillin', product: 'Late Autumn Riesling', size: '750mL', price: '13.99' },
+      { pid: '261099', brand: 'Inniskillin', product: 'Pinot Noir', size: '750mL', price: '16.99' },
+      { pid: '989921', brand: 'Jackson-Triggs', product: "Proprietors' Selection Pinot Grigio", size: '750mL', price: '10.99' },
+      { pid: '328534', brand: 'Jackson-Triggs', product: "Proprietors' Selection Cabernet Sauvignon", size: '750mL', price: '10.99' },
+      { pid: '80010516', brand: 'Jackson-Triggs', product: "Proprietors' Selection Chardonnay", size: '4L', price: '41.99' },
+      { pid: '80087069', brand: 'Sandbanks', product: 'Pinot Grigio', size: '750mL', price: '12.99' },
+      { pid: '80087085', brand: 'Sandbanks', product: 'Reserve Sleeping Giant', size: '750mL', price: '15.99' },
+      { pid: '80084913', brand: 'Saintly', product: 'The Good Sparkling Rosé', size: '750mL', price: '16.99' },
+      { pid: '80099905', brand: 'Saintly', product: 'The Good Sauvignon Blanc', size: '750mL', price: '16.99' },
+      { pid: '80082765', brand: 'Vintage Ink', product: 'Pink Ink', size: '750mL', price: '14.99' }
+    ] },
+    { name: 'Boxing Week Flash Sale', flash: true, start: new Date(2026, 11, 26), end: new Date(2027, 0, 3), items: [
+      { pid: '', brand: 'Sandbanks', product: 'Countryside White Blend', size: '750mL', off: 3 },
+      { pid: '', brand: 'Sandbanks', product: 'Countryside Red Blend', size: '750mL', off: 3 },
+      { pid: '80003789', brand: 'Jackson-Triggs', product: 'Entourage Grand Reserve Brut', size: '750mL', off: 3 }
     ] }
   ];
   SALE_PERIODS.forEach(function(period){
