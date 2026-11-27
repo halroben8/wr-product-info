@@ -195,6 +195,17 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   .scanner-frame i.tr{top:-3px;right:-3px;border-top-width:5px;border-right-width:5px;border-top-right-radius:8px}
   .scanner-frame i.bl{bottom:-3px;left:-3px;border-bottom-width:5px;border-left-width:5px;border-bottom-left-radius:8px}
   .scanner-frame i.br{bottom:-3px;right:-3px;border-bottom-width:5px;border-right-width:5px;border-bottom-right-radius:8px}
+  /* Camera controls (.32): torch + zoom, shown only where the camera
+     track reports the capability — never rendered where unsupported */
+  .scanner-controls{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+    display:flex;align-items:center;gap:8px;z-index:3}
+  .scanner-controls[hidden]{display:none}
+  .scanner-controls button{min-width:48px;min-height:44px;padding:8px 14px;border-radius:999px;
+    background:rgba(20,10,40,.78);color:#fff;border:1.5px solid rgba(255,255,255,.65);
+    font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+  .scanner-controls button[aria-pressed="true"]{background:#f59e0b;border-color:#f59e0b;color:#1c1005}
+  .scanner-zoom-label{font-size:14px;font-weight:700;color:#fff;min-width:34px;text-align:center;
+    text-shadow:0 1px 4px rgba(0,0,0,.8)}
   .scanner-line{position:absolute;left:5%;right:5%;top:50%;height:3px;border-radius:2px;
     transform:translateY(-50%);
     background:#000;box-shadow:0 0 10px rgba(0,0,0,.9)}
@@ -5555,7 +5566,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     <p class="settings-note" style="font-size:11px">Created and maintained by Michael Benia WR 358</p>
     <!-- VERSION CODE: bump this on every new build / push (see the
          .settings-version note in the CSS above). -->
-    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.31</span></p>
+    <p class="settings-version" id="appVersion">Version: <span class="version-code">2026.11.04.32</span></p>
     </div>
     <div class="settings-tabpanel" id="settingsPanel-documents" role="tabpanel" aria-labelledby="settingsTab-documents" hidden>
       <div class="settings-actions" style="margin-top:0">
@@ -5568,7 +5579,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <div class="loved-list" id="lovedWinesList" hidden></div>
         </div>
         <p class="settings-group-head" id="docsManualHead">Manual</p>
-        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.31</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
+        <button type="button" class="settings-action manual-web-action" id="webManualBtn"><span>Product Info Manual (mobile-friendly web version)<span class="sa-sub">Read it here &mdash; text fits your screen, no zooming &middot; Tap-to-open sections &middot; Search &middot; Version 2026.11.04.32</span></span><span class="sa-ext" aria-hidden="true">Best on phones</span></button>
         <a class="settings-action manual-print-action" href="Manual.pdf" target="_blank" rel="noopener"><span>Product Info Manual &mdash; PDF (for printing)<span class="sa-sub">Print version only &mdash; fixed pages for paper &middot; Same content as the web manual above</span></span><span class="sa-ext" aria-hidden="true">PDF &middot; Print &#8599;</span></a>
       </div>
     </div>
@@ -6691,7 +6702,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     </div>
     <p class="manual-lede">The mobile-friendly web version of the manual — the text fits your screen, so you just scroll. Tap a section to open it, or search below. This is the version to read on a phone.</p>
     <div class="manual-meta">
-      <span class="manual-pill accent">Version 2026.11.04.31</span>
+      <span class="manual-pill accent">Version 2026.11.04.32</span>
       <span class="manual-pill">Web edition — matches the app</span>
     </div>
     <p class="manual-print-note"><strong>Need it on paper?</strong> Use <strong>Product Info Manual — PDF (for printing)</strong> in Documents, directly below the web manual entry. It has the same content, laid out as fixed pages for printing.</p>
@@ -6809,7 +6820,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
       <div class="manual-sec-body">
         <ol>
           <li>Tap the <strong>scan icon</strong> under the settings gear, top right.</li>
-          <li>The scanner opens full-screen using the rear camera. A tip line on the scanner screen gives the best way to scan: Hold the phone level, about 4 inches from the bottle&rsquo;s back-label barcode, and keep it steady for 3 seconds in good light so the camera can focus. It focuses continuously where your phone supports it.</li>
+          <li>The scanner opens full-screen using the rear camera, in the highest resolution it offers. A tip line on the scanner screen gives the best way to scan: hold the phone level, <strong>6 to 8 inches</strong> from the bottle&rsquo;s back-label barcode &mdash; closer is not better, most phone cameras cannot focus at 4 inches &mdash; and keep it steady in good light. It focuses continuously where your phone supports it; <strong>tap the camera view to refocus</strong> if the barcode looks blurry. Where the camera supports them, <span class="manual-ui">Torch</span> and <span class="manual-ui">zoom</span> buttons appear at the bottom of the view: zoom lets the barcode fill the box from farther back, where focus is sharper. (Scanner fixed in Version 2026.11.04.32: the camera was being opened with no resolution request, so some phones &mdash; the Android app above all &mdash; got a low-resolution feed that never locked onto a barcode; and a barcode already on file could wrongly say &ldquo;not on file&rdquo; if the shared list hadn&rsquo;t finished loading, because recognition depended entirely on that load. The app now carries the known barcode links inside itself as well, so an on-file barcode is recognised with no connection and no waiting.)</li>
           <li>Tap the <strong>← back arrow</strong> at the top left to go back.</li>
         </ol>
         <h3>When it recognises the barcode</h3>
@@ -6953,7 +6964,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
           <li><strong>Impact sale prices are locked.</strong> Sale prices that come from a period impact document can&rsquo;t be edited in the app — they follow the impact.</li>
         </ul>
         <h3>“Sale price not working”</h3>
-        <p>If a sale price is set but isn&rsquo;t displaying or saving properly, use the <strong>sale-broken flag</strong> on the product to mark it. That flags it for follow-up instead of the problem being silently lost — un-flag it once it&rsquo;s displaying correctly.</p><h3>Flash sales</h3><p>Some sales are <strong>flash sales</strong> — short scheduled sales like the <strong>Black Friday Flash Sale</strong> (Nov 16–30: Susse Reserve Riesling and JT Grand Reserve Shiraz, $3 off each). A wine in a flash sale carries a black-and-yellow <span class="manual-bdg flash">⚡ Flash Sale</span> badge beside its pink Sale badge — on the card, and again in the expanded details beside the Sale / Reg / Save lines — so a flash sale never just looks like an ordinary sale. P10 brings a second one: the <strong>Boxing Week Flash Sale</strong> (Dec 26, 2026 – Jan 3, 2027: Sandbanks Countryside White Blend, Sandbanks Countryside Red Blend and JT Entourage Grand Reserve Brut, $3 off each), which runs past the end of P10 itself and clears on Jan 4. The P10 LTOs (17 wines, Nov 30, 2026 – Jan 3, 2027, at the P10 impacts&rsquo; promo shelf prices) are a scheduled sale period like the P8/P9 LTOs. (Added in Version 2026.11.04.31, with the P10 impacts for every store type.)</p><h3>When an impact sale ends, the sale clears itself</h3><p>When a scheduled impact sale period ends, the sale comes off the products in that impact automatically — <strong>both the on-sale flag and the sale price are cleared</strong>, even if that sale was typed in manually, so a stale sale never lingers past its impact. The <strong>regular price is never cleared</strong> — only the sale state is. A product that belongs to no impact sale is untouched: a one-off manual sale on it stays until someone turns it off.</p>
+        <p>If a sale price is set but isn&rsquo;t displaying or saving properly, use the <strong>sale-broken flag</strong> on the product to mark it. That flags it for follow-up instead of the problem being silently lost — un-flag it once it&rsquo;s displaying correctly.</p><h3>Flash sales</h3><p>Some sales are <strong>flash sales</strong> — short scheduled sales like the <strong>Black Friday Flash Sale</strong> (Nov 16–30: Susse Reserve Riesling and JT Grand Reserve Shiraz, $3 off each). A wine in a flash sale carries a black-and-yellow <span class="manual-bdg flash">⚡ Flash Sale</span> badge beside its pink Sale badge — on the card, and again in the expanded details beside the Sale / Reg / Save lines — so a flash sale never just looks like an ordinary sale. P10 brings a second one: the <strong>Boxing Week Flash Sale</strong> (Dec 26, 2026 – Jan 3, 2027: Sandbanks Countryside White Blend, Sandbanks Countryside Red Blend and JT Entourage Grand Reserve Brut, $3 off each), which runs past the end of P10 itself and clears on Jan 4. The P10 LTOs (17 wines, Nov 30, 2026 – Jan 3, 2027, at the P10 impacts&rsquo; promo shelf prices) are a scheduled sale period like the P8/P9 LTOs. (Added in Version 2026.11.04.32, with the P10 impacts for every store type.)</p><h3>When an impact sale ends, the sale clears itself</h3><p>When a scheduled impact sale period ends, the sale comes off the products in that impact automatically — <strong>both the on-sale flag and the sale price are cleared</strong>, even if that sale was typed in manually, so a stale sale never lingers past its impact. The <strong>regular price is never cleared</strong> — only the sale state is. A product that belongs to no impact sale is untouched: a one-off manual sale on it stays until someone turns it off.</p>
       </div>
     </details>
 
@@ -7173,7 +7184,7 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   </div>
 </details>
     </div>
-    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.31</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
+    <p class="manual-foot"><strong>WR Product Info — Manual, Version 2026.11.04.32</strong><br />Created and maintained by Michael Benia WR 358<br />This web manual and the print PDF carry the same content and the same version as the app.</p>
     <div class="editor-actions">
       <button type="button" class="btn-ghost" id="manualCancel">Close</button>
     </div>
@@ -7428,10 +7439,16 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     <button type="button" class="scanner-back" id="scannerCancel" aria-label="Back — close the scanner">←</button>
     <h2 id="scannerTitle">Scan barcode</h2>
   </div>
-  <p class="scanner-tip">Hold the phone level, about 4 inches from the bottle&rsquo;s back-label barcode, and keep it steady for 3 seconds in good light so the camera can focus.</p>
+  <p class="scanner-tip">Hold the phone level, 6 to 8 inches from the bottle&rsquo;s back-label barcode &mdash; closer is not better, most phone cameras cannot focus at 4 inches. Keep it steady in good light, and tap the view if it looks blurry to refocus.</p>
   <div class="scanner-stage">
     <video id="scannerVideo" playsinline muted autoplay aria-label="Camera view for scanning a barcode"></video>
     <div class="scanner-frame" aria-hidden="true"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="scanner-line"></span></div>
+    <div class="scanner-controls" id="scannerControls" hidden>
+      <button type="button" id="scannerTorch" aria-pressed="false">Torch</button>
+      <button type="button" id="scannerZoomOut" aria-label="Zoom out">&minus;</button>
+      <span class="scanner-zoom-label" id="scannerZoomLabel">1&times;</span>
+      <button type="button" id="scannerZoomIn" aria-label="Zoom in">+</button>
+    </div>
   </div>
   <p class="scanner-status" id="scannerStatus" role="status"></p>
   <div class="scanner-manual">
@@ -15650,6 +15667,63 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
      recognise a shared-list barcode even where the row on this
      screen does not carry it in data-barcode yet. */
   var sharedBarcodes = {};
+  /* BAKED_BARCODES (2026.11.04.32): every barcode link known when this
+     version was built, baked into the page itself — normalised code ->
+     [product_id, brand, product, size] candidates (a code can belong to
+     duplicate shared records of the same wine, hence a list). The scan
+     lookup falls back to this index, so a barcode that is on file is
+     recognised IMMEDIATELY — before the shared list has loaded, and
+     even if that fetch fails outright (the reported "every scan says
+     unknown barcode" bug: before .32 the built-in rows carried exactly
+     ONE barcode, so recognition depended entirely on the Supabase fetch
+     and its pid mapping having completed). Refreshed from the shared
+     list when this index was generated; links saved later still arrive
+     through sharedBarcodes, which is checked first. */
+  var BAKED_BARCODES = {"895770010003":[["80086441","13th Street","Burger Blend Gamay Noir Pinot Noir","750mL"]],"895770008802":[["80086442","13th Street","Burger Blend Riesling Pinot Grigio","750mL"]],"874537004196":[["80098880","20 Bees","Pinot Grigio Vidal","750mL"]],"063657044865":[["80096815","BASK","Cabernet Sauvignon","3L"]],"063657043981":[["80091176","BASK","Cabernet Sauvignon","750mL"]],"063657045701":[["80095812","BASK","Chardonnay","750mL"]],"063657043646":[["80090375","BASK","Crisp Rosé","3L"]],"063657042052":[["80085899","BASK","Crisp Rosé","750mL"]],"063657042786":[["80087831","BASK","Hard Sparkling Water Black Tea Goji & Blackberry","355mL"]],"063657043783":[["80091006","BASK","Hard Sparkling Water Green Tea Peach","355mL"]],"063657042779":[["bask-hard-sparkling-water-white-tea-passion-fruit-355ml","BASK","Hard Sparkling Water White Tea Passion Fruit","355mL"],["UMVYUI3QBX4","BASK Hard Sparkling Water","White Tea Passion Fruit","355mL"]],"063657044841":[["80093814","BASK","Lightly Sparkling Rosé","750mL"]],"063657044858":[["80094019","BASK","Pinot Grigio","3L"]],"063657043998":[["80091174","BASK","Pinot Grigio","750mL"]],"063657043639":[["80090372","BASK","Pinot Noir","3L"]],"063657042045":[["80085897","BASK","Pinot Noir","750mL"]],"063657047057":[["80098876","BASK","Reserve Simply Red","750mL"]],"063657047071":[["80098878","BASK","Reserve Simply Rosé","750mL"]],"063657047064":[["80098877","BASK","Reserve Simply White","750mL"]],"063657043707":[["80090894","BASK","Rosé Wine Spritz","355mL"]],"063657043790":[["80091007","BASK","Sangria Wine Spritz","355mL"]],"063657043622":[["80090370","BASK","Sauvignon Blanc","3L"]],"063657042038":[["80085895","BASK","Sauvignon Blanc","750mL"]],"063657043776":[["80091005","BASK","White Wine Spritz","355mL"]],"063657045015":[["blake-boulevard-cabernet-sauvignon-3l","Blake Boulevard","Cabernet Sauvignon","3L"]],"063657045022":[["80094413","Blake Boulevard","Cabernet Sauvignon","750mL"]],"063657045008":[["blake-boulevard-sauvignon-blanc-3l","Blake Boulevard","Sauvignon Blanc","3L"]],"063657045039":[["blake-boulevard-sauvignon-blanc-750ml","Blake Boulevard","Sauvignon Blanc","750mL"]],"063657038574":[["bodacious-bourbon-barrel-aged-red-blend-750ml","Bodacious","Bourbon Barrel Aged Red Blend","750mL"]],"063657033791":[["80023337","Bodacious","Cabernet Sauvignon","750mL"]],"063657038024":[["80062732","Bodacious","Moscato","750mL"]],"063657039861":[["80082106","Bodacious","Moscato Rosé","750mL"]],"063657045688":[["80095810","Bodacious","Peach Fizz","750mL"]],"063657045695":[["80095811","Bodacious","Sangria","750mL"]],"063657047415":[["80099122","Bodacious","Smooth Red","1.5L"]],"063657047347":[["80099115","Bodacious","Smooth Red","4L"]],"063657047408":[["80099121","Bodacious","Smooth Red","750mL"]],"063657047392":[["80099120","Bodacious","Smooth White","1.5L"]],"063657047330":[["80099114","Bodacious","Smooth White","4L"]],"063657047385":[["80099119","Bodacious","Smooth White","750mL"]],"063657047835":[["80100035","Bù","Cabernet Sauvignon","750mL"]],"063657047842":[["80100036","Bù","Chardonnay","750mL"]],"063657046043":[["80096856","Bù","Pinot Grigio","750mL"]],"063657046036":[["80096855","Bù","Pinot Noir","750mL"]],"063657046050":[["80096857","Bù","Tempranillo","750mL"]],"832136008052":[["80086423","Burnt Ship Bay","Cabernet Merlot","750mL"]],"832136007130":[["80086422","Burnt Ship Bay","Pinot Grigio","750mL"]],"063657024300":[["988285","Caleta","Cabernet Sauvignon Merlot","750mL"]],"063657035863":[["80055726","Caleta","Sauvignon Blanc","750mL"]],"063657034842":[["80031387","Cartier","Irish Cream","750mL"]],"063657038093":[["80062891","Cartier","Salted Caramel","750mL"]],"063657041345":[["cartier-smooth-s-mores-750ml","Cartier","Smooth S'mores","750mL"]],"779334210866":[["80090817","Cave Spring","Pinot Gris","750mL"]],"779334345834":[["80086425","Cave Spring","Riesling","750mL"]],"779334336351":[["80086424","Cave Spring","Riesling Dry","750mL"]],"776409816534":[["80098033","Chateau Des Charmes","Barrel Fermented Chardonnay","750mL"]],"776409000292":[["ch-teau-des-charmes-cabernet-merlot-750ml","Chateau Des Charmes","Cabernet Merlot","750mL"]],"776409000155":[["80059132","Chateau Des Charmes","Cabernet Sauvignon","750mL"]],"776409000230":[["80059009","Chateau Des Charmes","Cuvée Michèle Pinot Noir","750mL"]],"776409573499":[["80098469","Chateau Des Charmes","Gamay Noir","750mL"]],"819761002129":[["80059136","Creekside","Sauvignon Blanc","750mL"]],"819761001870":[["80059011","Creekside","Syrah","750mL"]],"627843062608":[["80086431","D'Ont Poke The Bear","Cabernet Baco Noir","750mL"],["d-ont-poke-the-bear-red-750ml","D'Ont Poke The Bear","Red","750mL"]],"874537003991":[["80086432","D'Ont Poke The Bear","Chardonnay Sauvignon Blanc Riesling","750mL"]],"876584002071":[["80059012","Fielding","Fireside Red","750mL"]],"876584000107":[["80059144","Fielding","Fireside White","750mL"]],"876584001159":[["80098471","Fielding","Pinot Grigio","750mL"]],"063657043844":[["good-fortune-hard-seltzer-blackberry-elderflower-355ml","Good Fortune","Hard Seltzer Blackberry Elderflower","355mL"],["UMVYUI3QBLI","Good Fortune Hard Seltzer","Blackberry Elderflower","355mL"]],"063657041321":[["good-fortune-sparkling-wine-spritz-citrus-orange-flower-355ml","Good Fortune","Sparkling Wine Spritz Citrus Orange Flower","355mL"],["UMVYUI3QB4V","Good Fortune Sparkling Wine Spritz","Citrus Orange Flower","355mL"]],"063657043868":[["good-fortune-sparkling-wine-spritz-mango-margarita-355ml","Good Fortune","Sparkling Wine Spritz Mango Margarita","355mL"],["UMVYUI3QBLP","Good Fortune Sparkling Wine Spritz","Mango Margarita","355mL"]],"063657041284":[["good-fortune-sparkling-wine-spritz-raspberry-hibiscus-355ml","Good Fortune","Sparkling Wine Spritz Raspberry Hibiscus","355mL"],["UMVYUI3QBJX","Good Fortune Sparkling Wine Spritz","Raspberry Hibiscus","355mL"]],"063657026472":[["80003052","Growers","1927 Extra Dry","473mL"]],"067932017384":[["984914","Growers","Cranberry Pomegranate","2L"]],"067932000386":[["240333","Growers","Extra Dry Apple","2L"]],"063657038987":[["80065964","Growers","Harvest Stone Fruit","2L"]],"063657039960":[["80082372","Growers","Raspberry Ginger Zinger","473mL"]],"063657042175":[["growers-ros-cider-1l","Growers","Rosé Cider","1L"]],"063657042861":[["growers-spritz-field-watermelon-lavender-473ml","Growers","Spritz Field Watermelon Lavender","473mL"],["UMVYUI3QBO4","Growers Spritz","Field Watermelon Lavender","473mL"]],"063657044650":[["growers-spritz-mango-passionfruit-473ml","Growers","Spritz Mango Passionfruit","473mL"],["UMVYUI3QBK0","Growers Spritz","Mango Passionfruit","473mL"]],"063657043967":[["growers-spritz-white-strawberry-lemonade-473ml","Growers","Spritz White Strawberry Lemonade","473mL"],["UMVYUI3QBTE","Growers Spritz","White Strawberry Lemonade","473mL"]],"063657036181":[["80057695","Growers","Triple Orchard Berry","473mL"]],"063657039984":[["80082375","Growers","Tropical Clementine Pineapple","2L"]],"063657038505":[["80064690","Growers","Tropical Clementine Pineapple","473mL"]],"063657034750":[["growers-winter-cranberry-1l","Growers","Winter Cranberry","1L"]],"779376109388":[["80059194","Henry of Pelham","Old Vines Baco Noir","750mL"]],"779376703012":[["80099449","Henry of Pelham","Sauvignon Blanc","750mL"]],"620654040018":[["317016","Inniskillin","Cabernet Franc","750mL"]],"620654022557":[["988103","Inniskillin","Chardonnay","750mL"]],"620654133031":[["inniskillin-discovery-series-baco-noir-750ml","Inniskillin","Discovery Series Baco Noir","750mL"],["UMVYUI3QCA0","Inniskillin Discovery Series","Baco Noir","750mL"]],"620654133277":[["inniskillin-discovery-series-blanc-de-franc-750ml","Inniskillin","Discovery Series Blanc de Franc","750mL"],["UMVYUI3QCFR","Inniskillin Discovery Series","Blanc de Franc","750mL"]],"620654133192":[["80088567","Inniskillin","Discovery Series Gamay Noir","750mL"]],"620654133413":[["80100209","Inniskillin","Discovery Series Meritage","750mL"]],"620654029198":[["inniskillin-discovery-series-p3-750ml","Inniskillin","Discovery Series P3","750mL"],["UMVYUI3QBY4","Inniskillin Discovery Series","P3","750mL"]],"620654132423":[["inniskillin-discovery-series-susse-reserve-riesling-750ml","Inniskillin","Discovery Series Susse Reserve Riesling","750mL"],["UMVYUI3QBAB","Inniskillin Discovery Series","Susse Reserve Riesling","750mL"]],"620654014262":[["986596","Inniskillin","Icewine 3-Bottle Gift Set","3 x 50mL"]],"620654110018":[["551085","Inniskillin","Icewine Vidal Icewine","375mL"]],"620654133291":[["80097274","Inniskillin","Inniskillin Fracette","750mL"]],"620654022014":[["219543","Inniskillin","Late Autumn Riesling","750mL"]],"620654150014":[["inniskillin-meritage-750ml","Inniskillin","Meritage","750mL"]],"620654060016":[["323444","Inniskillin","Merlot","750mL"]],"620654133000":[["UMVZU4JMFPX","Inniskillin","Merlot-Petit Verdot","750mL"]],"620654033010":[["inniskillin-montague-vineyard-pinot-noir-750ml","Inniskillin","Montague Vineyard Pinot Noir","750mL"],["UMVYUI3QC8N","Inniskillin Montague Vineyard","Pinot Noir","750mL"]],"620654070015":[["348979","Inniskillin","Pinot Grigio","750mL"]],"620654030019":[["261099","Inniskillin","Pinot Noir","750mL"]],"620654029556":[["inniskillin-reserve-cabernet-franc-750ml","Inniskillin","Reserve Cabernet Franc","750mL"],["UMVYUI3QBS7","Inniskillin Reserve","Cabernet Franc","750mL"]],"620654132751":[["80031361","Inniskillin","Reserve Cabernet Franc Rosé","750mL"]],"620654020393":[["inniskillin-reserve-chardonnay-750ml","Inniskillin","Reserve Chardonnay","750mL"],["UMVYUI3QC6S","Inniskillin Reserve","Chardonnay","750mL"]],"62060226":[["inniskillin-reserve-merlot-750ml","Inniskillin","Reserve Merlot","750mL"]],"620654020720":[["inniskillin-reserve-pinot-gris-750ml","Inniskillin","Reserve Pinot Gris","750mL"],["UMVYUI3QCDA","Inniskillin Reserve","Pinot Gris","750mL"]],"620654020409":[["inniskillin-reserve-pinot-noir-750ml","Inniskillin","Reserve Pinot Noir","750mL"],["UMVYUI3QCHA","Inniskillin Reserve","Pinot Noir","750mL"]],"620654020386":[["981233","Inniskillin","Reserve Riesling","750mL"]],"620654132447":[["80023659","Inniskillin","Reserve Sauvignon Blanc","750mL"]],"620654022946":[["inniskillin-reserve-shiraz-cabernet-750ml","Inniskillin","Reserve Shiraz Cabernet","750mL"],["UMVYUI3QBT4","Inniskillin Reserve","Shiraz Cabernet","750mL"]],"620654020010":[["083790","Inniskillin","Riesling","750mL"]],"063657022542":[["988102","Inniskillin","Riesling Pinot Grigio","750mL"]],"620654133222":[["80091929","Inniskillin","Rosé","750mL"]],"620654132454":[["UMVZUM0LMQH","Inniskillin","Sauvignon Blanc","750mL"]],"620654010011":[["066266","Inniskillin","Unoaked Chardonnay","750mL"]],"620654013531":[["UMVYUI3QCOZ","Inniskillin Icewine","Riesling Icewine","200mL"]],"620654022939":[["UMVYUI3QBPA","Inniskillin Reserve","Merlot","750mL"]],"063657006849":[["80003789","Jackson-Triggs","Entourage Grand Reserve Brut","750mL"]],"063657006863":[["jackson-triggs-grand-reserve-chardonnay-750ml","Jackson-Triggs","Grand Reserve Chardonnay","750mL"],["UMVYUI3QCZ4","Jackson-Triggs Grand Reserve","Chardonnay","750mL"]],"063657030622":[["jackson-triggs-grand-reserve-pinot-noir-750ml","Jackson-Triggs","Grand Reserve Pinot Noir","750mL"],["UMVYUI3QBHF","Jackson-Triggs Grand Reserve","Pinot Noir","750mL"]],"063657031803":[["jackson-triggs-grand-reserve-red-meritage-750ml","Jackson-Triggs","Grand Reserve Red Meritage","750mL"],["UMVYUI3QB61","Jackson-Triggs Grand Reserve","Red Meritage","750mL"]],"063657030592":[["jackson-triggs-grand-reserve-sauvignon-blanc-750ml","Jackson-Triggs","Grand Reserve Sauvignon Blanc","750mL"],["UMVYUI3QBGL","Jackson-Triggs Grand Reserve","Sauvignon Blanc","750mL"]],"063657030608":[["80011979","Jackson-Triggs","Grand Reserve Shiraz","750mL"]],"063657030615":[["80097807","Jackson-Triggs","Grand Reserve White Meritage","750mL"]],"063657001813":[["331025","Jackson-Triggs","Proprietors' Selection Cabernet Sauvignon","1.5L"]],"063657045756":[["jackson-triggs-proprietors-selection-cabernet-sauvignon-3l","Jackson-Triggs","Proprietors' Selection Cabernet Sauvignon","3L"],["UMVYUI3QC5R","Jackson-Triggs Proprietors' Selection","Cabernet Sauvignon","3L"]],"063657029855":[["80010517","Jackson-Triggs","Proprietors' Selection Cabernet Sauvignon","4L"]],"063657005347":[["328534","Jackson-Triggs","Proprietors' Selection Cabernet Sauvignon","750mL"]],"063657040447":[["80083707","Jackson-Triggs","Proprietors' Selection Cabernet Sauvignon Light","750mL"]],"063657005262":[["328526","Jackson-Triggs","Proprietors' Selection Chardonnay","1.5L"]],"063657029862":[["80010516","Jackson-Triggs","Proprietors' Selection Chardonnay","4L"]],"063657031322":[["80014111","Jackson-Triggs","Proprietors' Selection Dry White Vidal","1.5L"]],"063657029824":[["80010509","Jackson-Triggs","Proprietors' Selection Dry White Vidal","4L"]],"063657008201":[["377820","Jackson-Triggs","Proprietors' Selection Merlot","1.5L"]],"063657029794":[["80010507","Jackson-Triggs","Proprietors' Selection Merlot","4L"]],"063657007112":[["383711","Jackson-Triggs","Proprietors' Selection Merlot","750mL"]],"063657013151":[["987503","Jackson-Triggs","Proprietors' Selection Pinot Grigio","1.5L"]],"063657029787":[["80010511","Jackson-Triggs","Proprietors' Selection Pinot Grigio","4L"]],"063657011836":[["989921","Jackson-Triggs","Proprietors' Selection Pinot Grigio","750mL"]],"063657040508":[["80083815","Jackson-Triggs","Proprietors' Selection Pinot Grigio Light","750mL"]],"063657043424":[["80089861","Jackson-Triggs","Proprietors' Selection Rosé","4L"]],"063657040591":[["80083978","Jackson-Triggs","Proprietors' Selection Rosé Light","750mL"]],"063657004289":[["399428","Jackson-Triggs","Proprietors' Selection Sauvignon Blanc","1.5L"]],"063657029626":[["80010385","Jackson-Triggs","Proprietors' Selection Sauvignon Blanc","4L"]],"063657004104":[["399410","Jackson-Triggs","Proprietors' Selection Sauvignon Blanc","750mL"]],"063657029770":[["80010506","Jackson-Triggs","Proprietors' Selection Shiraz","4L"]],"063657046883":[["80098164","Jackson-Triggs","Reserve Cabernet Franc-Cabernet Sauvignon","3L"]],"063657006634":[["560680","Jackson-Triggs","Reserve Cabernet Franc-Cabernet Sauvignon","750mL"]],"063657006290":[["526251","Jackson-Triggs","Reserve Chardonnay","750mL"]],"063657006313":[["526228","Jackson-Triggs","Reserve Meritage","750mL"]],"063657024669":[["988319","Jackson-Triggs","Reserve Merlot","1.5L"]],"063657006962":[["618421","Jackson-Triggs","Reserve Merlot","750mL"]],"063657036860":[["535682","Jackson-Triggs","Reserve Pinot Grigio","750mL"]],"063657024676":[["988320","Jackson-Triggs","Reserve Sauvignon Blanc","1.5L"]],"063657006955":[["618413","Jackson-Triggs","Reserve Sauvignon Blanc","750mL"]],"063657031568":[["80018559","Jackson-Triggs","Reserve Shiraz Cabernet","750mL"]],"063657006726":[["80003392","Jackson-Triggs","Reserve Sparkling","750mL"]],"063657035245":[["80082731","Jackson-Triggs","Reserve Sparkling Moscato","750mL"]],"063657046128":[["80097273","KEW","KEW Fracette","750mL"]],"624654000072":[["80058787","Konzelmann","Chardonnay","750mL"]],"624654000775":[["80058788","Konzelmann","Shiraz","750mL"]],"063657040171":[["le-clos-jordanne-claystone-chardonnay-750ml","Le Clos Jordanne","Claystone Chardonnay","750mL"]],"063657040140":[["le-clos-jordanne-claystone-pinot-noir-750ml","Le Clos Jordanne","Claystone Pinot Noir","750mL"]],"063657047354":[["80099116","Maria Christina","Red Wine","1.5L"]],"063657047378":[["80099118","Maria Christina","White Wine","1.5L"]],"063657030271":[["mazia-pinot-grigio-1-5l","Mazia","Pinot Grigio","1.5L"]],"063657024355":[["mazia-pinot-grigio-750ml","Mazia","Pinot Grigio","750mL"]],"699187000387":[["megalomaniac-homegrown-red-750ml","Megalomaniac","Homegrown Red","750mL"]],"699187000363":[["80098032","Megalomaniac","Homegrown Riesling","750mL"]],"699187000547":[["megalomaniac-homegrown-white-750ml","Megalomaniac","Homegrown White","750mL"]],"063657047965":[["80100194","MXM","BlackBerry","750mL"]],"063657047972":[["80100195","MXM","Lemonade","750mL"]],"063657047996":[["80100197","MXM","Watermelon","750mL"]],"063657022283":[["open-merlot-750ml","OPEN","Merlot","750mL"]],"777081720904":[["80090814","Pelee Island","Cabernet Franc","750mL"]],"777081715382":[["80086437","Pelee Island","Lighthouse Riesling","750mL"]],"777081726746":[["80086439","Pelee Island","LOLA Blush Sparkling Rosé","750mL"]],"777081720706":[["80086436","Pelee Island","Pinot Noir","750mL"]],"809381010024":[["80090816","Peninsula Ridge","Inox Unoaked Chardonnay","750mL"]],"809381027008":[["80059024","Peninsula Ridge","Merlot","750mL"]],"809381013001":[["80059026","Peninsula Ridge","Sauvignon Blanc","750mL"]],"063657046142":[["80097275","Saintly","Saintly Fracette","750mL"]],"063657047675":[["80099662","Saintly","The Good Rosé","750mL"]],"063657047767":[["80099905","Saintly","The Good Sauvignon Blanc","750mL"]],"063657044438":[["80092651","Saintly","The Good Sparkling","200mL"]],"063657041574":[["80084918","Saintly","The Good Sparkling","750mL"]],"063657044391":[["80092647","Saintly","The Good Sparkling Rosé","200mL"]],"063657041529":[["80084913","Saintly","The Good Sparkling Rosé","750mL"]],"663935100032":[["80087078","Sandbanks","Baco Noir","750mL"]],"663935100049":[["UMVZU0TZ78L","Sandbanks","Cabernet Franc","750mL"]],"063657045411":[["sandbanks-countryside-white-blend-750ml","Sandbanks","Countryside White Blend","750mL"]],"66390022":[["80087082","Sandbanks","Dunes Red","750mL"]],"663935100018":[["80087068","Sandbanks","Dunes White","750mL"]],"663935100216":[["80087069","Sandbanks","Pinot Grigio","750mL"]],"663935100063":[["80087079","Sandbanks","Reserve Baco Noir","750mL"]],"663935100247":[["80087083","Sandbanks","Reserve French Kiss","750mL"]],"063657045046":[["80094698","Sandbanks","Reserve Marquette","750mL"]],"663935100322":[["80087085","Sandbanks","Reserve Sleeping Giant","750mL"],["sandbanks-reserve-sleeping-giant-foch-baco-noir-750ml","Sandbanks","Reserve Sleeping Giant Foch-Baco Noir","750mL"],["UMVYUI3QCMD","Sandbanks","Reserve Sleeping Giant Foch-Baco Noir","750mL"]],"063657046203":[["sandbanks-reserve-sleeping-giant-white-750ml","Sandbanks","Reserve Sleeping Giant White","750mL"],["UMVYUI3QCWQ","Sandbanks Reserve","Sleeping Giant White","750mL"]],"663935100131":[["80087073","Sandbanks","Rosé","750mL"]],"663935100179":[["80087102","Sandbanks","Sauvignon Blanc","750mL"]],"063657042694":[["80087746","Sandbanks","Sparkling Rosé","750mL"]],"063657045671":[["80095733","Sandbanks","Sparkling Secco","750mL"]],"663935100452":[["80087074","Sandbanks","Summer Rosé","750mL"]],"063657032206":[["80016840","Sawmill Creek","Chardonnay","1L"]],"063657015964":[["985911","Sawmill Creek","Merlot","1L"]],"063657021538":[["988015","Sawmill Creek","Pinot Grigio","1L"]],"063657028773":[["80003157","Sawmill Creek","Pinot Grigio Chardonnay","4L"]],"063657030783":[["80012293","Sawmill Creek","Riesling","4L"]],"063657018057":[["983197","Sawmill Creek","Sauvignon Blanc","1L"]],"063657018064":[["sawmill-creek-shiraz-1l","Sawmill Creek","Shiraz","1L"]],"063657047224":[["80098996","Sidney","Pinot Grigio","750mL"]],"063657047231":[["80098997","Sidney","Rosé","750mL"]],"063657047361":[["80099117","SOLA-NERO","Red Wine","1.5L"]],"063657047323":[["80099113","SOLA-NERO","Red Wine","4L"]],"063657042342":[["80087232","SOLA-NERO","White Wine","1.5L"]],"063657006566":[["587584","SOLA-NERO","White Wine","4L"]],"627222991017":[["80059212","Strewn","Barrel Aged Chardonnay","750mL"]],"627222992328":[["80059213","Strewn","Rogue's Lot Cabernet Sauvignon Cabernet Franc","750mL"]],"063657046166":[["UMVZTBLWY6","Svelte","Red","750mL"]],"063657046180":[["80097278","Svelte","Rosé","750mL"]],"063657046173":[["80097277","Svelte","White","750mL"]],"063657037799":[["80060870","The Noble Experiment","Cabernet Sauvignon","750mL"]],"779327130089":[["80059124","Vineland Estates","Cabernet Franc","750mL"]],"779327120011":[["80059125","Vineland Estates","Unoaked Chardonnay","750mL"]],"063657040249":[["80082765","Vintage Ink","Pink Ink","750mL"]],"063657037706":[["80060253","Vintage Ink","Rebel Red","750mL"]],"063657040867":[["vintage-ink-rum-barrel-aged-chardonnay-750ml","Vintage Ink","Rum Barrel Aged Chardonnay","750mL"]],"063657044346":[["80092411","Vintage Ink","Tequila Barrel Aged Sauvignon Blanc","750mL"]],"063657036808":[["80059250","Vintage Ink","Whisky Barrel Aged Red","750mL"]],"063657037690":[["vintage-ink-wicked-white-750ml","Vintage Ink","Wicked White","750mL"]],"063657024263":[["wallaroo-trail-cabernet-sauvignon-750ml","Wallaroo Trail","Cabernet Sauvignon","750mL"]],"3064071040461":[["wallaroo-trail-pinot-grigio-750ml","Wallaroo Trail","Pinot Grigio","750mL"]],"624644001072":[["80058787","Konzelmann","Chardonnay","750mL"]]};
+  var bakedRowKeyMap = null;
+  function bakedBarcodeRow(code){
+    var cands = BAKED_BARCODES[code];
+    if(!cands || !cands.length) return null;
+    var i, pid;
+    for(i = 0; i < cands.length; i++){
+      pid = cands[i][0];
+      if(pid && pidRow[pid]) return pidRow[pid];
+    }
+    /* No shared-list mapping on this screen (yet): match a built-in
+       row by the canonical brand + name + size key, computed with the
+       app's own normaliser so variant brands fold the same way the
+       shared-list sync folds them */
+    if(!bakedRowKeyMap){
+      bakedRowKeyMap = {};
+      rows.forEach(function(r){
+        var d = readRow(r), k = normKey(d.brand, d.name, d.size);
+        if(!bakedRowKeyMap[k]) bakedRowKeyMap[k] = r;
+      });
+    }
+    for(i = 0; i < cands.length; i++){
+      var nd = normalizeProductData({ brand: cands[i][1], name: cands[i][2], size: cands[i][3],
+        rs: '', sweet: '', rich: '', varietal: '', tannins: '', acidity: '', cooler: '', barcode: '', notes: '' });
+      var hit = bakedRowKeyMap[normKey(nd.brand, nd.name, nd.size)];
+      if(hit) return hit;
+    }
+    /* Last resort: loose word-set match — "Jackson-Triggs Grand
+       Reserve" + "Chardonnay" and "Jackson-Triggs" + "Grand Reserve
+       Chardonnay" are the same words in a different split */
+    function wordSet(b, n){
+      return (String(b || '') + ' ' + String(n || '')).toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).sort().join(' ');
+    }
+    for(i = 0; i < cands.length; i++){
+      var want = wordSet(cands[i][1], cands[i][2]);
+      var wantSize = String(cands[i][3] || '').toLowerCase().replace(/\s+/g, '');
+      for(var q = 0; q < rows.length; q++){
+        var rd = readRow(rows[q]);
+        if(wordSet(rd.brand, rd.name) === want &&
+           String(rd.size || '').toLowerCase().replace(/\s+/g, '') === wantSize) return rows[q];
+      }
+    }
+    return null;
+  }
 
   function normalizeBarcode(v){
     var d = String(v || '').replace(/\D/g, '');
@@ -15672,7 +15746,9 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     for(var i = 0; i < rows.length; i++){
       if(normalizeBarcode(rows[i].getAttribute('data-barcode') || '') === want) return rows[i];
     }
-    return null;
+    /* LAST the baked index (.32): on-file barcodes are recognised
+       even where neither the shared list nor a row carries them yet */
+    return bakedBarcodeRow(want);
   }
   /* The barcode REGISTERED to a product: the shared list's link
      for this product wins (it is what every phone scans against),
@@ -15832,6 +15908,10 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
 
   function stopScannerCamera(){
     scanActive = false;
+    if(scanFocusTimer){ clearInterval(scanFocusTimer); scanFocusTimer = null; }
+    scanTrack = null; scanCaps = null; scanTorch = false;
+    var sctl = document.getElementById('scannerControls'); if(sctl) sctl.hidden = true;
+    var stb = document.getElementById('scannerTorch'); if(stb) stb.setAttribute('aria-pressed', 'false');
     if(scanTimer){ clearTimeout(scanTimer); scanTimer = null; }
     if(scanZxing){ try{ scanZxing.reset(); }catch(e){} scanZxing = null; }
     if(scanStream){
@@ -15897,6 +15977,30 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     ctx.restore();
     return scanCanvas;
   }
+  /* Centre-crop decode canvas (.32): the middle of the frame —
+     roughly the viewfinder box the user is aiming with — cut out,
+     upscaled where it is small, and set on a white pad (a barcode
+     needs its quiet zone). Decoders try this crop FIRST: it throws
+     away the cluttered shelf around the label and gives the bars
+     more pixels than the full frame does. The full-frame sweeps
+     below still run unchanged when the crop holds nothing. */
+  function scanCenterCropCanvas(){
+    if(!captureScanFrame()) return null;
+    var sw = scanSnapshot.width, sh = scanSnapshot.height;
+    var cw = Math.floor(sw * 0.82), ch = Math.floor(sh * 0.60);
+    if(cw < 40 || ch < 40) return null;
+    var sx = Math.floor((sw - cw) / 2), sy = Math.floor((sh - ch) / 2);
+    var scale = cw < 1280 ? Math.min(2, 1280 / cw) : 1;
+    var pad = Math.floor(24 * scale);
+    var c = document.createElement('canvas');
+    c.width = Math.floor(cw * scale) + pad * 2;
+    c.height = Math.floor(ch * scale) + pad * 2;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(scanSnapshot, sx, sy, cw, ch, pad, pad, Math.floor(cw * scale), Math.floor(ch * scale));
+    return c;
+  }
   /* The first usable value out of a BarcodeDetector result set,
      or '' — a detected code with no rawValue is no use to the
      lookup, so keep looking through the set instead of giving up
@@ -15944,10 +16048,15 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     scanDetector.detect(scannerVideo).then(function(codes){
       var direct = firstDetectedCode(codes);
       if(direct){ handleScannedCode(direct); return; }
-      /* Nothing straight-on: before the next cycle, sweep this
-         frame through the rotation set, so a barcode at any
-         angle is still read automatically */
-      tryRotatedDetect().then(function(found){ if(!found) again(200); }, function(){ again(200); });
+      /* Nothing straight-on in the full frame: try the centre crop
+         (the viewfinder area, upscaled) before the rotation sweep */
+      var crop = scanCenterCropCanvas();
+      var cropTry = crop ? scanDetector.detect(crop).then(firstDetectedCode).catch(function(){ return ''; })
+                         : Promise.resolve('');
+      return cropTry.then(function(cc){
+        if(cc){ handleScannedCode(cc); return; }
+        return tryRotatedDetect().then(function(found){ if(!found) again(200); }, function(){ again(200); });
+      });
     }).catch(function(){
       tryRotatedDetect().then(function(found){ if(!found) again(300); }, function(){ again(300); });
     });
@@ -16008,6 +16117,23 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     if(!scanActive || scanHandled || !scanZxing) return;
     var again = function(ms){ if(scanActive && !scanHandled) scanTimer = setTimeout(zxingAngleLoop, ms); };
     if(!captureScanFrame()){ again(250); return; }
+    /* Centre crop first (.32) — the viewfinder area, upscaled; the
+       full-frame rotation sweep below runs if it holds nothing */
+    var cropCanvas = scanCenterCropCanvas();
+    if(cropCanvas){
+      decodeZxingCanvas(cropCanvas).then(function(result){
+        if(!scanActive || scanHandled) return;
+        var text = zxingResultText(result);
+        if(text && normalizeBarcode(text)){ handleScannedCode(text); return; }
+        zxingSweep();
+      }).catch(function(){ if(scanActive && !scanHandled) zxingSweep(); });
+      return;
+    }
+    zxingSweep();
+  }
+  function zxingSweep(){
+    if(!scanActive || scanHandled || !scanZxing) return;
+    var again = function(ms){ if(scanActive && !scanHandled) scanTimer = setTimeout(zxingAngleLoop, ms); };
     var angles = [0].concat(SCAN_ROTATION_ANGLES);
     var i = 0, reportedUnusable = false;
     function step(){
@@ -16088,42 +16214,101 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
     s.onerror = function(){ setScanStatus('Automatic scanning isn\u2019t supported in this browser — type the barcode below instead.'); };
     document.head.appendChild(s);
   }
+  /* Camera controls state (.32) */
+  var scanTrack = null, scanCaps = null, scanZoom = 1, scanTorch = false, scanFocusTimer = null;
+  function scanApplyAdvanced(adv){
+    if(!scanTrack || !scanTrack.applyConstraints) return;
+    try{
+      var p = scanTrack.applyConstraints({ advanced: [adv] });
+      if(p && p.catch) p.catch(function(){});
+    }catch(e){}
+  }
+  function scanRefocus(){
+    /* Single-shot first where supported (a fresh focus pull), then
+       back to continuous — some WebView cameras only refocus when
+       the mode is re-asserted */
+    scanApplyAdvanced({ focusMode: 'single-shot' });
+    window.setTimeout(function(){ if(scanActive) scanApplyAdvanced({ focusMode: 'continuous' }); }, 700);
+  }
+  function scanSetupControls(){
+    var box = document.getElementById('scannerControls');
+    if(!box) return;
+    var torchBtn = document.getElementById('scannerTorch');
+    var zoomIn = document.getElementById('scannerZoomIn'), zoomOut = document.getElementById('scannerZoomOut');
+    var zoomLbl = document.getElementById('scannerZoomLabel');
+    var hasTorch = !!(scanCaps && scanCaps.torch);
+    var hasZoom = !!(scanCaps && scanCaps.zoom && typeof scanCaps.zoom.max === 'number' && scanCaps.zoom.max > (scanCaps.zoom.min || 1));
+    if(torchBtn) torchBtn.style.display = hasTorch ? '' : 'none';
+    if(zoomIn) zoomIn.style.display = hasZoom ? '' : 'none';
+    if(zoomOut) zoomOut.style.display = hasZoom ? '' : 'none';
+    if(zoomLbl) zoomLbl.style.display = hasZoom ? '' : 'none';
+    box.hidden = !(hasTorch || hasZoom);
+    if(hasZoom){
+      try{
+        var st = scanTrack.getSettings ? scanTrack.getSettings() : null;
+        scanZoom = (st && typeof st.zoom === 'number') ? st.zoom : (scanCaps.zoom.min || 1);
+      }catch(e){ scanZoom = scanCaps.zoom.min || 1; }
+      if(zoomLbl) zoomLbl.textContent = (Math.round(scanZoom * 10) / 10) + '\u00d7';
+    }
+  }
+  function scanZoomBy(dir){
+    if(!scanCaps || !scanCaps.zoom) return;
+    var min = scanCaps.zoom.min || 1, max = scanCaps.zoom.max || 1;
+    var step = Math.max(0.25, (max - min) / 6);
+    scanZoom = Math.min(max, Math.max(min, scanZoom + dir * step));
+    scanApplyAdvanced({ zoom: scanZoom });
+    var lbl = document.getElementById('scannerZoomLabel');
+    if(lbl) lbl.textContent = (Math.round(scanZoom * 10) / 10) + '\u00d7';
+  }
   function startScannerCamera(){
     setScanStatus('');
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-      setScanStatus('This browser can\u2019t open a camera here — type the barcode below instead.');
+      setScanStatus('This browser can\u2019t open a camera here \u2014 type the barcode below instead.');
       return;
     }
-    navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }, audio:false })
-      .then(function(stream){
-        if(scannerOverlay.hidden){ stream.getTracks().forEach(function(t){ t.stop(); }); return; }
-        scanStream = stream;
-        scannerVideo.srcObject = stream;
-        /* Ask the camera for continuous focus where it supports
-           it, so the barcode stays sharp in the frame. This is a
-           supporting request only — where the track does not
-           support focusMode it is simply ignored. */
+    /* .32: ask for a HIGH-RESOLUTION rear camera. Before .32 the
+       request carried no size at all, so browsers — Android WebView
+       above all — were free to hand back a low default (often
+       640x480 or less), whose soft, upscaled preview would not lock
+       onto a barcode's fine bars at any distance: the reported
+       "scanner opens but never focuses" failure. 1920x1080 ideal
+       (not exact) so a camera that cannot do it still opens at its
+       best; if even the ideal request is refused outright, retry
+       once with the plain request before giving up. */
+    var hiRes = { video:{ facingMode:{ ideal:'environment' },
+      width:{ ideal:1920 }, height:{ ideal:1080 }, frameRate:{ ideal:30 } }, audio:false };
+    var plain = { video:{ facingMode:'environment' }, audio:false };
+    function onStream(stream){
+      if(scannerOverlay.hidden){ stream.getTracks().forEach(function(t){ t.stop(); }); return; }
+      scanStream = stream;
+      scannerVideo.srcObject = stream;
+      try{
+        scanTrack = stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
+        scanCaps = (scanTrack && scanTrack.getCapabilities) ? scanTrack.getCapabilities() : null;
+      }catch(e){ scanTrack = null; scanCaps = null; }
+      scanApplyAdvanced({ focusMode: 'continuous' });
+      /* Re-assert continuous focus periodically: some WebView
+         cameras drop the mode after the first frames */
+      if(scanFocusTimer) clearInterval(scanFocusTimer);
+      scanFocusTimer = window.setInterval(function(){ if(scanActive) scanApplyAdvanced({ focusMode: 'continuous' }); }, 3000);
+      scanSetupControls();
+      var played = scannerVideo.play();
+      if(played && played.catch) played.catch(function(){});
+      scanActive = true;
+      if('BarcodeDetector' in window){
         try{
-          var scanTrack = stream.getVideoTracks ? stream.getVideoTracks()[0] : null;
-          if(scanTrack && scanTrack.applyConstraints){
-            var focusReq = scanTrack.applyConstraints({ advanced:[{ focusMode:'continuous' }] });
-            if(focusReq && focusReq.catch) focusReq.catch(function(){});
-          }
-        }catch(e){}
-        var played = scannerVideo.play();
-        if(played && played.catch) played.catch(function(){});
-        scanActive = true;
-        if('BarcodeDetector' in window){
-          try{
-            scanDetector = new window.BarcodeDetector({ formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','qr_code'] });
-          }catch(e){ scanDetector = null; }
-        }
-        if(scanDetector) detectLoop();
-        else startZxingFallback();
-      })
-      .catch(function(){
-        setScanStatus('Camera unavailable — check the camera permission, or type the barcode below instead.');
+          scanDetector = new window.BarcodeDetector({ formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','qr_code'] });
+        }catch(e){ scanDetector = null; }
+      }
+      if(scanDetector) detectLoop();
+      else startZxingFallback();
+    }
+    navigator.mediaDevices.getUserMedia(hiRes).then(onStream).catch(function(){
+      if(scannerOverlay.hidden) return;
+      navigator.mediaDevices.getUserMedia(plain).then(onStream).catch(function(){
+        setScanStatus('Camera unavailable \u2014 check the camera permission, or type the barcode below instead.');
       });
+    });
   }
   function openScanner(){
     scanHandled = false;
@@ -16136,6 +16321,18 @@ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
   }
   document.getElementById('scanBtn').addEventListener('click', openScanner);
   document.getElementById('scannerCancel').addEventListener('click', closeScanner);
+  /* .32 controls: tap the camera view to refocus; torch + zoom
+     buttons act only where scanSetupControls showed them */
+  if(scannerVideo) scannerVideo.addEventListener('click', function(){ if(scanActive) scanRefocus(); });
+  var torchBtnEl = document.getElementById('scannerTorch');
+  if(torchBtnEl) torchBtnEl.addEventListener('click', function(){
+    scanTorch = !scanTorch;
+    torchBtnEl.setAttribute('aria-pressed', scanTorch ? 'true' : 'false');
+    scanApplyAdvanced({ torch: scanTorch });
+  });
+  var ziEl = document.getElementById('scannerZoomIn'), zoEl = document.getElementById('scannerZoomOut');
+  if(ziEl) ziEl.addEventListener('click', function(){ scanZoomBy(1); });
+  if(zoEl) zoEl.addEventListener('click', function(){ scanZoomBy(-1); });
   document.addEventListener('keydown', function(ev){
     if(ev.key === 'Escape' && !scannerOverlay.hidden) closeScanner();
   });
